@@ -1,0 +1,516 @@
+\section{Appendix: The classical Adams spectral sequence in the range $122 \le t-s \le 127, s \le 25$} \label{sec:App}
+
+We provide a brief overview of Lin's computer program for computing Adams differentials and extensions. The program's functionality for propagating differentials and extensions relies on the following data:
+\begin{itemize}
+    \item The Adams $E_2$-pages of a collection of CW spectra.
+    \item Maps between these $E_2$-pages.
+    \item Adams $d_2$-differentials for certain CW spectra.
+    \item There are three manually added differentials: $d_5 h_0^{24}h_6=h_0^2P^6d_0$ and\\
+ $d_6 h_0^{55}h_7=h_0^2x_{126,60}$ in the Adams spectral sequence of $S^0$ (from the image of $J$), and $d_3 v_2^{16}=\beta^5g$ in the Adams spectral sequence of $\mathit{tmf}$, derived from power operations (Bruner--Rognes \cite{BR21}).
+\end{itemize}
+
+Detailed descriptions of these data are available in \cite{LWXZenodo}. Lin’s program extends these results by computing additional Adams differentials using tools such as the Leibniz rule, naturality, the Generalized Leibniz Rule, and the Generalized Mahowald Trick. All computed differentials and extensions are accessible via interactive plots \cite{LinPlot}.
+
+Moreover, the proofs provided in \cite{LWXZenodo} offer more information than the interactive plots. These proofs include numerous disproofs of potential differentials, even for cases where the differentials remain unresolved. For example, consider 
+$$x_{126,21}\in E_2^{21,126+21}(S^0).$$
+The spectral sequence plot for $S^0$ shows that $x_{126,21}$ survives to the $E_4$-page, but the value of $d_4(x_{126,21})$ undetermined. By analyzing the proofs in \cite{LWXZenodo}, we observe that many potential values for $d_4(x_{126,21})$ have been ruled out. Consequently, we conclude:
+$$d_4(x_{126,21})=x_{125,25,2}+x_{125,25}+g^4\Delta h_1g+\text{possibly }d_0^2e_0gB_4.$$
+
+Tables~\ref{Table:S122}--\ref{Table:S127.9} present results from Lin’s program for the classical Adams spectral sequence of the sphere in the range $122 \le t-s \le 127, s \le 25$.
+
+
+\begin{table}
+    \centering
+\scalebox{1}{\begin{tabular}{|c|l|l|l|}\hline
+    $s$ & Elements & $d_r$ & value\\\hline\hline
+    \multirow{2}{*}{25} & $e_0g^3\Delta h_1g$ & $d_{2}^{-1}$ & $g^2\Delta^2m$ \\\cline{2-4}
+     & $d_0^3g[B_4]$ & $d_{4}$ & $d_0^4x_{65,13}$ \\\hline\hline
+    \multirow{1}{*}{24} & $d_0g\Delta^2g^2$ & $d_{2}$ & $d_0e_0g^3\Delta h_2^2$ \\\hline\hline
+    \multirow{2}{*}{23} & $Ph_1x_{113,18,2}$ & $d_{3}^{-1}$ & $x_{123,20}$ \\\cline{2-4}
+     & $h_0^2d_0x_{108,17}$ & $d_{3}$ & $d_0^4Mg$ \\\hline\hline
+    \multirow{3}{*}{22} & $e_0g^2Mg$ & $d_{3}^{-1}$ & $h_0^2h_3x_{116,16}$ \\\cline{2-4}
+     & $x_{122,22}$ & $d_{3}$ & $h_0^2d_0x_{107,19}$ \\\cline{2-4}
+     & $h_0d_0x_{108,17}$ & $d_{2}$ & $h_0^2d_0x_{107,18}$ \\\hline\hline
+    \multirow{2}{*}{21} & $h_0^2d_0e_0x_{91,11}$ & & Permanent \\\cline{2-4}
+     & $d_0x_{108,17}$ & $d_{2}$ & $d_0e_0\Delta h_2^2[B_4]+h_0d_0x_{107,18}$ \\\hline\hline
+    \multirow{3}{*}{20} & $h_0^4x_{122,16}$ & $d_{2}^{-1}$ & $h_0h_3x_{116,16}$ \\\cline{2-4}
+     & $g^3(C_0+h_0^6h_5^2)$ & $d_{3}$ & $g^3\Delta h_2^2n$ \\\cline{2-4}
+     & $h_0d_0e_0x_{91,11}$ & $d_{2}$ & $h_0^6x_{121,16}$ \\\hline\hline
+    \multirow{2}{*}{19} & $h_0^3x_{122,16}$ & $d_{2}^{-1}$ & $h_3x_{116,16}$ \\\cline{2-4}
+     & $d_0e_0x_{91,11}$ & $d_{2}$ & $h_0d_0^2x_{93,12}$ \\\hline\hline
+    \multirow{3}{*}{18} & $h_0^2x_{122,16}$ & $d_{3}^{-1}$ & $h_0^2x_{123,13,2}$ \\\cline{2-4}
+     & $h_1x_{121,17}$ & $d_{7}^{-1}$ & $x_{123,11,2}+x_{123,11}+h_0h_6[B_4]$ \\\cline{2-4}
+     & $d_0x_{108,14}$ & $d_{3}$ & $h_0d_0^2x_{93,12}+h_0^5x_{121,16}$ \\\hline\hline
+    \multirow{2}{*}{17} & $h_0x_{122,16}$ & $d_{3}^{-1}$ & $h_0x_{123,13,2}$ \\\cline{2-4}
+     & $g^3[H_1]$ & $d_{3}^{-1}$ & $\Delta h_2^2x_{93,8}$ \\\hline\hline
+    \multirow{3}{*}{16} & $x_{122,16}+h_0x_{122,15,2}$ & $d_{3}^{-1}$ & $x_{123,13,2}$ \\\cline{2-4}
+     & $\Delta h_2^2x_{92,10}$ & $d_{3}^{-1}$ & $x_{123,13}$ \\\cline{2-4}
+     & $h_0x_{122,15,2}$ & & Permanent \\\hline\hline
+    \multirow{2}{*}{15} & $x_{122,15}$ & $d_{3}$ & $g^3A$ \\\cline{2-4}
+     & $x_{122,15,2}$ & $d_{2}$ & $h_0^2h_4x_{106,14}$ \\\hline\hline
+    \multirow{1}{*}{14} & $h_0x_{122,13}$ & $d_{3}^{-1}$ & $x_{123,11,2}$ \\\hline\hline
+    \multirow{3}{*}{13} & $h_0^2h_6Md_0$ & $d_{2}^{-1}$ & $x_{123,11}$ \\\cline{2-4}
+     & $h_1^2x_{120,11}$ & & Permanent \\\cline{2-4}
+     & $x_{122,13}$ & $d_{3}$ & $h_0h_4x_{106,14}$ \\\hline\hline
+    \multirow{3}{*}{12} & $h_0h_6Md_0$ & $d_{2}^{-1}$ & $x_{123,10}$ \\\cline{2-4}
+     & $h_0x_{122,11}$ & $d_{3}^{-1}$ & $h_0x_{123,8}$ \\\cline{2-4}
+     & $h_5x_{91,11}$ & & Permanent \\\hline\hline
+    \multirow{2}{*}{11} & $x_{122,11}+h_6Md_0$ & $d_{3}^{-1}$ & $x_{123,8}$ \\\cline{2-4}
+     & $h_6Md_0$ & & Permanent \\\hline\hline
+    \multirow{1}{*}{9-10} & \multicolumn{3}{c|}{}\\\hline\hline
+    \multirow{1}{*}{8} & $h_1x_{121,7}$ & $d_{6}$ & $?$ \\\hline\hline
+    \multirow{1}{*}{0-7} & \multicolumn{3}{c|}{}\\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 25$ in stem 122}\vspace{1cm}
+\label{Table:S122}
+\end{table}
+%\newpage
+
+\begin{table}
+    \centering
+\scalebox{0.95}{\begin{tabular}{|c|l|l|l|}\hline
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{1}{*}{25} & \multicolumn{3}{c|}{}\\\hline\hline
+\multirow{3}{*}{24} & $h_1Ph_1x_{113,18,2}$ & $d_{2}^{-1}$ & $x_{124,22}$ \\\cline{2-4}
+ & $d_0^2\Delta h_2^2Mg$ & $d_{2}^{-1}$ & $d_0x_{110,18}$ \\\cline{2-4}
+ & $d_0M\!Px_{56,10}$ & $d_{4}$ & $M\!Px_{69,18}$ \\\hline\hline
+\multirow{1}{*}{23} & $g^2\Delta^2m$ & $d_{2}$ & $e_0g^3\Delta h_1g$ \\\hline\hline
+\multirow{1}{*}{21-22} & \multicolumn{3}{c|}{}\\\hline\hline
+\multirow{1}{*}{20} & $x_{123,20}$ & $d_{3}$ & $Ph_1x_{113,18,2}$ \\\hline\hline
+\multirow{4}{*}{19} & $e_0g^2x_{66,7}+h_0^6x_{123,13,2}$ & $d_{2}^{-1}$ & $x_{124,17}$ \\\cline{2-4}
+ & $h_0^6x_{123,13,2}$ & $d_{2}^{-1}$ & $h_0^3x_{124,14,2}$ \\\cline{2-4}
+ & $h_0e_0x_{106,14}+h_0^2h_3x_{116,16}$ & $d_{3}^{-1}$ & $e_0x_{107,12}$ \\\cline{2-4}
+ & $h_0^2h_3x_{116,16}$ & $d_{3}$ & $e_0g^2Mg$ \\\hline\hline
+\multirow{3}{*}{18} & $h_0^5x_{123,13,2}$ & $d_{2}^{-1}$ & $h_0^2x_{124,14,2}$ \\\cline{2-4}
+ & $e_0x_{106,14}+h_0h_3x_{116,16}$ & & Permanent \\\cline{2-4}
+ & $h_0h_3x_{116,16}$ & $d_{2}$ & $h_0^4x_{122,16}$ \\\hline\hline
+\multirow{4}{*}{17} & $h_0^2x_{123,15}+h_0^4x_{123,13,2}$ & $d_{2}^{-1}$ & $h_0x_{124,14}$ \\\cline{2-4}
+ & $h_0^4x_{123,13,2}$ & $d_{2}^{-1}$ & $h_0x_{124,14,2}+h_0x_{124,14}$ \\\cline{2-4}
+ & $d_0x_{109,13}$ & & Permanent \\\cline{2-4}
+ & $h_3x_{116,16}$ & $d_{2}$ & $h_0^3x_{122,16}$ \\\hline\hline
+\multirow{3}{*}{16} & $h_0x_{123,15}+h_0^3x_{123,13,2}$ & $d_{2}^{-1}$ & $x_{124,14}$ \\\cline{2-4}
+ & $h_0^3x_{123,13,2}$ & $d_{2}^{-1}$ & $x_{124,14,2}+x_{124,14}$ \\\cline{2-4}
+ & $h_1x_{122,15,2}$ & $d_{3}^{-1}$ & $h_4x_{109,12}$ \\\hline\hline
+\multirow{3}{*}{15} & $x_{123,15}$ & $d_{4}^{-1}$ & $x_{124,11,2}+x_{124,11}$ \\\cline{2-4}
+ & $h_4x_{108,14}$ & $d_{5}^{-1}$ & $h_0x_{124,9}$ \\\cline{2-4}
+ & $h_0^2x_{123,13,2}$ & $d_{3}$ & $h_0^2x_{122,16}$ \\\hline\hline
+\multirow{3}{*}{14} & $h_0^3x_{123,11}$ & $d_{2}^{-1}$ & $h_0x_{124,11}$ \\\cline{2-4}
+ & $h_0x_{123,13,2}$ & $d_{3}$ & $h_0x_{122,16}$ \\\cline{2-4}
+ & $\Delta h_2^2x_{93,8}$ & $d_{3}$ & $g^3[H_1]$ \\\hline\hline
+\multirow{3}{*}{13} & $h_0^2x_{123,11}$ & $d_{2}^{-1}$ & $x_{124,11}$ \\\cline{2-4}
+ & $x_{123,13,2}$ & $d_{3}$ & $x_{122,16}+h_0x_{122,15,2}$ \\\cline{2-4}
+ & $x_{123,13}$ & $d_{3}$ & $\Delta h_2^2x_{92,10}$ \\\hline\hline
+\multirow{3}{*}{12} & $h_0x_{123,11}+h_0^2h_6[B_4]$ & $d_{3}^{-1}$ & $x_{124,9,2}+h_0x_{124,8}$ \\\cline{2-4}
+ & $x_{123,12}$ & $d_{3}^{-1}$ & $x_{124,9}+h_0x_{124,8}$ \\\cline{2-4}
+ & $h_0^2h_6[B_4]$ & $d_{5}^{-1}$ & $h_6A$ \\\hline\hline
+\multirow{5}{*}{11} & $h_0^2x_{123,9}$ & $d_{2}^{-1}$ & $x_{124,9}$ \\\cline{2-4}
+ & $h_5x_{92,10}$ & $d_{5}^{-1}$ & $x_{124,6}$ \\\cline{2-4}
+ & $x_{123,11,2}+x_{123,11}+h_0h_6[B_4]$ & $d_{7}$ & $h_1x_{121,17}$ \\\cline{2-4}
+ & $x_{123,11}+h_0h_6[B_4]$ & $d_{3}$ & $h_0x_{122,13}$ \\\cline{2-4}
+ & $h_0h_6[B_4]$ & $d_{2}$ & $h_0^2h_6Md_0$ \\\hline\hline
+\multirow{3}{*}{10} & $h_0x_{123,9}$ & $d_{2}^{-1}$ & $x_{124,8}$ \\\cline{2-4}
+ & $x_{123,10}+h_6[B_4]$ & $d_{3}^{-1}$ & $x_{124,7}$ \\\cline{2-4}
+ & $h_6[B_4]$ & $d_{2}$ & $h_0h_6Md_0$ \\\hline\hline
+\multirow{2}{*}{9} & $x_{123,9}+h_0x_{123,8}$ & $d_{12}$ & $?$ \\\cline{2-4}
+ & $h_0x_{123,8}$ & $d_{3}$ & $h_0x_{122,11}+h_0h_6Md_0$ \\\hline\hline
+\multirow{1}{*}{8} & $x_{123,8}$ & $d_{3}$ & $x_{122,11}+h_6Md_0$ \\\hline\hline
+\multirow{1}{*}{0-7} & \multicolumn{3}{c|}{}\\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 25$ in stem 123}
+\label{Table:S123}
+\end{table}
+
+
+%\newpage
+
+\begin{table}
+    \centering
+\scalebox{0.95}{\begin{tabular}{|c|l|l|l|}\hline
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{3}{*}{25} & $h_0^{11}x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^9x_{125,14}$ \\\cline{2-4}
+ & $ix_{101,18}$ & $d_{2}$ & $d_0^2\Delta h_2^2x_{65,13}+h_0Pd_0x_{101,18}$ \\\cline{2-4}
+ & $d_0e_0\Delta^3h_1g$ & $d_{2}$ & $d_0^2g^3m$ \\\hline\hline
+\multirow{2}{*}{24} & $h_0^{10}x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^8x_{125,14}$ \\\cline{2-4}
+ & $h_0^2d_0x_{110,18}$ & $d_{2}^{-1}$ & $h_0e_0x_{108,17}$ \\\hline\hline
+\multirow{4}{*}{23} & $h_0^9x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^7x_{125,14}$ \\\cline{2-4}
+ & $d_0g\Delta h_2^2[B_4]+h_0d_0x_{110,18}$ & $d_{2}^{-1}$ & $e_0x_{108,17}$ \\\cline{2-4}
+ & $h_0d_0x_{110,18}$ & $d_{3}^{-1}$ & $x_{125,20}$ \\\cline{2-4}
+ & $d_0x_{110,19}$ & & Permanent \\\hline\hline
+\multirow{4}{*}{22} & $h_0^8x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^6x_{125,14}$ \\\cline{2-4}
+ & $g^2\Delta^2t$ & $d_{3}^{-1}$ & $gx_{105,15}$ \\\cline{2-4}
+ & $x_{124,22}$ & $d_{2}$ & $h_1Ph_1x_{113,18,2}$ \\\cline{2-4}
+ & $d_0x_{110,18}$ & $d_{2}$ & $d_0^2\Delta h_2^2Mg$ \\\hline\hline
+\multirow{2}{*}{21} & $h_0^7x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^5x_{125,14}$ \\\cline{2-4}
+ & $h_0d_0^2[\Delta\Delta_1g]$ & $d_{2}^{-1}$ & $d_0gx_{91,11}$ \\\hline\hline
+\multirow{2}{*}{20} & $h_0^6x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^4x_{125,14}$ \\\cline{2-4}
+ & $d_0^2[\Delta\Delta_1g]$ & $d_{5}^{-1}$ & $h_1x_{124,14}$ \\\hline\hline
+\multirow{2}{*}{19} & $h_0^5x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^3x_{125,14}$ \\\cline{2-4}
+ & $d_0x_{110,15}$ & & Permanent \\\hline\hline
+\multirow{2}{*}{18} & $h_0x_{124,17}+h_0^4x_{124,14,2}$ & $d_{2}^{-1}$ & $x_{125,16}$ \\\cline{2-4}
+ & $h_0^4x_{124,14,2}$ & $d_{2}^{-1}$ & $h_0^2x_{125,14}$ \\\hline\hline
+\multirow{4}{*}{17} & $h_0^3x_{124,14}$ & $d_{2}^{-1}$ & $x_{125,15}$ \\\cline{2-4}
+ & $h_0^2x_{124,15}$ & $d_{2}^{-1}$ & $h_0x_{125,14}$ \\\cline{2-4}
+ & $x_{124,17}$ & $d_{2}$ & $e_0g^2x_{66,7}+h_0^6x_{123,13,2}$ \\\cline{2-4}
+ & $h_0^3x_{124,14,2}$ & $d_{2}$ & $h_0^6x_{123,13,2}$ \\\hline\hline
+\multirow{5}{*}{16} & $h_0x_{124,15}$ & $d_{2}^{-1}$ & $x_{125,14}$ \\\cline{2-4}
+ & $h_1x_{123,15}$ & $d_{3}^{-1}$ & $h_3x_{118,12}$ \\\cline{2-4}
+ & $h_0^2x_{124,14}$ & & Permanent \\\cline{2-4}
+ & $e_0x_{107,12}$ & $d_{3}$ & $e_0g^2x_{66,7}+h_0e_0x_{106,14}+h_0^2h_3x_{116,16}$ \\\cline{2-4}
+ & $h_0^2x_{124,14,2}$ & $d_{2}$ & $h_0^5x_{123,13,2}$ \\\hline\hline
+\multirow{4}{*}{15} & $x_{124,15}$ & $d_{4}^{-1}$ & $h_6x_{62,10}$ \\\cline{2-4}
+ & $h_3^2x_{110,13}+h_0x_{124,14}$ & & Permanent \\\cline{2-4}
+ & $h_0x_{124,14}$ & $d_{2}$ & $h_0^2x_{123,15}+h_0^4x_{123,13,2}$ \\\cline{2-4}
+ & $h_0x_{124,14,2}$ & $d_{2}$ & $h_0^2x_{123,15}$ \\\hline\hline
+\multirow{5}{*}{14} & $h_1x_{123,13}$ & $d_{2}^{-1}$ & $x_{125,12}$ \\\cline{2-4}
+ & $h_1x_{123,13,2}$ & $d_{2}^{-1}$ & $x_{125,12,2}$ \\\cline{2-4}
+ & $\Delta h_2^2x_{94,8}$ & & Permanent \\\cline{2-4}
+ & $x_{124,14}$ & $d_{2}$ & $h_0x_{123,15}+h_0^3x_{123,13,2}$ \\\cline{2-4}
+ & $x_{124,14,2}$ & $d_{2}$ & $h_0x_{123,15}$ \\\hline\hline
+\multirow{4}{*}{13} & $h_0^5x_{124,8}$ & $d_{2}^{-1}$ & $h_0^3x_{125,8}$ \\\cline{2-4}
+ & $[H_1](\Delta e_1+C_0+h_0^6h_5^2)$ & $d_{3}^{-1}$ & $x_{125,10,2}$ \\\cline{2-4}
+ & $e_0\Delta h_6g$ & & Permanent \\\cline{2-4}
+ & $h_4x_{109,12}$ & $d_{3}$ & $h_1x_{122,15,2}$ \\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $13 \le s \le 25$ in stem 124}
+\label{Table:S124.13}
+\end{table}
+
+%\newpage
+
+\begin{table}
+    \centering
+\scalebox{0.9}{\begin{tabular}{|c|l|l|l|}\hline %%%%%%%%%%%%%%%%%%%%%%
+\multirow{5}{*}{12} & $h_0x_{124,11,2}+h_0x_{124,11}$ & $d_{2}^{-1}$ & $x_{125,10}$ \\\cline{2-4}
+ & $h_0^2x_{124,10,2}+h_0^4x_{124,8}$ & $d_{2}^{-1}$ & $h_0x_{125,9,2}$ \\\cline{2-4}
+ & $h_0^4x_{124,8}$ & $d_{2}^{-1}$ & $h_0^2x_{125,8}$ \\\cline{2-4}
+ & $h_1x_{123,11,2}$ & $d_{3}^{-1}$ & $x_{125,9}$ \\\cline{2-4}
+ & $h_0x_{124,11}$ & $d_{2}$ & $h_0^3x_{123,11}$ \\\hline\hline
+\multirow{5}{*}{11} & $h_0x_{124,10,2}+h_0^3x_{124,8}$ & $d_{2}^{-1}$ & $x_{125,9,2}$ \\\cline{2-4}
+ & $h_0^3x_{124,8}$ & $d_{2}^{-1}$ & $h_0x_{125,8}$ \\\cline{2-4}
+ & $x_{124,11,3}$ & $d_{3}^{-1}$ & $x_{125,8,2}$ \\\cline{2-4}
+ & $x_{124,11,2}+x_{124,11}$ & $d_{4}$ & $x_{123,15}$ \\\cline{2-4}
+ & $x_{124,11}$ & $d_{2}$ & $h_0^2x_{123,11}$ \\\hline\hline
+\multirow{5}{*}{10} & $h_1x_{123,9}+h_0^2x_{124,8}$ & $d_{2}^{-1}$ & $x_{125,8}$ \\\cline{2-4}
+ & $x_{124,10,2}+h_0x_{124,9}$ & $d_{4}^{-1}$ & $h_6[H_1]$ \\\cline{2-4}
+ & $x_{124,10}+h_0^2x_{124,8}$ & $d_{4}^{-1}$ & $h_6[H_1]+h_0x_{125,5}$ \\\cline{2-4}
+ & $h_0^2x_{124,8}$ & & Permanent \\\cline{2-4}
+ & $h_0x_{124,9}$ & $d_{5}$ & $h_4x_{108,14}$ \\\hline\hline
+\multirow{3}{*}{9} & $x_{124,9,2}+h_0x_{124,8}$ & $d_{3}$ & $h_0x_{123,11}+h_0^2h_6[B_4]$ \\\cline{2-4}
+ & $x_{124,9}+h_0x_{124,8}$ & $d_{3}$ & $x_{123,12}$ \\\cline{2-4}
+ & $h_0x_{124,8}$ & $d_{2}$ & $h_0^2x_{123,9}$ \\\hline\hline
+\multirow{1}{*}{8} & $x_{124,8}$ & $d_{2}$ & $h_0x_{123,9}$ \\\hline\hline
+\multirow{3}{*}{7} & $h_0x_{124,6}$ & $d_{2}^{-1}$ & $x_{125,5}$ \\\cline{2-4}
+ & $h_6A$ & $d_{5}$ & $h_0^2h_6[B_4]$ \\\cline{2-4}
+ & $x_{124,7}$ & $d_{3}$ & $x_{123,10}+h_6[B_4]$ \\\hline\hline
+\multirow{1}{*}{6} & $x_{124,6}$ & $d_{5}$ & $h_5x_{92,10}$ \\\hline\hline
+\multirow{1}{*}{0-5} & \multicolumn{3}{c|}{}\\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 12$ in stem 124}
+\label{Table:S124.12}
+\end{table}
+
+\begin{table}
+    \centering
+\scalebox{0.9}{\begin{tabular}{|c|l|l|l|}\hline
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{4}{*}{25} & $d_0^2e_0g[B_4]$ & $d_{4}^{-1}$ & $h_1x_{125,20}$ \\\cline{2-4}
+ & $x_{125,25,2}+x_{125,25}+g^4\Delta h_1g$ & $d_{4}^{-1}$ & $x_{126,21}+\text{possibly }h_1x_{125,20}$ \\\cline{2-4}
+ & $g^4\Delta h_1g$ & & Permanent \\\cline{2-4}
+ & $x_{125,25}$ & $d_{2}$ & $h_0x_{124,26}$ \\\hline\hline
+\multirow{1}{*}{24} & $e_0g\Delta^2g^2$ & $d_{2}$ & $d_0g^4\Delta h_2^2$ \\\hline\hline
+\multirow{2}{*}{23} & $h_0^2e_0x_{108,17}$ & $d_{3}$ & $d_0^3e_0Mg$ \\\cline{2-4}
+ & $h_0^9x_{125,14}$ & $d_{2}$ & $h_0^{11}x_{124,14,2}$ \\\hline\hline
+\multirow{4}{*}{22} & $g^3Mg$ & $d_{4}^{-1}$ & $x_{126,18}$ \\\cline{2-4}
+ & $ix_{102,15}+h_0^8x_{125,14}$ & $d_{4}^{-1}$ & $gx_{106,14}+e_0x_{109,14,2}$ \\\cline{2-4}
+ & $h_0^8x_{125,14}$ & $d_{2}$ & $h_0^{10}x_{124,14,2}$ \\\cline{2-4}
+ & $h_0e_0x_{108,17}$ & $d_{2}$ & $h_0^2d_0x_{110,18}$ \\\hline\hline
+\multirow{3}{*}{21} & $x_{125,21}$ & $d_{4}^{-1}$ & $d_0x_{112,13}$ \\\cline{2-4}
+ & $h_0^7x_{125,14}$ & $d_{2}$ & $h_0^9x_{124,14,2}$ \\\cline{2-4}
+ & $e_0x_{108,17}$ & $d_{2}$ & $d_0g\Delta h_2^2[B_4]+h_0d_0x_{110,18}$ \\\hline\hline
+\multirow{3}{*}{20} & $h_0d_0gx_{91,11}$ & $d_{2}^{-1}$ & $x_{126,18,2}$ \\\cline{2-4}
+ & $x_{125,20}$ & $d_{3}$ & $d_0g\Delta h_2^2[B_4]$ \\\cline{2-4}
+ & $h_0^6x_{125,14}$ & $d_{2}$ & $h_0^8x_{124,14,2}$ \\\hline
+ \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $20 \le s \le 25$ in stem 125}
+\label{Table:S125.20}
+\end{table}
+
+\begin{table}
+    \centering
+\scalebox{0.85}{\begin{tabular}{|c|l|l|l|}\hline %%%%%%%%%%%%%%%%%%%%%%
+\multirow{3}{*}{19} & $gx_{105,15}$ & $d_{3}$ & $g^2\Delta^2t$ \\\cline{2-4}
+ & $h_0^5x_{125,14}$ & $d_{2}$ & $h_0^7x_{124,14,2}$ \\\cline{2-4}
+ & $d_0gx_{91,11}$ & $d_{2}$ & $h_0d_0^2[\Delta\Delta_1g]$ \\\hline\hline
+\multirow{2}{*}{18} & $d_0^2x_{97,10}$ & $d_{5}^{-1}$ & $h_1x_{125,12,2}$ \\\cline{2-4}
+ & $h_0^4x_{125,14}$ & $d_{2}$ & $h_0^6x_{124,14,2}$ \\\hline\hline
+\multirow{2}{*}{17} & $h_0^2Q_2x_{68,8}$ & $d_{2}^{-1}$ & $h_0D_2x_{68,8}$ \\\cline{2-4}
+ & $h_0^3x_{125,14}$ & $d_{2}$ & $h_0^5x_{124,14,2}$ \\\hline\hline
+\multirow{4}{*}{16} & $h_0Q_2x_{68,8}$ & $d_{2}^{-1}$ & $D_2x_{68,8}$ \\\cline{2-4}
+ & $h_1x_{124,15}$ & $d_{4}^{-1}$ & $h_0^2x_{126,10}$ \\\cline{2-4}
+ & $x_{125,16}$ & $d_{2}$ & $h_0x_{124,17}+h_0^4x_{124,14,2}$ \\\cline{2-4}
+ & $h_0^2x_{125,14}$ & $d_{2}$ & $h_0^4x_{124,14,2}$ \\\hline\hline
+\multirow{5}{*}{15} & $h_0^3x_{125,12}$ & $d_{2}^{-1}$ & $h_0h_3x_{119,11}$ \\\cline{2-4}
+ & $Q_2x_{68,8}$ & $d_{4}^{-1}$ & $h_1x_{125,10}$ \\\cline{2-4}
+ & $h_1x_{124,14}$ & $d_{5}$ & $d_0^2[\Delta\Delta_1g]$ \\\cline{2-4}
+ & $x_{125,15}$ & $d_{2}$ & $h_0^3x_{124,14}$ \\\cline{2-4}
+ & $h_0x_{125,14}$ & $d_{2}$ & $h_0^2x_{124,15}$ \\\hline\hline
+\multirow{3}{*}{14} & $h_0^2x_{125,12}$ & $d_{2}^{-1}$ & $h_3x_{119,11}$ \\\cline{2-4}
+ & $h_1h_4x_{109,12}$ & & Permanent \\\cline{2-4}
+ & $x_{125,14}$ & $d_{2}$ & $h_0x_{124,15}$ \\\hline\hline
+\multirow{5}{*}{13} & $h_0^4x_{125,9,2}$ & $d_{2}^{-1}$ & $x_{126,11}$ \\\cline{2-4}
+ & $h_0^5x_{125,8}$ & $d_{2}^{-1}$ & $h_0x_{126,10}$ \\\cline{2-4}
+ & $nx_{94,8}$ & $d_{4}^{-1}$ & $h_1x_{125,8}$ \\\cline{2-4}
+ & $h_0x_{125,12}$ & $d_{4}^{-1}$ & $h_1x_{125,8,2}$ \\\cline{2-4}
+ & $h_3x_{118,12}$ & $d_{3}$ & $h_1x_{123,15}$ \\\hline\hline
+\multirow{5}{*}{12} & $h_0h_6x_{62,10}$ & $d_{2}^{-1}$ & $x_{126,10}$ \\\cline{2-4}
+ & $h_0^3x_{125,9,2}+h_0^4x_{125,8}$ & $d_{3}^{-1}$ & $x_{126,9}$ \\\cline{2-4}
+ & $h_0^4x_{125,8}$ & $d_{3}^{-1}$ & $x_{126,9}+h_0x_{126,8,3}$ \\\cline{2-4}
+ & $x_{125,12}$ & $d_{2}$ & $h_1x_{123,13}$ \\\cline{2-4}
+ & $x_{125,12,2}$ & $d_{2}$ & $h_1x_{123,13,2}$ \\\hline\hline
+\multirow{5}{*}{11} & $h_1x_{124,10,2}$ & $d_{3}^{-1}$ & $x_{126,8}$ \\\cline{2-4}
+ & $h_1x_{124,10}$ & $d_{3}^{-1}$ & $x_{126,8,2}$ \\\cline{2-4}
+ & $h_0^2x_{125,9,2}$ & $d_{5}$ & $?$ \\\cline{2-4}
+ & $h_6x_{62,10}$ & $d_{4}$ & $x_{124,15}$ \\\cline{2-4}
+ & $h_0^3x_{125,8}$ & $d_{2}$ & $h_0^5x_{124,8}$ \\\hline\hline
+\multirow{5}{*}{10} & $h_0x_{125,9}$ & $d_{2}^{-1}$ & $x_{126,8,3}$ \\\cline{2-4}
+ & $x_{125,10,2}$ & $d_{3}$ & $[H_1](\Delta e_1+C_0+h_0^6h_5^2)$ \\\cline{2-4}
+ & $x_{125,10}$ & $d_{2}$ & $h_0x_{124,11,2}+h_0x_{124,11}$ \\\cline{2-4}
+ & $h_0x_{125,9,2}$ & $d_{2}$ & $h_0^2x_{124,10,2}+h_0^4x_{124,8}$ \\\cline{2-4}
+ & $h_0^2x_{125,8}$ & $d_{2}$ & $h_0^4x_{124,8}$ \\\hline\hline
+\multirow{5}{*}{9} & $h_6(\Delta e_1+C_0+h_0^6h_5^2)$ & & Permanent \\\cline{2-4}
+ & $h_5x_{94,8}$ & $d_{7}$ & $?$ \\\cline{2-4}
+ & $x_{125,9}$ & $d_{3}$ & $h_1x_{123,11,2}$ \\\cline{2-4}
+ & $x_{125,9,2}$ & $d_{2}$ & $h_0x_{124,10,2}+h_0^3x_{124,8}$ \\\cline{2-4}
+ & $h_0x_{125,8}$ & $d_{2}$ & $h_0^3x_{124,8}$ \\\hline\hline
+\multirow{2}{*}{8} & $x_{125,8,2}$ & $d_{3}$ & $x_{124,11,3}$ \\\cline{2-4}
+ & $x_{125,8}$ & $d_{2}$ & $h_1x_{123,9}+h_0^2x_{124,8}$ \\\hline\hline
+\multirow{1}{*}{7} & $h_0^2x_{125,5}$ & $d_{3}^{-1}$ & $x_{126,4}$ \\\hline\hline
+\multirow{2}{*}{6} & $h_6[H_1]$ & $d_{4}$ & $x_{124,10,2}+h_0x_{124,9}$ \\\cline{2-4}
+ & $h_0x_{125,5}$ & $d_{4}$ & $x_{124,10,2}+x_{124,10}+h_0x_{124,9}+h_0^2x_{124,8}$ \\\hline\hline
+\multirow{1}{*}{5} & $x_{125,5}$ & $d_{2}$ & $h_0x_{124,6}$ \\\hline
+\hline
+\multirow{1}{*}{0-4} & \multicolumn{3}{c|}{}\\\hline
+ \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 19$ in stem 125}
+\label{Table:S125.19}
+\end{table}
+
+
+\begin{table}
+    \centering
+\scalebox{0.85}{\begin{tabular}{|c|l|l|l|}\hline
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{1}{*}{25} & $h_0^7x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{21}h_7$ \\\hline\hline
+\multirow{4}{*}{24} & $d_0e_0\Delta h_2^2Mg$ & $d_{2}^{-1}$ & $d_0x_{113,18}$ \\\cline{2-4}
+ & $h_0^6x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{20}h_7$ \\\cline{2-4}
+ & $g^4\Delta h_2c_1$ & $d_{3}^{-1}$ & $g^3C^{\prime\prime}$ \\\cline{2-4}
+ & $d_0Pd_0M^2$ & $d_{4}^{-1}$ & $d_0e_0[\Delta\Delta_1g]$ \\\hline\hline
+\multirow{2}{*}{23} & $h_0^5x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{19}h_7$ \\\cline{2-4}
+ & $x_{126,23}$ & $d_{4}^{-1}$ & $e_0x_{110,15}$ \\\hline\hline
+\multirow{2}{*}{22} & $h_0x_{126,21}+h_0^4x_{126,18}$ & $d_{3}^{-1}$ & $h_1x_{126,18,2}$ \\\cline{2-4}
+ & $h_0^4x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{18}h_7$ \\\hline\hline
+\multirow{3}{*}{21} & $h_0^3x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{17}h_7$ \\\cline{2-4}
+ & $h_1x_{125,20}$ & $d_{4}$ & $d_0^2e_0g[B_4]$ \\\cline{2-4}
+ & $x_{126,21}$ & $d_{4}$ & $x_{125,25,2}+x_{125,25}+g^4\Delta h_1g+\text{possibly }d_0^2e_0gB_4$ \\\hline\hline
+\multirow{2}{*}{20} & $h_0^2x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{16}h_7$ \\\cline{2-4}
+ & $d_0x_{112,16}$ & $d_{5}^{-1}$ & $x_{127,15}$ \\\hline\hline
+\multirow{2}{*}{19} & $h_0x_{126,18}$ & $d_{3}^{-1}$ & $h_0^{15}h_7$ \\\cline{2-4}
+ & $g^3x_{66,7}$ & $d_{3}^{-1}$ & $gx_{107,12}$ \\\hline\hline
+\multirow{4}{*}{18} & $x_{126,18}+e_0x_{109,14,2}$ & $d_{7}$ & $?$ \\\cline{2-4}
+ & $e_0x_{109,14,2}$ & $d_{4}$ & $g^3Mg$ \\\cline{2-4}
+ & $gx_{106,14}$ & $d_{4}$ & $ix_{102,15}+g^3Mg+h_0^8x_{125,14}$ \\\cline{2-4}
+ & $x_{126,18,2}$ & $d_{2}$ & $h_0d_0gx_{91,11}$ \\\hline\hline
+\multirow{4}{*}{17} & $h_0^{15}h_6^2$ & $d_{2}^{-1}$ & $h_0^{14}h_7$ \\\cline{2-4}
+ & $h_1^2x_{124,15}$ & $d_{2}^{-1}$ & $h_6x_{64,14}$ \\\cline{2-4}
+ & $x_{126,17}$ & $d_{8}$ & $?$ \\\cline{2-4}
+ & $d_0x_{112,13}$ & $d_{4}$ & $x_{125,21}$ \\\hline\hline
+\multirow{3}{*}{16} & $h_0^{14}h_6^2$ & $d_{2}^{-1}$ & $h_0^{13}h_7$ \\\cline{2-4}
+ & $h_0^2D_2x_{68,8}$ & $d_{3}^{-1}$ & $x_{127,13}$ \\\cline{2-4}
+ & $h_1^2x_{124,14}$ & $d_{6}^{-1}$ & $h_2x_{124,9}+h_0^2x_{127,8}$ \\\hline\hline
+\multirow{2}{*}{15} & $h_0^{13}h_6^2$ & $d_{2}^{-1}$ & $h_0^{12}h_7$ \\\cline{2-4}
+ & $h_0D_2x_{68,8}$ & $d_{2}$ & $h_0^2Q_2x_{68,8}$ \\\hline\hline
+\multirow{4}{*}{14} & $h_0^{12}h_6^2$ & $d_{2}^{-1}$ & $h_0^{11}h_7$ \\\cline{2-4}
+ & $x_{126,14}$ & $d_{4}^{-1}$ & $h_0^2x_{127,8}$ \\\cline{2-4}
+ & $h_1h_3x_{118,12}$ & $d_{5}^{-1}$ & $h_1x_{126,8,2}$ \\\cline{2-4}
+ & $D_2x_{68,8}$ & $d_{2}$ & $h_0Q_2x_{68,8}$ \\\hline\hline
+\multirow{3}{*}{13} & $h_0^{11}h_6^2$ & $d_{2}^{-1}$ & $h_0^{10}h_7$ \\\cline{2-4}
+ & $h_1x_{125,12,2}$ & $d_{5}$ & $d_0^2x_{97,10}$ \\\cline{2-4}
+ & $h_0h_3x_{119,11}$ & $d_{2}$ & $h_0^3x_{125,12}$ \\\hline\hline
+\multirow{5}{*}{12} & $d_1x_{94,8}$ & $d_{2}^{-1}$ & $x_{127,10}$ \\\cline{2-4}
+ & $h_0x_{126,11}$ & $d_{2}^{-1}$ & $h_3x_{120,9}$ \\\cline{2-4}
+ & $h_0^{10}h_6^2$ & $d_{2}^{-1}$ & $h_0^9h_7$ \\\cline{2-4}
+ & $h_0^2x_{126,10}$ & $d_{4}$ & $h_1x_{124,15}$ \\\cline{2-4}
+ & $h_3x_{119,11}$ & $d_{2}$ & $h_0^2x_{125,12}$ \\\hline\hline
+\multirow{6}{*}{11} & $h_0^2x_{126,9}$ & $d_{2}^{-1}$ & $h_0x_{127,8}$ \\\cline{2-4}
+ & $h_0^9h_6^2$ & $d_{2}^{-1}$ & $h_0^8h_7$ \\\cline{2-4}
+ & $h_1x_{125,10,2}+h_1x_{125,10}$ & & Permanent \\\cline{2-4}
+ & $h_1x_{125,10}$ & $d_{4}$ & $Q_2x_{68,8}$ \\\cline{2-4}
+ & $x_{126,11}$ & $d_{2}$ & $h_0^4x_{125,9,2}$ \\\cline{2-4}
+ & $h_0x_{126,10}$ & $d_{2}$ & $h_0^5x_{125,8}$ \\\hline
+ \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $11 \le s \le 25$ in stem 126}
+\label{Table:S126.11}
+\end{table}
+
+
+\begin{table}
+    \centering
+\scalebox{0.85}{\begin{tabular}{|c|l|l|l|}\hline %%%%%%%%%%%%%%%%%%%%%%
+\multirow{5}{*}{10} & $h_0x_{126,9}$ & $d_{2}^{-1}$ & $x_{127,8}$ \\\cline{2-4}
+ & $h_0^2x_{126,8}$ & $d_{2}^{-1}$ & $h_0x_{127,7}$ \\\cline{2-4}
+ & $h_0^8h_6^2$ & $d_{2}^{-1}$ & $h_0^7h_7$ \\\cline{2-4}
+ & $h_0^2x_{126,8,3}$ & & Permanent \\\cline{2-4}
+ & $x_{126,10}$ & $d_{2}$ & $h_0h_6x_{62,10}$ \\\hline\hline
+\multirow{6}{*}{9} & $h_0x_{126,8}$ & $d_{2}^{-1}$ & $x_{127,7}$ \\\cline{2-4}
+ & $h_0^7h_6^2$ & $d_{2}^{-1}$ & $h_0^6h_7$ \\\cline{2-4}
+ & $h_1x_{125,8}$ & $d_{4}$ & $nx_{94,8}$ \\\cline{2-4}
+ & $h_1x_{125,8,2}$ & $d_{4}$ & $h_0x_{125,12}$ \\\cline{2-4}
+ & $x_{126,9}$ & $d_{3}$ & $h_0^3x_{125,9,2}+h_0^4x_{125,8}$ \\\cline{2-4}
+ & $h_0x_{126,8,3}$ & $d_{3}$ & $h_0^3x_{125,9,2}$ \\\hline\hline
+\multirow{6}{*}{8} & $h_0^6h_6^2$ & $d_{2}^{-1}$ & $h_0^5h_7$ \\\cline{2-4}
+ & $h_6(C^{\prime}+X_2)$ & $d_{17}$ & $?$ \\\cline{2-4}
+ & $x_{126,8,4}+x_{126,8}$ & $d_{6}$ & $?$ \\\cline{2-4}
+ & $x_{126,8}$ & $d_{3}$ & $h_1x_{124,10,2}$ \\\cline{2-4}
+ & $x_{126,8,2}$ & $d_{3}$ & $h_1x_{124,10}$ \\\cline{2-4}
+ & $x_{126,8,3}$ & $d_{2}$ & $h_0x_{125,9}$ \\\hline\hline
+\multirow{2}{*}{7} & $h_0^5h_6^2$ & $d_{2}^{-1}$ & $h_0^4h_7$ \\\cline{2-4}
+ & $h_1h_6[H_1]$ & $d_{18}$ & $?$ \\\hline\hline
+\multirow{2}{*}{6} & $h_0^4h_6^2$ & $d_{2}^{-1}$ & $h_0^3h_7$ \\\cline{2-4}
+ & $x_{126,6}$ & $d_{3}$ & $h_5x_{94,8} +\text{possibly }h_6(\Delta e_1 + C_0 + h_0^6h_5^2)$ \\\hline\hline
+\multirow{1}{*}{5} & $h_0^3h_6^2$ & $d_{2}^{-1}$ & $h_0^2h_7$ \\\hline\hline
+\multirow{2}{*}{4} & $h_0^2h_6^2$ & $d_{2}^{-1}$ & $h_0h_7$ \\\cline{2-4}
+ & $x_{126,4}$ & $d_{3}$ & $h_0^2x_{125,5}$ \\\hline\hline
+\multirow{1}{*}{3} & $h_0h_6^2$ & $d_{2}^{-1}$ & $h_7$ \\\hline\hline
+\multirow{1}{*}{2} & $h_6^2$ & $d_{7}$ & $?$ \\\hline\hline
+\multirow{1}{*}{0-1} & \multicolumn{3}{c|}{}\\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 10$ in stem 126}
+\label{Table:S126.10}
+\end{table}
+
+\begin{table}
+    \centering
+\scalebox{0.85}{\begin{tabular}{|c|l|l|l|}\hline
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{3}{*}{25} & $h_0^{24}h_7$ & $d_{3}$ & $h_0^{10}x_{126,18}$ \\\cline{2-4}
+ & $ix_{104,18}$ & $d_{2}$ & $d_0^3x_{84,15,2}+h_0d_0x_{112,22}$ \\\cline{2-4}
+ & $d_0g\Delta^3h_1g$ & $d_{2}$ & $d_0e_0g^3m$ \\\hline\hline
+\multirow{3}{*}{24} & $h_0^2d_0x_{113,18}$ & $d_{2}^{-1}$ & $h_0gx_{108,17}$ \\\cline{2-4}
+ & $h_1x_{126,23}$ & $d_{3}^{-1}$ & $x_{128,21}$ \\\cline{2-4}
+ & $h_0^{23}h_7$ & $d_{3}$ & $h_0^9x_{126,18}$ \\\hline\hline
+\multirow{4}{*}{23} & $e_0g\Delta h_2^2[B_4]+h_0d_0x_{113,18}$ & $d_{2}^{-1}$ & $gx_{108,17}$ \\\cline{2-4}
+ & $h_0d_0x_{113,18}$ & $d_{4}$ & $d_0^3x_{84,15,2}$ \\\cline{2-4}
+ & $h_0^{22}h_7$ & $d_{3}$ & $h_0^8x_{126,18}$ \\\cline{2-4}
+ & $d_0Pd_0x_{91,11}$ & $d_{3}$ & $h_1x_{125,25}$ \\\hline\hline
+\multirow{3}{*}{22} & $d_0x_{113,18,2}$ & $d_{4}^{-1}$ & $d_0e_0x_{97,10}$ \\\cline{2-4}
+ & $h_0^{21}h_7$ & $d_{3}$ & $h_0^7x_{126,18}$ \\\cline{2-4}
+ & $d_0x_{113,18}$ & $d_{2}$ & $d_0e_0\Delta h_2^2Mg$ \\\hline\hline
+\multirow{4}{*}{21} & $h_0^6x_{127,15}$ & $d_{2}^{-1}$ & $h_0^5x_{128,14}$ \\\cline{2-4}
+ & $x_{127,21}+g^3C^{\prime\prime}$ & & Permanent \\\cline{2-4}
+ & $h_0^{20}h_7$ & $d_{3}$ & $h_0^6x_{126,18}$ \\\cline{2-4}
+ & $g^3C^{\prime\prime}$ & $d_{3}$ & $g^4\Delta h_2c_1$ \\\hline
+ \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $21 \le s \le 25$ in stem 127}
+\label{Table:S127.21}
+\end{table}
+
+
+\begin{table}
+    \centering
+\scalebox{0.9}{\begin{tabular}{|c|l|l|l|}\hline %%%%%%%%%%%%%%%%%%%%%%
+\multirow{3}{*}{20} & $h_0^5x_{127,15}$ & $d_{2}^{-1}$ & $h_0^4x_{128,14}$ \\\cline{2-4}
+ & $d_0e_0[\Delta\Delta_1g]$ & $d_{4}$ & $d_0Pd_0M^2$ \\\cline{2-4}
+ & $h_0^{19}h_7$ & $d_{3}$ & $h_0^5x_{126,18}$ \\\hline\hline
+\multirow{5}{*}{19} & $h_0^4x_{127,15}$ & $d_{2}^{-1}$ & $h_0^3x_{128,14}$ \\\cline{2-4}
+ & $h_1x_{126,18}$ & & Permanent \\\cline{2-4}
+ & $e_0x_{110,15}$ & $d_{4}$ & $x_{126,23}$ \\\cline{2-4}
+ & $h_1x_{126,18,2}$ & $d_{3}$ & $h_0x_{126,21}+h_0^4x_{126,18}$ \\\cline{2-4}
+ & $h_0^{18}h_7$ & $d_{3}$ & $h_0^4x_{126,18}$ \\\hline\hline
+\multirow{5}{*}{18} & $h_0^3x_{127,15}$ & $d_{2}^{-1}$ & $h_0^2x_{128,14}$ \\\cline{2-4}
+ & $h_0^3h_6x_{64,14}$ & $d_{2}^{-1}$ & $h_0^2h_6x_{65,13}$ \\\cline{2-4}
+ & $g^2\Delta h_1H_1$ & $d_{3}^{-1}$ & $gx_{108,11}$ \\\cline{2-4}
+ & $h_1x_{126,17}$ & & Permanent \\\cline{2-4}
+ & $h_0^{17}h_7$ & $d_{3}$ & $h_0^3x_{126,18}$ \\\hline\hline
+\multirow{5}{*}{17} & $h_0^2h_2x_{124,14}$ & $d_{2}^{-1}$ & $x_{128,15}$ \\\cline{2-4}
+ & $h_0^2x_{127,15}$ & $d_{2}^{-1}$ & $x_{128,15}+h_0x_{128,14}$ \\\cline{2-4}
+ & $h_0^2h_6x_{64,14}$ & $d_{2}^{-1}$ & $h_0h_6x_{65,13}$ \\\cline{2-4}
+ & $gx_{107,13}$ & $d_{4}^{-1}$ & $h_0h_3x_{121,11}$ \\\cline{2-4}
+ & $h_0^{16}h_7$ & $d_{3}$ & $h_0^2x_{126,18}$ \\\hline\hline
+\multirow{6}{*}{16} & $h_0x_{127,15}+h_0h_2x_{124,14}$ & $d_{2}^{-1}$ & $x_{128,14}$ \\\cline{2-4}
+ & $h_0h_6x_{64,14}$ & $d_{2}^{-1}$ & $h_6x_{65,13}$ \\\cline{2-4}
+ & $h_0h_2x_{124,14}$ & & Permanent \\\cline{2-4}
+ & $x_{127,16}$ & & Permanent \\\cline{2-4}
+ & $h_0^{15}h_7$ & $d_{3}$ & $h_0x_{126,18}$ \\\cline{2-4}
+ & $gx_{107,12}$ & $d_{3}$ & $g^3x_{66,7}$ \\\hline\hline
+\multirow{5}{*}{15} & $h_1x_{126,14}$ & $d_{2}^{-1}$ & $x_{128,13,2}$ \\\cline{2-4}
+ & $h_2x_{124,14}$ & & Permanent \\\cline{2-4}
+ & $x_{127,15}$ & $d_{5}$ & $d_0x_{112,16}$ \\\cline{2-4}
+ & $h_0^{14}h_7$ & $d_{2}$ & $h_0^{15}h_6^2$ \\\cline{2-4}
+ & $h_6x_{64,14}$ & $d_{2}$ & $h_1^2x_{124,15}$ \\\hline\hline
+\multirow{3}{*}{14} & $h_0g\Delta h_6g$ & $d_{2}^{-1}$ & $x_{128,12,2}$ \\\cline{2-4}
+ & $h_0h_3x_{120,12}$ & $d_{2}^{-1}$ & $h_3x_{121,11}$ \\\cline{2-4}
+ & $h_0^{13}h_7$ & $d_{2}$ & $h_0^{14}h_6^2$ \\\hline\hline
+\multirow{5}{*}{13} & $h_0^3x_{127,10}$ & $d_{2}^{-1}$ & $h_0x_{128,10}$ \\\cline{2-4}
+ & $g\Delta h_6g$ & $d_{3}^{-1}$ & $x_{128,10,2}$ \\\cline{2-4}
+ & $h_3x_{120,12}$ & $d_{4}^{-1}$ & $h_2x_{125,8,2}$ \\\cline{2-4}
+ & $x_{127,13}$ & $d_{3}$ & $h_0^2D_2x_{68,8}$ \\\cline{2-4}
+ & $h_0^{12}h_7$ & $d_{2}$ & $h_0^{13}h_6^2$ \\\hline\hline
+\multirow{3}{*}{12} & $h_0^2x_{127,10}$ & $d_{2}^{-1}$ & $x_{128,10}$ \\\cline{2-4}
+ & $h_1x_{126,11}$ & $d_{3}^{-1}$ & $h_1x_{127,8}$ \\\cline{2-4}
+ & $h_0^{11}h_7$ & $d_{2}$ & $h_0^{12}h_6^2$ \\\hline\hline
+\multirow{4}{*}{11} & $h_0h_3x_{120,9}$ & $d_{3}^{-1}$ & $h_3D_2h_6$ \\\cline{2-4}
+ & $h_0h_2x_{124,9}$ & & Permanent \\\cline{2-4}
+ & $h_0x_{127,10}$ & & Permanent \\\cline{2-4}
+ & $h_0^{10}h_7$ & $d_{2}$ & $h_0^{11}h_6^2$ \\\hline\hline
+\multirow{6}{*}{10} & $h_1^2x_{125,8}$ & & Permanent \\\cline{2-4}
+ & $h_2x_{124,9}+h_0^2x_{127,8}$ & $d_{6}$ & $h_1^2x_{124,14}$ \\\cline{2-4}
+ & $h_0^2x_{127,8}$ & $d_{4}$ & $x_{126,14}$ \\\cline{2-4}
+ & $x_{127,10}$ & $d_{2}$ & $d_1x_{94,8}$ \\\cline{2-4}
+ & $h_3x_{120,9}$ & $d_{2}$ & $h_0x_{126,11}$ \\\cline{2-4}
+ & $h_0^9h_7$ & $d_{2}$ & $h_0^{10}h_6^2$ \\\hline
+  \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $10 \le s \le 20$ in stem 127}
+\label{Table:S127.20}
+\end{table}
+
+\begin{table}
+    \centering
+\scalebox{0.95}{\begin{tabular}{|c|l|l|l|}\hline %%%%%%%%%%%%%%%%%%%%%%
+\multirow{5}{*}{9} & $h_0^2x_{127,7}$ & $d_{2}^{-1}$ & $h_0x_{128,6}$ \\\cline{2-4}
+ & $h_1x_{126,8}$ & & Permanent \\\cline{2-4}
+ & $h_1x_{126,8,2}$ & $d_{5}$ & $h_1h_3x_{118,12}$ \\\cline{2-4}
+ & $h_0x_{127,8}$ & $d_{2}$ & $h_0^2x_{126,9}$ \\\cline{2-4}
+ & $h_0^8h_7$ & $d_{2}$ & $h_0^9h_6^2$ \\\hline\hline
+\multirow{7}{*}{8} & $h_0x_{127,7,2}+h_0x_{127,7}+h_0^2x_{127,6}$ & $d_{2}^{-1}$ & $x_{128,6}$ \\\cline{2-4}
+ & $h_0^2x_{127,6}$ & $d_{2}^{-1}$ & $h_0x_{128,5}$ \\\cline{2-4}
+ & $h_2h_6A$ & & Permanent \\\cline{2-4}
+ & $h_2x_{124,7}$ & $d_{9}$ & $?$ \\\cline{2-4}
+ & $x_{127,8}$ & $d_{2}$ & $h_0x_{126,9}$ \\\cline{2-4}
+ & $h_0x_{127,7}$ & $d_{2}$ & $h_0^2x_{126,8}$ \\\cline{2-4}
+ & $h_0^7h_7$ & $d_{2}$ & $h_0^8h_6^2$ \\\hline\hline
+\multirow{5}{*}{7} & $h_0x_{127,6}$ & $d_{2}^{-1}$ & $x_{128,5}$ \\\cline{2-4}
+ & $h_1x_{126,6}$ & $d_{10}$ & $?$ \\\cline{2-4}
+ & $x_{127,7,2}+x_{127,7}$ & $d_{3}$ & $?$ \\\cline{2-4}
+ & $x_{127,7}$ & $d_{2}$ & $h_0x_{126,8}$ \\\cline{2-4}
+ & $h_0^6h_7$ & $d_{2}$ & $h_0^7h_6^2$ \\\hline\hline
+\multirow{2}{*}{6} & $x_{127,6}$ & $d_{4}$ & $?$ \\\cline{2-4}
+ & $h_0^5h_7$ & $d_{2}$ & $h_0^6h_6^2$ \\\hline\hline
+\multirow{1}{*}{5} & $h_0^4h_7$ & $d_{2}$ & $h_0^5h_6^2$ \\\hline\hline
+\multirow{1}{*}{4} & $h_0^3h_7$ & $d_{2}$ & $h_0^4h_6^2$ \\\hline\hline
+\multirow{2}{*}{3} & $h_1h_6^2$ & $d_{14}$ & $?$ \\\cline{2-4}
+ & $h_0^2h_7$ & $d_{2}$ & $h_0^3h_6^2$ \\\hline\hline
+\multirow{1}{*}{2} & $h_0h_7$ & $d_{2}$ & $h_0^2h_6^2$ \\\hline\hline
+\multirow{1}{*}{1} & $h_7$ & $d_{2}$ & $h_0h_6^2$ \\\hline\hline
+\multirow{1}{*}{0} & \multicolumn{3}{c|}{}\\\hline
+ \end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0$ for $s \le 9$ in stem 127}
+\label{Table:S127.9}
+\end{table}
+
+\makebibliography
+
+\hspace{1cm}\vspace{5pt}
+
+% {\scshape Weinan Lin, School of Mathematical Sciences, Peking University, 5 Yi He Yuan Road, Haidian District, Beijing, 100871, China.}
+
+% \emph{Email address}: \url{lwnpku@math.pku.edu.cn}

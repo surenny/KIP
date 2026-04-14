@@ -1,0 +1,675 @@
+\section{Proof of the main theorem}\label{sec:proof}
+
+In this section, we present the proof of our main Theorem~\ref{thm:h62}. 
+
+\begin{theorem}[Theorem~\ref{thm:h62}] \label{thm:126survives}
+    \uses{thm:bjmbx,prop:possibleh62,prop:state5false}
+    \lean{KervaireInvariant.MainProof.theorem_126survives}
+    The element $h_6^2$ survives to the $E_\infty$-page in the Adams spectral sequence.
+\end{theorem}
+
+We first recall the following theorem, known as the inductive method, originally by Barratt--Jones--Mahowald \cite{BJMinduction} and later extended to the H$\mathbb{F}_2$-synthetic setting by Burklund--Xu \cite[Proposition~7.19]{BurklundXu}.
+
+\begin{notation}
+    Let $\theta_5 = [h_5^2]$ represent any synthetic homotopy class in $\pi_{62,62+2}S^{0,0}$ detected by $h_5^2$ in the Adams $E_2$-page. For convenience, we use the same notation, $\theta_5$, to denote its image in $\pi_{62,62+2}S^{0,0}/\lambda^r$ via the map $S^{0,0} \rightarrow S^{0,0}/\lambda^r$ for all $r \ge 1$. Similarly, let $\eta = [h_1] \in \pi_{1,1+1}S^{0,0}$.
+\end{notation}
+
+
+\begin{axiom}[Barratt--Jones--Mahowald, Burklund--Xu] \label{thm:bjmbx}
+\lean{KervaireInvariant.MainProof.theorem_bjmbx}
+\begin{enumerate}
+ \item[]
+ \item    The element $h_6^2$ survives to the $E_{r+3}$-page of the classical Adams spectral sequence if and only if for some $\theta_5$, 
+ $$\lambda \eta \theta_5^2 = 0 \ \text{in} \ \pi_{125,125+4} S^{0,0}/\lambda^{r+1}.$$
+ \item   In particular, $h_6^2$ is a permanent cycle in the classical Adams spectral sequence if and only if for some $\theta_5$,
+ $$\lambda \eta \theta_5^2 = 0 \ \text{in} \ \pi_{125,125+4} S^{0,0}.$$ 
+ \end{enumerate}
+\end{axiom}
+
+\begin{remark}
+    The statement in Axiom~\ref{thm:bjmbx}(1) was originally stated as 
+    $$\eta \theta_5^2 = 0 \ \text{in} \ \pi_{125,125+5} S^{0,0}/\lambda^r$$
+    in \cite[Proposition~7.19]{BurklundXu}. Upon inspection, $\pi_{125,125+5} S^{0,0}$ doesn't contain any $\lambda$-torsion classes, so this is equivalent to the version we stated, which is more consistent with the statement in part (2). 
+\end{remark}
+
+\begin{remark} \label{rem:theta5choice}
+    \lean{KervaireInvariant.MainProof.remark_theta5choice}
+    Axiom~\ref{thm:bjmbx} is proved using the quadratic construction  on a map from the mod 2 Moore spectrum to the sphere spectrum, where the restriction on the bottom cell is $\theta_5$. Therefore, it is necessary to use a $\theta_5$ of order 2. 
+    
+    Notably, \cite{Xu, IWX} confirms that all classical $\theta_5$'s indeed have order 2. Furthermore, from Proposition~\ref{prereq:prop:syn-einfty-nuX} and an analysis of the differentials in the classical Adams spectral sequence, we find that $\pi_{62,62+2}S^{0,0}$ doesn't contain any $\lambda$-torsion. Consequently, all synthetic $\theta_5$'s also have order 2, making it valid to apply Axiom~\ref{thm:bjmbx} to any $\theta_5$. 
+    
+    Additionally, since the proof of Axiom~\ref{thm:bjmbx} shows that the expression $\lambda \eta \theta_5^2$ corresponds to the total differential $\delta_1: S^{0,0}/\lambda \rightarrow S^{1,-1}$ on $h_6^2$, the value of the expression $\lambda \eta \theta_5^2$ is consistent for every choice of $\theta_5$.  (Note that our grading for the triangulation translation functor is smashing with $S^{1,0}$, which is consistent with \cite[Appendix A]{BHS} but is different from \cite[Section 7]{BurklundXu}, so the target of $\delta_1$ is $S^{1,-1}$. )
+\end{remark}
+
+We pay special attention to the following three elements on the classical Adams $E_2$-page (see Figure~\ref{Fig:near126} and Tables~\ref{Table:S125.19}, \ref{Table:S126.10}, \ref{Table:S124.12}, \ref{Table:S125.20} in the Appendix): 
+\begin{align*}
+    h_1h_4x_{109,12} & \in \Ext_A^{14, 125+14}, \\
+    x_{126,8,4} + x_{126,8} & \in \Ext_A^{8, 126+8}, \\
+    h_0^2x_{124,8} & \in \Ext_A^{10, 124+10},\\
+    g^4\Delta h_1g & \in \Ext_A^{25,125+25}.
+\end{align*}
+
+For the right side of Figure ~\ref{Fig:near126}, we use dashed differentials to indicate the shortest possible nonzero differentials that these elements could support.
+
+{
+\include{112}
+}
+
+From Figure~\ref{Fig:near126} and Tables~\ref{Table:S124.12}, \ref{Table:S126.10}, \ref{Table:S125.19}, \ref{Table:S125.20} in the Appendix, we know that
+\begin{axiom} \label{fact:theta5sqAF}
+\lean{KervaireInvariant.MainProof.fact_theta5sqAF}
+\begin{enumerate}
+   % \item[]
+    \item $x_{126,8,4} + x_{126,8}$ survives to the $E_6$-page.
+    
+    \item $h_1h_4x_{109,12}$ is a permanent cycle, and can only be killed by 
+    $$d_6(x_{126,8,4} + x_{126,8}) \ \text{or} \ d_{12}(h_6^2).$$
+    
+    \item $h_0^2x_{124,8}$ survives to the $E_\infty$-page.
+
+    \item In $\Ext_A^{25,125+25}$, the element $g^4\Delta h_1g$ is the only one that survives to the classical $E_5$-page.
+\end{enumerate}\end{axiom}
+
+\begin{remark}
+From Table~\ref{Table:S126.10} in the Appendix, we have
+  % For Axiom~\ref{fact:theta5sqAF}(2), the element $x_{126,6} \in \Ext_A^{6, 126+6}$ supports a nonzero $d_3$-differential and therefore cannot kill $h_1h_4x_{109,12}$. In fact, since 
+ %  $$h_2 \cdot d_3(x_{126,6}) = d_3(h_2 \cdot x_{126,6}) = h_0^2 h_3 D_2 h_6 \neq 0 
+ %  \ \text{on the} \ E_3\text{-page},$$
+ %  we have 
+   $$d_3(x_{126,6}) = h_5x_{94,8}, \ \text{or} \ h_5x_{94,8} + h_6(\Delta e_1 + C_0 + h_0^6h_5^2) \neq 0.$$
+   Therefore, the element $x_{126,6} \in \Ext_A^{6, 126+6}$ cannot kill $h_1h_4x_{109,12}$.
+\end{remark}
+
+We will apply Axiom~\ref{thm:bjmbx} to prove the following Proposition~\ref{prop:possibleh62}.
+
+\begin{proposition} \label{prop:possibleh62}
+\uses{thm:bjmbx,prereq:ax:rigid,prereq:ax:lambda-bockstein,cor:delta-ess-general,lem:equistate4,lem:equistate5,fact:theta5sqAF}
+\lean{KervaireInvariant.MainProof.proposition_possibleh62}
+Exactly one of the following two statements is true:
+\begin{enumerate}
+    \item The element $h_6^2$ survives to the $E_\infty$-page.
+   
+    \item There is a nonzero classical Adams differential 
+    $$d_{12}(h_6^2) = h_1h_4x_{109,12}.$$
+\end{enumerate}
+Furthermore, statement $(2)$ is true if and only if the following three statements are all true:
+\begin{enumerate} \setcounter{enumi}{2}
+    \item \leavevmode\vspace*{-\dimexpr\abovedisplayskip + \baselineskip}  
+    $$d_6(x_{126,8,4} + x_{126,8}) = 0.$$
+    
+    \item There exists a $\theta_5$ such that 
+    $\theta_5^2$ is detected by $\lambda^6 h_0^2x_{124,8}$. In particular, 
+    $$\theta_5^2 = \lambda^6 [h_0^2x_{124,8}] \neq 0 \in \pi_{124,124+4}S^{0,0}$$
+    for some $[h_0^2x_{124,8}]$.
+
+    \item There exists a homotopy class $[h_0^2x_{124,8}]$ such that
+    $\lambda^3 \eta [h_0^2x_{124,8}]$ is detected by $\lambda^6 h_1h_4x_{109,12}$. In particular, we have 
+    $$\lambda^3 \eta [h_0^2x_{124,8}] = \lambda^6 [h_1h_4x_{109,12}] \in \pi_{125,125+8} S^{0,0}$$
+    for some $[h_1h_4x_{109,12}]$.
+\end{enumerate}
+\end{proposition}
+
+By further analyzing classical Adams differentials, we reduce the $\eta$-extension in statement $(5)$ of Proposition~\ref{prop:possibleh62} to a specific 2-extension in stem 125 (Corollary~\ref{cor:2ext125}), and then compare it with a particular $\nu$-extension in stem 125 (Lemma~\ref{lem:nuext125}) to demonstrate that the 2-extension cannot hold. This ultimately leads to the proof of Proposition~\ref{prop:state5false}.
+
+\begin{proposition} \label{prop:state5false}
+    \uses{cor:2ext125,lem:nuext125}
+    \lean{KervaireInvariant.MainProof.proposition_state5false}
+    If statement $(3)$ is true, then statement $(5)$ in Proposition~\ref{prop:possibleh62} must be false.
+\end{proposition}
+
+\begin{proof}[Proof of Theorem~\ref{thm:126survives}]
+    From Proposition~\ref{prop:state5false}, at least one of  statements $(3)$ or $(5)$ in Proposition~\ref{prop:possibleh62} is false. Consequently,  statement $(2)$ is also false, which confirms that statement $(1)$ in Proposition~\ref{prop:possibleh62} is true.  
+\end{proof}
+
+In the rest of this section, we prove Propositions~\ref{prop:possibleh62} and \ref{prop:state5false}.\\
+
+To prove Proposition~\ref{prop:possibleh62}, we first establish Lemmas~\ref{lem:equistate4} and \ref{lem:equistate5}, which demonstrate that the existential statements $(4)$ and $(5)$ in Proposition~\ref{prop:possibleh62} are equivalent to their corresponding universal statements $(4')$ and $(5')$. 
+
+%\usepackage{enumitem}
+\begin{lemma} \label{lem:equistate4}
+    \uses{rem:theta5choice}
+    \lean{KervaireInvariant.MainProof.lemma_equistate4}
+    The statement $(4)$ in Proposition~\ref{prop:possibleh62} is equivalent to the following statement $(4')$:
+    \begin{enumerate}\setcounter{enumi}{3}
+    \item For every $\theta_5$, we have $\theta_5^2$ is detected by $\lambda^6 h_0^2x_{124,8}$. In particular, 
+    $$\theta_5^2 = \lambda^6 [h_0^2x_{124,8}] \neq 0 \in \pi_{124,124+4}S^{0,0}$$
+    for some $[h_0^2x_{124,8}]$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    We only need to show that statement $(4)$ implies statement $(4')$. 
+    
+    According to \cite{IWX}, 
+    $$\pi_{62} \cong \mathbb{Z}/2 \oplus \mathbb{Z}/2 \oplus \mathbb{Z}/2 \oplus \mathbb{Z}/2,$$ 
+    and is generated by $\theta_5$ and classes of $\AF=6,8,10$. Therefore, the indeterminacy of the classical $\theta_5$, or the difference of any two choices of classical $\theta_5$, lies in $\AF \ge 6$.
+    
+    As explained in Remark~\ref{rem:theta5choice}, $\pi_{62,62+2}S^{0,0}$ contains no $\lambda$-torsion, and therefore, the indeterminacy of the synthetic $\theta_5$ also belongs to $\AF \ge 6$. Since every $\theta_5$ has order 2, the indeterminacy of the synthetic $\theta_5^2$ lies in $\AF \ge 12$.
+
+    Therefore, if for some $\theta_5$, $\theta_5^2$ is detected by this specific element $\lambda^6 h_0^2x_{124,8}$, which is nonzero in $\AF=10$, then for any $\theta_5$, $\theta_5^2$ is nonzero and detected by $\lambda^6 h_0^2x_{124,8}$.
+
+\end{proof}
+
+
+\begin{lemma} \label{lem:equistate5}
+    \uses{rem:theta5choice}
+    \lean{KervaireInvariant.MainProof.lemma_equistate5}
+    The statement $(5)$ in Proposition~\ref{prop:possibleh62} is equivalent to the following statement $(5')$:
+    \begin{enumerate}\setcounter{enumi}{4}
+    \item For every homotopy class $[h_0^2x_{124,8}]$, we have
+    $\lambda^3 \eta [h_0^2x_{124,8}]$ is detected by $\lambda^6 h_1h_4x_{109,12}$. In particular, we have 
+    $$\lambda^3 \eta [h_0^2x_{124,8}] = \lambda^6 [h_1h_4x_{109,12}] \in \pi_{125,125+8} S^{0,0}$$
+    for some $[h_1h_4x_{109,12}]$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    We only need to show that statement $(5)$ implies statement $(5')$, which is sufficient to show that the indeterminacy of $[h_0^2x_{124,8}]$, or the difference between any two homotopy classes $[h_0^2x_{124,8}]$, when multiplied by $\lambda^3 \eta$, belongs to $\AF \ge 15$, given that $[h_1h_4x_{109,12}]$ has $\AF=14$.
+
+    Since $[h_0^2x_{124,8}]$ has $\AF=10$, the indeterminacy is generated by cycles in $\AF \ge 11$ of stem 124. We observe that classical cycles in $\AF=11, 12$ of stem 124 are all killed by Adams $d_2$ or $d_3$-differentials, and cycles in $\AF=13$ are all annihilated by $h_1$ in Ext. Therefore, we conclude that the indeterminacy, when multiplied by $\lambda^3 \eta$, belongs to $\AF \ge 15$.
+\end{proof}
+
+\begin{remark}
+    From Axiom~\ref{fact:theta5sqAF}(2) and the rigidity Axioms~\ref{prereq:ax:rigid} and \ref{prereq:ax:lambda-bockstein} for the synthetic Adams spectral sequence for $S^{0,0}$, the right side of the equation in statement $(5')$ is nonzero if and only if statement $(3)$ is true.
+\end{remark}
+
+
+By Lemmas~\ref{lem:equistate4} and \ref{lem:equistate5}, we will freely interchange statements $(4)$ and $(4')$, as well as $(5)$ and $(5')$, depending on the context.\\
+
+Now we prove Proposition~\ref{prop:possibleh62}.
+
+\begin{proof}[Proof of Proposition~\ref{prop:possibleh62}]
+    From the proof of Axiom~\ref{thm:bjmbx} \cite{BurklundXu} we know that
+    $$\delta_1(h_6^2) = \lambda \eta \theta_5^2,$$
+    where $\delta_1$ is the map $S^{0,0}/\lambda \rightarrow S^{1,-1}$. Suppose that $\eta \theta_5^2$ is detected by $\lambda^{n-5} T_n$ in $\AF = n$ of the synthetic Adams spectral sequence for some $T_n \in \Ext_A^{n, 125+n}$. This implies a differential in the $\delta_1$-ESS:
+    $$d_{n-2}^{\delta_1} (h_6^2) = \lambda^{n-2} T_n.$$
+    By Axioms~\ref{prereq:ax:rigid}, \ref{prereq:ax:lambda-bockstein} and Corollary~\ref{cor:delta-ess-general}, this is equivalent to a 
+    synthetic Adams differential
+    $$d_{n-2} (h_6^2) = \lambda^{n-3} T_n$$
+    and a classical Adams differential
+    $$d_{n-2} (h_6^2) = T_n.$$
+    This differential is nonzero if and only if $T_n$ is nonzero on the classical $E_{n-2}$-page, i.e., not the image of a differential $d_{\le n-3}$. In particular, when $\lambda \eta \theta_5^2=0$, we conclude that $h_6^2$ is a permanent cycle.
+
+    We first show that statements $(3)$, $(4')$ and $(5')$ together imply statement $(2)$.
+
+    By statements $(4')$ and $(5')$, we have that for any $\theta_5$,
+    $$\lambda \eta \theta_5^2 = \lambda \eta \cdot \lambda^6 [h_0^2x_{124,8}] = \lambda^4 \cdot \lambda^3 \eta [h_0^2x_{124,8}] = \lambda^{10} [h_1h_4x_{109,12}].$$
+Recall from Axiom~\ref{fact:theta5sqAF}(2) that $h_1h_4x_{109,12}$ is a permanent cycle, and can only be killed classically by 
+    $$d_6(x_{126,8,4} + x_{126,8}) \ \text{or} \ d_{12}(h_6^2).$$
+    Therefore, statement $(3)$ implies that the expression $\lambda^{10} [h_1h_4x_{109,12}]$ is nonzero in synthetic homotopy, leading to a nonzero classical $d_{12}$-differential:
+    $$d_{12}(h_6^2) = h_1h_4x_{109,12}.$$
+    
+We will complete the proof of
+    Proposition~\ref{prop:possibleh62} by showing that if one the statements $(3)$, $(4)$ or $(5)$ is false, then statement $(2)$ is also false, and in this case, 
+    $$\eta \theta_5^2 = 0 \in \pi_{125,125+5} S^{0,0},$$ 
+    making statement $(1)$ true. This conclusion is reached by estimating the Adams filtration of $\theta_5^2$ and subsequently that of the expression $\eta \theta_5^2$. 
+
+
+
+We begin by estimating the Adams filtration of $\theta_5^2$ in   $\pi_{124,124+4} S^{0,0}$. First, we observe that this group  $\pi_{124,124+4} S^{0,0}$ does not contain any $\lambda$-torsion classes. 
+This is because, in the 125-stem, the group (from Table~\ref{Table:S125.19} in the Appendix) 
+$$\Ext_A^{i,125+i} = 0 \ \text{for} \ i\leq 4,$$ 
+and thus, by the rigidity Axioms~\ref{prereq:ax:rigid} and \ref{prereq:ax:lambda-bockstein} for the synthetic Adams spectral sequence for $S^{0,0}$, in the 124-stem, $\lambda$-torsion classes can only appear in $\pi_{124,124+j} S^{0,0}$ for $j \geq 7$.
+
+Additionally, by analyzing classical Adams differentials, the Adams filtration of $\theta_5^2$ is at least 10. In the case where it is of Adams filtration 10, it is detected by the element $h_0^2 x_{124,8}$, which, according to Axiom~\ref{fact:theta5sqAF}(3), is a permanent cycle and cannot be killed. 
+
+Upon further inspection of the differentials associated with elements in stem 124 and filtration between 10 and 13, we are left with three possibilities:
+\begin{enumerate}
+    \item $\theta_5^2 = \lambda^6 \cdot [h_0^2 x_{124,8}]$, which is statement (4), or
+    \item $\theta_5^2 = \lambda^9 \cdot [e_0 \Delta h_6 g]$, where $e_0 \Delta h_6 g$ is permanent cycle in $\AF=13$, or
+    \item $\theta_5^2$ is a $\lambda^{10}$-multiple.
+\end{enumerate}
+
+Since in Ext, we have $h_1 \cdot e_0 \Delta h_6 g = 0$, we deduce that in either possibilities (b) or (c), $\eta \theta_5^2$ is a $\lambda^{10}$-multiple. In other words, $\eta \theta_5^2$ has $\AF \ge 15$. In the group $\pi_{125,125+5} S^{0,0}$, the only class that is a $\lambda^{10}$-multiple is actually $\lambda$-free: By Axiom~\ref{fact:theta5sqAF}(4), it is $\lambda^{20} g^4 \Delta h_1 g$ in $\AF=25$ and is detected by tmf (see \cite{tmf} for the Hurewicz image of tmf). Since $\theta_5$ maps to zero in tmf, we have that $\eta \theta_5^2$ maps to zero in tmf and therefore must be zero in this case. 
+
+This shows that if statement (4) is false, then $\eta \theta_5^2 = 0$, and therefore $h_6^2$ is a permanent cycle.
+
+Hence, we focus on the remaining possibility (a), assuming statement (4) holds:
+$$\theta_5^2 = \lambda^6 \cdot [h_0^2 x_{124,8}].$$
+
+By the proof of Lemma~\ref{lem:equistate5}, the only nonzero possibility for $\lambda^3 \eta [h_0^2x_{124,8}]$ is $\lambda^6 [h_1h_4x_{109,12}]$. Therefore, if statement (5) is false, then using the same tmf detection argument, we conclude that $\eta \theta_5^2 = 0$, and consequently, $h_6^2$ is a permanent cycle.
+
+Finally, if statement (3) is false, an inspection reveals the only alternative classical differential:
+$$d_6(x_{126,8,4} + x_{126,8}) = h_1h_4x_{109,12}.$$
+This, combined with the tmf detection argument, would again imply $\eta \theta_5^2 = 0$, and consequently, $h_6^2$ is a permanent cycle. This completes the proof.
+\end{proof}
+
+%From the same tmf detection argument and inspection of differentials associated to elements in stem 125 and Adams filtration 12 and above tells us the only nonzero possibility for $\eta \theta_5^2$ is $\lambda^9 \cdot [h_1h_4x_{109,12}]$.\\
+
+%Next, we focus on the element $h_1h_4x_{109,12}$ in stem 125, Adams filtration 14. It is known that this is a permanent cycle, and there are three possibilities of which element could kill it (classically).
+%\usepackage{enumitem}
+%\begin{enumerate}[label=(\alph*)]
+%    \item $d_6(x_{126,8,4} + x_{126,8})  = \lambda^5 h_1h_4x_{109,12}$, or
+%    \item $d_{12} (h_6^2) = \lambda^{11} h_1h_4x_{109,12}$, or
+%    \item $h_1h_4x_{109,12}$ survives to a nonzero homotopy class in stem 125 classically. 
+%\end{enumerate}
+
+%Let $y$ denote a homotopy class in $\pi_{125,125+14} S^{0,0}$ that is detected by $h_1h_4x_{109,12}$ and maps to zero in tmf. Inspection of differentials associated to elements in stem 125 and Adams filtration 14 and above tells us possibility (a) implies that $\lambda^5 \cdot y = 0$, so it won't be relevant to $\eta \theta_5^2$.
+
+%For either possibilities (b) or (c), we have that
+%$$\lambda^{10} \cdot y\neq 0.$$
+%This is the statement we will work with from now on, for the remaining possibilities (b) and (c).\\
+
+Before we prove Proposition~\ref{prop:state5false}, we first state and prove a few lemmas.
+
+For Lemma~\ref{lem:x1239}, we draw attention to the following element in Ext:
+$$x_{123,9}+h_0x_{123,8} \in \Ext_A^{9, 123+9}.$$
+From Tables~\ref{Table:S123}, \ref{Table:S125.19} in the Appendix, we have
+\begin{axiom} \label{fact:x1239}
+    \lean{KervaireInvariant.MainProof.fact_x1239}
+    \begin{enumerate}
+
+   \item  $x_{123,9}+h_0x_{123,8}$ survives to the Adams $E_{12}$-page, and is not killed by any classical differential.
+      % \item In Ext, $h_1 \cdot (x_{123,9}+h_0x_{123,8}) = h_1 x_{123,9}$.
+    \item We have a classical nonzero differential 
+    $$d_2 (x_{125,8}) = h_1 (x_{123,9}+h_0x_{123,8}) + h_0^2x_{124,8}.$$
+   \end{enumerate}
+\end{axiom}
+
+\begin{lemma} \label{lem:x1239}
+    \uses{prereq:prop:syn-einfty-mod-lambda,thm:gen-leibniz,thm:gen-mahowald}
+    \lean{KervaireInvariant.MainProof.lemma_x1239}
+    There exists a homotopy class
+    $$\alpha_1 = [x_{123,9}+h_0x_{123,8}] \in \pi_{123,123+9} S^{0,0}/\lambda^9$$
+    with the following properties:
+    \begin{enumerate}
+    \item For any homotopy class $[h_0^2 x_{124,8}]$, there exist homotopy classes 
+    $$\alpha_2 \in \pi_{124,124+13} S^{0,0}/\lambda^9, \ \alpha_3 \in \pi_{125,125+15} S^{0,0}/\lambda^9,$$ 
+    such that 
+    \begin{align*}
+        \lambda^3 \eta \cdot \alpha_1 & = \lambda^3 [h_0^2 x_{124,8}] + 
+\lambda^6 \alpha_2 && \in \pi_{124,124+7} S^{0,0}/\lambda^9,\\
+\eta \cdot \alpha_2 & = \lambda \cdot \alpha_3 && \in \pi_{125,125+14} S^{0,0}/\lambda^9,
+    \end{align*}
+\item \leavevmode\vspace*{-\dimexpr\abovedisplayskip + \baselineskip} 
+$$\lambda^3 \cdot \alpha_1 \cdot [h_0] = 0 \in \pi_{123,123+7} S^{0,0}/\lambda^9.$$
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+From Axiom~\ref{fact:x1239}(1), the element $x_{123,9}+h_0x_{123,8}$ survives to the Adams $E_{12}$-page, and is not killed by any classical differential.
+
+Let $\alpha_1 = [x_{123,9}+h_0x_{123,8}] \in \pi_{123,123+9} S^{0,0}/\lambda^{11}$ denote any homotopy class detected by $x_{123,9}+h_0x_{123,8}$. For simplicity, we also use  $\alpha_1$ to denote its images in $\pi_{123,123+9} S^{0,0}/\lambda^r$ for $1 \leq r \leq 10$, under the following sequence of maps:
+$$
+\xymatrix{
+S^{0,0}/\lambda^{11} \ar[r] & S^{0,0}/\lambda^{10} \ar[r] & \cdots \ar[r] & S^{0,0}/\lambda \\
+\alpha_1 = [x_{123,9}+h_0x_{123,8}] \ar@{|->}[r] & \alpha_1 \ar@{|->}[r] & \cdots \ar@{|->}[r] & x_{123,9}+h_0x_{123,8}
+}$$
+
+From the nonzero $d_2$-differential in Axiom~\ref{fact:x1239},  we have 
+$$h_1 \cdot (x_{123,9}+h_0x_{123,8}) = h_0^2x_{124,8},$$
+on the classical $E_3$-page. This implies synthetically, for $2 \leq r \leq 11$,
+$$\lambda \eta \cdot \alpha_1 + \lambda [h_0^2 x_{124,8}] \in \pi_{124,124+9} S^{0,0}/\lambda^r$$
+lies in $\AF \ge 11$ for any $[h_0^2 x_{124,8}]$.
+
+%We claim that synthetically 
+%$$\lambda^3 \eta \cdot x = \lambda^3 [h_0^2 x_{124,8}] + 
+%\lambda^6 w \ \ \text{in} \ \ \pi_{124,124+7} S^{0,0}/\lambda^9,$$
+%where $w \in \pi_{124,124+13} S^{0,0}/\lambda^9$  with the property that $\eta w$ is $\lambda$-divisible. 
+
+By inspection, as in the proof of Lemma~\ref{lem:equistate5}, $$\lambda^3 \eta \cdot \alpha_1 + \lambda^3 [h_0^2 x_{124,8}] \in \pi_{124,124+7} S^{0,0}/\lambda^9$$
+has $\AF \ge 13$. The only possibility for it to have $\AF=13$ is that it is detected by the element $\lambda^6 e_0 \Delta h_6g$. (Note that the class $[\lambda^6 h_4 x_{109,12}]$ is irrelevant due to the nonzero differential $d_3(\lambda^6 h_4 x_{109,12}) = \lambda^8 h_1x_{122,15,2}$.) Since in Ext we have 
+$$h_1 \cdot e_0 \Delta h_6g = 0,$$
+we may choose $\alpha_2 \in \pi_{124,124+13} S^{0,0}/\lambda^9$ to be any class detected by $\lambda^6 e_0 \Delta h_6g$, with the property that $\eta \alpha_2$ is $\lambda$-divisible. Thus, there exists an $\alpha_3$ such that $\eta \alpha_2 = \lambda  \alpha_3$.
+
+This proves the required property $(1)$.
+
+For the relation in property $(2)$, we will first prove it in $\pi_{123,123+7} S^{0,0}/\lambda^{11}$ and then map it to $\pi_{123,123+7} S^{0,0}/\lambda^9$.
+
+By Proposition~\ref{prereq:prop:syn-einfty-mod-lambda} for the synthetic Adams spectral sequence for $S^{0,0}/\lambda^{11}$, the expression 
+$$\lambda^3 \cdot \alpha_1 \cdot [h_0] \in  \pi_{123,123+7} S^{0,0}/\lambda^{11}$$
+has $\AF \ge 17$. %(one can actually show that it has Adams filtration at least 17 but we only need it to be at least 16). 
+In particular, the values $$\lambda^4(x_{123,11,2}+x_{123,11}+h_0h_6B_4) \ \text{in} \ \AF=11,$$ 
+$$\lambda^8 h_0^2x_{123,13,2} \ \text{in} \ \AF=15$$
+can be ruled out due to the nonzero Adams differentials
+$$d_7( \lambda^4 \cdot (x_{123,11,2}+x_{123,11}+h_0h_6B_4) \ ) = \lambda^{10} h_1x_{121,17},$$
+$$d_3 (\lambda^8 \cdot h_0^2x_{123,13,2}) = \lambda^{10} h_0^2 x_{122,16},$$
+in the synthetic Adams spectral sequence for $S^{0,0}/\lambda^{11}$, which are zero in the spectral sequence for $S^{0,0}/\lambda^{9}$.
+
+Therefore, the expression $\lambda^3 \cdot \alpha_1 \cdot [h_0]$ is $\lambda^{10}$-divisible in $\pi_{123,123+7} S^{0,0}/\lambda^{11}$. Mapping it further to $\pi_{123,123+7} S^{0,0}/\lambda^9$, we conclude that it is zero. 
+\end{proof}
+
+
+%we also need to exclude $\lambda^4[x_{123,11,2}+x_{123,11}+h_0h_6[B_4]]$, but it is impossible that $\lambda [h_0] x = \lambda^2[x_{123,11,2}+x_{123,11}+h_0h_6[B_4]]$ in $S^{0,0}/\lambda^{9}$
+%}
+
+%\underline{Step 2-2.} \ Now we return to our main proof.
+
+%We will conclude our proof by showing that for any class $[h_0^2 x_{124,8}]$,
+%$$\lambda^3 \eta \cdot [h_0^2 x_{124,8}] \neq \lambda^6 \cdot y  \ \ \text{in} \ \ \pi_{125,125+8} S^{0,0}.$$
+
+%In fact, for a specific class $[h_0^2 x_{124,8}]$ that satisfies $\theta_5^2 = \lambda^6 \cdot [h_0^2 x_{124,8}]$, this would imply that
+%$$\eta \theta_5^2 = \lambda^6 \eta \cdot [h_0^2 x_{124,8}] \neq \lambda^9 \cdot y,$$
+%{there might be another term with filtraion $\geq 13$} {\color{blue} Not sure what you mean} \Comment{Weinan}{When both sides involve choices of homotopy elements, strict equality is hard to reach.} {\color{blue}Will modify.}
+%which is the only nonzero possibility by previous discussion. Therefore, we must have $\eta \theta_5^2 = 0$.\\
+
+
+For Lemma~\ref{lem:toda2ext}, we draw attention to the following element in Ext:
+$$h_0^2x_{125,9,2} \in \Ext_A^{11, 125+11}.$$
+From Table~\ref{Table:S125.19} in the Appendix, we have
+\begin{axiom} \label{fact:h02x1259}
+    \lean{KervaireInvariant.MainProof.fact_h02x1259}
+    The element $h_0^2x_{125,9,2}$ survives to the Adams $E_5$-page, and is not killed by any classical differential.
+\end{axiom}
+
+\begin{lemma} \label{lem:toda2ext}
+    \uses{lem:x1239}
+    \lean{KervaireInvariant.MainProof.lemma_toda2ext}
+    Assuming that both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true, the synthetic Toda bracket
+$$\langle \lambda^3 \alpha_1, [h_0], \eta \rangle \subset \pi_{125,125+7} S^{0,0}/\lambda^9$$
+    does not contain zero, and is detected by $\lambda^4 h_0^2x_{125,9,2}$. Here $\alpha_1 = [x_{123,9}+h_0x_{123,8}]$ refers to the homotopy class described in Lemma~\ref{lem:x1239}.
+\end{lemma}
+
+Note that the synthetic Toda bracket in Lemma~\ref{lem:toda2ext} is well defined, as the homotopy class $\alpha_1$ in Lemma~\ref{lem:x1239} satisfies the relation $\lambda^3 \alpha_1 \cdot [h_0] = 0$.
+
+\begin{remark} \label{rem:h02x1259}
+    According to Axiom~\ref{fact:h02x1259}, it is not yet known whether the element $h_0^2x_{125,9,2}$ supports a nonzero $d_5$-differential. Assuming that both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true, Lemma~\ref{lem:toda2ext} specifically implies that $\lambda^4 h_0^2x_{125,9,2}$ detects a nonzero homotopy class in $\pi_{125,125+7} S^{0,0}/\lambda^9$. Therefore, under these assumptions, we would have $d_5(h_0^2x_{125,9,2}) = 0$. 
+\end{remark}
+
+\begin{proof}[Proof of Lemma~\ref{lem:toda2ext}]
+    We assume both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true. From statement $(5')$, we have 
+    $$\lambda^3 \eta [h_0^2x_{124,8}] = \lambda^6 [h_1h_4x_{109,12}] \in \pi_{125,125+8} S^{0,0}.$$
+Mapping this relation to $S^{0,0}/\lambda^9$, and applying the following relations from Lemma~\ref{lem:x1239}
+\begin{align*}
+        \lambda^3 \eta \cdot \alpha_1 & = \lambda^3 [h_0^2 x_{124,8}] + 
+\lambda^6 \alpha_2 && \in \pi_{124,124+7} S^{0,0}/\lambda^9,\\
+\eta \cdot \alpha_2 & = \lambda \cdot \alpha_3 && \in \pi_{125,125+14} S^{0,0}/\lambda^9,
+    \end{align*}
+we have
+\begin{align*}
+    \eta \cdot \lambda^3 \eta \alpha_1 & = \eta \cdot \lambda^3 [h_0^2 x_{124,8}] + \eta \cdot \lambda^6 \alpha_2\\
+   & = \lambda^6 [h_1h_4x_{109,12}] + \lambda^7 \alpha_3 \in \pi_{125,125+8} S^{0,0}/\lambda^9,
+ \end{align*}
+ which, from statement $(3)$ and Remark~\ref{rem:h02x1259}, is nonzero and detected by $\lambda^6 h_1h_4x_{109,12}$ in $\AF=14$.
+ 
+ On the other hand, since $\eta^2 = \langle [h_0], \eta, [h_0] \rangle$, we have
+ $$\eta \cdot \lambda^3 \eta \alpha_1 = \lambda^3 \alpha_1 \cdot \langle [h_0], \eta, [h_0] \rangle = \langle \lambda^3 \alpha_1, [h_0], \eta \rangle \cdot [h_0].$$
+ Therefore, the synthetic Toda bracket
+$\langle \lambda^3 \alpha_1, [h_0], \eta \rangle$
+    does not contain zero, and its $[h_0]$-multiple is detected by $\lambda^6 h_1h_4x_{109,12}$ in $\AF=14$. Since $h_1h_4x_{109,12}$ is not $h_0$-divisible in Ext, the synthetic Toda bracket is detected by an element in $\AF \le 12$.
+    
+
+This synthetic Toda bracket $\langle \lambda^3 \alpha_1, [h_0], \eta \rangle$ lies in $\pi_{125,125+7} S^{0,0}/\lambda^9$, whose $\AF \le 12$ part is generated by
+\begin{align*}
+[h_0^2 x_{125,5}] \ & \text{in} \ \AF=7,\\ 
+\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)] \ & \text{in} \ \AF=9,\\ 
+[\lambda^4 h_0^2 x_{125,9,2}] \ & \text{in} \ \AF=11.
+\end{align*}
+%\ [\lambda^6 h_3 x_{118,12}], \ \lambda^7 y, \ [\lambda^7x_{125,14}].$$
+
+
+%also need to check the output data to have $d_3(x_{126,6})$
+
+%Note that, %due to the nonzero differential 
+%$$d_3(h_2 \cdot x_{126,6}) = \lambda^2 h_2 \cdot h_5 x_{94,8},$$
+%we deduce that 
+From Table~\ref{Table:S126.10} in the Appendix, we have
+$$0 \neq d_3(x_{126,6}) = \lambda^2 h_5 x_{94,8} + \ \text{possibly} \ \lambda^2 h_6(\Delta e_1 +C_0+h_0^6h_5^2).$$ 
+In both scenarios, $\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]$ remains and is in $\AF=9$.
+
+For the rest of the proof, we only need to rule out the cases $[h_0^2 x_{125,5}]$ in $\AF=7$ and $\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]$ in $\AF=9$. 
+
+For $[h_0^2 x_{125,5}]$ in $\AF=7$, due to the nonzero $d_3$-differential
+$$d_3(x_{126,4}) = \lambda^2 h_0^2 x_{125,5},$$
+it can be chosen to be annihilated by $\lambda^2$. 
+
+However, from statement $(3)$ and Remark~\ref{rem:h02x1259}, $\lambda^8 [h_1h_4x_{109,12}]$ remains nonzero in the homotopy of $S^{0,0}/\lambda^9$. Therefore, the synthetic Toda bracket is not annihilated by $\lambda^2$. As discussed earlier, its $[h_0]$-multiple is detected by $\lambda^6 h_1h_4x_{109,12}$, and thus, this case of $[h_0^2 x_{125,5}]$ can be ruled out.
+
+
+
+For $\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]$ in $\AF=9$, we first consider a classical Toda bracket in stem 125:
+$$\langle \theta_5, 2, [\Delta e_1 +C_0+h_0^6h_5^2] \rangle.$$
+
+From \cite{Xu, IWX}, $\pi_{62} \cong \mathbb{Z}/2 \oplus \mathbb{Z}/2 \oplus \mathbb{Z}/2 \oplus \mathbb{Z}/2$, so in particular both $\theta_5$ and $[\Delta e_1 +C_0+h_0^6h_5^2]$ have order 2, and this classical Toda bracket is well defined.
+
+From classical $d_2$-differentials:
+$$d_2(h_6) = h_0h_5^2, \ d_2(h_0^6h_6)= h_0(\Delta e_1 +C_0+h_0^6h_5^2),$$
+we obtain the following Massey product on the $E_3$-page
+$$h_6(\Delta e_1 +C_0+h_0^6h_5^2) = \langle h_5^2, h_0, \Delta e_1 +C_0+h_0^6h_5^2 \rangle,$$
+and we check that it has zero indeterminacy. Further analysis shows that there are no crossing differentials, as per the criteria of Moss's theorem \cite[Theorem~1.2]{Moss} (noting that crossing differentials in Moss's theorem have a different meaning from our definition). Therefore, we have a classical Toda bracket 
+$$[h_6(\Delta e_1 +C_0+h_0^6h_5^2)] \in \langle \theta_5, 2, [\Delta e_1 +C_0+h_0^6h_5^2] \rangle.$$
+
+Synthetically, by inspection, we also have $2\theta_5=0$ and $2 [\Delta e_1 +C_0+h_0^6h_5^2] = 0$. It follows that there is a corresponding synthetic Toda bracket
+$$[h_6(\Delta e_1 +C_0+h_0^6h_5^2)] \in \langle \theta_5, 2, [\Delta e_1 +C_0+h_0^6h_5^2] \rangle.$$
+Multiplying by $\lambda^2 [h_0]$, we get:
+\begin{align*}
+    \lambda^2 [h_0] \cdot [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]& = \lambda^2 [h_0] \cdot \langle \theta_5, 2, [\Delta e_1 +C_0+h_0^6h_5^2] \rangle \\
+    & = \lambda \cdot \langle 2, \theta_5, 2 \rangle [\Delta e_1 +C_0+h_0^6h_5^2]\\
+    & = \lambda^3 \eta \theta_5 [\Delta e_1 +C_0+h_0^6h_5^2].
+\end{align*}
+Note that all expressions in the above equation have zero indeterminacy. 
+
+If the synthetic Toda bracket $\langle \lambda^3 \alpha_1, [h_0], \eta \rangle$ were $\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]$, mapping the above equation to $S^{0,0}/\lambda^9$, we would then have a nonzero equation in $\pi_{125,125+8} S^{0,0}/\lambda^9$.
+\begin{align*}
+    \lambda^3 \eta [h_0^2 x_{124,8}] = \lambda^6 [h_1h_4x_{109,12}] & = \langle \lambda^3 \alpha_1, [h_0], \eta \rangle [h_0] + \lambda^6 \eta \alpha_2 \\ & = \lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)] [h_0] + \lambda^6 \eta \alpha_2\\ & = \lambda^3 \eta \theta_5 [\Delta e_1 +C_0+h_0^6h_5^2] + \lambda^6 \eta \alpha_2.
+\end{align*}
+For this equation to be nonzero, we must have a nonzero equation
+$$\lambda^3 [h_0^2 x_{124,8}] = \lambda^3 \theta_5 [\Delta e_1 +C_0+h_0^6h_5^2] + \lambda^6 \alpha_2 \ \ \text{in} \ \ \pi_{124,124+7} S^{0,0}/\lambda^9.$$
+However, in Ext, we have 
+$$h_5^2 (\Delta e_1 +C_0+h_0^6h_5^2) = 0 \neq h_0^2 x_{124,8} \in \Ext_A^{10,124+10},$$
+so this equation is not possible.
+
+
+We have ruled out the possibility that the synthetic Toda bracket $\langle \lambda^3 \alpha_1, [h_0], \eta \rangle$ is detected by $\lambda^2 [h_6(\Delta e_1 +C_0+h_0^6h_5^2)]$ or $[h_0^2 x_{125,5}]$. Therefore, we conclude that it must be detected by $[\lambda^4 h_0^2 x_{125,9,2}]$.
+\end{proof}
+
+From the proof of Lemma~\ref{lem:toda2ext}, we have the following $[h_0]$-extension.
+
+\begin{corollary} \label{cor:2ext125}
+    \uses{lem:toda2ext}
+    \lean{KervaireInvariant.MainProof.corollary_2ext125}
+    Assuming that both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true, we have a relation: For any homotopy class $[\lambda^4 h_0^2x_{125,9,2}]$,
+    $$[\lambda^4 h_0^2x_{125,9,2}] \cdot [h_0] = \lambda^6 [h_1h_4x_{109,12}] \neq 0 \in \pi_{125,125+8} S^{0,0}/\lambda^9,$$
+    for some $[h_1h_4x_{109,12}]$.
+\end{corollary}
+
+\begin{proof}
+    From the proof of Lemma~\ref{lem:toda2ext}, there exists a homotopy class $[\lambda^4 h_0^2x_{125,9,2}]$ contained in the synthetic Toda bracket $ \langle \lambda^3 \alpha_1, [h_0], \eta \rangle$, and we have
+    $$[\lambda^4 h_0^2x_{125,9,2}] \cdot [h_0] = \langle \lambda^3 \alpha_1, [h_0], \eta \rangle \cdot [h_0] = \lambda^6 [h_1h_4x_{109,12}] + \lambda^7 \alpha_3.$$
+    Since $\lambda^7 \alpha_3$ is in a strictly higher filtration than $\lambda^6 [h_1h_4x_{109,12}]$, we may choose another class $[h_1h_4x_{109,12}]$ such that the right-hand side of the above equation is simply $\lambda^6 [h_1h_4x_{109,12}]$. From the discussion of this synthetic Toda bracket in the proof of Lemma~\ref{lem:toda2ext}, we know that the difference of any two classes detected by $\lambda^4 h_0^2x_{125,9,2}$, when multiplied by $[h_0]$, is not detected by $\lambda^6 [h_1h_4x_{109,12}]$. Therefore, the corollary holds for any choice of $[\lambda^4 h_0^2x_{125,9,2}]$.
+\end{proof}
+
+
+
+
+
+
+
+%Since in $\pi_{123,123+7} S^{0,0}/\lambda^{9}$ we also have $\lambda^3 \cdot x \cdot [h_0] = 0$, the Toda bracket 
+% by consider this relation in $S^{0,0}/\lambda^9$. (EDIT and EXPAND
+
+
+%these kind of argument show that there exists some representative of $[x_{126,4}]$ which do not have the extension
+%}
+
+
+
+
+%{ $\theta_5[\Delta e_1+C_0]$ has filtration at least $10$, and ext data could show that it is at least filtration $11$, but we have already excluded any $\eta$ extension in filtration $\geq11$}
+%By inspection of differentials associated to stem 124, filtration between 11 and 13, we learn that there must be a relation in Ext: $h_0^2 x_{124,8} = h_5^2 (\Delta e_1 +C_0)$. This is, however, not true. 
+
+
+%In summary, we have shown that the assumption
+%$$\lambda^3 \eta \cdot [h_0^2 x_{124,8}] = \lambda^6 \cdot y  \ \ \text{in} \ \ \pi_{125,125+8} S^{0,0}$$
+%implies that
+%$$0 \neq \lambda^6 y + \lambda^6 \eta w = [\lambda^4 h_0^2 x_{125,9,2}] [h_0]  \ \ \text{in} \ \ \pi_{125,125+8} S^{0,0}/\lambda^9.$$
+
+We have one more Lemma~\ref{lem:nuext125} before we prove Proposition~\ref{prop:state5false}.
+
+We draw attention to the following element in Ext:
+$$h_1x_{121,7} \in \Ext_A^{8,122+8}.$$
+From Table~\ref{Table:S122} in the Appendix, we have
+\begin{axiom} \label{fact:h1x1217}
+    \lean{KervaireInvariant.MainProof.fact_h1x1217}
+    The element $h_1x_{121,7}$ survives to the Adams $E_6$-page, and is not killed by any classical differential.
+\end{axiom}
+
+\begin{lemma} \label{lem:nuext125}
+    \uses{prop:delta-ess-adams,thm:gen-mahowald,thm:gen-leibniz}
+    \lean{KervaireInvariant.MainProof.lemma_nuext125}
+    There exists a homotopy class $[\lambda^4 h_1 x_{121,7}] \in \pi_{122,122+4}S^{0,0}/\lambda^9$, such that 
+    $$[\lambda^4 h_1 x_{121,7}] \cdot [h_2] = \lambda [\lambda^5 h_0^2 x_{125,9,2}] \in \pi_{125,125+5} S^{0,0}/\lambda^9.$$
+\end{lemma}
+
+\begin{proof}
+    From Axiom~\ref{fact:h1x1217}, we know that the element $h_1x_{121,7}$ may only support a nonzero $d_r$-differential for $r \ge 6$. By Proposition~\ref{prop:delta-ess-adams}, $\lambda^4 h_1 x_{121,7}$ detects nonzero homotopy classes in $\pi_{122,122+4}S^{0,0}/\lambda^9$, and hence the required existence of such a homotopy class.
+
+    For the desired relation, we apply the Generalized Mahowald Trick Theorem~\ref{thm:gen-mahowald}. Consider the distinguished triangle
+        $$\xymatrix{S^3 \ar[r]^{\nu} & S^0 \ar[r]^-{i} & S^0/\nu \ar[r]^{q} & S^4.}$$
+The short exact sequence on $\HF$-homology
+$$\xymatrix{0 \ar[r] & {\HF}_*S^0 \ar[r]^-{i_*} & {\HF}_*S^0/\nu \ar[r]^-{q_*} & {\HF}_*S^4 \ar[r] & 0,}$$
+induces a long exact sequence on Ext-groups
+$$\xymatrix{\cdots \ar[r]^-{\cdot h_2} & {\Ext}_A^{*,*}(S^0) \ar[r]^-{i_*} & {\Ext}_A^{*,*}(S^0/\nu) \ar[r]^-{q_*} & {\Ext}_A^{*,*}(S^4) \ar[r]^-{\cdot h_2} & \cdots}.$$
+Also recall for notations, if an element $x$ in ${\Ext}_A^{*,*}(S^0/\nu)$ satisfies 
+$$q_*(x) = a \neq 0 \in \Ext_A^{*,*}(S^4),$$ 
+we denote $x$ by $a[4]$; otherwise, due to exactness, 
+$$x = i_*(b) \ \text{for some} \ b \in \Ext_A^{*,*}(S^0),$$
+and in this case, we denote $x$ by $b[0]$. 
+
+We consider
+\begin{align*}
+x & = h_1 x_{121,7} && \in \Ext_A^{8,130},\\
+\bar{x} & =h_1 x_{121,7} [4] + x_{126,8}[0] + x_{126,8,2}[0] && \in \Ext_A^{8,134}(S^0/\nu), \\
+y & =h_0^2 x_{125,9,2} && \in \Ext_A^{11,136} ,\\
+        \bar{y} & =h_0^2 x_{125,9,2}[0] && \in \Ext_A^{11,136}(S^0/\nu). 
+  \end{align*}      
+
+For conditions in Theorem~\ref{thm:gen-mahowald}, we have:
+\begin{enumerate}
+      \item $d_0^{q, E_2}(h_1 x_{121,7} [4] + x_{126,8}[0] + x_{126,8,2}[0]) = h_1 x_{121,7}$.
+      \item $d_3 (h_1 x_{121,7} [4] + x_{126,8}[0] + x_{126,8,2}[0]) = h_0^2 x_{125,9,2} [0]$. This is a classical Adams $d_3$-differential for $S^0/\nu$, and is obtained from our computations.
+      \item 
+      \begin{enumerate}
+          \item The differential in (1) has no crossing, as it is a $d_0$-differential, and
+          \item Upon inspection, the differential in (2) has no crossing. 
+      \end{enumerate}
+      \item 
+      $d_0^{i, E_2} (h_0^2 x_{125,9,2}) = h_0^2 x_{125,9,2}[0]$, as $h_0^2 x_{125,9,2}$ is not divisible by $h_2$ in Ext.
+      \end{enumerate}
+    Since all conditions of Theorem~\ref{thm:gen-mahowald} are  satisfied, we conclude that there is an $([h_2], E_4)$-extension:
+        $$d_3^{[h_2], E_4} (h_1 x_{121,7}) = h_0^2 x_{125,9,2}.$$
+In other words, we have the following relation:
+      $$[h_1 x_{121,7}] \cdot [h_2] = \lambda^2 [h_0^2 x_{125,9,2}] \in \pi_{125,125+9} S^{0,0}/\lambda^3.$$  
+Using the map $\rho:S^{0,0}/\lambda^5 \rightarrow S^{0,0}/\lambda^3$ from Notation~\ref{not:deltaandrho}, we lift the above relation and obtain:
+$$[h_1 x_{121,7}] \cdot [h_2] = [\lambda^2 h_0^2 x_{125,9,2}] \in \pi_{125,125+9} S^{0,0}/\lambda^5.$$
+In fact, since $h_1 x_{121,7} \cdot h_2 = 0$ in $\AF=9$ of Ext, we might obtain a relation of the form:
+$$[h_1 x_{121,7}] \cdot [h_2] = [\lambda x] + [\lambda^2 h_0^2 x_{125,9,2}] \in \pi_{125,125+9} S^{0,0}/\lambda^5,$$
+for some element $x$ in $\AF=10$. However, upon inspection, for all $x \in  \Ext_A^{10,125+10}$, the homotopy class $[\lambda x]$ either does not exist or can be chosen to be zero.
+
+
+
+
+Using the map $\lambda^4: \Sigma^{0,-4}S^{0,0}/\lambda^5 \rightarrow S^{0,0}/\lambda^9$ from Notation~\ref{not:deltaandrho}, we further push the above relation and obtain the following relation:
+$$[\lambda^4 h_1 x_{121,7}] \cdot [h_2] = \lambda [\lambda^5 h_0^2 x_{125,9,2}] \in \pi_{125,125+5} S^{0,0}/\lambda^9.$$
+This completes the proof.
+\end{proof}
+
+
+
+
+
+
+
+Now we prove Proposition~\ref{prop:state5false}.
+
+We draw attention to the following elements in Ext:
+\begin{align*}
+h_6 M d_0 & \in \Ext_A^{11,122+11}, \\
+h_5x_{91,11} & \in \Ext_A^{12,122+12}.
+\end{align*}
+From Table~\ref{Table:S122} in the Appendix, we have
+\begin{axiom} \label{fact:stem122}
+\lean{KervaireInvariant.MainProof.fact_stem122}
+\begin{enumerate}
+    \item[]
+    \item The element $h_6 M d_0$ survives to the Adams $E_\infty$-page.
+    \item The element $h_5x_{91,11}$ survives to the Adams $E_\infty$-page.
+\end{enumerate}
+
+\end{axiom}
+
+\begin{proof}[Proof of Proposition~\ref{prop:state5false}]
+    We assume that statement $(3)$ in Proposition~\ref{prop:possibleh62} is true. For the sake of a contradiction, we also assume statement $(5')$ is true.
+
+    From Lemma~\ref{lem:nuext125} and Corollary~\ref{cor:2ext125}, there exists a homotopy class\\ $[\lambda^4 h_1 x_{121,7}] \in \pi_{122,122+4}S^{0,0}/\lambda^9$, such that
+\begin{align*}
+    [\lambda^4 h_1 x_{121,7}] \cdot [h_2] \cdot [h_0] & = \lambda [\lambda^5 h_0^2 x_{125,9,2}] \cdot [h_0] \\
+    & = \lambda^8 [h_1h_4x_{109,12}] \neq 0 \in \pi_{125,125+6} S^{0,0}/\lambda^9,
+\end{align*} 
+    for some $[h_1h_4x_{109,12}]$. Note that statement $(3)$ in Proposition~\ref{prop:possibleh62}, Axiom~\ref{fact:theta5sqAF}(2), and Proposition~\ref{prop:delta-ess-adams} imply that the expression  $\lambda^8 [h_1h_4x_{109,12}]$ is nonzero in the homotopy of $S^{0,0}/\lambda^9$.
+
+Since the element detecting $h_1h_4x_{109,12}$ in not an $h_2$-multiple in Ext, we must have the expression
+$$[\lambda^4 h_1 x_{121,7}] \cdot [h_0]$$
+in $\pi_{122,122+5} S^{0,0}/\lambda^9$ be nonzero, and have $\AF \le 12$. Upon inspection, the only possibilities are:
+$$\lambda^6 [h_6 M d_0] \ \text{in} \ \AF=11,  \ \ \ \lambda^7 [h_5x_{91,11}] \ \text{in} \ \AF=12.$$
+From Axiom~\ref{fact:stem122} both $h_6 M d_0$ and $h_5x_{91,11}$ are nonzero permanent cycles in the classical Adams spectral sequence, so either possibility would lift to a relation in the homotopy groups of $S^{0,0}$.
+
+For the case of $\lambda^6 [h_6 M d_0]$, consider the expression
+$$\lambda^2 [h_6 M d_0] \cdot [h_2] \in \pi_{125, 125+10}S^{0,0}.$$
+Since $h_6 M d_0 \cdot h_2$ in $\AF=12$ is killed by a classical $d_2$-differential, we know that 
+$$\lambda [h_6 M d_0] \cdot [h_2] \in \pi_{125, 125+11}S^{0,0}$$ 
+is in $\AF \ge 13$. Upon inspection, the permanent cycles in $\Ext_A^{13, 125+13}$ are all killed by $d_2$ or $d_4$-differentials, and thus, $$\lambda^2 [h_6 M d_0] \cdot [h_2] \in \pi_{125, 125+10}S^{0,0}$$ 
+is in $\AF \ge 14$. Therefore, for the above relation in the homotopy of $S^{0,0}/\lambda^9$ to hold, we must have 
+$$\lambda^2 [h_6 M d_0] \cdot [h_2] = \lambda^4 [h_1h_4x_{109,12}] \in \pi_{125, 125+10} S^{0,0}.$$
+
+For the case of $\lambda^7 [h_5x_{91,11}]$, consider the expression
+$$\lambda [h_5x_{91,11}] \cdot [h_2] \in \pi_{125, 125+12}S^{0,0}.$$
+Since $h_5x_{91,11} \cdot h_2$ in $\AF=13$ is killed by a classical $d_2$-differential, we know that
+$$\lambda [h_5x_{91,11}] \cdot [h_2] \in \pi_{125, 125+12}S^{0,0}$$
+is in $\AF \ge 14$.
+Therefore, for the above relation in the homotopy of $S^{0,0}/\lambda^9$ to hold, we must have
+$$\lambda [h_5x_{91,11}] \cdot [h_2] = \lambda^2 [h_1h_4x_{109,12}] \in \pi_{125, 125+12}S^{0,0}.$$
+
+In both cases, $\lambda^4 [h_1h_4x_{109,12}]$ is a $\lambda [h_2]$-multiple in the homotopy of $S^{0,0}$. Since the classical $\nu \in \pi_3$ has $\AF=1$, we have 
+$$S^{0,0}/(\lambda [h_2]) \simeq \nu (S^0/\nu).$$
+By the rigidity Axiom~\ref{prereq:ax:rigid} of the synthetic Adams spectral sequence for $S^{0,0}/(\lambda [h_2])$, we know that the element $\lambda^4 h_1h_4x_{109,12}[0]$ must be killed by a synthetic Adams differential, which corresponds to to a statement that in the classical Adams spectral sequence of $S^0/\nu$, the element $h_1h_4x_{109,12}[0]$ must be killed by a $d_r$-differential for $r \leq 5$.
+
+
+
+%\begin{center}
+%\scalebox{0.8}{
+\begin{table}[h]
+    \centering
+\scalebox{0.85}{\begin{tabular}{|c|l|l|l|}\hline 
+$s$ & Elements & $d_r$ & value\\\hline\hline
+\multirow{4}{*}{14} & $h_0^{12}h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^{11}h_7[0]$ \\\cline{2-4}
+ & $x_{126,14}[0]$ & $d_{3}^{-1}$ & $(((x_{123,11,2})+(x_{123,11})+h_0 h_6 [B_4])[4])$ \\\cline{2-4}
+ & $Q_2D_2(h_3[4])+D_2x_{68,8}[0]$ & $d_{3}^{-1}$ & $(((x_{123,11,2})+h_5 (x_{92,10}))[4])$ \\\cline{2-4}
+ & $D_2x_{68,8}[0]$ & $d_{2}$ & $h_0Q_2x_{68,8}[0]$ \\\hline\hline
+\multirow{6}{*}{13} & $h_0^{11}h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^{10}h_7[0]$ \\\cline{2-4}
+ & $h_1x_{120,11}(h_1[4])$ & $d_{12}$ & $?$ \\\cline{2-4}
+ & $h_1x_{125,12,2}[0]$ & $d_{5}$ & $d_0^2x_{97,10}[0]$ \\\cline{2-4}
+ & $h_6x_{56,10}(h_0 h_2[4])$ & $d_{3}$ & $h_1x_{124,15}[0]$ \\\cline{2-4}
+ & $(((x_{122,13})+h_1^2 (x_{120,11})+h_0^2 h_6 (Md_0))[4])$ & $d_{2}$ & $x_{125,15}[0]+h_0^3x_{125,12}[0]$ \\\cline{2-4}
+ & $h_0h_3x_{119,11}[0]$ & $d_{2}$ & $h_0^3x_{125,12}[0]$ \\\hline\hline
+\multirow{4}{*}{12} & $d_1x_{94,8}[0]$ & $d_{2}^{-1}$ & $x_{127,10}[0]$ \\\cline{2-4}
+ & $h_0^{10}h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^9h_7[0]$ \\\cline{2-4}
+ & $((h_5 (x_{91,11})+h_0 (x_{122,11}))[4])$ & $d_{3}$ & $Q_2x_{68,8}[0]$ \\\cline{2-4}
+ & $h_3x_{119,11}[0]$ & $d_{2}$ & $h_0^2x_{125,12}[0]$ \\\hline\hline
+\multirow{4}{*}{11} & $h_0^9h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^8h_7[0]$ \\\cline{2-4}
+ & $x_{126,11}[0]$ & $d_{3}^{-1}$ & $x_{127,8}[0]$ \\\cline{2-4}
+ & $h_1x_{125,10,2}[0]+h_1x_{125,10}[0]$ & & Permanent \\\cline{2-4}
+ & $h_1x_{125,10}[0]$ & $d_{14}$ & $?$ \\\hline\hline
+\multirow{3}{*}{10} & $h_0^2x_{126,8}[0]$ & $d_{2}^{-1}$ & $h_0x_{127,7}[0]$ \\\cline{2-4}
+ & $h_0^8h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^7h_7[0]$ \\\cline{2-4}
+ & $x_{126,10}[0]$ & $d_{3}$ & $nx_{94,8}[0]$ \\\hline\hline
+\multirow{5}{*}{9} & $h_0x_{126,8}[0]$ & $d_{2}^{-1}$ & $x_{127,7}[0]$ \\\cline{2-4}
+ & $h_0^7h_6^2[0]$ & $d_{2}^{-1}$ & $h_0^6h_7[0]$ \\\cline{2-4}
+ & $h_1x_{125,8}[0]$ & $d_{16}$ & $?$ \\\cline{2-4}
+ & $h_0x_{126,8,3}[0]$ & $d_{4}$ & $h_0x_{125,12}[0]$ \\\cline{2-4}
+ & $x_{126,9}[0]$ & $d_{3}$ & $h_0^4x_{125,8}[0]$ \\\hline %\hline
+%\multicolumn{4}{|c|}{\text{stem}=126} \\\hline
+%\multicolumn{4}{|c|}{\TitleCellColor $E_2^{*,*}(S^0/\nu)$}\\\hline
+\end{tabular}}
+\caption{The classical Adams spectral sequence of $S^0/\nu$ for $9 \le s \le 14$ in stem 126}
+\label{Table:Cnu126}
+\end{table}
+
+%\end{center}
+
+However, from Table~\ref{Table:Cnu126} (obtained from \cite{LWXMachine} \cite{LWXZenodo}, and can be visualized from \cite{LinPlot}), in the classical Adams spectral sequence of $S^0/\nu$, the element  $h_1h_4x_{109,12}[0]$ is not killed by any $d_r$ for $r \leq 5$ (from the range of $9 \le s \le 14$ in stem 126). Therefore, we arrive at a contradiction.
+\end{proof}
+
+
+% \newpage
+

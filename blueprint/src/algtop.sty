@@ -1,0 +1,208 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{algtop}[2020/2/21 for math papers]
+
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{mathrsfs}
+\ifdefined\ifblueprintweb
+  \ifblueprintweb\else
+    \RequirePackage[shortlabels]{enumitem}
+  \fi
+\else
+  \RequirePackage[shortlabels]{enumitem}
+\fi
+
+\RequirePackage{multirow}
+
+
+\newif\if@beamer
+\newif\if@globalordering
+\newif\if@hyperref
+\DeclareOption{beamer}{\@beamertrue}
+\DeclareOption{globalordering}{\@globalorderingtrue}
+\DeclareOption{hyperref}{\@hyperreftrue}
+\ProcessOptions\relax
+
+\newcommand*{\waynemathoptions}{\texttt{beamer,globalordering,hyperref}}
+
+
+\if@hyperref
+\RequirePackage[hidelinks]{hyperref}
+\newcommand*{\mybm}{\texorpdfstring}
+\else
+\newcommand*{\mybm}[2]{#1}
+\fi
+
+% --------- Fonts -------------
+\newcommand*{\bA}{{\mathbb A}}
+\newcommand*{\bB}{{\mathbb B}}
+\newcommand*{\bC}{{\mathbb C}}
+\newcommand*{\bD}{{\mathbb D}}
+\newcommand*{\bE}{{\mathbb E}}
+\newcommand*{\bF}{{\mathbb F}}
+\newcommand*{\bG}{{\mathbb G}}
+\newcommand*{\bH}{{\mathbb H}}
+\newcommand*{\bI}{{\mathbb I}}
+\newcommand*{\bJ}{{\mathbb J}}
+\newcommand*{\bK}{{\mathbb K}}
+\newcommand*{\bL}{{\mathbb L}}
+\newcommand*{\bM}{{\mathbb M}}
+\newcommand*{\bN}{{\mathbb N}}
+\newcommand*{\bO}{{\mathbb O}}
+\newcommand*{\bP}{{\mathbb P}}
+\newcommand*{\bQ}{{\mathbb Q}}
+\newcommand*{\bR}{{\mathbb R}}
+\newcommand*{\bS}{{\mathbb S}}
+\newcommand*{\bT}{{\mathbb T}}
+\newcommand*{\bU}{{\mathbb U}}
+\newcommand*{\bV}{{\mathbb V}}
+\newcommand*{\bW}{{\mathbb W}}
+\newcommand*{\bX}{{\mathbb X}}
+\newcommand*{\bY}{{\mathbb Y}}
+\newcommand*{\bZ}{{\mathbb Z}}
+
+\newcommand*{\sA}{{\mathscr A}}
+\newcommand*{\sB}{{\mathscr B}}
+\newcommand*{\sC}{{\mathscr C}}
+\newcommand*{\sD}{{\mathscr D}}
+\newcommand*{\sE}{{\mathscr E}}
+\newcommand*{\sF}{{\mathscr F}}
+\newcommand*{\sG}{{\mathscr G}}
+\newcommand*{\sH}{{\mathscr H}}
+\newcommand*{\sI}{{\mathscr I}}
+\newcommand*{\sJ}{{\mathscr J}}
+\newcommand*{\sK}{{\mathscr K}}
+\newcommand*{\sL}{{\mathscr L}}
+\newcommand*{\sM}{{\mathscr M}}
+\newcommand*{\sN}{{\mathscr N}}
+\newcommand*{\sO}{{\mathscr O}}
+\newcommand*{\sP}{{\mathscr P}}
+\newcommand*{\sQ}{{\mathscr Q}}
+\newcommand*{\sR}{{\mathscr R}}
+\newcommand*{\sS}{{\mathscr S}}
+\newcommand*{\sT}{{\mathscr T}}
+\newcommand*{\sU}{{\mathscr U}}
+\newcommand*{\sV}{{\mathscr V}}
+\newcommand*{\sW}{{\mathscr W}}
+\newcommand*{\sX}{{\mathscr X}}
+\newcommand*{\sY}{{\mathscr Y}}
+\newcommand*{\sZ}{{\mathscr Z}}
+
+\newcommand*{\calA}{{\mathcal A}}
+\newcommand*{\calB}{{\mathcal B}}
+\newcommand*{\calC}{{\mathcal C}}
+\newcommand*{\calD}{{\mathcal D}}
+\newcommand*{\calE}{{\mathcal E}}
+\newcommand*{\calF}{{\mathcal F}}
+\newcommand*{\calG}{{\mathcal G}}
+\newcommand*{\calH}{{\mathcal H}}
+\newcommand*{\calI}{{\mathcal I}}
+\newcommand*{\calJ}{{\mathcal J}}
+\newcommand*{\calK}{{\mathcal K}}
+\newcommand*{\calL}{{\mathcal L}}
+\newcommand*{\calM}{{\mathcal M}}
+\newcommand*{\calN}{{\mathcal N}}
+\newcommand*{\calO}{{\mathcal O}}
+\newcommand*{\calP}{{\mathcal P}}
+\newcommand*{\calQ}{{\mathcal Q}}
+\newcommand*{\calR}{{\mathcal R}}
+\newcommand*{\calS}{{\mathcal S}}
+\newcommand*{\calT}{{\mathcal T}}
+\newcommand*{\calU}{{\mathcal U}}
+\newcommand*{\calV}{{\mathcal V}}
+\newcommand*{\calW}{{\mathcal W}}
+\newcommand*{\calX}{{\mathcal X}}
+\newcommand*{\calY}{{\mathcal Y}}
+\newcommand*{\calZ}{{\mathcal Z}}
+
+% --------- Theorem Environments ------------
+\if@beamer
+    \RequirePackage{lmodern}
+    \usetheme{Madrid}
+\else\if@globalordering
+        \newtheorem{theorem}{Theorem}
+    \else
+        \newtheorem{theorem}{Theorem}[section]
+    \fi
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{conjecture}[theorem]{Conjecture}
+    \newtheorem{question}[theorem]{Question}
+    \newtheorem{fact}[theorem]{Fact}
+    \newtheorem{algorithm}[theorem]{Algorithm}
+    \newtheorem{axiom}[theorem]{Axiom}
+
+   \theoremstyle{definition}
+    \newtheorem{definition}[theorem]{Definition}
+    \newtheorem{example}[theorem]{Example}
+    \newtheorem{construction}[theorem]{Construction}
+    \newtheorem{notation}[theorem]{Notation}
+    \newtheorem{exercise}[theorem]{Exercise}
+    \newtheorem{counterexample}[theorem]{Counterexample}
+    \newtheorem{homework}[theorem]{Homework}
+    \newtheorem{readinghomework}[theorem]{Reading Homework}
+
+   % \theoremstyle{remark}
+    \newtheorem{remark}[theorem]{Remark}
+    \newtheorem{warning}[theorem]{Warning}
+    % For myself
+    \newtheorem{thought}[theorem]{Thought}
+    \newtheorem{plan}[theorem]{Plan}
+    \newtheorem{guess}{Guess}
+\fi
+
+% --------- Operators ------------------
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator*{\Span}{Span}
+\DeclareMathOperator{\Ker}{ker}
+\DeclareMathOperator{\Coker}{coker}
+\DeclareMathOperator{\Image}{im}
+
+% ---------- Symbols ------------------
+\newcommand*{\iso}{\cong}
+\newcommand*{\embed}{\hookrightarrow}
+\newcommand*{\fto}{\xrightarrow}
+\newcommand*{\longimplies}{\Longrightarrow}
+\newcommand*{\submod}{\hspace{2pt}\mathrm{mod}\hspace{2pt}} % for \mod in \limits subscript
+
+\newcommand*{\wreath}{\!\mathbin{\rotatebox{8}{$\textstyle\int$}}\!}
+\newcommand*{\rdH}{\tilde{H}}
+\newcommand*{\Sett}[1]{\{\text{#1}\}}
+
+\newcommand*{\Hom}{\mathrm{Hom}}
+\newcommand*{\Map}{\mathrm{Map}}
+\newcommand*{\Sym}{\mathrm{Sym}}
+\newcommand*{\Tor}{\mathrm{Tor}}
+\newcommand*{\Ext}{\mathrm{Ext}}
+\newcommand*{\HH}{\mathrm{HH}}
+\newcommand*{\mrchar}{\mathrm{char}}
+\newcommand*{\lcm}{\mathrm{lcm}}
+
+% ---------- Others ------------------
+\newcommand*{\TODO}[1]{\textcolor{red}{TODO: #1}}
+\newcommand*{\Comment}[2]{\textcolor{red}{(#1: #2)}}
+
+% --------- Operators ------------------
+\DeclareMathOperator*{\holim}{holim}
+\DeclareMathOperator*{\hocolim}{hocolim}
+\DeclareMathOperator*{\hofiber}{hofiber}
+\DeclareMathOperator*{\tfiber}{tfiber}
+\DeclareMathOperator*{\Tot}{Tot}
+
+% ---------- Symbols ------------------
+\newcommand*{\Sus}{\Sigma}
+\newcommand*{\Loop}{\Omega}
+\newcommand*{\sma}{\wedge}
+\newcommand*{\bigsma}{\bigwedge}
+\newcommand*{\THH}{\mathrm{THH}}
+\newcommand*{\TC}{\mathrm{TC}}
+
+\newcommand*{\Massey}[1]{\langle #1 \rangle}
+\newcommand*{\Mackey}[1]{\underline{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\endinput

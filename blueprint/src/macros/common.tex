@@ -1,0 +1,72 @@
+\usepackage{algtop}
+\usepackage[all, cmtip]{xy}
+\ifblueprintweb\else
+\usepackage{caption}
+\usepackage{graphics}
+\fi
+\usepackage{mathtools}
+\ifblueprintweb\else
+\usepackage{enumitem}
+\fi
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+%\usepackage[polish]{babel}
+% \usepackage{natbib}
+
+\usepackage[
+  thms=theorem+lemma+proposition+corollary+definition+remark+example+fact+question+notation+axiom
+]{blueprint}
+\input{leanpkg}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+
+\makeatletter
+	\let\c@equation\c@theorem
+\makeatother
+\numberwithin{equation}{section}
+
+\newcommand{\makebibliography}{
+    \newpage
+    \bibliographystyle{plain}
+    \bibliography{main.bib}
+}
+
+\newcommand{\AF}{\mathrm{AF}}
+\newcommand{\ESS}[1]{\prescript{#1\!}{}{E}}
+\newcommand{\ZESS}[1]{\prescript{#1\!}{}{Z}}
+\newcommand{\BESS}[1]{\prescript{#1\!}{}{B}}
+\newcommand{\SynSS}{\prescript{\mathrm{syn}\!}{}{E}}
+\newcommand{\HF}{\mathrm{H}\bF_2}
+
+\newcommand{\Pstragowski}{Pstr\k{a}gowski}
+
+
+% Define tikz colors
+\definecolor{lightgray}{RGB}{200,200,200}
+\definecolor{llgray}{RGB}{235,235,235}
+
+% draw grid in tikz
+% params: x1,x2,y1,y2
+\newcommand{\tikzgrid}[4]{\foreach \x in {#1,...,#2} {
+        \draw[black!20] (\x-0.5, #3-0.5) -- (\x-0.5, #4-0.5);
+    }
+    \foreach \y in {#3,...,#4} {
+        \draw[black!20] (#1-0.5, \y-0.5) -- (#2-0.5, \y-0.5);
+    }
+}
+
+\newcommand{\drawarrow}{\draw[-{Stealth[length=1.5mm]}, shorten >=(0.08cm)]}
+
+\title{On the Last Kervaire Invariant Problem}
+\author{Weinan Lin, Guozhen Wang, and Zhouli Xu}
+\address{Shanghai Center for Mathematical Sciences, Fudan University, Shanghai, China, 200433}
+\email{linweinan@fudan.edu.cn}
+\address{Shanghai Center for Mathematical Sciences, Fudan University, Shanghai, China, 200433}
+\email{wangguozhen@fudan.edu.cn}
+\address{UCLA Department of Mathematics, Los Angeles, CA 90095-1555, USA}
+\email{xuzhouli@ucla.edu}
+\dedicatory{Dedicated to Mark Mahowald}
+\date{}
