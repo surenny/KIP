@@ -1,5 +1,7 @@
 \usepackage{algtop}
+\ifblueprintweb\else
 \usepackage[all, cmtip]{xy}
+\fi
 \ifblueprintweb\else
 \usepackage{caption}
 \usepackage{graphics}
@@ -21,9 +23,11 @@
 ]{blueprint}
 \input{leanpkg}
 
+\ifblueprintweb\else
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{calc}
+\fi
 
 \makeatletter
 	\let\c@equation\c@theorem
