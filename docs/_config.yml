@@ -1,0 +1,10 @@
+title: "On the Last Kervaire Invariant Problem"
+description: by Weinan Lin, Guozhen Wang, and Zhouli Xu
+baseurl: ""
+url: "https://surenny.github.io/KIP"
+repository: surenny/KIP
+
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-github-metadata
