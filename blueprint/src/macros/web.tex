@@ -2,3 +2,7 @@
 \newcommand{\scalebox}[2]{#2}
 \newcommand{\resizebox}[3]{#3}
 \newcommand{\rotatebox}[2]{#2}
+
+% multirow causes \ifdim crash in plasTeX; provide a simple stub.
+\newcommand{\multirow}[3]{#3}
+\newcommand{\cline}[1]{}

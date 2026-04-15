@@ -14,7 +14,13 @@
   \RequirePackage[shortlabels]{enumitem}
 \fi
 
-\RequirePackage{multirow}
+\ifdefined\ifblueprintweb
+  \ifblueprintweb\else
+    \RequirePackage{multirow}
+  \fi
+\else
+  \RequirePackage{multirow}
+\fi
 
 
 \newif\if@beamer
