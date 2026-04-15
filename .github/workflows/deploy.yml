@@ -41,7 +41,7 @@ jobs:
       - name: Build the project
         uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e
         with:
-          use-github-cache: false
+          use-github-cache: true
 
       - name: Compile blueprint and documentation
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
