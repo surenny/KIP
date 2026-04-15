@@ -24,7 +24,6 @@ In this paper we prove the following Theorem~\ref{thm:main}.
 
 \begin{theorem} \label{thm:main}
     \uses{thm:browder,thm:h62}
-    \lean{KervaireInvariant.Introduction.theorem_main}
     There exist framed manifolds of Kervaire invariant one in dimension 126.
 \end{theorem}
 
@@ -32,8 +31,7 @@ Together with previous results by Browder \cite{Browder}, Mahowald--Tangora \cit
 
 \begin{corollary}\label{cor:kervaire-dimensions}
   \uses{thm:main}
-  \lean{KervaireInvariant.Introduction.corollary_kervaire_dimensions}
-  The dimensions that there exist framed manifolds of Kervaire invariant one are 2, 6, 14, 30, 62, and 126.  
+  The dimensions that there exist framed manifolds of Kervaire invariant one are 2, 6, 14, 30, 62, and 126.
 \end{corollary}
 
 In dimensions 2, 6, and 14, the product of spheres $S^1 \times S^1, \ S^3 \times S^3, S^7 \times S^7$ can be framed to have Kervarie invariant one.
@@ -42,7 +40,6 @@ In dimension 30, an explicit framed manifold of Kervarie invariant one was const
 Our Theorem \ref{thm:main} is a consequence of Browder's theorem (Theorem~\ref{thm:browder}) and the following main theorem of this paper, Theorem~\ref{thm:h62}. 
 
 \begin{theorem}[Browder \cite{Browder}] \label{thm:browder}
-    \lean{KervaireInvariant.Introduction.theorem_browder}
    There exist framed manifolds in dimension $n$ of Kervaire invariant one if and only if
    \begin{enumerate}
        \item $n=2^{j+1}-2$, and
@@ -55,7 +52,6 @@ The Adams spectral sequence \cite{Adams58} converges to the stable homotopy grou
 
 \begin{theorem}[Theorem~\ref{thm:126survives}] \label{thm:h62}
     \uses{thm:126survives}
-    \lean{KervaireInvariant.Introduction.theorem_h62}
     The element $h_6^2$ survives to the $E_\infty$-page in the Adams spectral sequence.
 \end{theorem}
 
@@ -80,7 +76,6 @@ The Kervaire invariant element $h_j^2$ lives on the Adams 2-line, which is gener
 
 \begin{corollary} \label{cor:2line}
     \uses{thm:h62}
-    \lean{KervaireInvariant.Introduction.corollary_2line}
     On the Adams 2-line, the only non-trivial elements that survive in the Adams spectral sequence are:
     $$h_0h_2, \ h_0h_3, \ h_2h_4, \ h_1h_j \ (j \geq 3), \ h_j^2 \ (j \leq 6).$$
 \end{corollary}
@@ -94,12 +89,10 @@ May \cite{Maythesis} proved that the first three elements and $h_j^2$ for $j \le
 Before Hill--Hopkins--Ravenel's proof on the non-existence of $\theta_j$ for $j \geq 7$, Barratt--Jones--Mahowald \cite{BJMinduction} had an inductive argument trying to establish the existence of all $\theta_j$: They proved that if there exists a $\theta_j$ satisfying $2\cdot \theta_j = 0, \ \theta_j^2 = 0$, then there exists a $\theta_{j+1}$ satisfying $2\cdot \theta_{j+1} = 0$. In particular, the problem of whether a $\theta_{j+1}$ of order 2 exists is known as the strong Kervaire invariant problem. It was known that $2\cdot \theta_j = 0$ for $j \leq 5$ (see \cite{MahowaldTangora} for $j=4$ and \cite{Xu, IWX} for $j=5$). Although we prove that $\theta_6$ exists in this paper, the following questions are still open:
 
 \begin{question} \label{que:2theta6}
-    \lean{KervaireInvariant.Introduction.question_2theta6}
     Does there exist a $\theta_6$ that has order 2?
 \end{question}
 
 \begin{question} \label{que:theta5sq}
-    \lean{KervaireInvariant.Introduction.question_theta5sq}
     Does there exist a $\theta_5$ such that $\theta_5^2 = 0$?
 \end{question}
 

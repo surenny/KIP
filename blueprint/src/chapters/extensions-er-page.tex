@@ -28,7 +28,6 @@ $$n<\AF(f)\text{ or }n>r-2-k+e(f).$$
     
 \begin{definition}\label{def:f-Er-extension}
     \uses{prereq:not:fhat,prereq:prop:syn-einfty-mod-lambda}
-    \lean{KervaireInvariant.ExtensionsOnErPage.definition_f_Er_extension}
     Let $x\in Z^{s,t}_{r-1}(X)$ and $y\in Z^{s+n,t+n}_{r-1-n+e(f)}(Y)$ for some
     $$e(f)\le n\le r-2+e(f).$$
     We say that there is an $(f,E_r)$-extension from $x$ to $y$, denoted by
@@ -122,7 +121,6 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
 
 \begin{definition}\label{def:f-Er-crossing}
     \uses{def:f-Er-extension}
-    \lean{KervaireInvariant.ExtensionsOnErPage.definition_f_Er_crossing}
     A crossing of the $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classical}) is defined as an essential $(f, E_{r-a})$-extension from some $x'\in Z_{r-1-a}^{s+a,t+a}(X)$ to
     $$y'\in Z_{r-1-n+b+e(f)}^{s+n-b,t+n-b}(Y)\backslash B_{1+n-b-e(f)}^{s+n-b,t+n-b}(Y)$$
     (where $\backslash$ denotes the difference of sets and it means that $y'$ should survive to the classical Adams $E_{r-n+b+e(f)}$ page while it should not be hit by an Adams differential of length at most $1+n-b-e(f)$) for $0<a \le r-2$ and $0\le b\le n-a-e(f)$. See Figure \ref{fig:f-Er-crossing}.
@@ -202,7 +200,6 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
 
 \begin{proposition}\label{prop:cross-f-Er}
     \uses{def:f-Er-crossing,def:f-Er-extension}
-    \lean{KervaireInvariant.ExtensionsOnErPage.proposition_cross_f_Er}
     An $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ (\ref{eq:f-Er-ext-classical}) has a crossing if and only if the synthetic $\hat f_{r-1}$-extension $d_{n}^{\hat f_{r-1}}(x)=\lambda^{n-e(f)} y$ (\ref{eq:f-Er-ext-synthetic}) has a crossing.
 \end{proposition}
 
@@ -230,7 +227,6 @@ The above Definition~\ref{def:f-Er-crossing}, and Proposition~\ref{prop:cross-f-
 
 \begin{proposition}\label{prop:enfty-extension-quotient}
     \uses{def:f-Er-extension}
-    \lean{KervaireInvariant.ExtensionsOnErPage.proposition_enfty_extension_quotient}
     Consider $f: X\to Y$, $x\in Z_\infty^{s,t}(X)$ and $y\in Z_\infty^{s+n,t+n}(Y)$.
     Then
     $$d^{f,E_\infty}_n(x)=y$$

@@ -4,7 +4,6 @@ Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool f
 
 \begin{theorem}[Generalized Leibniz Rule]\label{thm:gen-leibniz}
     \uses{prop:delta-ess-adams,prop:cross-dr-En,prop:cross-f-Er,cor:four-spectra,def:f-Er-extension}
-    \lean{KervaireInvariant.LeibnizMahowald.theorem_gen_leibniz}
     Let $f: X\to Y$ be a map between two classical spectra.
     Suppose that $2\le n\le r$, $e(f)\le m\le n-2+e(f)$, $l\ge e(f)$, and we have
     $$x\in Z_{r-1}^{s,t}(X), \hspace{0.5cm} y\in Z_{r-1-m+e(f)}^{s+m,t+m}(Y)$$
@@ -74,7 +73,6 @@ $$d_3(h_0h_4) = 0, \ d_3(h_0h_4) = h_0 d_0.$$
 \end{remark}
 
 \begin{remark} \label{rem:chuaerror}
-    \lean{KervaireInvariant.LeibnizMahowald.remark_chuaerror}
     In Chua's work \cite[Theorem~12.9]{Chua}, it is stated that for a synthetic map $\alpha: X\rightarrow Y$, and an element $x \in \pi_{*,*}X/\lambda$, there exists a differential from a maximal $\alpha$-extension of $x$ to a maximal $\alpha$-extension of $d_r(x)$. According to  \cite[Definition~12.5]{Chua}, a maximal $\alpha$-extension of $x'$ is defined as $\alpha[x']$, where $[x']$ represents a lift of $x'$ to the $E_{r'}$-page, chosen such that $\alpha[x']$ is the most $\lambda$-divisible among all such lifts. 
 
     In the context of the counter-example above, let $r=2, r'=\infty$,
@@ -97,7 +95,6 @@ Next, we discuss the Generalized Mahowald Trick.
 
 In order to apply the Generalized Leibniz Rule, we need to provide a method for computing extensions on specific Adams $E_k$-pages. This is provided by Theorem~\ref{thm:gen-mahowald} (the Generalized Mahowald Trick). The crux of the proof of the Generalized Mahowald Trick lies in the following lemma.
 \begin{lemma}[May \cite{May01}]\label{lem:may-smash}
-    \lean{KervaireInvariant.LeibnizMahowald.lemma_may_smash}
     Let $X\to Y\to Z\to \Sus X$ and $X'\to Y'\to Z'\to \Sus X'$ be distinguished triangles of (synthetic) spectra. By smashing these distinguished triangles together, we obtain the following commutative diagram of cofiber sequences:
     $$\xymatrix{
     X\sma X' \ar[r] \ar[d] & Y\sma X' \ar[r] \ar[d] & Z\sma X' \ar[d]\\
@@ -124,7 +121,6 @@ Since $a$ and $b$ map to the same element in $\pi_n(Y\sma Z')$, we know that we 
  
 \begin{theorem}[Generalized Mahowald Trick]\label{thm:gen-mahowald}
     \uses{lem:may-smash,prop:cross-dr-En,prop:cross-f-Er,prereq:prop:syn-einfty-mod-lambda,def:f-Er-extension,prereq:prop:fhat-triangle}
-    \lean{KervaireInvariant.LeibnizMahowald.theorem_gen_mahowald}
     Consider a distinguished triangle of spectra
     $$X\fto{f} Y\fto{g} Z\fto{h} \Sus X$$
     with $e(f)+e(g)+e(h)=1$.
@@ -278,7 +274,6 @@ The outcome of the Generalized Mahowald Trick, as stated in Theorem~\ref{thm:gen
 
 \begin{proposition}\label{prop:ext-across-pages}
     \uses{cor:ess-naturality,def:f-Er-extension}
-    \lean{KervaireInvariant.LeibnizMahowald.proposition_ext_across_pages}
     Suppose that we have an $(f,E_r)$-extension $d^{f,E_r}_n(x)=y$, where $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_{r-1-n+e(f)}^{s+n,t+n}(Y)$. Then for all $2\le r'<r$, we also have
     \begin{equation}\label{eq:dr'}
         d^{f,E_{r'}}_n(x)=y.
@@ -373,7 +368,6 @@ The following Corollary~\ref{cor:stretch-extension} is the contrapositive statem
 
 \begin{corollary}\label{cor:stretch-extension}
     \uses{prop:ext-across-pages}
-    \lean{KervaireInvariant.LeibnizMahowald.corollary_stretch_extension}
     Suppose $r\ge r'$ and there exists an $(f,E_{r'})$-extension 
     $$d^{f,E_{r'}}_n(x)=y$$
     for $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_{r'-1-n+e(f)}^{s+n,t+n}(Y)$. Assume that this extension has no crossing of the form $d^{f,E_{r'-a}}_{n-a-b}(x')=y'$ for any $b>0$, $0<a\le n-e(f)$, and 

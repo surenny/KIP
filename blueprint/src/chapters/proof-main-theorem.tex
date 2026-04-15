@@ -4,7 +4,6 @@ In this section, we present the proof of our main Theorem~\ref{thm:h62}.
 
 \begin{theorem}[Theorem~\ref{thm:h62}] \label{thm:126survives}
     \uses{thm:bjmbx,prop:possibleh62,prop:state5false}
-    \lean{KervaireInvariant.MainProof.theorem_126survives}
     The element $h_6^2$ survives to the $E_\infty$-page in the Adams spectral sequence.
 \end{theorem}
 
@@ -16,7 +15,6 @@ We first recall the following theorem, known as the inductive method, originally
 
 
 \begin{axiom}[Barratt--Jones--Mahowald, Burklund--Xu] \label{thm:bjmbx}
-\lean{KervaireInvariant.MainProof.theorem_bjmbx}
 \begin{enumerate}
  \item[]
  \item    The element $h_6^2$ survives to the $E_{r+3}$-page of the classical Adams spectral sequence if and only if for some $\theta_5$, 
@@ -33,7 +31,6 @@ We first recall the following theorem, known as the inductive method, originally
 \end{remark}
 
 \begin{remark} \label{rem:theta5choice}
-    \lean{KervaireInvariant.MainProof.remark_theta5choice}
     Axiom~\ref{thm:bjmbx} is proved using the quadratic construction  on a map from the mod 2 Moore spectrum to the sphere spectrum, where the restriction on the bottom cell is $\theta_5$. Therefore, it is necessary to use a $\theta_5$ of order 2. 
     
     Notably, \cite{Xu, IWX} confirms that all classical $\theta_5$'s indeed have order 2. Furthermore, from Proposition~\ref{prereq:prop:syn-einfty-nuX} and an analysis of the differentials in the classical Adams spectral sequence, we find that $\pi_{62,62+2}S^{0,0}$ doesn't contain any $\lambda$-torsion. Consequently, all synthetic $\theta_5$'s also have order 2, making it valid to apply Axiom~\ref{thm:bjmbx} to any $\theta_5$. 
@@ -57,7 +54,6 @@ For the right side of Figure ~\ref{Fig:near126}, we use dashed differentials to 
 
 From Figure~\ref{Fig:near126} and Tables~\ref{Table:S124.12}, \ref{Table:S126.10}, \ref{Table:S125.19}, \ref{Table:S125.20} in the Appendix, we know that
 \begin{axiom} \label{fact:theta5sqAF}
-\lean{KervaireInvariant.MainProof.fact_theta5sqAF}
 \begin{enumerate}
    % \item[]
     \item $x_{126,8,4} + x_{126,8}$ survives to the $E_6$-page.
@@ -84,7 +80,6 @@ We will apply Axiom~\ref{thm:bjmbx} to prove the following Proposition~\ref{prop
 
 \begin{proposition} \label{prop:possibleh62}
 \uses{thm:bjmbx,prereq:ax:rigid,prereq:ax:lambda-bockstein,cor:delta-ess-general,lem:equistate4,lem:equistate5,fact:theta5sqAF}
-\lean{KervaireInvariant.MainProof.proposition_possibleh62}
 Exactly one of the following two statements is true:
 \begin{enumerate}
     \item The element $h_6^2$ survives to the $E_\infty$-page.
@@ -113,7 +108,6 @@ By further analyzing classical Adams differentials, we reduce the $\eta$-extensi
 
 \begin{proposition} \label{prop:state5false}
     \uses{cor:2ext125,lem:nuext125}
-    \lean{KervaireInvariant.MainProof.proposition_state5false}
     If statement $(3)$ is true, then statement $(5)$ in Proposition~\ref{prop:possibleh62} must be false.
 \end{proposition}
 
@@ -128,7 +122,6 @@ To prove Proposition~\ref{prop:possibleh62}, we first establish Lemmas~\ref{lem:
 %\usepackage{enumitem}
 \begin{lemma} \label{lem:equistate4}
     \uses{rem:theta5choice}
-    \lean{KervaireInvariant.MainProof.lemma_equistate4}
     The statement $(4)$ in Proposition~\ref{prop:possibleh62} is equivalent to the following statement $(4')$:
     \begin{enumerate}\setcounter{enumi}{3}
     \item For every $\theta_5$, we have $\theta_5^2$ is detected by $\lambda^6 h_0^2x_{124,8}$. In particular, 
@@ -153,7 +146,6 @@ To prove Proposition~\ref{prop:possibleh62}, we first establish Lemmas~\ref{lem:
 
 \begin{lemma} \label{lem:equistate5}
     \uses{rem:theta5choice}
-    \lean{KervaireInvariant.MainProof.lemma_equistate5}
     The statement $(5)$ in Proposition~\ref{prop:possibleh62} is equivalent to the following statement $(5')$:
     \begin{enumerate}\setcounter{enumi}{4}
     \item For every homotopy class $[h_0^2x_{124,8}]$, we have
@@ -256,7 +248,6 @@ For Lemma~\ref{lem:x1239}, we draw attention to the following element in Ext:
 $$x_{123,9}+h_0x_{123,8} \in \Ext_A^{9, 123+9}.$$
 From Tables~\ref{Table:S123}, \ref{Table:S125.19} in the Appendix, we have
 \begin{axiom} \label{fact:x1239}
-    \lean{KervaireInvariant.MainProof.fact_x1239}
     \begin{enumerate}
 
    \item  $x_{123,9}+h_0x_{123,8}$ survives to the Adams $E_{12}$-page, and is not killed by any classical differential.
@@ -268,7 +259,6 @@ From Tables~\ref{Table:S123}, \ref{Table:S125.19} in the Appendix, we have
 
 \begin{lemma} \label{lem:x1239}
     \uses{prereq:prop:syn-einfty-mod-lambda,thm:gen-leibniz,thm:gen-mahowald}
-    \lean{KervaireInvariant.MainProof.lemma_x1239}
     There exists a homotopy class
     $$\alpha_1 = [x_{123,9}+h_0x_{123,8}] \in \pi_{123,123+9} S^{0,0}/\lambda^9$$
     with the following properties:
@@ -348,13 +338,11 @@ For Lemma~\ref{lem:toda2ext}, we draw attention to the following element in Ext:
 $$h_0^2x_{125,9,2} \in \Ext_A^{11, 125+11}.$$
 From Table~\ref{Table:S125.19} in the Appendix, we have
 \begin{axiom} \label{fact:h02x1259}
-    \lean{KervaireInvariant.MainProof.fact_h02x1259}
     The element $h_0^2x_{125,9,2}$ survives to the Adams $E_5$-page, and is not killed by any classical differential.
 \end{axiom}
 
 \begin{lemma} \label{lem:toda2ext}
     \uses{lem:x1239}
-    \lean{KervaireInvariant.MainProof.lemma_toda2ext}
     Assuming that both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true, the synthetic Toda bracket
 $$\langle \lambda^3 \alpha_1, [h_0], \eta \rangle \subset \pi_{125,125+7} S^{0,0}/\lambda^9$$
     does not contain zero, and is detected by $\lambda^4 h_0^2x_{125,9,2}$. Here $\alpha_1 = [x_{123,9}+h_0x_{123,8}]$ refers to the homotopy class described in Lemma~\ref{lem:x1239}.
@@ -457,7 +445,6 @@ From the proof of Lemma~\ref{lem:toda2ext}, we have the following $[h_0]$-extens
 
 \begin{corollary} \label{cor:2ext125}
     \uses{lem:toda2ext}
-    \lean{KervaireInvariant.MainProof.corollary_2ext125}
     Assuming that both statements $(3)$ and $(5')$ in Proposition~\ref{prop:possibleh62} are true, we have a relation: For any homotopy class $[\lambda^4 h_0^2x_{125,9,2}]$,
     $$[\lambda^4 h_0^2x_{125,9,2}] \cdot [h_0] = \lambda^6 [h_1h_4x_{109,12}] \neq 0 \in \pi_{125,125+8} S^{0,0}/\lambda^9,$$
     for some $[h_1h_4x_{109,12}]$.
@@ -500,13 +487,11 @@ We draw attention to the following element in Ext:
 $$h_1x_{121,7} \in \Ext_A^{8,122+8}.$$
 From Table~\ref{Table:S122} in the Appendix, we have
 \begin{axiom} \label{fact:h1x1217}
-    \lean{KervaireInvariant.MainProof.fact_h1x1217}
     The element $h_1x_{121,7}$ survives to the Adams $E_6$-page, and is not killed by any classical differential.
 \end{axiom}
 
 \begin{lemma} \label{lem:nuext125}
     \uses{prop:delta-ess-adams,thm:gen-mahowald,thm:gen-leibniz}
-    \lean{KervaireInvariant.MainProof.lemma_nuext125}
     There exists a homotopy class $[\lambda^4 h_1 x_{121,7}] \in \pi_{122,122+4}S^{0,0}/\lambda^9$, such that 
     $$[\lambda^4 h_1 x_{121,7}] \cdot [h_2] = \lambda [\lambda^5 h_0^2 x_{125,9,2}] \in \pi_{125,125+5} S^{0,0}/\lambda^9.$$
 \end{lemma}
@@ -579,7 +564,6 @@ h_5x_{91,11} & \in \Ext_A^{12,122+12}.
 \end{align*}
 From Table~\ref{Table:S122} in the Appendix, we have
 \begin{axiom} \label{fact:stem122}
-\lean{KervaireInvariant.MainProof.fact_stem122}
 \begin{enumerate}
     \item[]
     \item The element $h_6 M d_0$ survives to the Adams $E_\infty$-page.

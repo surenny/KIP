@@ -10,7 +10,6 @@ where $\ZESS{f}_*^{*,*,*}$ and $\BESS{f}_*^{*,*,*}$ are  analogous to the notati
 In fact all the definitions and results in Section \ref{sec:ess} remain valid in this synthetic setting, provided we include the extra weight degree in addition to the topological degree and ensure that all maps also preserve the weight degree. For convenience, we will not restate these results here but will occasionally refer to them and apply their synthetic versions when needed.
 
 \begin{notation} \label{not:deltaandrho}
-\lean{KervaireInvariant.SyntheticExtensions.notation_deltaandrho}
 There are certain special maps between synthetic spectra that we want to consider. For any $n<m\le \infty$ and a spectrum $X$, we have the following  distinguished triangles of $\HF$-synthetic spectra
 $$\Sus^{0,-n}\nu X/\lambda^{m-n}\fto{\lambda^n} \nu X/\lambda^m\fto{~\rho_{n,m}~} \nu X/\lambda^n\fto{~\delta_{n,m}~} \Sus^{1,-n}\nu X/\lambda^{m-n}.$$
 We simply write $\rho=\rho_{n,m}$, $\delta=\delta_{n,m}$ by abuse of notation if $n,m$ is understood in the context.
@@ -28,7 +27,6 @@ We also note that our grading for the triangulation translation functor is smash
 
 \begin{proposition}\label{prop:lambda-rho-trivial}
     \uses{prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda,cor:composition-zero,not:deltaandrho}
-    \lean{KervaireInvariant.SyntheticExtensions.proposition_lambda_rho_trivial}
 The only nonzero differentials in the extension spectral sequences for the maps $\lambda^n$ and $\rho$ from Notation~\ref{not:deltaandrho} are the $d_0$'s:
 $$d^{\lambda^n}_0=\lambda^n \ \text{and} \ d^{\rho}_0=\rho.$$ 
 As a result, these $d_0$'s have no crossings.
@@ -73,7 +71,6 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 
 \begin{proposition}\label{prop:delta-ess-adams}
     \uses{prereq:ax:lambda-bockstein,cor:triangle-map,cor:composition-ext,not:deltaandrho,prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda}
-    \lean{KervaireInvariant.SyntheticExtensions.proposition_delta_ess_adams}
     Suppose in the classical Adams spectral sequence of $X$ we have $d_r(x)=y$, where $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_\infty^{s+r,t+r-1}(X)$. Consider the map
     $$\delta:\nu X/\lambda^n\to \Sus^{1,-n}\nu X/\lambda^{m-n}.$$
     \begin{enumerate}
@@ -145,7 +142,6 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 
 \begin{corollary}\label{cor:delta-ess-general}
     \uses{prop:delta-ess-adams}
-    \lean{KervaireInvariant.SyntheticExtensions.corollary_delta_ess_general}
     For $x,y,\delta$ in Proposition \ref{prop:delta-ess-adams} we always have
     \begin{equation}\label{eq:delta-ess-formula}
         d^{\delta}_r(\lambda^ax)=\lambda^{a+r-n-1}y
@@ -154,7 +150,6 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \end{corollary}
 
 \begin{remark}\label{rmk:delta-ess-equiv-classical}
-    \lean{KervaireInvariant.SyntheticExtensions.remark_delta_ess_equiv_classical}
     As indicated in the proof, the right-hand side of equation (\ref{eq:delta-ess-formula}) (considered as a subset of $Z_\infty^{s+r,t+r-1}(X)$) is a coset of
     $$B_{r-1}^{s+r,t+r-1}(X)$$
     which is the same as the value of the classical Adams differential $d_r(x)=y$. This implies that the equation (\ref{eq:delta-ess-formula}) holds if and only if $d_r(x)=y$. Therefore the $\delta$-ESS encodes the same information as the classical Adams spectral sequence.
@@ -162,7 +157,6 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 
 \begin{definition} \label{def:classicalcrossdiff}
     \uses{def:ess}
-    \lean{KervaireInvariant.SyntheticExtensions.definition_classicalcrossdiff}
     Suppose $r\ge n+1$ and $d_r(x)=y$, where
     $$x\in E_2^{s,t}(X), \hspace{0.5cm} y\in E_2^{s+r,t+r-1}(X).$$
     A crossing of $d_r(x)=y$ on the $E_{n+1}$-page refers to an essential Adams differential
@@ -217,7 +211,6 @@ The emphasis on a crossing occurring ``on the $E_{n+1}$-page" in Definition~\ref
 
 \begin{proposition}\label{prop:cross-dr-En}
     \uses{prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda,prop:delta-ess-adams,cor:delta-ess-general,def:classicalcrossdiff}
-    \lean{KervaireInvariant.SyntheticExtensions.proposition_cross_dr_En}
     The Adams differential $d_r(x)=y$ has a crossing on the $E_{n+1}$-page if and only if the corresponding $\delta_n$-extension
     $$d^{\delta_n}_r(x)=\lambda^{r-n-1}y$$
     for
