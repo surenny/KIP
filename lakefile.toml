@@ -20,5 +20,9 @@ git = "https://github.com/leanprover/doc-gen4"
 rev = "v4.28.0"
 scope = "leanprover"
 
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
 [[lean_lib]]
 name = "KIP"
