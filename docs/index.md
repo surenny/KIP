@@ -2,14 +2,12 @@
 usemathjax: true
 ---
 
-# On the Last Kervaire Invariant Problem
+This is a Lean 4 formalization project for the paper *On the Last Kervaire Invariant Problem* by Weinan Lin, Guozhen Wang, and Zhouli Xu, which proves that framed manifolds of Kervaire invariant one exist in dimension 126.
 
-A Lean 4 formalization project for the proof that framed manifolds of Kervaire invariant one exist in dimension 126.
-
-**Weinan Lin, Guozhen Wang, Zhouli Xu**
+## Useful links
 
 * [Blueprint]({{ site.url }}/blueprint/)
-* [Blueprint (PDF)]({{ site.url }}/blueprint.pdf)
+* [Blueprint as PDF]({{ site.url }}/blueprint.pdf)
 * [Dependency graph]({{ site.url }}/blueprint/dep_graph_document.html)
 * [Lean API docs]({{ site.url }}/docs/)
 * [Source code](https://github.com/surenny/KIP)
