@@ -19,6 +19,8 @@
         \item An increasing family of subobjects $\{B_r\}_{r \in \mathbb{N} \cup \{\infty\}}$ of $V$, called \emph{$r$-boundaries}:
         $$B_0 \subseteq B_1 \subseteq B_2 \subseteq \cdots \subseteq B_\infty.$$
         \item The containment $B_r \subseteq Z_r$ for all $r$.
+        \item $Z_\infty$ is the greatest lower bound of the finite cycles: for any subobject $X \subseteq V$, if $X \subseteq Z_i$ for all $i \in \mathbb{N}$, then $X \subseteq Z_\infty$. Together with the monotonicity of $Z$, this gives $Z_\infty = \bigcap_{i \in \mathbb{N}} Z_i$.
+        \item $B_\infty$ is the least upper bound of the finite boundaries: for any subobject $X \subseteq V$, if $B_i \subseteq X$ for all $i \in \mathbb{N}$, then $B_\infty \subseteq X$. Together with the monotonicity of $B$, this gives $B_\infty = \bigcup_{i \in \mathbb{N}} B_i$.
     \end{enumerate}
     Together these form the nested chain
     $$V \supseteq Z_0 \supseteq Z_1 \supseteq \cdots \supseteq Z_\infty \supseteq B_\infty \supseteq \cdots \supseteq B_1 \supseteq B_0.$$
@@ -333,13 +335,38 @@
     holds (covariant), and dually for the contravariant case.
 \end{proposition}
 
+\begin{definition}\label{prereq:def:closed-symmetric-monoidal}
+    A \emph{closed symmetric monoidal category} is a category $\mathcal{C}$ equipped with:
+    \begin{enumerate}
+        \item A unit object $S$.
+        \item A bifunctor $(X, Y) \mapsto X \wedge Y$ (the \emph{smash product} or \emph{tensor product}) from $\mathcal{C} \times \mathcal{C}$ to $\mathcal{C}$, which is associative and commutative up to coherent natural isomorphism, with $S \wedge X \cong X$ up to coherent natural isomorphism.
+        \item Function objects $F(X, Y)$, functorial contravariantly in $X$ and covariantly in $Y$, satisfying the tensor-hom adjunction
+        $$[X, F(Y, Z)] \cong [X \wedge Y, Z]$$
+        naturally in all three variables.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}\label{prereq:def:closed-symmetric-tensor-triangulated}
+    \uses{prereq:def:closed-symmetric-monoidal,prereq:def:triangulated-category}
+    A \emph{closed symmetric tensor triangulated category} is a triangulated category $\mathcal{C}$ equipped with a closed symmetric monoidal structure (Definition~\ref{prereq:def:closed-symmetric-monoidal}) that is \emph{compatible} with the triangulation:
+    \begin{enumerate}
+        \item The smash product preserves suspensions: there is a natural equivalence $e_{X,Y}: \Sigma X \wedge Y \xrightarrow{\sim} \Sigma(X \wedge Y)$, compatible with the unit and associativity isomorphisms.
+        \item The smash product is exact: if $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is an exact triangle, then for any object $W$,
+        $$X \wedge W \xrightarrow{f \wedge 1} Y \wedge W \xrightarrow{g \wedge 1} Z \wedge W \xrightarrow{h \wedge 1} \Sigma(X \wedge W)$$
+        is exact.
+        \item The functor $F(X, Y)$ is exact in $Y$; it is exact in $X$ up to sign.
+        \item The smash product interacts with suspension in a graded-commutative manner: the twist map $T: S^r \wedge S^s \to S^s \wedge S^r$ and the equivalence $S^r \wedge S^s \simeq S^{r+s}$ satisfy $T = (-1)^{rs}$.
+    \end{enumerate}
+    This definition follows Hovey--Palmieri--Strickland~\cite{HPS97}, Definition~A.2.1.
+\end{definition}
+
 \begin{definition}\label{prereq:def:stable-homotopy-category}
-    \uses{prereq:def:triangulated-category}
-    The \emph{stable homotopy category} $\mathcal{S}$ is a symmetric monoidal triangulated category. Its objects are called \emph{spectra}. Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide.
+    \uses{prereq:def:closed-symmetric-tensor-triangulated}
+    The \emph{stable homotopy category} $\mathcal{S}$ is a closed symmetric tensor triangulated category (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}). Its objects are called \emph{spectra}. Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide.
 \end{definition}
 
 \begin{remark}
-    In this project, $\mathcal{S}$ refers to the homotopy category of spectra (in the sense of stable homotopy theory). It can be constructed as the homotopy category of a stable model category, but we take it as given and work axiomatically with its triangulated structure.
+    In this project, $\mathcal{S}$ refers to the homotopy category of spectra (in the sense of stable homotopy theory). It can be constructed as the homotopy category of a stable model category, but we take it as given and work axiomatically with its triangulated and closed symmetric monoidal structure.
 \end{remark}
 
 \begin{definition}\label{prereq:def:sphere-spectrum}
@@ -366,14 +393,14 @@
 \end{proposition}
 
 \begin{definition}\label{prereq:def:smash-product}
-    \uses{prereq:def:stable-homotopy-category,prereq:def:sphere-Sn}
-    The \emph{smash product} $\wedge: \mathcal{S} \times \mathcal{S} \to \mathcal{S}$ is a symmetric monoidal product with unit $\mathbb{S}$. It satisfies $S^m \wedge S^n \simeq S^{m+n}$ and induces a pairing on homotopy groups:
+    \uses{prereq:def:stable-homotopy-category,prereq:def:closed-symmetric-tensor-triangulated,prereq:def:sphere-Sn}
+    The \emph{smash product} $\wedge: \mathcal{S} \times \mathcal{S} \to \mathcal{S}$ is the symmetric monoidal product from the closed symmetric monoidal structure of $\mathcal{S}$ (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}), with unit $\mathbb{S}$. It satisfies $S^m \wedge S^n \simeq S^{m+n}$ and induces a pairing on homotopy groups:
     $$\pi_m X \otimes \pi_n Y \to \pi_{m+n}(X \wedge Y).$$
 \end{definition}
 
 \begin{definition}\label{prereq:def:mapping-spectra}
-    \uses{prereq:def:stable-homotopy-category,prereq:def:smash-product}
-    For spectra $X, Y \in \mathcal{S}$, the \emph{mapping spectrum} $F(X, Y)$ is the internal hom adjoint to the smash product:
+    \uses{prereq:def:stable-homotopy-category,prereq:def:closed-symmetric-tensor-triangulated,prereq:def:smash-product}
+    For spectra $X, Y \in \mathcal{S}$, the \emph{mapping spectrum} $F(X, Y)$ is the internal hom (function object) from the closed symmetric monoidal structure (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}), adjoint to the smash product:
     $$[X \wedge Y, Z] \cong [X, F(Y, Z)].$$
     In particular, $\pi_n F(X, Y) \cong [\Sigma^n X, Y]$.
 \end{definition}

@@ -41,6 +41,14 @@ structure SSData (C : Type u) [Category.{v} C] [Abelian C] where
   Z_zero : Z 0 = ⊤
   /-- Boundaries are always contained in cycles at each level -/
   B_le_Z : ∀ r, B r ≤ Z r
+  /-- Z ⊤ is the greatest lower bound of all finite Z_i.
+      Combined with `Z_anti` (which gives `Z ⊤ ≤ Z ↑i` for all `i`), this says
+      `Z ⊤ = ⨅ᶠ Z ↑i`. -/
+  Z_top_greatest : ∀ (X : Subobject V), (∀ i : ℕ, X ≤ Z ↑i) → X ≤ Z ⊤
+  /-- B ⊤ is the least upper bound of all finite B_i.
+      Combined with `B_mono` (which gives `B ↑i ≤ B ⊤` for all `i`), this says
+      `B ⊤ = ⨆ᶠ B ↑i`. -/
+  B_top_least : ∀ (X : Subobject V), (∀ i : ℕ, B ↑i ≤ X) → B ⊤ ≤ X
 
 variable {C : Type u} [Category.{v} C] [Abelian C]
 
@@ -58,6 +66,28 @@ noncomputable def SSData.pageπ (D : SSData C) (r : WithTop ℕ) :
 
 theorem SSData.B_bot_le_Z (D : SSData C) (r : WithTop ℕ) : D.B ⊥ ≤ D.Z r :=
   le_trans (D.B_mono bot_le) (D.B_le_Z r)
+
+/-- When B r = Z r, the page E_r = Z r / B r is zero.
+    The inclusion B r ↪ Z r is an iso when B r = Z r, hence epi, so its
+    cokernel vanishes. -/
+theorem SSData.page_isZero_of_eq (D : SSData C) (r : WithTop ℕ) (h : D.B r = D.Z r) :
+    IsZero (D.page r) := by
+  unfold SSData.page
+  have : IsIso (Subobject.ofLE (D.B r) (D.Z r) (D.B_le_Z r)) := by
+    rw [← Subobject.isoOfEq_hom _ _ h]
+    infer_instance
+  exact isZero_cokernel_of_epi _
+
+/-- The converse: if the page is zero, then B r = Z r. -/
+theorem SSData.eq_of_page_isZero (D : SSData C) (r : WithTop ℕ) (h : IsZero (D.page r)) :
+    D.B r = D.Z r := by
+  unfold SSData.page at h
+  have hepi : Epi (Subobject.ofLE (D.B r) (D.Z r) (D.B_le_Z r)) := by
+    rwa [Preadditive.epi_iff_isZero_cokernel]
+  haveI : IsIso (Subobject.ofLE (D.B r) (D.Z r) (D.B_le_Z r)) := isIso_of_mono_of_epi _
+  apply le_antisymm (D.B_le_Z r)
+  exact Subobject.le_of_comm (inv (Subobject.ofLE (D.B r) (D.Z r) (D.B_le_Z r)))
+    (by simp [Subobject.ofLE_arrow])
 
 /-! ### Spectral sequences -/
 

@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: print.aux
+A level-1 auxiliary file: 112.aux
+The style file: plain.bst
+Database file #1: main.bib
+Warning--can't use both volume and number fields in HPS97
+Warning--empty publisher in HPS97
+Warning--empty booktitle in MillerHHR
+Warning--there's a number but no series in MillerHHR
+Warning--empty publisher in MillerHHR
+Warning--there's a number but no volume in WXems
+You've used 59 entries,
+            2118 wiz_defined-function locations,
+            903 strings with 11935 characters,
+and the built_in function-call counts, 19415 in all, are:
+= -- 2004
+> -- 713
+< -- 12
++ -- 305
+- -- 226
+* -- 1381
+:= -- 3175
+add.period$ -- 183
+call.type$ -- 59
+change.case$ -- 287
+chr.to.int$ -- 0
+cite$ -- 65
+duplicate$ -- 720
+empty$ -- 1599
+format.name$ -- 226
+if$ -- 4035
+int.to.chr$ -- 0
+int.to.str$ -- 59
+missing$ -- 59
+newline$ -- 299
+num.names$ -- 118
+pop$ -- 241
+preamble$ -- 1
+purify$ -- 231
+quote$ -- 0
+skip$ -- 502
+stack$ -- 0
+substring$ -- 1613
+swap$ -- 136
+text.length$ -- 12
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 230
+warning$ -- 6
+while$ -- 211
+width$ -- 61
+write$ -- 646
+(There were 6 warnings)
