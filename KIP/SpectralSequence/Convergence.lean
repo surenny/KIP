@@ -78,30 +78,60 @@ a linear reindexing of the grading.
 
 This is *weak convergence* — the project does not consider strong convergence. -/
 
-/-- A spectral sequence `E` (via its `EInftyData`) converges to a graded object
-    `A` equipped with filtration `F`. The `reindex` map specifies how the
-    spectral sequence index `ω` maps to `(filtration degree, stem degree)`. -/
+/-- A spectral sequence `E` converges to a graded object `A` equipped with
+    filtration `F`. The `reindex` map specifies how the spectral sequence
+    index `ω` maps to `(filtration degree, stem degree)`.
+    The E∞-page is `(E.ssData k).eInfty = Z⊤/B⊤` from the SSData. -/
 structure Convergence {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    (E : EInftyData C ω) {ω' : Type w} (A : ω' → C) (F : Filtration A) where
+    (E : SpectralSequence C ω) {ω' : Type w} (A : ω' → C) (F : Filtration A) where
   /-- Reindexing: spectral sequence index → (filtration degree, stem degree). -/
   reindex : ω → ℤ × ω'
   /-- Convergence isomorphism: `E∞^k ≅ gr^s A^{k'}` where `(s, k') = reindex k`. -/
   iso : ∀ (k : ω),
-    E.EInfty k ≅ F.associatedGraded (reindex k).1 (reindex k).2
+    (E.ssData k).eInfty ≅ F.associatedGraded (reindex k).1 (reindex k).2
 
 /-! ### Stem and filtration degrees -/
 
 /-- The filtration degree component of the convergence reindexing. -/
 def Convergence.filtrationDegree {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E : EInftyData C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
     (conv : Convergence E A F) (k : ω) : ℤ :=
   (conv.reindex k).1
 
 /-- The stem degree component of the convergence reindexing. -/
 def Convergence.stemDegree {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E : EInftyData C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
     (conv : Convergence E A F) (k : ω) : ω' :=
   (conv.reindex k).2
+
+/-! ### Induced maps on associated graded
+
+A family of morphisms `aMap : A₁ k' ⟶ A₂ k'` that preserves filtrations
+induces a map `gr^s(A₁) ⟶ gr^s(A₂)` on the associated graded pieces. -/
+
+/-- The map induced on associated graded pieces by a filtration-compatible map.
+    Given filtrations `F₁` on `A₁` and `F₂` on `A₂`, a family of morphisms
+    `aMap : A₁ k' ⟶ A₂ k'` preserving the filtrations induces a map
+    `gr^s(A₁, k') ⟶ gr^s(A₂, k')` on the associated graded via the
+    universal property of cokernels. -/
+noncomputable def Filtration.inducedAssocGradedMap {ω' : Type w} {A₁ A₂ : ω' → C}
+    {F₁ : Filtration A₁} {F₂ : Filtration A₂}
+    (aMap : ∀ k', A₁ k' ⟶ A₂ k')
+    (hcompat : ∀ (s : ℤ) (k' : ω'),
+      ∃ (φ : Subobject.underlying.obj (F₁.F s k') ⟶
+             Subobject.underlying.obj (F₂.F s k')),
+        φ ≫ (F₂.F s k').arrow = (F₁.F s k').arrow ≫ aMap k')
+    (s : ℤ) (k' : ω') : F₁.associatedGraded s k' ⟶ F₂.associatedGraded s k' :=
+  cokernel.map
+    (Subobject.ofLE (F₁.F (s + 1) k') (F₁.F s k') (F₁.mono s k'))
+    (Subobject.ofLE (F₂.F (s + 1) k') (F₂.F s k') (F₂.mono s k'))
+    (hcompat (s + 1) k').choose
+    (hcompat s k').choose
+    (by
+      apply (cancel_mono ((F₂.F s k').arrow)).mp
+      simp only [Category.assoc, Subobject.ofLE_arrow]
+      rw [(hcompat s k').choose_spec, (hcompat (s + 1) k').choose_spec,
+        ← Category.assoc, Subobject.ofLE_arrow])
 
 /-! ### Category of converging spectral sequences
 
@@ -110,13 +140,19 @@ E∞-pages and a morphism on the target graded objects, preserving
 filtrations and compatible with convergence isomorphisms. -/
 
 /-- A morphism of converging spectral sequences
-    `(E₁, A₁, F₁, conv₁) → (E₂, A₂, F₂, conv₂)`. -/
+    `(E₁, A₁, F₁, conv₁) → (E₂, A₂, F₂, conv₂)`.
+    The base data consists of a spectral sequence morphism `ssMap` (SSData maps)
+    plus a target map `aMap`, with an explicit E∞-page map derived from `ssMap`. -/
 structure ConvergenceMorphism {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E₁ E₂ : EInftyData C ω} {ω' : Type w}
+    {E₁ E₂ : SpectralSequence C ω} {ω' : Type w}
     {A₁ A₂ : ω' → C} {F₁ : Filtration A₁} {F₂ : Filtration A₂}
     (conv₁ : Convergence E₁ A₁ F₁) (conv₂ : Convergence E₂ A₂ F₂) where
-  /-- The map on E∞-pages. -/
-  eMap : ∀ (k : ω), E₁.EInfty k ⟶ E₂.EInfty k
+  /-- The underlying spectral sequence morphism. -/
+  ssMap : SpectralSequenceMorphism E₁ E₂
+  /-- The map on E∞-pages, derived from ssMap. -/
+  eMap : ∀ (k : ω), (E₁.ssData k).eInfty ⟶ (E₂.ssData k).eInfty
+  /-- `eMap` equals the E∞-map induced by the spectral sequence morphism `ssMap`. -/
+  eMap_eq : ∀ (k : ω), eMap k = ssMap.eInftyMap k
   /-- The map on target graded objects. -/
   aMap : ∀ (k' : ω'), A₁ k' ⟶ A₂ k'
   /-- The reindexings agree (so the morphism is well-defined). -/
@@ -129,10 +165,24 @@ structure ConvergenceMorphism {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
            Subobject.underlying.obj (F₂.F s k')),
       φ ≫ (F₂.F s k').arrow = (F₁.F s k').arrow ≫ aMap k'
   /-- Compatibility of `eMap` and `aMap` with the convergence isomorphisms.
-      The diagram E∞^k → gr^s(A₁) → gr^s(A₂) commutes with
-      E∞^k → E∞^k → gr^s(A₂). -/
-  iso_compat : ∀ (_k : ω), True -- full statement deferred to prover stage
-    -- The precise formulation requires transporting across reindex_eq
+      For each `k`, the diagram
+      ```
+      (E₁.ssData k).eInfty --[eMap k]--> (E₂.ssData k).eInfty
+          |                                     |
+        iso₁(k)                               iso₂(k)
+          v                                     v
+      gr^s(A₁, k')      --[grMap]-->      gr^s(A₂, k')
+      ```
+      commutes, where `(s, k') = reindex k` and `grMap` is the map on
+      associated graded pieces induced by `aMap` via `filtration_compat`.
+      The `eqToHom` transports `conv₂.iso` from `conv₂.reindex`-indices
+      to `conv₁.reindex`-indices using `reindex_eq`. -/
+  iso_compat : ∀ (k : ω),
+    eMap k ≫ (conv₂.iso k).hom ≫
+      eqToHom (by rw [show conv₁.reindex = conv₂.reindex from reindex_eq]) =
+    (conv₁.iso k).hom ≫
+      Filtration.inducedAssocGradedMap aMap filtration_compat
+        (conv₁.reindex k).1 (conv₁.reindex k).2
 
 /-! ### Detection
 
@@ -147,10 +197,10 @@ Elements are modeled as generalized elements (morphisms from a test object `T`).
     `(s, k') = conv.reindex k`. Concretely:
     `y ≫ iso(k) = x ≫ π` where `π : F^s → gr^s = F^s/F^{s+1}`. -/
 def Detects {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E : EInftyData C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
     (conv : Convergence E A F)
     {T : C} {k : ω}
-    (y : T ⟶ E.EInfty k)
+    (y : T ⟶ (E.ssData k).eInfty)
     (x : T ⟶ Subobject.underlying.obj (F.F (conv.reindex k).1 (conv.reindex k).2))
     : Prop :=
   y ≫ (conv.iso k).hom =
@@ -164,11 +214,11 @@ def Detects {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
     That is, `x ∈ F^s A^k` maps to zero in `gr^s = F^s/F^{s+1}` iff `x`
     lifts to `F^{s+1}`. -/
 theorem detect_zero {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E : EInftyData C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
     (conv : Convergence E A F)
     {T : C} {k : ω}
     (x : T ⟶ Subobject.underlying.obj (F.F (conv.reindex k).1 (conv.reindex k).2))
-    : Detects conv (0 : T ⟶ E.EInfty k) x ↔
+    : Detects conv (0 : T ⟶ (E.ssData k).eInfty) x ↔
       ∃ (x' : T ⟶ Subobject.underlying.obj
             (F.F ((conv.reindex k).1 + 1) (conv.reindex k).2)),
         x' ≫ Subobject.ofLE
@@ -189,10 +239,10 @@ theorem detect_zero {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
     That is, `x` and `x'` project to the same element in `gr^s` iff `x - x'`
     lifts to `F^{s+1}`. -/
 theorem detect_difference {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
-    {E : EInftyData C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
     (conv : Convergence E A F)
     {T : C} {k : ω}
-    (y : T ⟶ E.EInfty k)
+    (y : T ⟶ (E.ssData k).eInfty)
     (x x' : T ⟶ Subobject.underlying.obj (F.F (conv.reindex k).1 (conv.reindex k).2))
     : (Detects conv y x ∧ Detects conv y x') ↔
       (Detects conv y x ∧

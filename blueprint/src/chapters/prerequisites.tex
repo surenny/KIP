@@ -49,22 +49,22 @@
 \end{remark}
 
 \begin{definition}\label{prereq:def:einfty-data}
-    \uses{prereq:def:spectral-sequence}
-    \lean{KIP.SpectralSequence.EInftyData}\leanok
-    The \emph{$E_\infty$-data} of a spectral sequence $E$ consists of a graded object $E_\infty^{\mathbf{k}}$ together with natural maps from each page $E_r^{\mathbf{k}} \to E_\infty^{\mathbf{k}}$ (for $r$ sufficiently large in the degenerate case), compatible with the page isomorphisms. For bounded or degenerate spectral sequences, $E_\infty = E_r$ for all sufficiently large $r$.
+    \uses{prereq:def:ss-data}
+    The \emph{$E_\infty$-page} of a spectral sequence $E$ at index $\mathbf{k}$ is given by the nested subspace data: $E_\infty^{\mathbf{k}} = Z_\infty^{\mathbf{k}} / B_\infty^{\mathbf{k}}$. For bounded or degenerate spectral sequences, $E_\infty = E_r$ for all sufficiently large $r$.
 \end{definition}
 
 \begin{definition}\label{prereq:def:ss-morphism}
     \uses{prereq:def:spectral-sequence}
     \lean{KIP.SpectralSequence.SpectralSequenceMorphism}\leanok
-    A \emph{morphism of spectral sequences} $f: E \to E'$ (with the same differential degree function) consists of a family of graded maps $f_r: E_r^{\mathbf{k}} \to E'^{\mathbf{k}}_r$ commuting with differentials:
-    $$f_r \circ d_r = d'_r \circ f_r.$$
+    A \emph{morphism of spectral sequences} $f: E \to E'$ consists of a family of maps $\varphi_{\mathbf{k}}: V^{\mathbf{k}} \to V'^{\mathbf{k}}$ on the underlying objects at each index, preserving the cycle and boundary subobjects:
+    $$\varphi_{\mathbf{k}}(Z_r^{\mathbf{k}}) \subseteq Z'^{\mathbf{k}}_r, \qquad \varphi_{\mathbf{k}}(B_r^{\mathbf{k}}) \subseteq B'^{\mathbf{k}}_r$$
+    for all $r$, and commuting with differentials on the induced page maps. A morphism induces maps on all pages $E_r \to E'_r$ and on the $E_\infty$-page.
 \end{definition}
 
 \subsubsection{Convergence of Spectral Sequences}\label{sec:prereq-convergence}
 
 \begin{definition}\label{prereq:def:convergence}
-    \uses{prereq:def:einfty-data,prereq:def:filtration,prereq:def:associated-graded}
+    \uses{prereq:def:spectral-sequence,prereq:def:einfty-data,prereq:def:filtration,prereq:def:associated-graded}
     \lean{KIP.SpectralSequence.Convergence}\leanok
     Let $E$ be a spectral sequence with $n$-grading and let $A$ be an $(n-1)$-graded object equipped with a decreasing filtration (Definition~\ref{prereq:def:filtration}). We say $E$ \emph{converges} to $A$, written $E_{r_0} \Longrightarrow A$, if there exists an isomorphism of $n$-graded objects
     $$E_\infty \cong \mathrm{gr}\, A,$$
@@ -76,9 +76,14 @@
 \end{remark}
 
 \begin{definition}\label{prereq:def:converging-ss-morphism}
-    \uses{prereq:def:convergence,prereq:def:filtration}
+    \uses{prereq:def:convergence,prereq:def:ss-morphism,prereq:def:filtration}
     \lean{KIP.SpectralSequence.ConvergenceMorphism}\leanok
-    Given a reindexing rule, the \emph{category of converging spectral sequences} has objects $(E, A, F, \varphi)$ where $E$ is a spectral sequence, $A$ is a filtered graded object, and $\varphi: E_\infty \xrightarrow{\sim} \mathrm{gr}\, A$ is the convergence isomorphism. A morphism $(E_1, A_1) \to (E_2, A_2)$ consists of a morphism of spectral sequences $E_1 \to E_2$ together with a filtration-preserving map $A_1 \to A_2$, compatible with the convergence isomorphisms.
+    Given a reindexing rule, the \emph{category of converging spectral sequences} has objects $(E, A, F, \varphi)$ where $E$ is a spectral sequence, $A$ is a filtered graded object, and $\varphi: E_\infty \xrightarrow{\sim} \mathrm{gr}\, A$ is the convergence isomorphism. A morphism $(E_1, A_1) \to (E_2, A_2)$ consists of:
+    \begin{enumerate}
+        \item A morphism of spectral sequences $E_1 \to E_2$ (Definition~\ref{prereq:def:ss-morphism}), inducing maps on $E_\infty$-pages.
+        \item A filtration-preserving map $A_1 \to A_2$.
+        \item Compatibility: the induced $E_\infty$-map and the associated graded map commute with the convergence isomorphisms.
+    \end{enumerate}
 \end{definition}
 
 \begin{definition}\label{prereq:def:stem}
