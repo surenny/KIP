@@ -50,6 +50,7 @@
 
 \begin{definition}\label{prereq:def:einfty-data}
     \uses{prereq:def:ss-data}
+    \lean{KIP.SpectralSequence.SSData.eInfty}\leanok
     The \emph{$E_\infty$-page} of a spectral sequence $E$ at index $\mathbf{k}$ is given by the nested subspace data: $E_\infty^{\mathbf{k}} = Z_\infty^{\mathbf{k}} / B_\infty^{\mathbf{k}}$. For bounded or degenerate spectral sequences, $E_\infty = E_r$ for all sufficiently large $r$.
 \end{definition}
 
@@ -76,7 +77,7 @@
 \end{remark}
 
 \begin{definition}\label{prereq:def:converging-ss-morphism}
-    \uses{prereq:def:convergence,prereq:def:ss-morphism,prereq:def:filtration}
+    \uses{prereq:def:convergence,prereq:def:ss-morphism,prereq:def:filtration,prereq:def:filtered-morphism}
     \lean{KIP.SpectralSequence.ConvergenceMorphism}\leanok
     Given a reindexing rule, the \emph{category of converging spectral sequences} has objects $(E, A, F, \varphi)$ where $E$ is a spectral sequence, $A$ is a filtered graded object, and $\varphi: E_\infty \xrightarrow{\sim} \mathrm{gr}\, A$ is the convergence isomorphism. A morphism $(E_1, A_1) \to (E_2, A_2)$ consists of:
     \begin{enumerate}
@@ -122,16 +123,22 @@
     \lean{KIP.SpectralSequence.Filtration}\leanok
     A \emph{filtered $n$-graded abelian group} is an $n$-graded abelian group $A$ equipped with a decreasing filtration: for each index $\mathbf{k} \in \mathbb{Z}^n$, a family of subgroups
     $$\cdots \supseteq F^{s-1} A^{\mathbf{k}} \supseteq F^s A^{\mathbf{k}} \supseteq F^{s+1} A^{\mathbf{k}} \supseteq \cdots$$
-    A morphism of filtered graded abelian groups is a graded homomorphism preserving the filtration. These form a category.
+\end{definition}
+
+\begin{definition}\label{prereq:def:filtered-morphism}
+    \uses{prereq:def:filtration}
+    A \emph{morphism of filtered graded abelian groups} is a graded homomorphism $f: A \to B$ that preserves the filtration: $f(F^s A^{\mathbf{k}}) \subseteq F^s B^{\mathbf{k}}$ for all $s$ and $\mathbf{k}$. Filtered graded abelian groups and their morphisms form a category.
 \end{definition}
 
 \begin{definition}\label{prereq:def:filtered-complex}
     \uses{prereq:def:filtration}
+    \lean{KIP.SpectralSequence.FilteredComplex}\leanok
     A \emph{filtered chain complex} is a chain complex $(C_*, d)$ in the category of filtered graded abelian groups: the differential $d: C_n \to C_{n-1}$ preserves the filtration, i.e., $d(F^s C_n) \subseteq F^s C_{n-1}$ for all $s$ and $n$.
 \end{definition}
 
 \begin{proposition}\label{prereq:prop:homology-filtration}
     \uses{prereq:def:filtered-complex}
+    \lean{KIP.SpectralSequence.FilteredComplex.homologyFiltration}\leanok
     A filtered chain complex $(C_*, d, F^s)$ induces a natural filtration on its homology:
     $$F^s H_n(C_*) = \mathrm{im}(H_n(F^s C_*) \to H_n(C_*)) = \ker(H_n(C_*) \to H_n(C_* / F^s C_*)).$$
 \end{proposition}
@@ -145,22 +152,29 @@
 
 \begin{definition}\label{prereq:def:associated-graded-complex}
     \uses{prereq:def:filtered-complex,prereq:def:associated-graded}
+    \lean{KIP.SpectralSequence.FilteredComplex.assocGraded}\leanok
     Given a filtered chain complex $(C_*, d, F^s)$, the \emph{associated graded complex} is the bigraded object $\mathrm{gr}^s C_n$ equipped with the induced differential $\bar{d}: \mathrm{gr}^s C_n \to \mathrm{gr}^s C_{n-1}$ (well-defined since $d$ preserves the filtration).
 \end{definition}
 
-\begin{definition}\label{prereq:def:exhaustive-hausdorff}
+\begin{definition}\label{prereq:def:exhaustive}
     \uses{prereq:def:filtered-complex}
-    A filtered chain complex $(C_*, d, F^s)$ is
-    \begin{itemize}
-        \item \emph{exhaustive} if $\bigcup_s F^s C_n = C_n$ for all $n$,
-        \item \emph{Hausdorff} (or \emph{separated}) if $\bigcap_s F^s C_n = 0$ for all $n$,
-        \item \emph{bounded} if for each $n$, there exist $a \le b$ with $F^a C_n = C_n$ and $F^{b+1} C_n = 0$.
-    \end{itemize}
-    A bounded filtration is both exhaustive and Hausdorff. We assume all filtered complexes in this project are exhaustive and Hausdorff.
+    A filtered chain complex $(C_*, d, F^s)$ is \emph{exhaustive} if $\bigcup_s F^s C_n = C_n$ for all $n$.
+\end{definition}
+
+\begin{definition}\label{prereq:def:hausdorff}
+    \uses{prereq:def:filtered-complex}
+    A filtered chain complex $(C_*, d, F^s)$ is \emph{Hausdorff} (or \emph{separated}) if $\bigcap_s F^s C_n = 0$ for all $n$.
+\end{definition}
+
+\begin{definition}\label{prereq:def:bounded-filtration}
+    \uses{prereq:def:exhaustive,prereq:def:hausdorff}
+    \lean{KIP.SpectralSequence.FilteredComplex.IsBounded}\leanok
+    A filtered chain complex $(C_*, d, F^s)$ is \emph{bounded} if for each $n$, there exist $a \le b$ with $F^a C_n = C_n$ and $F^{b+1} C_n = 0$. A bounded filtration is both exhaustive and Hausdorff. We assume all filtered complexes in this project are exhaustive and Hausdorff.
 \end{definition}
 
 \begin{definition}\label{prereq:def:filtered-complex-ssdata}
     \uses{prereq:def:ss-data,prereq:def:filtered-complex,prereq:def:associated-graded-complex}
+    \lean{KIP.SpectralSequence.FilteredComplex.toSSData}\leanok
     Given a filtered chain complex $(C_*, d, F^s)$, we construct an SSData structure. The spectral sequence starts at $E_0$ with $(n+1)$-grading.
     \begin{enumerate}
         \item Define $V^{s,t} = \mathrm{gr}^s C_{s+t}$, the associated graded.
@@ -172,11 +186,13 @@
 
 \begin{proposition}\label{prereq:prop:filtered-complex-ssdata-wd}
     \uses{prereq:def:filtered-complex-ssdata}
+    \lean{KIP.SpectralSequence.FilteredComplex.pageDifferential_comp}\leanok
     The differential $d_r$ in Definition~\ref{prereq:def:filtered-complex-ssdata} is well-defined and satisfies $d_r \circ d_r = 0$.
 \end{proposition}
 
 \begin{theorem}\label{prereq:thm:filtered-complex-ss}
     \uses{prereq:def:spectral-sequence,prereq:def:filtered-complex-ssdata,prereq:prop:filtered-complex-ssdata-wd}
+    \lean{KIP.SpectralSequence.FilteredComplex.toSpectralSequence}\leanok
     The nested subspace data and differentials from Definition~\ref{prereq:def:filtered-complex-ssdata} satisfy the axioms of a spectral sequence. Specifically:
     \begin{enumerate}
         \item $B_r \subseteq B_{r+1} \subseteq Z_{r+1} \subseteq Z_r$ for all $r$.
@@ -187,7 +203,8 @@
 \end{theorem}
 
 \begin{theorem}\label{prereq:thm:filtered-complex-convergence}
-    \uses{prereq:thm:filtered-complex-ss,prereq:def:convergence,prereq:prop:homology-filtration,prereq:def:exhaustive-hausdorff}
+    \uses{prereq:thm:filtered-complex-ss,prereq:def:convergence,prereq:prop:homology-filtration,prereq:def:exhaustive,prereq:def:hausdorff}
+    \lean{KIP.SpectralSequence.FilteredComplex.weakConvergence}\leanok
     If the filtration on a filtered chain complex is exhaustive and Hausdorff, then the associated spectral sequence converges to the homology:
     $$E_r^{s,t} \Longrightarrow H_{s+t}(C_*).$$
     The convergence isomorphism is $E_\infty^{s,t} \cong \mathrm{gr}^s H_{s+t}(C_*)$ with respect to the induced filtration from Proposition~\ref{prereq:prop:homology-filtration}.
@@ -205,8 +222,21 @@
 
 \subsubsection{Crossing of Differentials}\label{sec:prereq-crossing}
 
+\begin{definition}\label{prereq:def:essential-differential}
+    \uses{prereq:def:spectral-sequence}
+    \lean{KIP.SpectralSequence.IsEssentialAt}\leanok
+    Let $E$ be a spectral sequence. A differential $d_r(x) = y$ is called \emph{essential} if $y \ne 0$ on the $E_r$-page. Equivalently, $d_r(x) = y$ is essential if $x$ is not a boundary and $y$ is not zero in $E_r$. A differential is \emph{inessential} if $y = 0$ on the $E_r$-page.
+\end{definition}
+
+\begin{definition}\label{prereq:def:differential-data}
+    \uses{prereq:def:spectral-sequence,prereq:def:essential-differential}
+    \lean{KIP.SpectralSequence.DifferentialDatum}\leanok
+    A \emph{differential datum} in a spectral sequence $E$ is a triple $(r, x, y)$ where $r \ge r_0$, $x \in E_r^{\mathbf{k}}$, and $y \in E_r^{\mathbf{k}+\mathbf{d}(r)}$ with $d_r(x) = y$. We say the differential datum is \emph{essential} if $y \ne 0$, and denote it $d_r(x) = y$.
+\end{definition}
+
 \begin{definition}\label{prereq:def:crossing}
-    \uses{prereq:def:convergence}
+    \uses{prereq:def:convergence,prereq:def:essential-differential,prereq:def:differential-data}
+    \lean{KIP.SpectralSequence.HasCrossingAt}\leanok
     Let $E$ be a spectral sequence converging to $A$. Let $x \in E$ be an element of filtration $s$, and suppose $d_n(x) = y$ is a differential (so $y$ has filtration $s + n$). Assume the spectral sequence starts at page $\ge 0$ and that $d_n$ increases filtration by $n$.
     \begin{enumerate}
         \item We say that $d_n(x) = y$ \emph{has a crossing that hits filtration $p$} for some $p \le s+n$, if there exists an element $x' \in E$ of filtration $s + a$ with $a > 0$ and an essential differential $d_m(x') = y'$ for $0 \ne y'$ of filtration $s + a + m$, such that
@@ -242,8 +272,15 @@
     We say there is an \emph{$f$-extension} from $x \in E_\infty^{s,t}(X)$ to $y \in E_\infty^{s+n,t+n}(Y)$ if $d_n^f(x) = y$ in the $f$-ESS. The extension is \emph{essential} if $y$ is nontrivial on the $E_n$-page; otherwise it is \emph{inessential}.
 \end{definition}
 
+\begin{notation}\label{prereq:not:representatives}
+    \uses{prereq:def:detect}
+    For $x \in E_\infty^{s,t}(X)$, let $\{x\} \subseteq \pi_{t-s}X$ denote the set of elements detected by $x$:
+    $$\{x\} = \{ \alpha \in F^s \pi_{t-s}X \mid \bar{\alpha} \mapsto x \text{ under } E_\infty^{s,t} \cong \mathrm{gr}^s \pi_{t-s}X \}.$$
+    For $[x] \in \{x\}$, we call $[x]$ a \emph{representative} of $x$. Note that $\{x\}$ is a coset of $F^{s+1}\pi_{t-s}X$ in $F^s\pi_{t-s}X$.
+\end{notation}
+
 \begin{proposition}\label{prereq:prop:f-ext-characterization}
-    \uses{prereq:def:f-extension}
+    \uses{prereq:def:f-extension,prereq:not:representatives}
     An $f$-extension $d_n^f(x) = y$ holds if and only if there exists $[x] \in \{x\}$ such that $f[x] \in \{y\}$.
 \end{proposition}
 
@@ -251,6 +288,13 @@
     \uses{prereq:def:ess,prereq:def:adams-filtration-maps}
     If $\mathrm{AF}(f) = k$, then $d_i^f = 0$ for $i < k$.
 \end{corollary}
+
+\begin{proposition}\label{prereq:prop:ess-exactness}
+    \uses{prereq:prop:f-ext-characterization,prereq:cor:composition-zero,prereq:not:representatives}
+    If $X \xrightarrow{f} Y \xrightarrow{g} Z$ induces an exact sequence on homotopy groups, then all permanent $d^g$-cycles in $E_\infty(Y)$ are boundaries in the $f$-ESS.
+\end{proposition}
+
+\subsubsection{Commutativity of Extension Differentials}\label{sec:prereq-commutativity}
 
 \begin{theorem}\label{prereq:thm:four-spectra}
     \uses{prereq:prop:no-crossing-iff}
@@ -290,13 +334,6 @@
     If $g \circ f = 0$ and $d_n^f(x) = y$, then $y$ is a permanent cycle in the $g$-ESS: $d_m^g(y) = 0$ for all $m \ge 0$.
 \end{corollary}
 
-\begin{proposition}\label{prereq:prop:ess-exactness}
-    \uses{prereq:prop:f-ext-characterization,prereq:cor:composition-zero}
-    If $X \xrightarrow{f} Y \xrightarrow{g} Z$ induces an exact sequence on homotopy groups, then all permanent $d^g$-cycles in $E_\infty(Y)$ are boundaries in the $f$-ESS.
-\end{proposition}
-
-\subsubsection{Extension Differentials and Crossing}\label{sec:prereq-ess-crossing}
-
 \begin{corollary}\label{prereq:cor:ess-naturality}
     \uses{prereq:def:ess,prereq:cor:four-spectra}
     Consider a homotopy commutative diagram
@@ -305,6 +342,16 @@
     Z \ar[r]_{g} & W
     }$$
     If $\mathrm{ESS}(p)_0 = \mathrm{ESS}(p)_r$ and $\mathrm{ESS}(q)_0 = \mathrm{ESS}(q)_r$ for some $r \ge 0$, then $(d_r^p, d_r^q)$ induces a map from the $f$-ESS to the $g$-ESS.
+\end{corollary}
+
+\begin{corollary}\label{prereq:cor:stationary-page}
+    \uses{prereq:thm:four-spectra}
+    In the setting of Theorem~\ref{prereq:thm:four-spectra}, if the $g$-ESS and the $q$-ESS have stationary pages (i.e., $E_0 = E_r$ for all $r$), then the differentials commute with the induced maps on $E_\infty$-pages.
+\end{corollary}
+
+\begin{corollary}\label{prereq:cor:vanishing-target}
+    \uses{prereq:thm:four-spectra}
+    In the setting of Theorem~\ref{prereq:thm:four-spectra}, if $W = 0$, then $d_n^f(x) = y$ and $d_m^p(x) = z$ implies $d_{m+l-n}^q(y) = 0$ for all $l$, i.e., $y$ is a permanent cycle in the $q$-ESS.
 \end{corollary}
 
 
@@ -331,6 +378,16 @@
 \begin{definition}\label{prereq:def:cofiber-sequence}
     \uses{prereq:def:triangulated-category}
     In a triangulated category, a distinguished triangle $X \xrightarrow{f} Y \to C_f \to \Sigma X$ is called a \emph{cofiber sequence}, and $C_f$ is the \emph{cofiber} (or \emph{cone}) of $f$. By (TR1), every morphism admits a cofiber sequence.
+\end{definition}
+
+\begin{definition}\label{prereq:def:functorial-cofiber}
+    \uses{prereq:def:cofiber-sequence}
+    A \emph{functorial cofiber} on a triangulated category $\mathcal{T}$ is an assignment that to each morphism $f: X \to Y$ in $\mathcal{T}$ associates a distinguished triangle $X \xrightarrow{f} Y \to Cf \to \Sigma X$ that is functorial: given a commutative square
+    $$\xymatrix{
+    X \ar[r]^{f}\ar[d]_{\alpha} & Y\ar[d]^{\beta}\\
+    X' \ar[r]_{f'} & Y'
+    }$$
+    there is an induced map $C\alpha\beta: Cf \to Cf'$ making the diagram of distinguished triangles commute.
 \end{definition}
 
 \begin{proposition}\label{prereq:prop:les-hom}
@@ -365,9 +422,20 @@
     This definition follows Hovey--Palmieri--Strickland~\cite{HPS97}, Definition~A.2.1.
 \end{definition}
 
+\begin{definition}\label{prereq:def:tensor-triangulated-functorial-cofiber}
+    \uses{prereq:def:closed-symmetric-tensor-triangulated,prereq:def:functorial-cofiber}
+    A \emph{closed symmetric tensor triangulated category with functorial cofiber} is a closed symmetric tensor triangulated category $\mathcal{T}$ (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}) equipped with:
+    \begin{enumerate}
+        \item A functorial cofiber (Definition~\ref{prereq:def:functorial-cofiber}).
+        \item A \emph{tensor-cofiber exchange}: for morphisms $f: X \to Y$ and $g: A \to B$, a natural isomorphism
+        $$C(f \wedge g) \cong Cf \wedge Cg$$
+        compatible with the triangulated structure.
+    \end{enumerate}
+\end{definition}
+
 \begin{definition}\label{prereq:def:stable-homotopy-category}
-    \uses{prereq:def:closed-symmetric-tensor-triangulated}
-    The \emph{stable homotopy category} $\mathcal{S}$ is a closed symmetric tensor triangulated category (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}). Its objects are called \emph{spectra}. Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide.
+    \uses{prereq:def:tensor-triangulated-functorial-cofiber}
+    The \emph{stable homotopy category} $\mathcal{S}$ is a closed symmetric tensor triangulated category with functorial cofiber (Definition~\ref{prereq:def:tensor-triangulated-functorial-cofiber}). Its objects are called \emph{spectra}. Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide.
 \end{definition}
 
 \begin{remark}
@@ -491,8 +559,8 @@
 \subsubsection{Synthetic Spectra}\label{sec:prereq-syn-basic}
 
 \begin{definition}\label{prereq:def:synthetic-category}
-    \uses{prereq:def:stable-homotopy-category}
-    The category $h\mathrm{Syn}$ of \emph{$\HF$-synthetic spectra} is a triangulated category (it arises as the homotopy category of a stable model category $\mathrm{Syn}_{\HF}$).
+    \uses{prereq:def:stable-homotopy-category,prereq:def:functorial-cofiber}
+    The category $h\mathrm{Syn}$ of \emph{$\HF$-synthetic spectra} is a triangulated category with functorial cofiber (it arises as the homotopy category of a stable model category $\mathrm{Syn}_{\HF}$).
 \end{definition}
 
 \begin{definition}\label{prereq:def:bigraded-suspension}

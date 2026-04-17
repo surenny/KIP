@@ -1,5 +1,6 @@
 KIP.SpectralSequence.SSData
 KIP.SpectralSequence.SpectralSequence
+KIP.SpectralSequence.SSData.eInfty
 KIP.SpectralSequence.SpectralSequenceMorphism
 KIP.SpectralSequence.Convergence
 KIP.SpectralSequence.ConvergenceMorphism
@@ -9,4 +10,15 @@ KIP.SpectralSequence.Detects
 KIP.SpectralSequence.detect_zero
 KIP.SpectralSequence.detect_difference
 KIP.SpectralSequence.Filtration
+KIP.SpectralSequence.FilteredComplex
+KIP.SpectralSequence.FilteredComplex.homologyFiltration
 KIP.SpectralSequence.Filtration.associatedGraded
+KIP.SpectralSequence.FilteredComplex.assocGraded
+KIP.SpectralSequence.FilteredComplex.IsBounded
+KIP.SpectralSequence.FilteredComplex.toSSData
+KIP.SpectralSequence.FilteredComplex.pageDifferential_comp
+KIP.SpectralSequence.FilteredComplex.toSpectralSequence
+KIP.SpectralSequence.FilteredComplex.weakConvergence
+KIP.SpectralSequence.IsEssentialAt
+KIP.SpectralSequence.DifferentialDatum
+KIP.SpectralSequence.HasCrossingAt
