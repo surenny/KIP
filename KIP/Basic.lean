@@ -1,4 +1,3 @@
-import KIP.Basic
 import KIP.SpectralSequence.Basic
 import KIP.SpectralSequence.Convergence
 import KIP.SpectralSequence.FilteredComplex
@@ -6,9 +5,9 @@ import KIP.SpectralSequence.Crossing
 import KIP.SpectralSequence.Extension
 import KIP.SpectralSequence.Commutativity
 import KIP.StableHomotopy.Basic
-import KIP.StableHomotopy.TensorTriangulatedCategory
 import KIP.StableHomotopy.Cohomology
 import KIP.StableHomotopy.Adams
+import KIP.StableHomotopy.TensorTriangulatedCategory
 import KIP.Synthetic.Basic
 import KIP.Synthetic.Sphere
 import KIP.Synthetic.Adams

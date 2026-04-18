@@ -602,4 +602,29 @@ noncomputable def SpectralSequenceMorphism.eInftyMap
       apply (cancel_mono ((E'.ssData k).Z ⊤).arrow).mp
       simp only [Category.assoc, hZ, Subobject.ofLE_arrow, hB, Subobject.ofLE_arrow_assoc])
 
+/-! ### E∞ data -/
+
+/-- Packages a spectral sequence with convenient access to its E∞-page.
+    This wraps a `SpectralSequence` to provide a uniform `EInfty` accessor
+    used by downstream axioms (Adams SS, Synthetic Adams SS). -/
+structure EInftyData (C : Type u) [Category.{v} C] [Abelian C]
+    (ι : Type w) [AddCommGroup ι] [DecidableEq ι] where
+  /-- The underlying spectral sequence -/
+  ss : SpectralSequence C ι
+
+/-- The E∞-page at bidegree `k`, defined as the E∞ of the underlying SSData. -/
+noncomputable def EInftyData.EInfty {C : Type u} [Category.{v} C] [Abelian C]
+    {ι : Type w} [AddCommGroup ι] [DecidableEq ι]
+    (eData : EInftyData C ι) (k : ι) : C :=
+  (eData.ss.ssData k).eInfty
+
+/-- If every page of the underlying SS is zero at bidegree `k`, then E∞ is zero. -/
+noncomputable def EInftyData.eInfty_isZero_of_page_isZero
+    {C : Type u} [Category.{v} C] [Abelian C]
+    {ι : Type w} [AddCommGroup ι] [DecidableEq ι]
+    (eData : EInftyData C ι) (k : ι)
+    (h : ∀ r : ℤ, eData.ss.r₀ ≤ r → IsZero (eData.ss.Page r k)) :
+    IsZero (eData.EInfty k) :=
+  SpectralSequence.eInfty_isZero_of_page_isZero eData.ss k h
+
 end KIP.SpectralSequence

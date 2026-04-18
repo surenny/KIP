@@ -275,4 +275,63 @@ theorem detect_difference {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
     simp only [Category.assoc, Filtration.toAssociatedGraded, cokernel.condition, Limits.comp_zero,
       sub_zero]
 
+/-! ### One-sided filtration conditions
+
+Exhaustive and Hausdorff are the one-sided analogues of `IsBounded`.
+A bounded filtration is both exhaustive and Hausdorff. -/
+
+/-- A filtration is **exhaustive** if for each `k`, the filtration eventually
+    covers everything from below: `∃ s₀, ∀ s ≤ s₀, F^s A^k = ⊤`. -/
+structure Filtration.IsExhaustive {ω : Type w} {A : ω → C}
+    (fil : Filtration A) where
+  lo : ω → ℤ
+  exhaustive : ∀ (k : ω) (s : ℤ), s ≤ lo k → fil.F s k = ⊤
+
+/-- A filtration is **Hausdorff** if for each `k`, the filtration eventually
+    becomes trivial from above: `∃ s₀, ∀ s ≥ s₀, F^s A^k = ⊥`. -/
+structure Filtration.IsHausdorff {ω : Type w} {A : ω → C}
+    (fil : Filtration A) where
+  hi : ω → ℤ
+  hausdorff : ∀ (k : ω) (s : ℤ), hi k ≤ s → fil.F s k = ⊥
+
+/-- A bounded filtration is exhaustive. -/
+def Filtration.IsBounded.toIsExhaustive {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsExhaustive where
+  lo := hb.lo
+  exhaustive := hb.exhaustive
+
+/-- A bounded filtration is Hausdorff. -/
+def Filtration.IsBounded.toIsHausdorff {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsHausdorff where
+  hi := hb.hi
+  hausdorff := hb.hausdorff
+
+/-! ### Filtered morphisms
+
+A morphism between filtered graded objects that preserves filtration. -/
+
+/-- A filtered morphism between graded objects `A₁` and `A₂` with filtrations
+    `F₁` and `F₂` consists of a degreewise map that preserves filtrations:
+    the restriction of `map k` to `F₁^s A₁^k` factors through `F₂^s A₂^k`. -/
+structure FilteredMorphism {ω : Type w} {A₁ A₂ : ω → C}
+    (F₁ : Filtration A₁) (F₂ : Filtration A₂) where
+  map : ∀ (k : ω), A₁ k ⟶ A₂ k
+  compat : ∀ (s : ℤ) (k : ω),
+    ∃ (φ : Subobject.underlying.obj (F₁.F s k) ⟶
+           Subobject.underlying.obj (F₂.F s k)),
+      φ ≫ (F₂.F s k).arrow = (F₁.F s k).arrow ≫ map k
+
+/-- A filtered morphism induces a map on associated graded pieces. -/
+noncomputable def FilteredMorphism.inducedGrMap {ω : Type w} {A₁ A₂ : ω → C}
+    {F₁ : Filtration A₁} {F₂ : Filtration A₂}
+    (f : FilteredMorphism F₁ F₂) (s : ℤ) (k : ω) :
+    F₁.associatedGraded s k ⟶ F₂.associatedGraded s k :=
+  Filtration.inducedAssocGradedMap f.map f.compat s k
+
+/-! ### Essential differentials
+
+A differential `d_r` is essential at index `k` when it is nonzero.
+The primary definition lives in `KIP.SpectralSequence.Crossing` as
+`IsEssentialAt`. We do not duplicate it here. -/
+
 end KIP.SpectralSequence

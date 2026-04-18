@@ -10,6 +10,7 @@
 -/
 import Mathlib
 import KIP.SpectralSequence.Basic
+import KIP.SpectralSequence.Convergence
 
 namespace KIP.SpectralSequence
 
@@ -79,5 +80,25 @@ def NoCrossingRange (dd : DifferentialDatum C ι) (p : ℤ) : Prop :=
     Equivalent to: no crossing hitting the range `Fil ≥ s + 1`. -/
 def NoCrossing (dd : DifferentialDatum C ι) : Prop :=
   NoCrossingRange dd (dd.filtDeg dd.k + 1)
+
+/-! ### SpectralSequence-based constructors -/
+
+/-- Construct a `DifferentialDatum` directly from a spectral sequence, a page `r`,
+    a source bidegree `k`, a filtration degree function, and an essentiality proof. -/
+def DifferentialDatum.ofSpectralSequence
+    (E : SpectralSequence C ι) (r : ℤ) (k : ι)
+    (filtDeg : ι → ℤ) (hess : IsEssentialAt E r k) :
+    DifferentialDatum C ι :=
+  { E := E, r := r, k := k, filtDeg := filtDeg, is_essential := hess }
+
+/-! ### Crossing composed with convergence -/
+
+/-- Crossing predicate relativised to a convergent spectral sequence.
+    Given a convergence `conv : Convergence E A F`, this wraps `HasCrossingAt`
+    so that the caller does not need to manually extract the filtration degree. -/
+def HasCrossingAt_conv {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
+    {E : SpectralSequence C ω} {ω' : Type w} {A : ω' → C} {F : Filtration A}
+    (_conv : Convergence E A F) (dd : DifferentialDatum C ω) (p : ℤ) : Prop :=
+  HasCrossingAt dd p
 
 end KIP.SpectralSequence
