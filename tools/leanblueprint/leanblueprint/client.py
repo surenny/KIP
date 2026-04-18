@@ -8,6 +8,8 @@ import socketserver
 import subprocess
 import sys
 import tomlkit
+import yaml
+from datetime import datetime, timezone
 from tomlkit.toml_file import TOMLFile
 from tomlkit import TOMLDocument
 from collections import deque
@@ -545,6 +547,186 @@ def serve() -> None:
         pass
     httpd.server_close()
     os.chdir(cwd)
+
+
+def _load_status() -> dict:
+    path = blueprint_root / "status.yaml"
+    if not path.exists():
+        return {}
+    with path.open() as f:
+        return yaml.safe_load(f) or {}
+
+
+def _save_status(data: dict) -> None:
+    path = blueprint_root / "status.yaml"
+    with path.open('w') as f:
+        yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+
+
+def _get_reviewer(reviewer_flag: Optional[str]) -> str:
+    if reviewer_flag:
+        return reviewer_flag
+    try:
+        return repo.git.config("user.name")  # type: ignore[union-attr]
+    except Exception:
+        return "unknown"
+
+
+def _node_state(st: dict) -> str:
+    if st.get('verified'):
+        return 'verified'
+    if st.get('proved'):
+        return 'proved'
+    if st.get('aligned'):
+        return 'aligned'
+    if st.get('bound'):
+        return 'bound'
+    if st.get('nl_reviewed'):
+        return 'reviewed'
+    return 'draft'
+
+
+STATE_COLORS = {
+    'draft': 'dim',
+    'reviewed': 'yellow',
+    'bound': 'blue',
+    'aligned': 'green',
+    'proved': 'bright_green',
+    'verified': 'bold green',
+}
+
+
+VALID_KINDS = ['definition', 'theorem', 'lemma', 'proposition', 'corollary', 'axiom']
+
+
+@cli.command()
+@click.argument('label', required=False)
+@click.option('--review', is_flag=True, help='Mark node as NL-reviewed')
+@click.option('--align', is_flag=True, help='Mark node as aligned (NL↔Lean confirmed)')
+@click.option('--verify', is_flag=True, help='Mark node as verified (proof quality reviewed)')
+@click.option('--reviewer', default=None, help='Reviewer name (default: git user.name)')
+@click.option('--comment', default=None, help='Review comment (free text)')
+@click.option('--reclassify', default=None, type=click.Choice(VALID_KINDS, case_sensitive=False),
+              help='Suggest reclassification (definition/theorem/lemma/proposition/corollary/axiom)')
+def status(label: Optional[str], review: bool, align: bool, verify: bool,
+           reviewer: Optional[str], comment: Optional[str], reclassify: Optional[str]) -> None:
+    """
+    Show or update the extended node status.
+
+    Without arguments, prints a summary table of all nodes.
+    With a LABEL argument, shows detailed status for that node.
+    Use --review, --align, or --verify to advance a node's state.
+    Use --comment to leave a review note, --reclassify to suggest a type change.
+    """
+    data = _load_status()
+    nodes = data.get('nodes', {})
+
+    if not nodes:
+        error("No status.yaml found or it has no nodes. Run 'leanblueprint web' first to auto-populate.")
+
+    is_mutation = review or align or verify or comment or reclassify
+
+    if is_mutation and not label:
+        error("Please specify a node label when using --review, --align, --verify, --comment, or --reclassify.")
+
+    if is_mutation:
+        if label not in nodes:
+            error(f"Node '{label}' not found in status.yaml.")
+        st = nodes[label]
+        reviewer_name = _get_reviewer(reviewer)
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+        if review:
+            st['nl_reviewed'] = True
+            st['nl_reviewer'] = reviewer_name
+            st['nl_reviewed_at'] = now
+            console.print(f"[green]Marked '{label}' as NL-reviewed by {reviewer_name}[/]")
+        if align:
+            st['aligned'] = True
+            st['align_reviewer'] = reviewer_name
+            st['aligned_at'] = now
+            # Monotonic: aligned → bound → reviewed
+            st['bound'] = True
+            st.setdefault('nl_reviewed', True)
+            console.print(f"[green]Marked '{label}' as aligned by {reviewer_name}[/]")
+        if verify:
+            st['verified'] = True
+            st['verify_reviewer'] = reviewer_name
+            st['verified_at'] = now
+            # Monotonic: verified → proved → aligned → bound → reviewed
+            st['proved'] = True
+            st['aligned'] = True
+            st['bound'] = True
+            st.setdefault('nl_reviewed', True)
+            console.print(f"[green]Marked '{label}' as verified by {reviewer_name}[/]")
+        if comment:
+            st['nl_review_comment'] = comment
+            st['nl_review_comment_by'] = reviewer_name
+            st['nl_review_comment_at'] = now
+            console.print(f"[green]Added comment on '{label}' by {reviewer_name}[/]")
+        if reclassify:
+            st['reclassify'] = reclassify
+            st['reclassify_by'] = reviewer_name
+            st['reclassify_at'] = now
+            console.print(f"[yellow]Reclassification suggested for '{label}': → {reclassify} (by {reviewer_name})[/]")
+
+        data['nodes'] = nodes
+        _save_status(data)
+        return
+
+    if label:
+        if label not in nodes:
+            error(f"Node '{label}' not found in status.yaml.")
+        st = nodes[label]
+        state = _node_state(st)
+        console.print(f"\n[bold]{label}[/]  [{STATE_COLORS[state]}]{state}[/]")
+        if st.get('lean_decl'):
+            console.print(f"  Lean: {st['lean_decl']}")
+        console.print(f"  NL reviewed:  {st.get('nl_reviewed', False)}", end='')
+        if st.get('nl_reviewer'):
+            console.print(f"  (by {st['nl_reviewer']}, {st.get('nl_reviewed_at', '?')})")
+        else:
+            console.print()
+        console.print(f"  Bound:        {st.get('bound', False)}")
+        console.print(f"  Aligned:      {st.get('aligned', False)}", end='')
+        if st.get('align_reviewer'):
+            console.print(f"  (by {st['align_reviewer']}, {st.get('aligned_at', '?')})")
+        else:
+            console.print()
+        console.print(f"  Proved:       {st.get('proved', False)}")
+        console.print(f"  Verified:     {st.get('verified', False)}", end='')
+        if st.get('verify_reviewer'):
+            console.print(f"  (by {st['verify_reviewer']}, {st.get('verified_at', '?')})")
+        else:
+            console.print()
+        if st.get('reclassify'):
+            console.print(f"  [yellow]Reclassify → {st['reclassify']}[/]", end='')
+            if st.get('reclassify_by'):
+                console.print(f"  (by {st['reclassify_by']}, {st.get('reclassify_at', '?')})")
+            else:
+                console.print()
+        if st.get('nl_review_comment'):
+            console.print(f"  [info]Comment:[/] {st['nl_review_comment']}", end='')
+            if st.get('nl_review_comment_by'):
+                console.print(f"  (by {st['nl_review_comment_by']}, {st.get('nl_review_comment_at', '?')})")
+            else:
+                console.print()
+        console.print()
+        return
+
+    # Summary table
+    counts = {'draft': 0, 'reviewed': 0, 'bound': 0, 'aligned': 0, 'proved': 0, 'verified': 0}
+    for nid, st in nodes.items():
+        state = _node_state(st)
+        counts[state] += 1
+
+    total = len(nodes)
+    console.print(f"\n[bold]Blueprint Node Status[/] ({total} nodes)\n")
+    for state_name in ['draft', 'reviewed', 'bound', 'aligned', 'proved', 'verified']:
+        c = counts[state_name]
+        bar = '█' * c + '░' * (total - c)
+        console.print(f"  [{STATE_COLORS[state_name]}]{state_name:>10}[/]  {c:3d}  {bar}")
+    console.print()
 
 
 def safe_cli():
