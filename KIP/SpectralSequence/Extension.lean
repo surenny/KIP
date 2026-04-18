@@ -59,6 +59,17 @@ structure ExtensionSS {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
   /-- The ESS boundary group at page n, bidegree k -/
   essBoundary : ℤ → ω → C
 
+/-- An **$f$-extension** from index $k_1$ to $k_2$ on page $n$ is an essential
+    ESS differential: $d_n^f(x) = y \ne 0$.
+    Blueprint: `prereq:def:f-extension`. -/
+abbrev HasFExtension {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
+    {E₁ E₂ : SpectralSequence C ω} {ω' : Type w}
+    {A₁ A₂ : ω' → C} {F₁ : Filtration A₁} {F₂ : Filtration A₂}
+    {conv₁ : Convergence E₁ A₁ F₁} {conv₂ : Convergence E₂ A₂ F₂}
+    {cm : ConvergenceMorphism conv₁ conv₂}
+    (ess : ExtensionSS cm) (n : ℤ) (k₁ k₂ : ω) : Prop :=
+  ¬IsZero (ess.essDiff n k₁ k₂)
+
 /-! ### Four-spectra chain -/
 
 /-- A chain of three composable convergence morphisms, used for the four-spectra
