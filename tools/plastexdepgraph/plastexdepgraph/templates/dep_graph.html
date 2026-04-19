@@ -758,7 +758,7 @@ function showSettingsModal() {
 
   var box = document.createElement('div');
   box.style.cssText = 'background:#fff;border-radius:8px;padding:24px;min-width:340px;' +
-    'box-shadow:0 4px 20px rgba(0,0,0,.2);';
+    'box-shadow:0 4px 20px rgba(0,0,0,.2);position:relative;';
 
   var repoOwner = REPO_CONFIG.owner || 'OWNER';
   var repoName = REPO_CONFIG.repo || 'REPO';
@@ -768,10 +768,11 @@ function showSettingsModal() {
     '<input id="settings-reviewer" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" />' +
     '<label style="display:block;margin-bottom:8px;font-weight:bold;">GitHub PAT ' +
     '<span id="pat-help-icon" style="display:inline-block;width:18px;height:18px;border-radius:50%;' +
-    'background:#0072B2;color:#fff;text-align:center;font-size:12px;line-height:18px;cursor:help;' +
-    'margin-left:4px;vertical-align:middle;position:relative;" title="What is this?">?</span></label>' +
+    'background:#0072B2;color:#fff;text-align:center;font-size:12px;line-height:18px;cursor:pointer;' +
+    'margin-left:4px;vertical-align:middle;" title="Click for help">?</span></label>' +
     '<div id="pat-help-tooltip" style="display:none;background:#f0f7ff;border:1px solid #0072B2;' +
-    'border-radius:6px;padding:12px;margin-bottom:12px;font-size:13px;font-weight:normal;line-height:1.5;">' +
+    'border-radius:6px;padding:12px;font-size:13px;font-weight:normal;line-height:1.5;' +
+    'position:absolute;left:24px;right:24px;z-index:10001;box-shadow:0 2px 8px rgba(0,0,0,.15);">' +
     '<strong>How to get a GitHub Personal Access Token:</strong><br>' +
     '1. Go to <a href="https://github.com/settings/tokens?type=beta" target="_blank" ' +
     'style="color:#0072B2;">github.com/settings/tokens</a> (Fine-grained tokens)<br>' +
@@ -793,12 +794,6 @@ function showSettingsModal() {
   overlay.appendChild(box);
   document.body.appendChild(overlay);
 
-  document.getElementById('pat-help-icon').addEventListener('mouseenter', function() {
-    document.getElementById('pat-help-tooltip').style.display = 'block';
-  });
-  document.getElementById('pat-help-icon').addEventListener('mouseleave', function() {
-    document.getElementById('pat-help-tooltip').style.display = 'none';
-  });
   document.getElementById('pat-help-icon').addEventListener('click', function() {
     var tt = document.getElementById('pat-help-tooltip');
     tt.style.display = tt.style.display === 'none' ? 'block' : 'none';
