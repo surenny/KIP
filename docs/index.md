@@ -8,6 +8,5 @@ This is a Lean 4 formalization project for the paper *On the Last Kervaire Invar
 
 * [Blueprint]({{ site.url }}/blueprint/)
 * [Blueprint as PDF]({{ site.url }}/blueprint.pdf)
-* [Dependency graph]({{ site.url }}/blueprint/dep_graph_document.html)
 * [Lean API docs]({{ site.url }}/docs/)
 * [Source code](https://github.com/surenny/KIP)

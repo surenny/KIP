@@ -11,6 +11,7 @@ Options:
 
 You can also add options that will be passed to the dependency graph package.
 """
+import hashlib
 import json
 import re
 import string
@@ -521,10 +522,26 @@ def ProcessOptions(options, document):
                     st['kind'] = kind
                     has_lean_binding = bool(leandecls)
                     st['bound'] = has_lean_binding
-                    # Definitions: max lifecycle is aligned (human confirms NL↔Lean match)
-                    #   bound + leanok does NOT auto-promote to aligned
-                    # Axioms: never proved (max lifecycle = aligned)
-                    # Only theorems/lemmas/propositions go through proved
+
+                    # NL content change detection: hash textContent,
+                    # reset human review gates if content changed.
+                    # Skip anonymous nodes (plasTeX auto-ids like a0000000001)
+                    # whose textContent is not stable across builds.
+                    is_anonymous = node_id.startswith('a') and node_id[1:].isdigit()
+                    if not is_anonymous:
+                        nl_text = node.textContent.strip()
+                        nl_hash = hashlib.sha256(nl_text.encode()).hexdigest()[:16]
+                        old_hash = st.get('nl_hash')
+                        if old_hash is not None and old_hash != nl_hash:
+                            st['nl_reviewed'] = False
+                            st['aligned'] = False
+                            st.pop('nl_reviewed_by', None)
+                            st.pop('nl_reviewed_at', None)
+                            st.pop('aligned_by', None)
+                            st.pop('aligned_at', None)
+                            log.info(f'NL content changed for {node_id}, resetting review status')
+                        st['nl_hash'] = nl_hash
+
                     if kind == 'definition':
                         st['proved'] = False
                     elif kind == 'axiom':

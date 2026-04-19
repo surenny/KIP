@@ -20,9 +20,8 @@ nodes:
       by: web-reviewer
       at: '2026-04-19'
     nl_reviewer: test
-    nl_reviewed_at: '2026-04-19'
     align_reviewer: web-reviewer
-    aligned_at: '2026-04-19'
+    nl_hash: 192c2f3b92f48706
   prereq:def:spectral-sequence:
     lean_decl: KIP.SpectralSequence.SpectralSequence
     nl_reviewed: true
@@ -32,6 +31,7 @@ nodes:
     kind: definition
     align_reviewer: web-reviewer
     aligned_at: '2026-04-19'
+    nl_hash: 81e4dfd3fc37ef20
   prereq:def:einfty-data:
     lean_decl: KIP.SpectralSequence.SSData.eInfty
     nl_reviewed: true
@@ -41,6 +41,7 @@ nodes:
     kind: definition
     align_reviewer: web-reviewer
     aligned_at: '2026-04-19'
+    nl_hash: 83a891b656d5e2ff
   prereq:def:ss-morphism:
     lean_decl: KIP.SpectralSequence.SpectralSequenceMorphism
     nl_reviewed: true
@@ -48,6 +49,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 200afa45a6b7125f
   prereq:def:convergence:
     lean_decl: KIP.SpectralSequence.Convergence
     nl_reviewed: true
@@ -55,6 +57,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 9f8021ac561f0766
   prereq:def:converging-ss-morphism:
     lean_decl: KIP.SpectralSequence.ConvergenceMorphism
     nl_reviewed: true
@@ -62,6 +65,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: f18ecb05b83ddcfd
   prereq:def:stem:
     lean_decl: KIP.SpectralSequence.Convergence.stemDegree
     nl_reviewed: true
@@ -71,6 +75,7 @@ nodes:
     kind: definition
     nl_reviewer: test-ping
     nl_reviewed_at: '2026-04-19'
+    nl_hash: ff79ac43a1565ea2
   prereq:def:filtration-degree:
     lean_decl: KIP.SpectralSequence.Convergence.filtrationDegree
     nl_reviewed: true
@@ -78,6 +83,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 4b4aa679c47de728
   prereq:def:detect:
     lean_decl: KIP.SpectralSequence.Detects
     nl_reviewed: true
@@ -85,6 +91,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 78da008987da146e
   prereq:prop:detect-zero:
     lean_decl: KIP.SpectralSequence.detect_zero
     nl_reviewed: true
@@ -92,6 +99,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
+    nl_hash: bec131dcaeb00815
   prereq:prop:detect-difference:
     lean_decl: KIP.SpectralSequence.detect_difference
     nl_reviewed: true
@@ -99,6 +107,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
+    nl_hash: 30659f1385f638be
   prereq:def:filtration:
     lean_decl: KIP.SpectralSequence.Filtration
     nl_reviewed: true
@@ -106,6 +115,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: ac0cf089df4b4690
   prereq:def:filtered-morphism:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
@@ -113,6 +123,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 49d94e708caedb2d
   prereq:def:filtered-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex
     nl_reviewed: true
@@ -120,6 +131,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 4e31ba80f211280e
   prereq:prop:homology-filtration:
     lean_decl: KIP.SpectralSequence.FilteredComplex.homologyFiltration
     nl_reviewed: true
@@ -127,6 +139,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: fbd847b9efe7e533
   prereq:def:associated-graded:
     lean_decl: KIP.SpectralSequence.Filtration.associatedGraded
     nl_reviewed: true
@@ -134,6 +147,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 1c46e40d6cb84948
   prereq:def:associated-graded-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex.assocGraded
     nl_reviewed: true
@@ -141,6 +155,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 9d4af98d74c639cf
   prereq:def:exhaustive:
     lean_decl: KIP.SpectralSequence.Filtration.IsExhaustive
     nl_reviewed: true
@@ -148,6 +163,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: f9ed920b05acf0e9
   prereq:def:hausdorff:
     lean_decl: KIP.SpectralSequence.Filtration.IsHausdorff
     nl_reviewed: true
@@ -155,6 +171,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 4c0c21038a15fffc
   prereq:def:bounded-filtration:
     lean_decl: KIP.SpectralSequence.FilteredComplex.IsBounded
     nl_reviewed: true
@@ -162,6 +179,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 5410c664c5e279f3
   prereq:def:filtered-complex-ssdata:
     lean_decl: KIP.SpectralSequence.FilteredComplex.toSSData
     nl_reviewed: true
@@ -169,6 +187,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: ca67d08381cfe9dd
   prereq:prop:filtered-complex-ssdata-wd:
     lean_decl: KIP.SpectralSequence.FilteredComplex.pageDifferential_comp
     nl_reviewed: true
@@ -176,6 +195,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
+    nl_hash: fa31872661152c19
   prereq:thm:filtered-complex-ss:
     lean_decl: KIP.SpectralSequence.FilteredComplex.toSpectralSequence
     nl_reviewed: true
@@ -183,6 +203,7 @@ nodes:
     aligned: false
     proved: false
     kind: theorem
+    nl_hash: 32b6c5346ad7ae97
   prereq:thm:filtered-complex-convergence:
     lean_decl: KIP.SpectralSequence.FilteredComplex.weakConvergence
     nl_reviewed: true
@@ -190,6 +211,7 @@ nodes:
     aligned: false
     proved: false
     kind: theorem
+    nl_hash: a7c87534d7253664
   prereq:def:essential-differential:
     lean_decl: KIP.SpectralSequence.IsEssentialAt
     nl_reviewed: true
@@ -197,6 +219,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: d706c2e1c154f7ba
   prereq:def:differential-data:
     lean_decl: KIP.SpectralSequence.DifferentialDatum
     nl_reviewed: true
@@ -204,6 +227,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 22b9c6dba2573b78
   prereq:def:crossing:
     lean_decl: KIP.SpectralSequence.HasCrossingAt
     nl_reviewed: true
@@ -211,6 +235,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 8fc52a93f8dce043
   prereq:prop:no-crossing-iff:
     lean_decl: KIP.SpectralSequence.ess_no_crossing_char
     nl_reviewed: true
@@ -218,6 +243,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: c3d66f4ad4e6e4a0
   prereq:def:ess:
     lean_decl: KIP.SpectralSequence.ExtensionSS
     nl_reviewed: true
@@ -225,6 +251,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: eeb5058bd9d3a459
   prereq:def:f-extension:
     lean_decl: KIP.SpectralSequence.HasFExtension
     nl_reviewed: true
@@ -232,6 +259,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: c6d125389ce82df1
   prereq:not:representatives:
     lean_decl: KIP.SpectralSequence.DetectionSet
     nl_reviewed: true
@@ -239,6 +267,7 @@ nodes:
     aligned: false
     proved: false
     kind: notation
+    nl_hash: d492652a3c01a396
   prereq:prop:f-ext-characterization:
     lean_decl: KIP.SpectralSequence.ess_diff_char
     nl_reviewed: true
@@ -246,6 +275,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 48057673f62a34f7
   prereq:cor:af-vanishing:
     lean_decl: KIP.SpectralSequence.af_vanishing
     nl_reviewed: true
@@ -253,6 +283,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 9db3b228e065b567
   prereq:prop:ess-exactness:
     lean_decl: KIP.SpectralSequence.ess_exactness
     nl_reviewed: true
@@ -260,6 +291,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 974e076ae4e81222
   prereq:thm:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_exact
     nl_reviewed: true
@@ -267,6 +299,7 @@ nodes:
     aligned: false
     proved: false
     kind: theorem
+    nl_hash: 3aa7ab03a1164c8f
   prereq:cor:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_cor
     nl_reviewed: true
@@ -274,6 +307,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 161ea4d7767e16a7
   prereq:cor:triangle-map:
     lean_decl: KIP.SpectralSequence.essCommutativity_triangle
     nl_reviewed: true
@@ -281,6 +315,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 04bc9b3def8c6e83
   prereq:cor:composition-ext:
     lean_decl: KIP.SpectralSequence.ess_composition
     nl_reviewed: true
@@ -288,6 +323,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 3813424223bd18dc
   prereq:cor:composition-zero:
     lean_decl: KIP.SpectralSequence.ess_composition_zero
     nl_reviewed: true
@@ -295,6 +331,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 12d97e7724341f15
   prereq:cor:ess-naturality:
     lean_decl: KIP.SpectralSequence.essCommutativity_induces_map
     nl_reviewed: true
@@ -302,6 +339,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: a606f3bb0659e825
   prereq:cor:stationary-page:
     lean_decl: KIP.SpectralSequence.essCommutativity_eInfty_compat
     nl_reviewed: true
@@ -309,6 +347,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 20bc050c312a7cf5
   prereq:cor:vanishing-target:
     lean_decl: KIP.SpectralSequence.essCommutativity_null
     nl_reviewed: true
@@ -316,6 +355,7 @@ nodes:
     aligned: false
     proved: false
     kind: corollary
+    nl_hash: 9df42a7fdeb75ec8
   prereq:def:triangulated-category:
     lean_decl: CategoryTheory.Pretriangulated
     nl_reviewed: true
@@ -323,6 +363,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 8c348f88fc72e2bf
   prereq:def:cofiber-sequence:
     lean_decl: KIP.StableHomotopy.HoCofiberSequence
     nl_reviewed: true
@@ -330,6 +371,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: e03062cb07ec7cf0
   prereq:def:functorial-cofiber:
     lean_decl: KIP.StableHomotopy.HasFunctorialCofiber
     nl_reviewed: true
@@ -337,6 +379,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: fb1ee3bfba105f02
   prereq:prop:les-hom:
     lean_decl: CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂
     nl_reviewed: true
@@ -344,6 +387,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 5113b802cd877f78
   prereq:def:closed-symmetric-monoidal:
     lean_decl: CategoryTheory.MonoidalClosed
     nl_reviewed: true
@@ -351,6 +395,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 59a9545e085f03cc
   prereq:def:closed-symmetric-tensor-triangulated:
     lean_decl: KIP.StableHomotopy.ClosedSymmetricTensorTriangulated
     nl_reviewed: true
@@ -358,6 +403,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: e13a878ff51d9ea7
   prereq:def:tensor-triangulated-functorial-cofiber:
     lean_decl: KIP.StableHomotopy.TensorTriangulatedCatWithFunctorialCofiber
     nl_reviewed: true
@@ -365,6 +411,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: cedd10011e2b5858
   prereq:def:stable-homotopy-category:
     lean_decl: KIP.StableHomotopy.StableHomotopyCategory
     nl_reviewed: true
@@ -372,6 +419,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 9a889a3089ee3677
   prereq:def:sphere-spectrum:
     lean_decl: KIP.StableHomotopy.SphereSpectrum
     nl_reviewed: true
@@ -379,6 +427,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: bc00d52b4abff248
   prereq:def:sphere-Sn:
     lean_decl: KIP.StableHomotopy.Sphere
     nl_reviewed: true
@@ -386,6 +435,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 2da1db97353c9d05
   prereq:def:homotopy-groups:
     lean_decl: KIP.StableHomotopy.HomotopyGroup
     nl_reviewed: true
@@ -393,6 +443,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 05977c65b1380327
   prereq:prop:homotopy-graded-abelian:
     lean_decl: KIP.StableHomotopy.HomotopyGroups
     nl_reviewed: true
@@ -400,6 +451,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 66d45a87e7ebcd85
   prereq:def:smash-product:
     lean_decl: KIP.StableHomotopy.smashSpheres_iso
     nl_reviewed: true
@@ -407,6 +459,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 144c083b9b324a84
   prereq:def:mapping-spectra:
     lean_decl: KIP.StableHomotopy.MappingSpectrum
     nl_reviewed: true
@@ -414,6 +467,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 057facd960d8028b
   prereq:prop:les-homotopy:
     lean_decl: KIP.StableHomotopy.les_homotopy_exact_f
     nl_reviewed: true
@@ -421,6 +475,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
+    nl_hash: 50685f67485c5e06
   prereq:def:eilenberg-maclane:
     lean_decl: KIP.StableHomotopy.EilenbergMacLane
     nl_reviewed: true
@@ -428,6 +483,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 2e21a968e4db542c
   prereq:ax:eilenberg-maclane-homotopy:
     lean_decl: KIP.StableHomotopy.HF2_pi0
     nl_reviewed: true
@@ -435,6 +491,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: a1fddd1476edbca9
   prereq:def:mod2-cohomology:
     lean_decl: KIP.StableHomotopy.Mod2CohomologyTotal
     nl_reviewed: true
@@ -442,6 +499,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 81d8add82796736b
   prereq:def:mod2-homology:
     lean_decl: KIP.StableHomotopy.Mod2HomologyTotal
     nl_reviewed: true
@@ -449,6 +507,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: cbe150c72dee8943
   prereq:ax:adams-ss:
     lean_decl: KIP.StableHomotopy.AdamsSS
     nl_reviewed: true
@@ -456,6 +515,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: ef443e5f750327d6
   prereq:ax:adams-convergence:
     lean_decl: KIP.StableHomotopy.adamsConvergence
     nl_reviewed: true
@@ -463,6 +523,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: b1e6bd0f0acbbaf2
   prereq:ax:adams-e2-order2:
     lean_decl: KIP.StableHomotopy.adams_2torsion
     nl_reviewed: true
@@ -470,6 +531,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: 6f1dcd184b2834c5
   prereq:def:adams-filtration:
     lean_decl: KIP.StableHomotopy.InAdamsFiltration
     nl_reviewed: true
@@ -477,6 +539,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 49238adaaf6a20fa
   prereq:def:adams-filtration-maps:
     lean_decl: KIP.StableHomotopy.AF
     nl_reviewed: true
@@ -484,6 +547,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 4d3971a33cad7227
   prereq:prop:adams-filtration-characterization:
     lean_decl: KIP.StableHomotopy.adamsFiltration_functorial
     nl_reviewed: true
@@ -491,6 +555,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: ecfe47711b4d1093
   prereq:def:synthetic-category:
     lean_decl: KIP.Synthetic.SyntheticCategory
     nl_reviewed: true
@@ -498,6 +563,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 13678dbafc3ec29a
   prereq:def:bigraded-suspension:
     lean_decl: KIP.Synthetic.SyntheticCategory.biShift
     nl_reviewed: true
@@ -505,6 +571,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 86cb503cb8878911
   prereq:def:lambda:
     lean_decl: KIP.Synthetic.SyntheticCategory.lam
     nl_reviewed: true
@@ -512,6 +579,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: eda10030d46fecff
   prereq:def:bigraded-spheres:
     lean_decl: KIP.Synthetic.Smn
     nl_reviewed: true
@@ -519,6 +587,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: f2c4120520a999db
   prereq:def:synthetic-homotopy-groups:
     lean_decl: KIP.Synthetic.BiHom
     nl_reviewed: true
@@ -526,6 +595,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 3623cb27427340d2
   prereq:prop:synthetic-homotopy-shift:
     lean_decl: KIP.Synthetic.susp_invariance
     nl_reviewed: true
@@ -533,6 +603,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 87c16ec3696bc619
   prereq:ax:syn-adams-ss:
     lean_decl: KIP.Synthetic.SynAdamsSS
     nl_reviewed: true
@@ -540,6 +611,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: 8d3b23acd0b6f72c
   prereq:def:nu-functor:
     lean_decl: KIP.Synthetic.nu
     nl_reviewed: true
@@ -547,6 +619,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
+    nl_hash: 48228d34b4ad78c2
   prereq:ax:nu-cofiber:
     lean_decl: KIP.Synthetic.nu_cofiber_iff
     nl_reviewed: true
@@ -554,6 +627,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: 891cf65962d3e53b
   prereq:ax:rigid:
     lean_decl: KIP.Synthetic.rigidity_degeneration
     nl_reviewed: true
@@ -561,6 +635,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: a7c23b5890c3d129
   prereq:ax:lambda-bockstein:
     lean_decl: KIP.Synthetic.lambda_bockstein_iso
     nl_reviewed: true
@@ -568,6 +643,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: 5bf47b540c8f0b6d
   prereq:prop:syn-einfty-nuX:
     lean_decl: KIP.Synthetic.einfty_nuX
     nl_reviewed: true
@@ -575,6 +651,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
+    nl_hash: 28f001b7064a86ad
   prereq:prop:syn-einfty-mod-lambda:
     lean_decl: KIP.Synthetic.einfty_nuX_mod_lambda
     nl_reviewed: true
@@ -582,6 +659,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 97cc8123101942e8
   prereq:ax:synthetic-lift:
     lean_decl: KIP.Synthetic.synthetic_lift
     nl_reviewed: true
@@ -589,6 +667,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
+    nl_hash: 5d951ce50f45e2a9
   prereq:prop:syn-distinguished-triangle:
     lean_decl: KIP.Synthetic.syn_distinguished_triangle
     nl_reviewed: true
@@ -596,6 +675,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 05f7a4bfb98e4da3
   prereq:not:fhat:
     lean_decl: KIP.Synthetic.eHat
     nl_reviewed: true
@@ -603,6 +683,7 @@ nodes:
     aligned: false
     proved: false
     kind: notation
+    nl_hash: 0066745a21a34568
   prereq:prop:fhat-triangle:
     lean_decl: KIP.Synthetic.fhat_triangle
     nl_reviewed: true
@@ -610,301 +691,432 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
+    nl_hash: 3d77f92124aaa008
   a0000000001:
     bound: false
     kind: remark
-    nl_reviewed: true
+    nl_reviewed: false
     nl_reviewer: web-reviewer
-    nl_reviewed_at: '2026-04-19'
+    nl_hash: 392c753ce7d36550
+    aligned: false
   a0000000002:
     bound: false
     kind: remark
-    nl_reviewed: true
+    nl_reviewed: false
     nl_reviewer: web-reviewer
-    nl_reviewed_at: '2026-04-19'
+    nl_hash: bae37962648aca7e
+    aligned: false
   prereq:rem:decreasing-filtration:
     bound: false
     kind: remark
+    nl_hash: 22dd969e7ab5a499
   prereq:rem:weak-convergence:
     bound: false
     kind: remark
     nl_reviewed: true
     nl_reviewer: web-reviewer
     nl_reviewed_at: '2026-04-19'
+    nl_hash: cda248a7a43d920b
   a0000000003:
     bound: false
     kind: remark
+    nl_hash: c39633b332fdd3bc
+    nl_reviewed: false
+    aligned: false
   prereq:prop:filtered-complex-functoriality:
     bound: false
     kind: proposition
+    nl_hash: 11c3837b78c933e6
   prereq:def:filtered-complex-morphism:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 2478096e234dc052
   a0000000004:
     bound: false
     kind: remark
+    nl_hash: e839acd444e194a9
   thm:main:
     bound: false
     kind: theorem
+    nl_hash: c0343d1c85698b80
   cor:kervaire-dimensions:
     bound: false
     kind: corollary
+    nl_hash: 89872210bbed6684
   thm:126survives:
     bound: false
     kind: theorem
+    nl_hash: c99230704cabda48
   thm:h62:
     bound: false
     kind: theorem
+    nl_hash: c99230704cabda48
   thm:browder:
     bound: false
     kind: theorem
+    nl_hash: c2394efaf33e03e7
   cor:2line:
     bound: false
     kind: corollary
+    nl_hash: 890dbb0d16ea1ca8
   que:2theta6:
     bound: false
     kind: question
+    nl_hash: bc2393703a32d399
   que:theta5sq:
     bound: false
     kind: question
+    nl_hash: edb0222c9db74c88
   thm:four-spectra:
     bound: false
     kind: theorem
+    nl_hash: ff5e23e68041ce74
   prop:ess-exactness:
     bound: false
     kind: proposition
+    nl_hash: 936b6a33373317cf
   cor:four-spectra:
     bound: false
     kind: corollary
+    nl_hash: f2f958a9ec05e23d
   cor:ess-naturality:
     bound: false
     kind: corollary
+    nl_hash: 9c5104370d571ab6
   def:ess:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 3b54639e174c949b
   def:crossing:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 7baae54d6206b811
   a0000000005:
     bound: false
-    kind: remark
+    kind: notation
+    nl_hash: 6343a41675fa7cdf
   cor:af-vanishing:
     bound: false
     kind: corollary
+    nl_hash: 869dcd79772bde24
   prop:f-ext-characterization:
     bound: false
     kind: proposition
+    nl_hash: 8addbb998e854b89
   prop:no-crossing-iff:
     bound: false
     kind: proposition
+    nl_hash: 85a8e95f1f43950b
   cor:triangle-map:
     bound: false
     kind: corollary
+    nl_hash: eb941b7352455df8
   cor:composition-ext:
     bound: false
     kind: corollary
+    nl_hash: 85601ee95a8ee1d6
   cor:composition-zero:
     bound: false
     kind: corollary
+    nl_hash: 794ab688fbb697ed
   def:f-extension:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 101cf48ef5456495
   a0000000006:
     bound: false
     kind: remark
+    nl_hash: 72d241409030dd3c
   a0000000007:
     bound: false
-    kind: notation
+    kind: remark
+    nl_hash: add0a104495f4766
   nota:ess-notation:
     bound: false
     kind: notation
+    nl_hash: b211f41c38eb91c6
   a0000000008:
     bound: false
     kind: remark
+    nl_hash: 7bb29815f0942e22
   a0000000009:
     bound: false
     kind: remark
+    nl_hash: 2337fba42bf2d2f9
+    nl_reviewed: false
+    aligned: false
   a0000000010:
     bound: false
     kind: notation
+    nl_hash: a29dd213d4dfc81d
+    nl_reviewed: false
+    aligned: false
   a0000000011:
     bound: false
     kind: remark
+    nl_hash: 69a72ada33a4ae3d
+    nl_reviewed: false
+    aligned: false
   a0000000012:
     bound: false
     kind: remark
+    nl_hash: 4a3c3f93b2df7744
   a0000000013:
     bound: false
     kind: remark
+    nl_hash: d4b541323c42bbe7
+    nl_reviewed: false
+    aligned: false
   rem:deformation:
     bound: false
     kind: remark
+    nl_hash: e6a0957ae3e44d03
   a0000000014:
     bound: false
     kind: remark
+    nl_hash: 876f7e1849b2ba2b
+    nl_reviewed: false
+    aligned: false
   a0000000015:
     bound: false
     kind: notation
+    nl_hash: ef5a8f338dab1e64
   prop:lambda-rho-trivial:
     bound: false
     kind: proposition
+    nl_hash: d0cf9a1a576d7448
   prop:cross-dr-En:
     bound: false
     kind: proposition
+    nl_hash: 76d8ba2cb6bd2d49
   cor:delta-ess-general:
     bound: false
     kind: corollary
+    nl_hash: 6c91402fe74947dc
   a0000000016:
     bound: false
     kind: remark
+    nl_hash: 2a2f97d9081e0c4d
+    nl_reviewed: false
+    aligned: false
   a0000000017:
     bound: false
     kind: remark
+    nl_hash: 3d4c65047211cca9
+    nl_reviewed: false
+    aligned: false
   nocrossE2:
     bound: false
     kind: remark
+    nl_hash: 166924693de509f6
   prop:delta-ess-adams:
     bound: false
     kind: proposition
+    nl_hash: 83b5f0ed0a69dfe4
   a0000000018:
     bound: false
     kind: remark
+    nl_hash: 1b36ea2e00cebea2
+    nl_reviewed: false
+    aligned: false
   a0000000019:
     bound: false
     kind: remark
+    nl_hash: 3654fbdff0b25f39
+    nl_reviewed: false
+    aligned: false
   not:deltaandrho:
     bound: false
     kind: notation
+    nl_hash: 565f6f8d249d3f9f
   def:classicalcrossdiff:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 595eb3741f10ac97
   rmk:delta-ess-equiv-classical:
     bound: false
     kind: remark
+    nl_hash: ee9f8fe67c8f4051
   prop:cross-f-Er:
     bound: false
     kind: proposition
+    nl_hash: dfe7abb54e1b8677
   def:fErextess:
     bound: false
     kind: remark
+    nl_hash: 395103b214cf396d
   def:f-Er-crossing:
     bound: false
     kind: definition
     proved: false
+    nl_hash: 0e487136d0b54429
   a0000000020:
     bound: false
     kind: remark
+    nl_hash: 2c11f8aa1f1ef2f6
   prop:enfty-extension-quotient:
     bound: false
     kind: proposition
+    nl_hash: ccbc993e128e26b4
   def:f-Er-extension:
     bound: false
     kind: definition
     proved: false
+    nl_hash: b86bcaa8e343a63a
   a0000000021:
     bound: false
     kind: notation
+    nl_hash: d767c2596512cd80
   rem:chuaerror:
     bound: false
     kind: remark
+    nl_hash: bd022b3386c2d1f5
   thm:gen-leibniz:
     bound: false
     kind: theorem
+    nl_hash: 0ca8bb7feca3b7d1
   lem:may-smash:
     bound: false
     kind: lemma
+    nl_hash: be649656f6a6b74e
   cor:stretch-extension:
     bound: false
     kind: corollary
+    nl_hash: ab0723abee05add8
   prop:ext-across-pages:
     bound: false
     kind: proposition
+    nl_hash: 4ea59b098b81037a
   a0000000022:
     bound: false
     kind: remark
+    nl_hash: 6e44510fed4c834a
+    nl_reviewed: false
+    aligned: false
   a0000000023:
     bound: false
     kind: remark
+    nl_hash: df1de5dcda6ccf5e
+    nl_reviewed: false
+    aligned: false
   thm:gen-mahowald:
     bound: false
     kind: theorem
+    nl_hash: 92952a07db102c54
   a0000000024:
     bound: false
     kind: remark
+    nl_hash: 93e6683513af8382
+    nl_reviewed: false
+    aligned: false
   a0000000025:
     bound: false
     kind: remark
+    nl_hash: 2339bd35ca31252a
+    nl_reviewed: false
+    aligned: false
   a0000000026:
     bound: false
     kind: remark
+    nl_hash: 0dfe01bf04842a9c
+    nl_reviewed: false
+    aligned: false
   lem:x1239:
     bound: false
     kind: lemma
+    nl_hash: b940d91526a16f79
   prop:possibleh62:
     bound: false
     kind: proposition
+    nl_hash: f08457a0437b0094
   lem:equistate5:
     bound: false
     kind: lemma
+    nl_hash: ba06e3b0c17c4462
   lem:toda2ext:
     bound: false
     kind: lemma
+    nl_hash: d16df208c5725b37
   cor:2ext125:
     bound: false
     kind: corollary
+    nl_hash: 9a8555fccc03bff3
   prop:state5false:
     bound: false
     kind: proposition
+    nl_hash: 67a3c2fc453903a4
   a0000000027:
     bound: false
     kind: remark
+    nl_hash: 3e7601ad86cc2418
+    nl_reviewed: false
+    aligned: false
   a0000000028:
     bound: false
     kind: remark
+    nl_hash: f32c25f209f26615
+    nl_reviewed: false
+    aligned: false
   fact:theta5sqAF:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: 429004b987bc238e
   lem:equistate4:
     bound: false
     kind: lemma
+    nl_hash: e156795870b4ba7a
   lem:nuext125:
     bound: false
     kind: lemma
+    nl_hash: d3cdcd67ac2ba027
   a0000000029:
     bound: false
-    kind: remark
+    kind: notation
+    nl_hash: e14e0086a6e9e371
+    nl_reviewed: false
+    aligned: false
   rem:h02x1259:
     bound: false
     kind: remark
+    nl_hash: 824d0d34703e4d18
   fact:h02x1259:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: 3e69ac9427daec38
   a0000000030:
     bound: false
-    kind: notation
+    kind: remark
+    nl_hash: 98d4f8cf6afa470d
+    nl_reviewed: false
+    aligned: false
   rem:theta5choice:
     bound: false
     kind: remark
+    nl_hash: b70e4cdd9c44fc33
   thm:bjmbx:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: 5dbc400d677fe64f
   fact:x1239:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: 79746d39289b687a
   fact:h1x1217:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: 0c32b98b7a3f87f4
   fact:stem122:
     bound: false
     kind: axiom
     proved: false
+    nl_hash: fde6081eafe9067f

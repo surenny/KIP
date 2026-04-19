@@ -639,8 +639,14 @@ function updateCommitButton() {
 function ensureToken(callback) {
   var token = getGithubToken();
   if (token) { callback(token); return; }
-  var t = prompt('Enter a GitHub Personal Access Token (PAT) with "contents" write permission.\n' +
-    'This is stored in your browser localStorage only.');
+  var t = prompt('A GitHub Personal Access Token (PAT) is required to commit reviews.\n\n' +
+    'To create one:\n' +
+    '1. Go to github.com/settings/tokens?type=beta\n' +
+    '2. Generate new token \u2192 select repo "' + (REPO_CONFIG.owner || '') + '/' + (REPO_CONFIG.repo || '') + '"\n' +
+    '3. Permissions \u2192 Contents: Read and write\n' +
+    '4. Paste the token (github_pat_...) below.\n\n' +
+    'Or click \u2699 Settings for a detailed guide.\n\n' +
+    'Token (stored in browser only):');
   if (!t) return;
   setGithubToken(t.trim());
   callback(t.trim());
@@ -754,11 +760,30 @@ function showSettingsModal() {
   box.style.cssText = 'background:#fff;border-radius:8px;padding:24px;min-width:340px;' +
     'box-shadow:0 4px 20px rgba(0,0,0,.2);';
 
+  var repoOwner = REPO_CONFIG.owner || 'OWNER';
+  var repoName = REPO_CONFIG.repo || 'REPO';
+
   box.innerHTML = '<h3 style="margin-top:0;">Review Settings</h3>' +
     '<label style="display:block;margin-bottom:8px;font-weight:bold;">Reviewer Name</label>' +
     '<input id="settings-reviewer" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" />' +
-    '<label style="display:block;margin-bottom:8px;font-weight:bold;">GitHub PAT</label>' +
-    '<input id="settings-token" type="password" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" />' +
+    '<label style="display:block;margin-bottom:8px;font-weight:bold;">GitHub PAT ' +
+    '<span id="pat-help-icon" style="display:inline-block;width:18px;height:18px;border-radius:50%;' +
+    'background:#0072B2;color:#fff;text-align:center;font-size:12px;line-height:18px;cursor:help;' +
+    'margin-left:4px;vertical-align:middle;position:relative;" title="What is this?">?</span></label>' +
+    '<div id="pat-help-tooltip" style="display:none;background:#f0f7ff;border:1px solid #0072B2;' +
+    'border-radius:6px;padding:12px;margin-bottom:12px;font-size:13px;font-weight:normal;line-height:1.5;">' +
+    '<strong>How to get a GitHub Personal Access Token:</strong><br>' +
+    '1. Go to <a href="https://github.com/settings/tokens?type=beta" target="_blank" ' +
+    'style="color:#0072B2;">github.com/settings/tokens</a> (Fine-grained tokens)<br>' +
+    '2. Click <strong>Generate new token</strong><br>' +
+    '3. Token name: anything (e.g. <code>blueprint-review</code>)<br>' +
+    '4. Expiration: 30 or 90 days<br>' +
+    '5. Repository access: <strong>Only select repositories</strong> \u2192 select <strong>' + repoOwner + '/' + repoName + '</strong><br>' +
+    '6. Permissions \u2192 Repository permissions \u2192 <strong>Contents: Read and write</strong><br>' +
+    '7. Click <strong>Generate token</strong> and copy the token (<code>github_pat_...</code>)<br>' +
+    '8. Paste it in the field below. It is stored in your browser only.</div>' +
+    '<input id="settings-token" type="password" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" ' +
+    'placeholder="github_pat_..." />' +
     '<div style="margin-top:12px;">' +
     '<button id="settings-save" style="background:#0072B2;color:#fff;border:none;border-radius:4px;padding:8px 16px;cursor:pointer;margin-right:8px;">Save</button>' +
     '<button id="settings-clear" style="background:#c00;color:#fff;border:none;border-radius:4px;padding:8px 16px;cursor:pointer;margin-right:8px;">Clear Pending</button>' +
@@ -767,6 +792,17 @@ function showSettingsModal() {
 
   overlay.appendChild(box);
   document.body.appendChild(overlay);
+
+  document.getElementById('pat-help-icon').addEventListener('mouseenter', function() {
+    document.getElementById('pat-help-tooltip').style.display = 'block';
+  });
+  document.getElementById('pat-help-icon').addEventListener('mouseleave', function() {
+    document.getElementById('pat-help-tooltip').style.display = 'none';
+  });
+  document.getElementById('pat-help-icon').addEventListener('click', function() {
+    var tt = document.getElementById('pat-help-tooltip');
+    tt.style.display = tt.style.display === 'none' ? 'block' : 'none';
+  });
 
   document.getElementById('settings-reviewer').value = getReviewerName();
   document.getElementById('settings-token').value = getGithubToken();
