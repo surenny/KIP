@@ -40,9 +40,6 @@ def _extract_lean_source(lean_root: Path, decl_name: str, max_lines: int = 40) -
     """
     # The short name is the last component: KIP.SpectralSequence.SSData → SSData
     short_name = decl_name.rsplit('.', 1)[-1]
-    # Also try the namespace-qualified path to narrow the file search
-    # KIP.SpectralSequence.SSData → KIP/SpectralSequence as search path hint
-    parts = decl_name.split('.')
     for lean_file in sorted(lean_root.rglob('*.lean')):
         try:
             lines = lean_file.read_text(encoding='utf-8').splitlines()
@@ -321,17 +318,17 @@ STATUS_BADGES_TPL = Template("""
     {%- set topic_colors = {'review':'#E69F00','align':'#009E73','verify':'#1CAC78','general':'#666'} -%}
     {%- set tc = topic_colors.get(c.get('topic','general'), '#666') -%}
     <div style="padding:3px 8px;background:#FAFAFA;border-left:3px solid {{ tc }};font-size:0.82em;margin-bottom:2px;">
-      <span style="color:{{ tc }};font-weight:bold;font-size:0.85em;">{{ c.get('topic','general') }}</span>
-      {{ c['text'] }}
-      <span style="color:#999;font-size:0.9em;"> — {{ c.get('by','?') }}{% if c.get('at') %}, {{ c['at'] }}{% endif %}</span>
+      <span style="color:{{ tc }};font-weight:bold;font-size:0.85em;">{{ c.get('topic','general')|e }}</span>
+      {{ c['text']|e }}
+      <span style="color:#999;font-size:0.9em;"> — {{ c.get('by','?')|e }}{% if c.get('at') %}, {{ c['at']|e }}{% endif %}</span>
     </div>
     {%- endfor -%}
   </div>
   {%- endif -%}
   {%- if st.get('nl_review_comment') -%}
   <div class="ext-review-comment" style="margin-top:4px;padding:4px 8px;background:#FFF8E1;border-left:3px solid #E69F00;font-size:0.85em;">
-    {{ st['nl_review_comment'] }}
-    {%- if st.get('nl_review_comment_by') %} <span style="color:#999;">-- {{ st['nl_review_comment_by'] }}{% if st.get('nl_review_comment_at') %}, {{ st['nl_review_comment_at'] }}{% endif %}</span>{% endif -%}
+    {{ st['nl_review_comment']|e }}
+    {%- if st.get('nl_review_comment_by') %} <span style="color:#999;">-- {{ st['nl_review_comment_by']|e }}{% if st.get('nl_review_comment_at') %}, {{ st['nl_review_comment_at']|e }}{% endif %}</span>{% endif -%}
   </div>
   {%- endif -%}
   <div class="review-panel" data-node-id="{{ thm.id }}" style="margin-top:8px;padding:8px;background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;font-size:0.85em;">

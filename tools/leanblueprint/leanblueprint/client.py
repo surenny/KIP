@@ -521,6 +521,8 @@ def all() -> None:
 
 def _make_review_handler(status_yaml_path: Path):
     """Create an HTTP handler that serves static files + review API."""
+    import threading
+    _status_lock = threading.Lock()
 
     class ReviewHandler(http.server.SimpleHTTPRequestHandler):
         def do_GET(self):
@@ -542,7 +544,8 @@ def _make_review_handler(status_yaml_path: Path):
             if self.path == '/api/review':
                 length = int(self.headers.get('Content-Length', 0))
                 body = json.loads(self.rfile.read(length)) if length else {}
-                result = self._handle_review(body)
+                with _status_lock:
+                    result = self._handle_review(body)
                 self._send_json(result, 200 if 'error' not in result else 400)
             else:
                 self._send_json({'error': 'not found'}, 404)
@@ -572,7 +575,7 @@ def _make_review_handler(status_yaml_path: Path):
                 st['align_reviewer'] = reviewer
                 st['aligned_at'] = now
                 st['bound'] = True
-                st.setdefault('nl_reviewed', True)
+                st['nl_reviewed'] = True
             elif action == 'comment':
                 text = body.get('text', '')
                 if not text:
@@ -768,7 +771,7 @@ def status(label: Optional[str], review: bool, align: bool,
             st['aligned_at'] = now
             # Monotonic: aligned → bound → reviewed
             st['bound'] = True
-            st.setdefault('nl_reviewed', True)
+            st['nl_reviewed'] = True
             console.print(f"[green]Marked '{label}' as aligned by {reviewer_name}[/]")
         if comment:
             comments = st.setdefault('comments', [])
@@ -838,14 +841,14 @@ def status(label: Optional[str], review: bool, align: bool,
         return
 
     # Summary table
-    counts = {'draft': 0, 'reviewed': 0, 'bound': 0, 'aligned': 0, 'proved': 0, 'verified': 0}
+    counts = {'draft': 0, 'reviewed': 0, 'bound': 0, 'aligned': 0, 'proved': 0}
     for nid, st in nodes.items():
         state = _node_state(st)
         counts[state] += 1
 
     total = len(nodes)
     console.print(f"\n[bold]Blueprint Node Status[/] ({total} nodes)\n")
-    for state_name in ['draft', 'reviewed', 'bound', 'aligned', 'proved', 'verified']:
+    for state_name in ['draft', 'reviewed', 'bound', 'aligned', 'proved']:
         c = counts[state_name]
         bar = '█' * c + '░' * (total - c)
         console.print(f"  [{STATE_COLORS[state_name]}]{state_name:>10}[/]  {c:3d}  {bar}")

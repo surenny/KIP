@@ -270,9 +270,15 @@ function renderComments(thm, comments) {
     var tc = topicColors[c.topic] || '#666';
     var entry = document.createElement('div');
     entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
-    entry.innerHTML = '<span style="color:'+tc+';font-weight:bold;font-size:0.85em;">'+(c.topic||'general')+'</span> '+
-      (c.text||'').replace(/</g,'&lt;')+
-      ' <span style="color:#999;font-size:0.9em;"> \u2014 '+(c.by||'?')+(c.at ? ', '+c.at : '')+'</span>';
+    var topicSpan = document.createElement('span');
+    topicSpan.style.cssText = 'color:'+tc+';font-weight:bold;font-size:0.85em;';
+    topicSpan.textContent = c.topic || 'general';
+    entry.appendChild(topicSpan);
+    entry.appendChild(document.createTextNode(' ' + (c.text || '') + ' '));
+    var metaSpan = document.createElement('span');
+    metaSpan.style.cssText = 'color:#999;font-size:0.9em;';
+    metaSpan.textContent = '\u2014 ' + (c.by || '?') + (c.at ? ', ' + c.at : '');
+    entry.appendChild(metaSpan);
     div.appendChild(entry);
   }
   var badges = thm.querySelector('.ext-status-badges');
@@ -415,9 +421,15 @@ document.addEventListener('click', function(e) {
           var tc = topicColors[body.topic] || '#666';
           var entry = document.createElement('div');
           entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
-          entry.innerHTML = '<span style="color:'+tc+';font-weight:bold;font-size:0.85em;">'+body.topic+'</span> '+
-            body.text.replace(/</g,'&lt;')+
-            ' <span style="color:#999;font-size:0.9em;"> — '+body.reviewer+'</span>';
+          var topicSpan = document.createElement('span');
+          topicSpan.style.cssText = 'color:'+tc+';font-weight:bold;font-size:0.85em;';
+          topicSpan.textContent = body.topic;
+          entry.appendChild(topicSpan);
+          entry.appendChild(document.createTextNode(' ' + body.text + ' '));
+          var metaSpan = document.createElement('span');
+          metaSpan.style.cssText = 'color:#999;font-size:0.9em;';
+          metaSpan.textContent = '\u2014 ' + body.reviewer;
+          entry.appendChild(metaSpan);
           commentsDiv.appendChild(entry);
         }
       }

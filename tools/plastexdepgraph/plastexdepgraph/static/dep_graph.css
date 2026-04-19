@@ -101,7 +101,7 @@ button.dep-closebtn
 
 div.dep-modal-container {
   position: fixed;
-  z-index: $modal-z-index;
+  z-index: 1050;
   top: 0;
   left: 0;
 
