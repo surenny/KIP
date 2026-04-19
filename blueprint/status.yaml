@@ -105,9 +105,10 @@ nodes:
     lean_decl: KIP.SpectralSequence.Filtration
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
+    aligned_by: surenny
   prereq:def:filtered-morphism:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
