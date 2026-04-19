@@ -1,0 +1,137 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{sfmath}
+\usepackage{hyperref}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=0cm,right=0cm,top=0cm,bottom=0.1cm, footskip=0cm, includefoot=true}
+%\usepackage[contents = \thepage, color=yellow, angle=0, scale = 20]{background}
+\pagestyle{empty}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{}
+%\fancyfoot{}
+%\cfoot{}
+%\lfoot{{\small \color{red} \slshape \thepage 页}}
+%\fancyfoot[R]{\thepage}
+
+\usepackage[all]{xy}
+\usepackage{color}
+
+\renewenvironment{proof}{{\noindent\it\textbf{Proof}}\quad\it}{\hfill$\square$}
+
+%\theoremstyle{definition}
+
+\newtheorem{thm}[equation]{Theorem}
+\newtheorem{cor}[equation]{Corollary}
+\newtheorem{lem}[equation]{Lemma}
+\newtheorem{prop}[equation]{Proposition}
+\newtheorem{defn}[equation]{Definition}
+\newtheorem{rem}[equation]{Remark}
+
+\title{last Kervaire}
+\author{}
+
+\setcounter{secnumdepth}{6}
+
+\begin{document}
+
+\sffamily
+\maketitle
+\thispagestyle{empty}
+
+\abstract{}
+\tableofcontents
+
+\large
+
+\begin{sloppy}
+\clubpenalty=-100
+\widowpenalty=-100
+
+
+
+\section{Adams谱序列}
+
+\subsection{Adams 谱序列构造}
+
+\paragraph{公理} 对任意谱形$X$, $Y$, 存在Adams 谱序列 $Adams(X,Y)$
+
+\paragraph{公理}Adams谱序列是$\mathcal{S}^{op}\times \mathcal{S}$到双分次的谱序列范畴的函子
+
+\paragraph{谱形的有限性}
+
+\paragraph{定义} $\mathcal{S}^{fin}$ 为包含球谱的最小的全子范畴，在suspension、desuspension、cofiber操作下封闭
+
+\paragraph{定理}  $Z\in\mathcal{S}^{fin}$ 当且仅当$X$可以通过有限步如下的操作得到：\begin{enumerate}
+    \item suspension/desuspension
+    \item taking cofiber under a map from the sphere spectrum
+\end{enumerate}
+
+\subsection{谱形的连通性}
+\paragraph{定义}$X$是$n$-连通的，若对所有$i\leq n$,$\pi_i(X)=0$
+
+\paragraph{定理sorry}
+球谱是 $(-1)$-连通的
+
+\paragraph{定义}X is connective iff there is some $n\in \mathbb{Z}$, such that X is n-connected
+
+\paragraph{定理sorry} 若X是n-连通，则当$i\leq n$时，$H_*(X;\mathbb{F}_2) = 0$
+
+\subsection{finite type}
+\paragraph{定义} a spectrum $X$ is finite type iff
+for any $n$, there is some spectrum $X_n\in \mathcal{S}^{fin}$, such that there is a map
+$X_n\xrightarrow{}X$, whose cofiber is $n$-connected
+
+\paragraph{定理sorry}$X$ finite type当且仅当
+\begin{enumerate}
+    \item $X$ is connective
+    \item for any $i$, $\pi_i(X)$ is finitely generated as abelian group
+\end{enumerate}
+
+\paragraph{定理sorry}
+$X$ finite type， 则$H_i（X;\mathbb{F}_2）$ 均为有限维
+
+\subsection{Adams 谱序列的收敛性}
+本subsection均假设$X\in \mathcal{S}^{fin}$, $Y\in \mathcal{S}$, $Y$ finite type。
+\paragraph{Adams filtration的定义}
+
+$f\in [X,Y]$ has Adams filtration $\geq n$ 当且仅当
+存在$X_1,\dots, X_{n-1} \in \mathcal{S}^{fin}$, 使得$f$等于如下的复合
+$$X\xrightarrow[]{f_1}X_1\xrightarrow{f_2}X_2\xrightarrow[]{f_3}\dots \xrightarrow[]{f_{n-1}}X_{n-1}\xrightarrow[]{f_n}Y$$
+且$f_i$诱导的mod 2同调的映射为0
+
+\paragraph{定义}称$f\in [X,Y]$的Adams filtration为无穷，若对所有n，$f$的Adams filtration $\geq n$
+
+\paragraph{定理}
+若$f$是奇数阶，则f的Adams filtration为无穷
+
+\paragraph{定理sorry}
+若$f$不是奇数阶，则f的Adams filtration不是无穷
+
+\paragraph{定理sorry}
+Adams谱序列$Adams(X,Y)$弱收敛到$[X,Y]$, 即Adams filtration的graded piece与Adams 谱序列的$E_\infty$项中相应的群之间存在自然同构
+
+\paragraph{定理}
+$[X,Y]/\text{所有奇数阶元}$上面具有诱导的Adams filtration，并且这时filtration is separated
+
+\paragraph{Adams谱序列的boundedness}
+
+若$X$ finite type
+
+\paragraph{定理 sorry}
+假设$H_i(X;\mathbb{Q}) = 0$, 则$\pi_i(X)/\text{所有奇数阶元}$上面的Adams filtation是bounded
+
+\paragraph{定理sorry}
+$\pi_i(X)/\text{所有奇数阶元}$上面的Adams filtation
+满足所有的subquotient都为有限群
+
+
+\begin{thebibliography}{99}
+
+
+\end{thebibliography}
+
+\end{sloppy}
+\end{document}
