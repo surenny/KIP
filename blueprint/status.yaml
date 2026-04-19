@@ -45,16 +45,18 @@ nodes:
     lean_decl: KIP.SpectralSequence.SpectralSequenceMorphism
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
+    aligned_by: surenny
   prereq:def:convergence:
     lean_decl: KIP.SpectralSequence.Convergence
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
+    aligned_by: surenny
   prereq:def:converging-ss-morphism:
     lean_decl: KIP.SpectralSequence.ConvergenceMorphism
     nl_reviewed: true
@@ -635,7 +637,7 @@ nodes:
     bound: false
     kind: remark
     nl_reviewed: true
-    nl_reviewed_by: web-reviewer
+    nl_reviewed_by: surenny
     comments:
       - topic: general
         text: hello
@@ -652,7 +654,7 @@ nodes:
     bound: false
     kind: remark
     nl_reviewed: true
-    nl_reviewed_by: web-reviewer
+    nl_reviewed_by: surenny
   thm:main:
     bound: false
     kind: theorem
