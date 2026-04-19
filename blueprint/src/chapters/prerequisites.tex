@@ -551,6 +551,12 @@
     $$H_n(X; \bF_2) = \pi_n(\HF \wedge X).$$
 \end{definition}
 
+\begin{axiom}\label{prereq:ax:universal-coefficient}
+    \uses{prereq:def:mod2-cohomology,prereq:def:mod2-homology}
+    (Universal Coefficient Theorem) For any spectrum $X$ and $n \in \bZ$, the mod~2 cohomology is canonically isomorphic to the $\bF_2$-linear dual of the mod~2 homology:
+    $$H^n(X; \bF_2) \cong \Hom_{\bF_2}(H_n(X; \bF_2),\ \bF_2).$$
+\end{axiom}
+
 \subsubsection{Adams Spectral Sequence}\label{sec:prereq-adams}
 
 \begin{axiom}\label{prereq:ax:adams-ss}
@@ -593,6 +599,103 @@
     A map $f: X \to Y$ with $\AF(f) = k$ maps $F^s \pi_* X$ into $F^{s+k} \pi_* Y$ for all $s$.
 \end{proposition}
 
+\subsubsection{Finite Spectra}\label{sec:prereq-finite-spectra}
+
+\begin{definition}\label{prereq:def:finite-spectra}
+    \uses{prereq:def:stable-homotopy-category,prereq:def:sphere-spectrum,prereq:def:cofiber-sequence}
+    The full subcategory $\calS^{fin} \subset \calS$ of \emph{finite spectra} is the smallest full subcategory containing the sphere spectrum $\bS$ and closed under suspension, desuspension, and taking cofibers.
+\end{definition}
+
+\begin{theorem}\label{prereq:thm:finite-spectra-char}
+    \uses{prereq:def:finite-spectra}
+    $Z \in \calS^{fin}$ if and only if $Z$ can be obtained from $\bS$ by finitely many operations of the following two types:
+    \begin{enumerate}
+        \item suspension or desuspension,
+        \item taking the cofiber of a map from a sphere spectrum $S^n$.
+    \end{enumerate}
+\end{theorem}
+
+\subsubsection{Connectivity}\label{sec:prereq-connectivity}
+
+\begin{definition}\label{prereq:def:connected}
+    \uses{prereq:def:homotopy-groups}
+    A spectrum $X$ is \emph{$n$-connected} if $\pi_i(X) = 0$ for all $i \le n$.
+\end{definition}
+
+\begin{axiom}\label{prereq:ax:sphere-connected}
+    \uses{prereq:def:connected,prereq:def:sphere-spectrum}
+    The sphere spectrum $\bS$ is $(-1)$-connected.
+\end{axiom}
+
+\begin{definition}\label{prereq:def:connective}
+    \uses{prereq:def:connected}
+    A spectrum $X$ is \emph{connective} if it is $n$-connected for some $n \in \bZ$.
+\end{definition}
+
+\begin{axiom}\label{prereq:ax:connected-homology-vanishing}
+    \uses{prereq:def:connected,prereq:def:mod2-homology}
+    If $X$ is $n$-connected, then $H_i(X; \bF_2) = 0$ for all $i \le n$.
+\end{axiom}
+
+\subsubsection{Finite Type}\label{sec:prereq-finite-type}
+
+\begin{definition}\label{prereq:def:finite-type}
+    \uses{prereq:def:finite-spectra,prereq:def:connected}
+    A spectrum $X$ is of \emph{finite type} if for each $n$, there exists a finite spectrum $X_n \in \calS^{fin}$ and a map $X_n \to X$ whose cofiber is $n$-connected.
+\end{definition}
+
+\begin{axiom}\label{prereq:ax:finite-type-char}
+    \uses{prereq:def:finite-type,prereq:def:connective,prereq:def:homotopy-groups}
+    A spectrum $X$ is of finite type if and only if:
+    \begin{enumerate}
+        \item $X$ is connective, and
+        \item for each $i$, the homotopy group $\pi_i(X)$ is finitely generated as an abelian group.
+    \end{enumerate}
+\end{axiom}
+
+\begin{axiom}\label{prereq:ax:finite-type-homology}
+    \uses{prereq:def:finite-type,prereq:def:mod2-homology}
+    If $X$ is of finite type, then $H_i(X; \bF_2)$ is a finite-dimensional $\bF_2$-vector space for each $i$.
+\end{axiom}
+
+\subsubsection{Adams Convergence and Boundedness}\label{sec:prereq-adams-convergence}
+
+In this subsection, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
+
+\begin{definition}\label{prereq:def:adams-filtration-infinity}
+    \uses{prereq:def:adams-filtration-maps}
+    A map $f \in [X, Y]$ has \emph{Adams filtration $\infty$} if $\AF(f) \ge n$ for all $n$.
+\end{definition}
+
+\begin{axiom}\label{prereq:ax:odd-order-af-infinity}
+    \uses{prereq:def:adams-filtration-infinity}
+    If $f$ has odd order in $[X,Y]$, then $f$ has Adams filtration $\infty$.
+\end{axiom}
+
+\begin{axiom}\label{prereq:ax:not-odd-order-af-finite}
+    \uses{prereq:def:adams-filtration-infinity}
+    If $f$ does not have odd order, then $f$ does not have Adams filtration $\infty$.
+\end{axiom}
+
+\begin{axiom}\label{prereq:ax:adams-weak-convergence}
+    \uses{prereq:ax:adams-ss,prereq:def:convergence,prereq:def:finite-spectra,prereq:def:finite-type}
+    For $X \in \calS^{fin}$ and $Y$ of finite type, the Adams spectral sequence $Adams(X,Y)$ weakly converges to $[X, Y]$: there is a natural isomorphism between the graded pieces of the Adams filtration on $[X, Y]$ and the $E_\infty$-page of $Adams(X,Y)$.
+\end{axiom}
+
+\begin{axiom}\label{prereq:ax:adams-separated}
+    \uses{prereq:ax:adams-weak-convergence,prereq:ax:odd-order-af-infinity}
+    The quotient $[X, Y] / \{\text{odd-order elements}\}$ carries an induced Adams filtration that is separated (Hausdorff).
+\end{axiom}
+
+\begin{axiom}\label{prereq:ax:adams-boundedness}
+    \uses{prereq:ax:adams-separated,prereq:def:finite-type}
+    Suppose $X$ is of finite type and $H_i(X; \bQ) = 0$ for some $i$. Then:
+    \begin{enumerate}
+        \item The Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ is bounded.
+        \item All subquotients of this filtration are finite groups.
+    \end{enumerate}
+\end{axiom}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{$\HF$-Synthetic Spectra}\label{sec:prereq-synthetic}
@@ -603,7 +706,7 @@
 \begin{definition}\label{prereq:def:synthetic-category}
     \uses{prereq:def:stable-homotopy-category,prereq:def:functorial-cofiber}
     \lean{KIP.Synthetic.SyntheticCategory}\leanok
-    The category $h\mathrm{Syn}$ of \emph{$\HF$-synthetic spectra} is a triangulated category with functorial cofiber (it arises as the homotopy category of a stable model category $\mathrm{Syn}_{\HF}$).
+    The category $h\mathrm{Syn}$ of \emph{$\HF$-synthetic spectra} is a closed symmetric monoidal triangulated category with functorial cofiber (it arises as the homotopy category of a stable model category $\mathrm{Syn}_{\HF}$). We denote its tensor product by $\otimes$ and its unit object by $\mathbf{1}$.
 \end{definition}
 
 \begin{definition}\label{prereq:def:bigraded-suspension}
@@ -614,41 +717,89 @@
     The functor $\Sigma^{1,0}$ is identified with the triangulated suspension functor.
 \end{definition}
 
+\begin{axiom}\label{prereq:ax:bishift-tensor-comm}
+    \uses{prereq:def:bigraded-suspension,prereq:def:synthetic-category}
+    The bigraded suspension commutes with the tensor product: for all $(m,n) \in \bZ^2$ and objects $X, Y$ of $h\mathrm{Syn}$,
+    $$\Sigma^{m,n}(X \otimes Y) \cong \Sigma^{m,n}X \otimes Y.$$
+\end{axiom}
+
 \begin{definition}\label{prereq:def:lambda}
     \uses{prereq:def:bigraded-suspension}
     \lean{KIP.Synthetic.SyntheticCategory.lam}\leanok
     There exists a natural transformation
     $$\lambda: \Sigma^{0,-1} \to \mathrm{Id}$$
-    in $h\mathrm{Syn}$. For a synthetic spectrum $X$, we define $X/\lambda^n$ as the cofiber of $\lambda^n: \Sigma^{0,-n}X \to X$.
+    in $h\mathrm{Syn}$. For a synthetic spectrum $X$, $\lambda_X$ denotes the component $\Sigma^{0,-1}X \to X$.
 \end{definition}
 
-\begin{remark}
-    The hom-sets in $h\mathrm{Syn}$ are enriched over $\mathbb{Z}[\lambda]$-modules: $\Hom(X,Y)$ is the bigraded abelian group $[\Sigma^{*,*}X, Y]$, with $\lambda$ acting by the natural transformation of degree $(0,-1)$.
-\end{remark}
+\begin{definition}\label{prereq:def:lambda-power}
+    \uses{prereq:def:lambda,prereq:def:bigraded-suspension}
+    For $n \ge 0$, define $\lambda^n_X: \Sigma^{0,-n}X \to X$ by induction:
+    \begin{enumerate}
+        \item $\lambda^0_X = \mathrm{id}_X: X \to X$.
+        \item $\lambda^{n+1}_X = \lambda_X \circ \Sigma^{0,-1}(\lambda^n_X): \Sigma^{0,-n-1}X \to \Sigma^{0,-1}X \to X$, using the composition isomorphism $\Sigma^{0,-n-1} \cong \Sigma^{0,-1}\Sigma^{0,-n}$.
+    \end{enumerate}
+    We define $X/\lambda^n$ as the cofiber of $\lambda^n_X$. In particular, $X/\lambda^0 = 0$ and $X/\lambda^1 = X/\lambda$. The cofiber construction gives a distinguished triangle
+    $$\Sigma^{0,-n}X \xrightarrow{\lambda^n_X} X \to X/\lambda^n \to \Sigma^{1,-n}X.$$
+\end{definition}
+
+\begin{proposition}\label{prereq:prop:zlambda-enrichment}
+    \uses{prereq:def:lambda,prereq:def:synthetic-category}
+    The homotopy category $h\mathrm{Syn}$ is enriched over $\bZ[\lambda]$-modules.
+\end{proposition}
+\begin{proof}
+    The argument proceeds in three steps:
+    \begin{enumerate}
+        \item Since $h\mathrm{Syn}$ is preadditive, it is enriched over $\bZ$-modules.
+        \item The natural transformation $\lambda$ induces an action on hom-sets: for $f: X \to Y$, define $\lambda \cdot f = \lambda_Y \circ \Sigma^{0,-1}(f)$. By naturality of $\lambda$, this agrees with $f \circ \lambda_X$ (up to the identification $\Sigma^{0,-1}X \to X$), and is compatible with composition.
+        \item The polynomial ring $\bZ[\lambda]$ is the free $\bZ$-algebra on one generator. By its universal property, the $\bZ$-linear action of $\lambda$ on each $\Hom(X,Y)$ extends uniquely to a $\bZ[\lambda]$-module structure.
+    \end{enumerate}
+\end{proof}
 
 \subsubsection{Synthetic Spheres}\label{sec:prereq-syn-spheres}
 
 \begin{definition}\label{prereq:def:bigraded-spheres}
     \uses{prereq:def:bigraded-suspension,prereq:def:synthetic-category}
     \lean{KIP.Synthetic.Smn}\leanok
-    The \emph{bigraded spheres} are the synthetic spectra $S^{m,n}$ defined by
-    $$S^{m,n} = \Sigma^{m,n} S^{0,0}$$
-    where $S^{0,0}$ is the sphere object of $h\mathrm{Syn}$.
+    The \emph{synthetic sphere} $S^{0,0}$ is defined as the monoidal unit $\mathbf{1}$ of $h\mathrm{Syn}$. The \emph{bigraded spheres} are
+    $$S^{m,n} = \Sigma^{m,n} S^{0,0} = \Sigma^{m,n}\mathbf{1}.$$
 \end{definition}
+
+\begin{proposition}\label{prereq:prop:bishift-tensor-sphere}
+    \uses{prereq:def:bigraded-spheres,prereq:ax:bishift-tensor-comm}
+    For any synthetic spectrum $X$,
+    $$\Sigma^{m,n}X \cong S^{m,n} \otimes X.$$
+\end{proposition}
+\begin{proof}
+    By Axiom~\ref{prereq:ax:bishift-tensor-comm} and the unit isomorphism $\mathbf{1} \otimes X \cong X$:
+    $\Sigma^{m,n}X \cong \Sigma^{m,n}(\mathbf{1} \otimes X) \cong \Sigma^{m,n}\mathbf{1} \otimes X = S^{m,n} \otimes X$.
+\end{proof}
 
 \begin{definition}\label{prereq:def:synthetic-homotopy-groups}
     \uses{prereq:def:bigraded-spheres}
     \lean{KIP.Synthetic.BiHom}\leanok
     The \emph{synthetic homotopy groups} of a synthetic spectrum $X$ are
     $$\pi_{m,n}(X) = [S^{m,n}, X].$$
-    These form a bigraded abelian group with a natural $\mathbb{Z}[\lambda]$-module structure.
+    These form a bigraded abelian group with a natural $\mathbb{Z}[\lambda]$-module structure (Proposition~\ref{prereq:prop:zlambda-enrichment}).
 \end{definition}
 
 \begin{proposition}\label{prereq:prop:synthetic-homotopy-shift}
     \uses{prereq:def:synthetic-homotopy-groups,prereq:def:bigraded-suspension}
     \lean{KIP.Synthetic.susp_invariance}\leanok
-    $$\pi_{m,n}(X) = \pi_{m+k,n+l}(\Sigma^{k,l}X).$$
+    $$\pi_{m,n}(X) \cong \pi_{m+k,n+l}(\Sigma^{k,l}X).$$
 \end{proposition}
+\begin{proof}
+    By the composition axiom $\Sigma^{m,n}\Sigma^{k,l} \cong \Sigma^{m+k,n+l}$, the functor $\Sigma^{k,l}$ is an autoequivalence and induces a bijection $[S^{m,n}, X] \cong [\Sigma^{k,l}S^{m,n}, \Sigma^{k,l}X] \cong [S^{m+k,n+l}, \Sigma^{k,l}X]$.
+\end{proof}
+
+\begin{definition}\label{prereq:def:lambda-action}
+    \uses{prereq:def:synthetic-homotopy-groups,prereq:def:lambda,prereq:prop:zlambda-enrichment}
+    \lean{KIP.Synthetic.lambdaAction}\leanok
+    The \emph{$\lambda$-action} on synthetic homotopy groups is the map
+    $$\lambda: \pi_{m,n}(X) \to \pi_{m,n-1}(X)$$
+    defined as follows: given $f: S^{m,n} \to X$, the element $\lambda \cdot f \in \pi_{m,n-1}(X)$ is the composite
+    $$S^{m,n-1} \xrightarrow[\sim]{\mathrm{biShift}} \Sigma^{0,-1}S^{m,n} \xrightarrow{\lambda_{S^{m,n}}} S^{m,n} \xrightarrow{f} X,$$
+    where the first arrow is the biShift composition isomorphism $S^{m,n-1} = \Sigma^{m,n-1}\mathbf{1} \cong \Sigma^{0,-1}\Sigma^{m,n}\mathbf{1} = \Sigma^{0,-1}S^{m,n}$, and $\lambda_{S^{m,n}}: \Sigma^{0,-1}S^{m,n} \to S^{m,n}$ is the component of $\lambda$ at $S^{m,n}$.
+\end{definition}
 
 \subsubsection{Synthetic Adams Spectral Sequence}\label{sec:prereq-syn-adams}
 
@@ -669,23 +820,42 @@
 \begin{definition}\label{prereq:def:nu-functor}
     \uses{prereq:def:stable-homotopy-category,prereq:def:synthetic-category}
     \lean{KIP.Synthetic.nu}\leanok
-    There exists a functor
+    There exists an additive functor
     $$\nu: h\mathcal{S} \to h\mathrm{Syn}$$
-    from the homotopy category of spectra to the homotopy category of synthetic spectra. The functor $\nu$ is lax symmetric monoidal and preserves filtered colimits.
+    from the homotopy category of spectra to the homotopy category of synthetic spectra.
 \end{definition}
 
-\begin{remark}
-    \uses{prereq:def:nu-functor}
-    The functor $\nu$ does not commute with suspension: instead, $\nu(\Sigma X) \cong \Sigma^{1,1} \nu X$. The natural comparison map $\Sigma(\nu X) \to \nu(\Sigma X)$ is $\lambda$.
-\end{remark}
+\begin{axiom}\label{prereq:ax:nu-susp}
+    \uses{prereq:def:nu-functor,prereq:def:bigraded-suspension}
+    \lean{KIP.Synthetic.nu_susp}\leanok
+    The functor $\nu$ intertwines suspension with bigraded suspension:
+    $$\nu(\Sigma X) \cong \Sigma^{1,1} \nu(X).$$
+    The natural comparison map $\Sigma(\nu X) \to \nu(\Sigma X)$ is induced by $\lambda$.
+\end{axiom}
 
-\begin{axiom}\label{prereq:ax:nu-cofiber}
+\begin{theorem}\label{prereq:thm:nu-shift-bishift}
+    \uses{prereq:ax:nu-susp,prereq:def:bigraded-suspension}
+    For all $n \in \bZ$ and spectra $X$,
+    $$\nu(\Sigma^n X) \cong \Sigma^{n,n}\nu(X).$$
+\end{theorem}
+\begin{proof}
+    By induction on $n$. The base case $n = 1$ is Axiom~\ref{prereq:ax:nu-susp}. The inductive step follows from the biShift composition isomorphism $\Sigma^{n,n}\Sigma^{1,1} \cong \Sigma^{n+1,n+1}$.
+\end{proof}
+
+\begin{axiom}\label{prereq:ax:nu-cofiber-ses}
     \uses{prereq:def:nu-functor,prereq:def:cofiber-sequence,prereq:def:mod2-homology}
     \lean{KIP.Synthetic.nu_cofiber_iff}\leanok
-    Suppose $X \xrightarrow{f} Y \xrightarrow{g} Z$ is a cofiber sequence of spectra. Then $\nu X \xrightarrow{\nu f} \nu Y \xrightarrow{\nu g} \nu Z$ is a cofiber sequence of synthetic spectra if and only if
+    Suppose $X \xrightarrow{f} Y \xrightarrow{g} Z$ is a cofiber sequence of spectra such that
     $$0 \to {\HF}_*X \xrightarrow{{\HF}_*f} {\HF}_*Y \xrightarrow{{\HF}_*g} {\HF}_*Z \to 0$$
-    is a short exact sequence.
+    is a short exact sequence of $\HF$-homology. Then $\nu X \xrightarrow{\nu f} \nu Y \xrightarrow{\nu g} \nu Z$ is a distinguished triangle in $h\mathrm{Syn}$.
 \end{axiom}
+
+\begin{remark}\label{prereq:rem:nu-cofiber-cohomological}
+    \uses{prereq:ax:nu-cofiber-ses,prereq:ax:universal-coefficient}
+    The cohomological variant also holds: if $X \to Y \to Z$ is a cofiber sequence with
+    $$0 \to H^*(Z; \bF_2) \to H^*(Y; \bF_2) \to H^*(X; \bF_2) \to 0$$
+    short exact in mod~2 cohomology, then $\nu$ sends it to a distinguished triangle. This follows from Axiom~\ref{prereq:ax:nu-cofiber-ses} and the universal coefficient theorem (Axiom~\ref{prereq:ax:universal-coefficient}).
+\end{remark}
 
 \subsubsection{Synthetic Rigidity}\label{sec:prereq-syn-rigidity}
 
@@ -731,7 +901,7 @@
 \subsubsection{Synthetic Lift}\label{sec:prereq-syn-lift}
 
 \begin{axiom}\label{prereq:ax:synthetic-lift}
-    \uses{prereq:ax:nu-cofiber}
+    \uses{prereq:ax:nu-cofiber-ses}
     \lean{KIP.Synthetic.synthetic_lift}\leanok
     If a map $f: X \to Y$ has Adams filtration $\AF(f) = k$, then there exists a factorization
     $$\xymatrix{
@@ -742,7 +912,7 @@
 \end{axiom}
 
 \begin{proposition}\label{prereq:prop:syn-distinguished-triangle}
-    \uses{prereq:ax:nu-cofiber,prereq:ax:synthetic-lift}
+    \uses{prereq:ax:nu-cofiber-ses,prereq:ax:synthetic-lift}
     \lean{KIP.Synthetic.syn_distinguished_triangle}\leanok
     Suppose that $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is a distinguished triangle of spectra with $\AF(h) > 0$, and consequently a short exact sequence on $\HF$-homology
     $$0 \to H_*X \xrightarrow{H_*f} H_*Y \xrightarrow{H_*g} H_*Z \to 0.$$

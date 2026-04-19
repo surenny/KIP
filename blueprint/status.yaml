@@ -563,7 +563,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 13678dbafc3ec29a
+    nl_hash: 09ebf79319d98650
   prereq:def:bigraded-suspension:
     lean_decl: KIP.Synthetic.SyntheticCategory.biShift
     nl_reviewed: true
@@ -579,7 +579,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: eda10030d46fecff
+    nl_hash: 36115d210af7542d
   prereq:def:bigraded-spheres:
     lean_decl: KIP.Synthetic.Smn
     nl_reviewed: true
@@ -587,7 +587,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: f2c4120520a999db
+    nl_hash: 81e5b89684416b82
   prereq:def:synthetic-homotopy-groups:
     lean_decl: KIP.Synthetic.BiHom
     nl_reviewed: true
@@ -595,7 +595,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 3623cb27427340d2
+    nl_hash: ca9ef4f390317c6f
   prereq:prop:synthetic-homotopy-shift:
     lean_decl: KIP.Synthetic.susp_invariance
     nl_reviewed: true
@@ -603,7 +603,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
-    nl_hash: 87c16ec3696bc619
+    nl_hash: 612af56727829e8b
   prereq:ax:syn-adams-ss:
     lean_decl: KIP.Synthetic.SynAdamsSS
     nl_reviewed: true
@@ -619,7 +619,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 48228d34b4ad78c2
+    nl_hash: 1cbd0b2d69f36c55
   prereq:ax:nu-cofiber:
     lean_decl: KIP.Synthetic.nu_cofiber_iff
     nl_reviewed: true
@@ -719,7 +719,7 @@ nodes:
     nl_hash: cda248a7a43d920b
   a0000000003:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: c39633b332fdd3bc
     nl_reviewed: false
     aligned: false
@@ -796,7 +796,7 @@ nodes:
     nl_hash: 7baae54d6206b811
   a0000000005:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 6343a41675fa7cdf
   cor:af-vanishing:
     bound: false
@@ -867,7 +867,7 @@ nodes:
     nl_hash: 4a3c3f93b2df7744
   a0000000013:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: d4b541323c42bbe7
     nl_reviewed: false
     aligned: false
@@ -883,7 +883,7 @@ nodes:
     aligned: false
   a0000000015:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: ef5a8f338dab1e64
   prop:lambda-rho-trivial:
     bound: false
@@ -925,7 +925,7 @@ nodes:
     aligned: false
   a0000000019:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 3654fbdff0b25f39
     nl_reviewed: false
     aligned: false
@@ -970,7 +970,7 @@ nodes:
     nl_hash: b86bcaa8e343a63a
   a0000000021:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: d767c2596512cd80
   rem:chuaerror:
     bound: false
@@ -1052,7 +1052,7 @@ nodes:
     nl_hash: 67a3c2fc453903a4
   a0000000027:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 3e7601ad86cc2418
     nl_reviewed: false
     aligned: false
@@ -1120,3 +1120,127 @@ nodes:
     kind: axiom
     proved: false
     nl_hash: fde6081eafe9067f
+  prereq:def:adams-filtration-infinity:
+    kind: definition
+    bound: false
+    nl_hash: 3e2f49c7b95a5c1c
+    proved: false
+  prereq:ax:adams-separated:
+    kind: axiom
+    bound: false
+    nl_hash: 0e0bcee1d10255b9
+    proved: false
+  prereq:ax:sphere-connected:
+    kind: axiom
+    bound: false
+    nl_hash: 6d218bc7088c6878
+    proved: false
+  prereq:ax:odd-order-af-infinity:
+    kind: axiom
+    bound: false
+    nl_hash: 70c5624b37269250
+    proved: false
+  prereq:ax:finite-type-char:
+    kind: axiom
+    bound: false
+    nl_hash: 408a8716063deaac
+    proved: false
+  prereq:ax:connected-homology-vanishing:
+    kind: axiom
+    bound: false
+    nl_hash: c46deefb86c12757
+    proved: false
+  prereq:prop:zlambda-enrichment:
+    kind: proposition
+    bound: false
+    nl_hash: 2052ed7c0fd8f38f
+  prereq:def:finite-spectra:
+    kind: definition
+    bound: false
+    nl_hash: 5742e4481fea367e
+    proved: false
+  prereq:prop:bishift-tensor-sphere:
+    kind: proposition
+    bound: false
+    nl_hash: 417b897c01c5e88e
+  prereq:ax:not-odd-order-af-finite:
+    kind: axiom
+    bound: false
+    nl_hash: 3083a6865fee819c
+    proved: false
+  prereq:ax:adams-weak-convergence:
+    kind: axiom
+    bound: false
+    nl_hash: a0d7273048f468ad
+    proved: false
+  prereq:def:connected:
+    kind: definition
+    bound: false
+    nl_hash: fb179ece8ea73dff
+    proved: false
+  prereq:def:lambda-action:
+    kind: definition
+    bound: true
+    nl_hash: e18f2bae19dfec87
+    proved: false
+    nl_reviewed: true
+    aligned: false
+  prereq:ax:adams-boundedness:
+    kind: axiom
+    bound: false
+    nl_hash: d4915bb9addf144e
+    proved: false
+  prereq:def:connective:
+    kind: definition
+    bound: false
+    nl_hash: 492471fb12270f1f
+    proved: false
+  prereq:thm:finite-spectra-char:
+    kind: theorem
+    bound: false
+    nl_hash: 7421873496fe6b21
+  prereq:def:finite-type:
+    kind: definition
+    bound: false
+    nl_hash: 68261cc9a08b7787
+    proved: false
+  prereq:ax:finite-type-homology:
+    kind: axiom
+    bound: false
+    nl_hash: 4a0082243f6e972e
+    proved: false
+  prereq:def:lambda-power:
+    kind: definition
+    bound: false
+    nl_hash: fbe53e9c3c9316f3
+    proved: false
+  prereq:ax:bishift-tensor-comm:
+    kind: axiom
+    bound: false
+    nl_hash: 161c52acd455cc3d
+    proved: false
+  prereq:ax:nu-susp:
+    kind: axiom
+    bound: true
+    nl_hash: c3e447dc81b1c43e
+    proved: false
+    nl_reviewed: true
+  prereq:ax:universal-coefficient:
+    kind: axiom
+    bound: false
+    nl_hash: cb6fee4ca0fcec1c
+    proved: false
+  prereq:rem:nu-cofiber-cohomological:
+    kind: remark
+    bound: false
+    nl_hash: e83fce7c3adf29c2
+  prereq:thm:nu-shift-bishift:
+    kind: theorem
+    bound: false
+    nl_hash: d9d33fdadc435482
+  prereq:ax:nu-cofiber-ses:
+    kind: axiom
+    bound: true
+    nl_hash: ca33a2963d77f060
+    proved: false
+    nl_reviewed: true

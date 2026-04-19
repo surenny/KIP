@@ -71,8 +71,10 @@ KIP.Synthetic.SyntheticCategory.lam
 KIP.Synthetic.Smn
 KIP.Synthetic.BiHom
 KIP.Synthetic.susp_invariance
+KIP.Synthetic.lambdaAction
 KIP.Synthetic.SynAdamsSS
 KIP.Synthetic.nu
+KIP.Synthetic.nu_susp
 KIP.Synthetic.nu_cofiber_iff
 KIP.Synthetic.rigidity_degeneration
 KIP.Synthetic.lambda_bockstein_iso
