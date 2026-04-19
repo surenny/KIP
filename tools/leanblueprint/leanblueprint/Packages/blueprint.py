@@ -11,6 +11,7 @@ Options:
 
 You can also add options that will be passed to the dependency graph package.
 """
+import json
 import re
 import string
 from datetime import datetime
@@ -547,6 +548,8 @@ def ProcessOptions(options, document):
 
         if use_extended_states:
             _save_status_yaml(status_nodes)
+            document.userdata['dep_graph']['status_nodes_json'] = json.dumps(
+                status_nodes, ensure_ascii=False, default=str)
 
         lean_decls_path = Path(document.userdata['working-dir']).parent/"lean_decls"
         lean_decls_path.write_text("\n".join(document.userdata.get("lean_decls", [])))

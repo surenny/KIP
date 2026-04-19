@@ -41,8 +41,26 @@ jobs:
         with:
           use-github-cache: true
 
-      - name: Compile blueprint and documentation
+      - name: Build blueprint with local tools
+        uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d
+        with:
+          docker_image: ghcr.io/xu-cheng/texlive-full:20250401
+          run: |
+            apk update && apk add --update make py3-pip git pkgconfig graphviz graphviz-dev gcc musl-dev
+            git config --global --add safe.directory $GITHUB_WORKSPACE
+            python3 -m venv env && source env/bin/activate
+            pip install --upgrade pip requests wheel
+            pip install pygraphviz --config-settings="--global-option=build_ext" \
+              --config-settings="--global-option=-L/usr/lib/graphviz/" \
+              --config-settings="--global-option=-R/usr/lib/graphviz/"
+            pip install -e ./tools/plastexdepgraph
+            pip install -e ./tools/leanblueprint
+            cd blueprint && leanblueprint pdf && leanblueprint web && cd ..
+            mkdir -p docs && cp blueprint/print/print.pdf docs/blueprint.pdf
+            cp -r blueprint/web docs/blueprint
+
+      - name: Compile documentation and deploy
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
         with:
-          blueprint: true
+          blueprint: false
           deploy: ${{ github.event_name != 'pull_request' }}

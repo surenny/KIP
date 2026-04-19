@@ -103,17 +103,91 @@
 </div>
 </div> <!-- content -->
 </div> <!-- wrapper -->
+<script id="leanblueprint-status" type="application/json">{{ status_nodes_json }}</script>
+<script id="leanblueprint-repo-config" type="application/json">{"owner":"surenny","repo":"KIP","status_path":"blueprint/status.yaml","branch":"main"}</script>
 <script src="js/jquery.min.js" type="text/javascript"></script>
 
 <script src="js/d3.min.js"></script>
 <script src="js/hpcc.min.js"></script>
 <script src="js/d3-graphviz.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 
 <script type="text/javascript">
+/* ====== Environment detection ====== */
+var REVIEW_MODE = 'unknown'; // 'local' or 'github'
+var EMBEDDED_STATUS = {};
+var REPO_CONFIG = {};
+
+try {
+  var statusEl = document.getElementById('leanblueprint-status');
+  if (statusEl) EMBEDDED_STATUS = JSON.parse(statusEl.textContent || '{}');
+} catch(e) { EMBEDDED_STATUS = {}; }
+try {
+  var configEl = document.getElementById('leanblueprint-repo-config');
+  if (configEl) REPO_CONFIG = JSON.parse(configEl.textContent || '{}');
+} catch(e) { REPO_CONFIG = {}; }
+
+/* ====== localStorage helpers ====== */
+function lsGet(key) {
+  try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+function getGithubToken() { return localStorage.getItem('leanblueprint_github_token') || ''; }
+function setGithubToken(t) { localStorage.setItem('leanblueprint_github_token', t); }
+function getReviewerName() { return localStorage.getItem('leanblueprint_reviewer_name') || ''; }
+function setReviewerName(n) { localStorage.setItem('leanblueprint_reviewer_name', n); }
+function getPendingReviews() { return lsGet('leanblueprint_pending_reviews') || {}; }
+function setPendingReviews(r) { lsSet('leanblueprint_pending_reviews', r); }
+function getPendingComments() { return lsGet('leanblueprint_pending_comments') || {}; }
+function setPendingComments(c) { lsSet('leanblueprint_pending_comments', c); }
+
+function countPending() {
+  var reviews = getPendingReviews();
+  var comments = getPendingComments();
+  var n = Object.keys(reviews).length;
+  for (var k in comments) { n += (comments[k] || []).length; }
+  return n;
+}
+
+/* Merge embedded status with localStorage pending changes */
+function mergedStatus() {
+  var base = {};
+  // Deep copy embedded status
+  for (var k in EMBEDDED_STATUS) {
+    base[k] = {};
+    for (var f in EMBEDDED_STATUS[k]) base[k][f] = EMBEDDED_STATUS[k][f];
+  }
+  // Overlay pending reviews
+  var pending = getPendingReviews();
+  for (var nodeId in pending) {
+    if (!base[nodeId]) base[nodeId] = {};
+    var fields = pending[nodeId];
+    for (var f in fields) base[nodeId][f] = fields[f];
+  }
+  // Overlay pending comments
+  var pendingC = getPendingComments();
+  for (var nodeId in pendingC) {
+    if (!base[nodeId]) base[nodeId] = {};
+    if (!base[nodeId].comments) base[nodeId].comments = [];
+    base[nodeId].comments = base[nodeId].comments.concat(pendingC[nodeId]);
+  }
+  return base;
+}
+
+/* ====== UTF-8 safe base64 for GitHub API ====== */
+function utf8ToBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function base64ToUtf8(b64) {
+  return decodeURIComponent(escape(atob(b64)));
+}
+
+/* ====== Graph rendering ====== */
 const graphContainer = d3.select("#graph");
 const width = graphContainer.node().clientWidth;
 const height = graphContainer.node().clientHeight;
-
 
 graphContainer.graphviz({useWorker: true})
     .width(width)
@@ -153,6 +227,8 @@ function interactive() {
         d3.select(modal).style('display', 'none');
     });
 
+    // Prefill reviewer name from localStorage
+    prefillReviewerName();
     // Fetch live status from API and update all node badges/buttons
     refreshAllStatus();
 }
@@ -314,28 +390,38 @@ function updateSvgNode(nodeId, state) {
   }
 }
 
+/* Common status application logic */
+function applyStatus(nodes) {
+  for (var nodeId in nodes) {
+    var st = nodes[nodeId];
+    var state = nodeState(st);
+    updateSvgNode(nodeId, state);
+    var badges = document.querySelector('.ext-status-badges[data-node-id="'+nodeId+'"]');
+    if (badges) renderLifecycle(badges, state, st.kind || '');
+    var panel = document.querySelector('.review-panel[data-node-id="'+nodeId+'"]');
+    if (panel) updateButtons(panel, st);
+    var thm = badges ? badges.closest('.thm') : null;
+    if (thm && st.comments) renderComments(thm, st.comments);
+  }
+}
+
 function refreshAllStatus() {
   fetch('api/status')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var nodes = data.nodes || {};
-      for (var nodeId in nodes) {
-        var st = nodes[nodeId];
-        var state = nodeState(st);
-        // Update SVG graph node colors
-        updateSvgNode(nodeId, state);
-        // Update lifecycle badges
-        var badges = document.querySelector('.ext-status-badges[data-node-id="'+nodeId+'"]');
-        if (badges) renderLifecycle(badges, state, st.kind || '');
-        // Update review panel buttons
-        var panel = document.querySelector('.review-panel[data-node-id="'+nodeId+'"]');
-        if (panel) updateButtons(panel, st);
-        // Update comments
-        var thm = badges ? badges.closest('.thm') : null;
-        if (thm && st.comments) renderComments(thm, st.comments);
-      }
+    .then(function(r) {
+      if (!r.ok) throw new Error('not local');
+      return r.json();
     })
-    .catch(function() { /* API not available, keep static HTML */ });
+    .then(function(data) {
+      REVIEW_MODE = 'local';
+      applyStatus(data.nodes || {});
+      updateCommitButton();
+    })
+    .catch(function() {
+      // API not available — GitHub Pages mode
+      REVIEW_MODE = 'github';
+      applyStatus(mergedStatus());
+      updateCommitButton();
+    });
 }
 
 
@@ -356,6 +442,17 @@ function updateBadge(panel, state, reviewer) {
   if (nodeId) updateSvgNode(nodeId, state);
 }
 
+/* ====== Prefill reviewer name ====== */
+function prefillReviewerName() {
+  var name = getReviewerName();
+  if (!name) return;
+  var inputs = document.querySelectorAll('.review-reviewer-input');
+  for (var i = 0; i < inputs.length; i++) {
+    if (!inputs[i].value) inputs[i].value = name;
+  }
+}
+
+/* ====== Dual-mode click handler ====== */
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('.review-btn');
   if (!btn) return;
@@ -366,6 +463,9 @@ document.addEventListener('click', function(e) {
   var feedback = panel.querySelector('.review-feedback');
   var reviewerInput = panel.querySelector('.review-reviewer-input');
   var reviewer = reviewerInput ? reviewerInput.value.trim() : '';
+
+  // Save reviewer name
+  if (reviewer) setReviewerName(reviewer);
 
   var body = {node_id: nodeId, action: action, reviewer: reviewer || 'web-reviewer'};
 
@@ -382,65 +482,318 @@ document.addEventListener('click', function(e) {
     if (!body.kind) { feedback.textContent = 'Please select a type.'; return; }
   }
 
-  btn.disabled = true;
-  feedback.textContent = 'Sending...';
-  feedback.style.color = '#666';
+  if (REVIEW_MODE === 'local') {
+    // === Local server mode: POST to API ===
+    btn.disabled = true;
+    feedback.textContent = 'Sending...';
+    feedback.style.color = '#666';
 
-  fetch('api/review', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(body)
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    btn.disabled = false;
-    if (data.error) {
-      feedback.textContent = 'Error: ' + data.error;
-      feedback.style.color = '#c00';
-    } else {
-      feedback.textContent = 'Done! State: ' + data.state;
-      feedback.style.color = '#009E73';
-      updateBadge(panel, data.state, body.reviewer);
-      // Update buttons based on new state from API response
-      updateButtons(panel, data);
-      if (action === 'comment') {
-        var input = panel.querySelector('.review-comment-input');
-        if (input) input.value = '';
-        // Append comment to the comment list in the modal
-        var thm = panel.closest('.thm');
-        if (thm) {
-          var commentsDiv = thm.querySelector('.ext-review-comments');
-          if (!commentsDiv) {
-            commentsDiv = document.createElement('div');
-            commentsDiv.className = 'ext-review-comments';
-            commentsDiv.style.cssText = 'margin-top:4px;';
-            var badges = thm.querySelector('.ext-status-badges');
-            if (badges) badges.parentNode.insertBefore(commentsDiv, badges.nextSibling);
-          }
-          var topicColors = {review:'#E69F00',align:'#009E73',verify:'#1CAC78',general:'#666'};
-          var tc = topicColors[body.topic] || '#666';
-          var entry = document.createElement('div');
-          entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
-          var topicSpan = document.createElement('span');
-          topicSpan.style.cssText = 'color:'+tc+';font-weight:bold;font-size:0.85em;';
-          topicSpan.textContent = body.topic;
-          entry.appendChild(topicSpan);
-          entry.appendChild(document.createTextNode(' ' + body.text + ' '));
-          var metaSpan = document.createElement('span');
-          metaSpan.style.cssText = 'color:#999;font-size:0.9em;';
-          metaSpan.textContent = '\u2014 ' + body.reviewer;
-          entry.appendChild(metaSpan);
-          commentsDiv.appendChild(entry);
+    fetch('api/review', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      btn.disabled = false;
+      if (data.error) {
+        feedback.textContent = 'Error: ' + data.error;
+        feedback.style.color = '#c00';
+      } else {
+        feedback.textContent = 'Done! State: ' + data.state;
+        feedback.style.color = '#009E73';
+        updateBadge(panel, data.state, body.reviewer);
+        updateButtons(panel, data);
+        if (action === 'comment') {
+          var input = panel.querySelector('.review-comment-input');
+          if (input) input.value = '';
+          appendCommentToUI(panel, body);
         }
       }
+    })
+    .catch(function(err) {
+      btn.disabled = false;
+      feedback.textContent = 'Network error (is leanblueprint serve running?)';
+      feedback.style.color = '#c00';
+    });
+  } else {
+    // === GitHub Pages mode: save to localStorage ===
+    var pending = getPendingReviews();
+    if (!pending[nodeId]) pending[nodeId] = {};
+
+    if (action === 'review') {
+      pending[nodeId].nl_reviewed = true;
+      pending[nodeId].nl_reviewed_by = body.reviewer;
+      setPendingReviews(pending);
+    } else if (action === 'align') {
+      pending[nodeId].aligned = true;
+      pending[nodeId].aligned_by = body.reviewer;
+      setPendingReviews(pending);
+    } else if (action === 'reclassify') {
+      pending[nodeId].kind = body.kind;
+      setPendingReviews(pending);
+    } else if (action === 'comment') {
+      var pendingC = getPendingComments();
+      if (!pendingC[nodeId]) pendingC[nodeId] = [];
+      pendingC[nodeId].push({
+        topic: body.topic || 'general',
+        text: body.text,
+        by: body.reviewer,
+        at: new Date().toISOString().slice(0,19)
+      });
+      setPendingComments(pendingC);
+      var input = panel.querySelector('.review-comment-input');
+      if (input) input.value = '';
+      appendCommentToUI(panel, body);
     }
-  })
-  .catch(function(err) {
-    btn.disabled = false;
-    feedback.textContent = 'Network error (is leanblueprint serve running?)';
-    feedback.style.color = '#c00';
-  });
+
+    // Optimistic UI update
+    var merged = mergedStatus();
+    var st = merged[nodeId] || {};
+    var state = nodeState(st);
+    updateBadge(panel, state, body.reviewer);
+    updateButtons(panel, st);
+    if (st.comments) {
+      var thm = panel.closest('.thm');
+      if (thm) renderComments(thm, st.comments);
+    }
+
+    feedback.textContent = 'Queued (pending commit) \u2014 ' + countPending() + ' change(s)';
+    feedback.style.color = '#0072B2';
+    updateCommitButton();
+  }
 });
+
+/* Helper: append a comment entry to the modal UI */
+function appendCommentToUI(panel, body) {
+  var thm = panel.closest('.thm');
+  if (!thm) return;
+  var commentsDiv = thm.querySelector('.ext-review-comments');
+  if (!commentsDiv) {
+    commentsDiv = document.createElement('div');
+    commentsDiv.className = 'ext-review-comments';
+    commentsDiv.style.cssText = 'margin-top:4px;';
+    var badges = thm.querySelector('.ext-status-badges');
+    if (badges) badges.parentNode.insertBefore(commentsDiv, badges.nextSibling);
+  }
+  var topicColors = {review:'#E69F00',align:'#009E73',verify:'#1CAC78',general:'#666'};
+  var tc = topicColors[body.topic] || '#666';
+  var entry = document.createElement('div');
+  entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
+  var topicSpan = document.createElement('span');
+  topicSpan.style.cssText = 'color:'+tc+';font-weight:bold;font-size:0.85em;';
+  topicSpan.textContent = body.topic || 'general';
+  entry.appendChild(topicSpan);
+  entry.appendChild(document.createTextNode(' ' + body.text + ' '));
+  var metaSpan = document.createElement('span');
+  metaSpan.style.cssText = 'color:#999;font-size:0.9em;';
+  metaSpan.textContent = '\u2014 ' + body.reviewer;
+  entry.appendChild(metaSpan);
+  commentsDiv.appendChild(entry);
+}
+
+/* ====== Floating commit button (GitHub mode only) ====== */
+(function() {
+  var commitDiv = document.createElement('div');
+  commitDiv.id = 'github-commit-bar';
+  commitDiv.style.cssText = 'display:none;position:fixed;bottom:1rem;right:1rem;z-index:9999;' +
+    'background:#fff;border:1px solid #0072B2;border-radius:8px;padding:10px 16px;' +
+    'box-shadow:0 2px 12px rgba(0,0,0,.15);font-size:14px;';
+
+  var countSpan = document.createElement('span');
+  countSpan.id = 'commit-count';
+  countSpan.style.cssText = 'font-weight:bold;margin-right:10px;';
+  commitDiv.appendChild(countSpan);
+
+  var commitBtn = document.createElement('button');
+  commitBtn.id = 'commit-reviews-btn';
+  commitBtn.textContent = 'Commit Reviews';
+  commitBtn.style.cssText = 'background:#0072B2;color:#fff;border:none;border-radius:4px;' +
+    'padding:6px 14px;cursor:pointer;font-size:14px;margin-right:6px;';
+  commitBtn.addEventListener('click', function() { doGithubCommit(); });
+  commitDiv.appendChild(commitBtn);
+
+  var settingsBtn = document.createElement('button');
+  settingsBtn.textContent = '\u2699';
+  settingsBtn.title = 'Settings';
+  settingsBtn.style.cssText = 'background:none;border:1px solid #ccc;border-radius:4px;' +
+    'padding:4px 8px;cursor:pointer;font-size:16px;';
+  settingsBtn.addEventListener('click', function() { showSettingsModal(); });
+  commitDiv.appendChild(settingsBtn);
+
+  document.body.appendChild(commitDiv);
+})();
+
+function updateCommitButton() {
+  var bar = document.getElementById('github-commit-bar');
+  if (!bar) return;
+  if (REVIEW_MODE !== 'github') { bar.style.display = 'none'; return; }
+  var n = countPending();
+  bar.style.display = n > 0 ? 'flex' : 'none';
+  bar.style.alignItems = 'center';
+  var span = document.getElementById('commit-count');
+  if (span) span.textContent = n + ' pending change(s)';
+}
+
+/* ====== GitHub API commit flow ====== */
+function ensureToken(callback) {
+  var token = getGithubToken();
+  if (token) { callback(token); return; }
+  var t = prompt('Enter a GitHub Personal Access Token (PAT) with "contents" write permission.\n' +
+    'This is stored in your browser localStorage only.');
+  if (!t) return;
+  setGithubToken(t.trim());
+  callback(t.trim());
+}
+
+function doGithubCommit() {
+  var n = countPending();
+  if (n === 0) { alert('No pending changes to commit.'); return; }
+  ensureToken(function(token) {
+    var owner = REPO_CONFIG.owner || '';
+    var repo = REPO_CONFIG.repo || '';
+    var path = REPO_CONFIG.status_path || '';
+    var branch = REPO_CONFIG.branch || 'main';
+    if (!owner || !repo || !path) {
+      alert('Repository configuration missing.'); return;
+    }
+
+    var btn = document.getElementById('commit-reviews-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Committing...'; }
+
+    var apiBase = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+    var headers = {
+      'Authorization': 'token ' + token,
+      'Accept': 'application/vnd.github.v3+json'
+    };
+
+    // Step 1: GET current status.yaml (cache-bust to get fresh SHA)
+    fetch(apiBase + '?ref=' + branch + '&t=' + Date.now(), { headers: headers, cache: 'no-store' })
+      .then(function(r) {
+        if (!r.ok) throw new Error('GitHub API GET failed: ' + r.status);
+        return r.json();
+      })
+      .then(function(fileData) {
+        var sha = fileData.sha;
+        var content = base64ToUtf8(fileData.content.replace(/\n/g, ''));
+        var statusObj;
+        try { statusObj = jsyaml.load(content) || {}; } catch(e) { statusObj = {}; }
+        if (!statusObj.nodes) statusObj.nodes = {};
+
+        // Step 2: Merge pending reviews
+        var pending = getPendingReviews();
+        for (var nodeId in pending) {
+          if (!statusObj.nodes[nodeId]) statusObj.nodes[nodeId] = {};
+          var fields = pending[nodeId];
+          for (var f in fields) statusObj.nodes[nodeId][f] = fields[f];
+        }
+
+        // Step 3: Merge pending comments
+        var pendingC = getPendingComments();
+        for (var nodeId in pendingC) {
+          if (!statusObj.nodes[nodeId]) statusObj.nodes[nodeId] = {};
+          if (!statusObj.nodes[nodeId].comments) statusObj.nodes[nodeId].comments = [];
+          statusObj.nodes[nodeId].comments = statusObj.nodes[nodeId].comments.concat(pendingC[nodeId]);
+        }
+
+        // Step 4: Serialize back to YAML and PUT
+        var newYaml = jsyaml.dump(statusObj, {lineWidth: -1, noRefs: true});
+        var reviewer = getReviewerName() || 'anonymous';
+        var msg = 'review: ' + n + ' change(s) by ' + reviewer + ' via GitHub Pages';
+
+        return fetch(apiBase, {
+          method: 'PUT',
+          headers: Object.assign({'Content-Type': 'application/json'}, headers),
+          body: JSON.stringify({
+            message: msg,
+            content: utf8ToBase64(newYaml),
+            sha: sha,
+            branch: branch
+          })
+        });
+      })
+      .then(function(r) {
+        if (!r.ok) {
+          return r.json().then(function(err) {
+            throw new Error(err.message || 'PUT failed: ' + r.status);
+          });
+        }
+        return r.json();
+      })
+      .then(function(result) {
+        // Clear pending
+        setPendingReviews({});
+        setPendingComments({});
+        updateCommitButton();
+        alert('Committed successfully!\n' + (result.commit ? result.commit.html_url : ''));
+        if (btn) { btn.disabled = false; btn.textContent = 'Commit Reviews'; }
+      })
+      .catch(function(err) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Commit Reviews'; }
+        if (err.message && err.message.indexOf('does not match') !== -1) {
+          alert('Conflict: status.yaml was changed by someone else.\n' +
+            'Please refresh the page and try again.');
+        } else {
+          alert('Commit failed: ' + err.message);
+        }
+      });
+  });
+}
+
+/* ====== Settings modal ====== */
+function showSettingsModal() {
+  var existing = document.getElementById('review-settings-modal');
+  if (existing) { existing.style.display = 'block'; return; }
+
+  var overlay = document.createElement('div');
+  overlay.id = 'review-settings-modal';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;' +
+    'background:rgba(0,0,0,.3);z-index:10000;display:flex;align-items:center;justify-content:center;';
+
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:8px;padding:24px;min-width:340px;' +
+    'box-shadow:0 4px 20px rgba(0,0,0,.2);';
+
+  box.innerHTML = '<h3 style="margin-top:0;">Review Settings</h3>' +
+    '<label style="display:block;margin-bottom:8px;font-weight:bold;">Reviewer Name</label>' +
+    '<input id="settings-reviewer" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" />' +
+    '<label style="display:block;margin-bottom:8px;font-weight:bold;">GitHub PAT</label>' +
+    '<input id="settings-token" type="password" style="width:100%;padding:6px;margin-bottom:12px;box-sizing:border-box;" />' +
+    '<div style="margin-top:12px;">' +
+    '<button id="settings-save" style="background:#0072B2;color:#fff;border:none;border-radius:4px;padding:8px 16px;cursor:pointer;margin-right:8px;">Save</button>' +
+    '<button id="settings-clear" style="background:#c00;color:#fff;border:none;border-radius:4px;padding:8px 16px;cursor:pointer;margin-right:8px;">Clear Pending</button>' +
+    '<button id="settings-close" style="background:#eee;border:1px solid #ccc;border-radius:4px;padding:8px 16px;cursor:pointer;">Close</button>' +
+    '</div>';
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  document.getElementById('settings-reviewer').value = getReviewerName();
+  document.getElementById('settings-token').value = getGithubToken();
+
+  document.getElementById('settings-save').addEventListener('click', function() {
+    setReviewerName(document.getElementById('settings-reviewer').value.trim());
+    setGithubToken(document.getElementById('settings-token').value.trim());
+    prefillReviewerName();
+    overlay.style.display = 'none';
+  });
+  document.getElementById('settings-clear').addEventListener('click', function() {
+    if (confirm('Clear all pending reviews and comments? This cannot be undone.')) {
+      setPendingReviews({});
+      setPendingComments({});
+      updateCommitButton();
+      // Re-apply embedded status only
+      applyStatus(EMBEDDED_STATUS);
+      overlay.style.display = 'none';
+    }
+  });
+  document.getElementById('settings-close').addEventListener('click', function() {
+    overlay.style.display = 'none';
+  });
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) overlay.style.display = 'none';
+  });
+}
 
 // Lean 4 syntax highlighter (Catppuccin Mocha palette)
 var leanHL = (function() {

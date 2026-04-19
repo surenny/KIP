@@ -359,6 +359,7 @@ def ProcessOptions(options, document):
                              title=title,
                              legend=document.userdata['dep_graph']['legend'],
                              extra_modal_links=document.userdata['dep_graph'].get('extra_modal_links_tpl', []),
+                             status_nodes_json=document.userdata['dep_graph'].get('status_nodes_json', '{}'),
                              document=document,
                              config=document.config).dump(graph_target)
         return files
