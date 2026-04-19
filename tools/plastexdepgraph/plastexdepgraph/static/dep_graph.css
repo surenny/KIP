@@ -108,6 +108,7 @@ div.dep-modal-container {
   display: none;
 
   width: 90vw;
+  max-height: calc(100vh - 5rem);
   margin-top: 4rem;
   margin-left: 5vw;
   margin-right: 5vw;
@@ -115,7 +116,8 @@ div.dep-modal-container {
 div.dep-modal-content {
   font-weight: normal;
 
-  overflow: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 6rem);
 
   margin: auto;
 

@@ -3,771 +3,908 @@ nodes:
     lean_decl: KIP.SpectralSequence.SSData
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
-    verified: false
+    kind: definition
+    comments:
+    - topic: align
+      text: SSData字段顺序和NL不一致，建议p q互换
+      by: surenny
+      at: '2026-04-19'
+    - topic: general
+      text: 这个定义是整个谱序列的基础
+      by: wangguozhen
+      at: '2026-04-19'
+    - topic: general
+      text: 这是一个非常正确的形式化
+      by: web-reviewer
+      at: '2026-04-19'
+    nl_reviewer: test
+    nl_reviewed_at: '2026-04-19'
+    align_reviewer: web-reviewer
+    aligned_at: '2026-04-19'
   prereq:def:spectral-sequence:
     lean_decl: KIP.SpectralSequence.SpectralSequence
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
-    verified: false
+    kind: definition
+    align_reviewer: web-reviewer
+    aligned_at: '2026-04-19'
   prereq:def:einfty-data:
     lean_decl: KIP.SpectralSequence.SSData.eInfty
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
-    verified: false
+    kind: definition
+    align_reviewer: web-reviewer
+    aligned_at: '2026-04-19'
   prereq:def:ss-morphism:
     lean_decl: KIP.SpectralSequence.SpectralSequenceMorphism
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:convergence:
     lean_decl: KIP.SpectralSequence.Convergence
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:converging-ss-morphism:
     lean_decl: KIP.SpectralSequence.ConvergenceMorphism
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:stem:
     lean_decl: KIP.SpectralSequence.Convergence.stemDegree
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
+    nl_reviewer: test-ping
+    nl_reviewed_at: '2026-04-19'
   prereq:def:filtration-degree:
     lean_decl: KIP.SpectralSequence.Convergence.filtrationDegree
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:detect:
     lean_decl: KIP.SpectralSequence.Detects
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:detect-zero:
     lean_decl: KIP.SpectralSequence.detect_zero
     nl_reviewed: true
     bound: true
-    aligned: true
+    aligned: false
     proved: true
-    verified: false
+    kind: proposition
   prereq:prop:detect-difference:
     lean_decl: KIP.SpectralSequence.detect_difference
     nl_reviewed: true
     bound: true
-    aligned: true
+    aligned: false
     proved: true
-    verified: false
+    kind: proposition
   prereq:def:filtration:
     lean_decl: KIP.SpectralSequence.Filtration
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:filtered-morphism:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:filtered-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:homology-filtration:
     lean_decl: KIP.SpectralSequence.FilteredComplex.homologyFiltration
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:def:associated-graded:
     lean_decl: KIP.SpectralSequence.Filtration.associatedGraded
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:associated-graded-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex.assocGraded
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:exhaustive:
     lean_decl: KIP.SpectralSequence.Filtration.IsExhaustive
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:hausdorff:
     lean_decl: KIP.SpectralSequence.Filtration.IsHausdorff
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:bounded-filtration:
     lean_decl: KIP.SpectralSequence.FilteredComplex.IsBounded
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:filtered-complex-ssdata:
     lean_decl: KIP.SpectralSequence.FilteredComplex.toSSData
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:filtered-complex-ssdata-wd:
     lean_decl: KIP.SpectralSequence.FilteredComplex.pageDifferential_comp
     nl_reviewed: true
     bound: true
-    aligned: true
+    aligned: false
     proved: true
-    verified: false
+    kind: proposition
   prereq:thm:filtered-complex-ss:
     lean_decl: KIP.SpectralSequence.FilteredComplex.toSpectralSequence
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: theorem
   prereq:thm:filtered-complex-convergence:
     lean_decl: KIP.SpectralSequence.FilteredComplex.weakConvergence
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: theorem
   prereq:def:essential-differential:
     lean_decl: KIP.SpectralSequence.IsEssentialAt
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:differential-data:
     lean_decl: KIP.SpectralSequence.DifferentialDatum
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:crossing:
     lean_decl: KIP.SpectralSequence.HasCrossingAt
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:no-crossing-iff:
     lean_decl: KIP.SpectralSequence.ess_no_crossing_char
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:def:ess:
     lean_decl: KIP.SpectralSequence.ExtensionSS
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:f-extension:
     lean_decl: KIP.SpectralSequence.HasFExtension
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:not:representatives:
     lean_decl: KIP.SpectralSequence.DetectionSet
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: notation
   prereq:prop:f-ext-characterization:
     lean_decl: KIP.SpectralSequence.ess_diff_char
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:cor:af-vanishing:
     lean_decl: KIP.SpectralSequence.af_vanishing
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:prop:ess-exactness:
     lean_decl: KIP.SpectralSequence.ess_exactness
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:thm:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_exact
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: theorem
   prereq:cor:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_cor
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:triangle-map:
     lean_decl: KIP.SpectralSequence.essCommutativity_triangle
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:composition-ext:
     lean_decl: KIP.SpectralSequence.ess_composition
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:composition-zero:
     lean_decl: KIP.SpectralSequence.ess_composition_zero
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:ess-naturality:
     lean_decl: KIP.SpectralSequence.essCommutativity_induces_map
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:stationary-page:
     lean_decl: KIP.SpectralSequence.essCommutativity_eInfty_compat
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:cor:vanishing-target:
     lean_decl: KIP.SpectralSequence.essCommutativity_null
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: corollary
   prereq:def:triangulated-category:
     lean_decl: CategoryTheory.Pretriangulated
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:cofiber-sequence:
     lean_decl: KIP.StableHomotopy.HoCofiberSequence
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:functorial-cofiber:
     lean_decl: KIP.StableHomotopy.HasFunctorialCofiber
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:les-hom:
     lean_decl: CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:def:closed-symmetric-monoidal:
     lean_decl: CategoryTheory.MonoidalClosed
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:closed-symmetric-tensor-triangulated:
     lean_decl: KIP.StableHomotopy.ClosedSymmetricTensorTriangulated
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:tensor-triangulated-functorial-cofiber:
     lean_decl: KIP.StableHomotopy.TensorTriangulatedCatWithFunctorialCofiber
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:stable-homotopy-category:
     lean_decl: KIP.StableHomotopy.StableHomotopyCategory
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:sphere-spectrum:
     lean_decl: KIP.StableHomotopy.SphereSpectrum
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:sphere-Sn:
     lean_decl: KIP.StableHomotopy.Sphere
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:homotopy-groups:
     lean_decl: KIP.StableHomotopy.HomotopyGroup
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:homotopy-graded-abelian:
     lean_decl: KIP.StableHomotopy.HomotopyGroups
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:def:smash-product:
     lean_decl: KIP.StableHomotopy.smashSpheres_iso
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:mapping-spectra:
     lean_decl: KIP.StableHomotopy.MappingSpectrum
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:les-homotopy:
     lean_decl: KIP.StableHomotopy.les_homotopy_exact_f
     nl_reviewed: true
     bound: true
-    aligned: true
+    aligned: false
     proved: true
-    verified: false
+    kind: proposition
   prereq:def:eilenberg-maclane:
     lean_decl: KIP.StableHomotopy.EilenbergMacLane
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:ax:eilenberg-maclane-homotopy:
     lean_decl: KIP.StableHomotopy.HF2_pi0
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:def:mod2-cohomology:
     lean_decl: KIP.StableHomotopy.Mod2CohomologyTotal
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:mod2-homology:
     lean_decl: KIP.StableHomotopy.Mod2HomologyTotal
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:ax:adams-ss:
     lean_decl: KIP.StableHomotopy.AdamsSS
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:ax:adams-convergence:
     lean_decl: KIP.StableHomotopy.adamsConvergence
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:ax:adams-e2-order2:
     lean_decl: KIP.StableHomotopy.adams_2torsion
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:def:adams-filtration:
     lean_decl: KIP.StableHomotopy.InAdamsFiltration
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:adams-filtration-maps:
     lean_decl: KIP.StableHomotopy.AF
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:adams-filtration-characterization:
     lean_decl: KIP.StableHomotopy.adamsFiltration_functorial
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:def:synthetic-category:
     lean_decl: KIP.Synthetic.SyntheticCategory
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:bigraded-suspension:
     lean_decl: KIP.Synthetic.SyntheticCategory.biShift
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:lambda:
     lean_decl: KIP.Synthetic.SyntheticCategory.lam
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:bigraded-spheres:
     lean_decl: KIP.Synthetic.Smn
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:def:synthetic-homotopy-groups:
     lean_decl: KIP.Synthetic.BiHom
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:prop:synthetic-homotopy-shift:
     lean_decl: KIP.Synthetic.susp_invariance
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:ax:syn-adams-ss:
     lean_decl: KIP.Synthetic.SynAdamsSS
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:def:nu-functor:
     lean_decl: KIP.Synthetic.nu
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: definition
   prereq:ax:nu-cofiber:
     lean_decl: KIP.Synthetic.nu_cofiber_iff
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:ax:rigid:
     lean_decl: KIP.Synthetic.rigidity_degeneration
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:ax:lambda-bockstein:
     lean_decl: KIP.Synthetic.lambda_bockstein_iso
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:prop:syn-einfty-nuX:
     lean_decl: KIP.Synthetic.einfty_nuX
     nl_reviewed: true
     bound: true
-    aligned: true
+    aligned: false
     proved: true
-    verified: false
+    kind: proposition
   prereq:prop:syn-einfty-mod-lambda:
     lean_decl: KIP.Synthetic.einfty_nuX_mod_lambda
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:ax:synthetic-lift:
     lean_decl: KIP.Synthetic.synthetic_lift
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: axiom
   prereq:prop:syn-distinguished-triangle:
     lean_decl: KIP.Synthetic.syn_distinguished_triangle
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   prereq:not:fhat:
     lean_decl: KIP.Synthetic.eHat
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: notation
   prereq:prop:fhat-triangle:
     lean_decl: KIP.Synthetic.fhat_triangle
     nl_reviewed: true
     bound: true
     aligned: false
     proved: false
-    verified: false
+    kind: proposition
   a0000000001:
     bound: false
+    kind: remark
+    nl_reviewed: true
+    nl_reviewer: web-reviewer
+    nl_reviewed_at: '2026-04-19'
   a0000000002:
     bound: false
+    kind: remark
+    nl_reviewed: true
+    nl_reviewer: web-reviewer
+    nl_reviewed_at: '2026-04-19'
   prereq:rem:decreasing-filtration:
     bound: false
+    kind: remark
   prereq:rem:weak-convergence:
     bound: false
+    kind: remark
+    nl_reviewed: true
+    nl_reviewer: web-reviewer
+    nl_reviewed_at: '2026-04-19'
   a0000000003:
     bound: false
+    kind: remark
   prereq:prop:filtered-complex-functoriality:
     bound: false
+    kind: proposition
   prereq:def:filtered-complex-morphism:
     bound: false
+    kind: definition
+    proved: false
   a0000000004:
     bound: false
+    kind: remark
   thm:main:
     bound: false
+    kind: theorem
   cor:kervaire-dimensions:
     bound: false
+    kind: corollary
   thm:126survives:
     bound: false
+    kind: theorem
   thm:h62:
     bound: false
+    kind: theorem
   thm:browder:
     bound: false
+    kind: theorem
   cor:2line:
     bound: false
+    kind: corollary
   que:2theta6:
     bound: false
+    kind: question
   que:theta5sq:
     bound: false
+    kind: question
   thm:four-spectra:
     bound: false
+    kind: theorem
   prop:ess-exactness:
     bound: false
+    kind: proposition
   cor:four-spectra:
     bound: false
+    kind: corollary
   cor:ess-naturality:
     bound: false
+    kind: corollary
   def:ess:
     bound: false
+    kind: definition
+    proved: false
   def:crossing:
     bound: false
+    kind: definition
+    proved: false
   a0000000005:
     bound: false
+    kind: remark
   cor:af-vanishing:
     bound: false
+    kind: corollary
   prop:f-ext-characterization:
     bound: false
+    kind: proposition
   prop:no-crossing-iff:
     bound: false
+    kind: proposition
   cor:triangle-map:
     bound: false
+    kind: corollary
   cor:composition-ext:
     bound: false
+    kind: corollary
   cor:composition-zero:
     bound: false
+    kind: corollary
   def:f-extension:
     bound: false
+    kind: definition
+    proved: false
   a0000000006:
     bound: false
+    kind: remark
   a0000000007:
     bound: false
+    kind: notation
   nota:ess-notation:
     bound: false
+    kind: notation
   a0000000008:
     bound: false
+    kind: remark
   a0000000009:
     bound: false
+    kind: remark
   a0000000010:
     bound: false
+    kind: notation
   a0000000011:
     bound: false
+    kind: remark
   a0000000012:
     bound: false
+    kind: remark
   a0000000013:
     bound: false
+    kind: remark
   rem:deformation:
     bound: false
+    kind: remark
   a0000000014:
     bound: false
+    kind: remark
   a0000000015:
     bound: false
+    kind: notation
   prop:lambda-rho-trivial:
     bound: false
+    kind: proposition
   prop:cross-dr-En:
     bound: false
+    kind: proposition
   cor:delta-ess-general:
     bound: false
+    kind: corollary
   a0000000016:
     bound: false
+    kind: remark
   a0000000017:
     bound: false
+    kind: remark
   nocrossE2:
     bound: false
+    kind: remark
   prop:delta-ess-adams:
     bound: false
+    kind: proposition
   a0000000018:
     bound: false
+    kind: remark
   a0000000019:
     bound: false
+    kind: remark
   not:deltaandrho:
     bound: false
+    kind: notation
   def:classicalcrossdiff:
     bound: false
+    kind: definition
+    proved: false
   rmk:delta-ess-equiv-classical:
     bound: false
+    kind: remark
   prop:cross-f-Er:
     bound: false
+    kind: proposition
   def:fErextess:
     bound: false
+    kind: remark
   def:f-Er-crossing:
     bound: false
+    kind: definition
+    proved: false
   a0000000020:
     bound: false
+    kind: remark
   prop:enfty-extension-quotient:
     bound: false
+    kind: proposition
   def:f-Er-extension:
     bound: false
+    kind: definition
+    proved: false
   a0000000021:
     bound: false
+    kind: notation
   rem:chuaerror:
     bound: false
+    kind: remark
   thm:gen-leibniz:
     bound: false
+    kind: theorem
   lem:may-smash:
     bound: false
+    kind: lemma
   cor:stretch-extension:
     bound: false
+    kind: corollary
   prop:ext-across-pages:
     bound: false
+    kind: proposition
   a0000000022:
     bound: false
+    kind: remark
   a0000000023:
     bound: false
+    kind: remark
   thm:gen-mahowald:
     bound: false
+    kind: theorem
   a0000000024:
     bound: false
+    kind: remark
   a0000000025:
     bound: false
+    kind: remark
   a0000000026:
     bound: false
+    kind: remark
   lem:x1239:
     bound: false
+    kind: lemma
   prop:possibleh62:
     bound: false
+    kind: proposition
   lem:equistate5:
     bound: false
+    kind: lemma
   lem:toda2ext:
     bound: false
+    kind: lemma
   cor:2ext125:
     bound: false
+    kind: corollary
   prop:state5false:
     bound: false
+    kind: proposition
   a0000000027:
     bound: false
+    kind: remark
   a0000000028:
     bound: false
+    kind: remark
   fact:theta5sqAF:
     bound: false
+    kind: axiom
+    proved: false
   lem:equistate4:
     bound: false
+    kind: lemma
   lem:nuext125:
     bound: false
+    kind: lemma
   a0000000029:
     bound: false
+    kind: remark
   rem:h02x1259:
     bound: false
+    kind: remark
   fact:h02x1259:
     bound: false
+    kind: axiom
+    proved: false
   a0000000030:
     bound: false
+    kind: notation
   rem:theta5choice:
     bound: false
+    kind: remark
   thm:bjmbx:
     bound: false
+    kind: axiom
+    proved: false
   fact:x1239:
     bound: false
+    kind: axiom
+    proved: false
   fact:h1x1217:
     bound: false
+    kind: axiom
+    proved: false
   fact:stem122:
     bound: false
+    kind: axiom
+    proved: false

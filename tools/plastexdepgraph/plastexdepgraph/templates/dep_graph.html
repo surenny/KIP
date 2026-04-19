@@ -41,6 +41,17 @@
 {% for css in config.html5.get('extra-css', []) %}
 <link rel="stylesheet" href="styles/{{ css }}" />
 {% endfor %}
+<style>
+/* Lean 4 syntax highlighting — Catppuccin Mocha */
+.lean-keyword  { color: #cba6f7; font-weight: bold; }  /* mauve */
+.lean-tactic   { color: #89b4fa; }                      /* blue */
+.lean-type     { color: #f9e2af; }                      /* yellow */
+.lean-string   { color: #a6e3a1; }                      /* green */
+.lean-number   { color: #fab387; }                      /* peach */
+.lean-comment  { color: #6c7086; font-style: italic; }  /* overlay0 */
+.lean-doc      { color: #74c7ec; font-style: italic; }  /* sapphire */
+.lean-attr     { color: #94e2d5; }                      /* teal */
+</style>
 </head>
 
 <body>
@@ -141,7 +152,387 @@ function interactive() {
             d3.select(this).node().parentNode.parentNode.parentNode ;
         d3.select(modal).style('display', 'none');
     });
+
+    // Fetch live status from API and update all node badges/buttons
+    refreshAllStatus();
 }
+
+// Review panel interaction
+const STAGE_DEF = {
+  thm:  [{key:'draft',label:'Draft',bg:'#999',fg:'#fff'},
+         {key:'reviewed',label:'Reviewed',bg:'#E69F00',fg:'#fff'},
+         {key:'bound',label:'Bound',bg:'#0072B2',fg:'#fff'},
+         {key:'aligned',label:'Aligned',bg:'#009E73',fg:'#fff'},
+         {key:'proved',label:'Proved',bg:'#1CAC78',fg:'#fff'}],
+  other:[{key:'draft',label:'Draft',bg:'#999',fg:'#fff'},
+         {key:'reviewed',label:'Reviewed',bg:'#E69F00',fg:'#fff'},
+         {key:'bound',label:'Bound',bg:'#0072B2',fg:'#fff'},
+         {key:'aligned',label:'Aligned',bg:'#009E73',fg:'#fff'}]
+};
+var STATE_ORDER = {draft:0,reviewed:1,bound:2,aligned:3,proved:4};
+
+function nodeState(st) {
+  var kind = st.kind || '';
+  var isDefAx = (kind === 'definition' || kind === 'axiom');
+  if (!isDefAx && st.proved) return 'proved';
+  if (st.aligned) return 'aligned';
+  if (st.bound) return 'bound';
+  if (st.nl_reviewed) return 'reviewed';
+  return 'draft';
+}
+
+function isThmKind(kind) {
+  return kind !== 'definition' && kind !== 'axiom';
+}
+
+function renderLifecycle(badges, state, kind) {
+  var isThm = isThmKind(kind);
+  var stages = isThm ? STAGE_DEF.thm : STAGE_DEF.other;
+  var curIdx = STATE_ORDER[state] || 0;
+  var reclassifyBadge = badges.querySelector('.badge-reclassify');
+  badges.innerHTML = '';
+  for (var i = 0; i < stages.length; i++) {
+    if (i > 0) {
+      var arrow = document.createElement('span');
+      arrow.style.cssText = 'color:#bbb;margin:0 3px;';
+      arrow.innerHTML = '&rarr;';
+      badges.appendChild(arrow);
+    }
+    var span = document.createElement('span');
+    if (i === curIdx) {
+      span.className = 'badge badge-' + stages[i].key;
+      span.style.cssText = 'background:'+stages[i].bg+';color:'+stages[i].fg+';padding:2px 6px;border-radius:3px;';
+      span.textContent = stages[i].label;
+    } else if (i < curIdx) {
+      span.style.cssText = 'color:#333;font-weight:500;';
+      span.textContent = stages[i].label;
+    } else {
+      span.style.cssText = 'color:#ccc;';
+      span.textContent = stages[i].label;
+    }
+    badges.appendChild(span);
+  }
+  if (reclassifyBadge) {
+    var sep = document.createElement('span');
+    sep.style.cssText = 'color:#bbb;margin:0 3px;';
+    sep.textContent = '|';
+    badges.appendChild(sep);
+    badges.appendChild(reclassifyBadge);
+  }
+}
+
+function updateButtons(panel, st) {
+  var btns = panel.querySelectorAll('.review-btn[data-action="review"], .review-btn[data-action="align"]');
+  btns.forEach(function(b) {
+    if (b.getAttribute('data-action') === 'review') {
+      b.style.display = st.nl_reviewed ? 'none' : '';
+    }
+    if (b.getAttribute('data-action') === 'align') {
+      b.style.display = (st.bound && !st.aligned) ? '' : 'none';
+    }
+  });
+  // Update completion labels
+  var completionSpans = panel.querySelectorAll('span[style*="font-weight:bold"]');
+  completionSpans.forEach(function(s) { s.remove(); });
+  var btnRow = panel.querySelector('div');
+  if (btnRow) {
+    var kind = st.kind || '';
+    var state = nodeState(st);
+    if (kind === 'definition' && st.aligned) {
+      var s = document.createElement('span');
+      s.style.cssText = 'color:#009E73;font-size:0.8em;font-weight:bold;';
+      s.textContent = 'Complete (definition)';
+      btnRow.appendChild(s);
+    } else if (kind === 'axiom' && st.aligned) {
+      var s = document.createElement('span');
+      s.style.cssText = 'color:#CC79A7;font-size:0.8em;font-weight:bold;';
+      s.textContent = 'Complete (axiom \u2014 no proof needed)';
+      btnRow.appendChild(s);
+    } else if (isThmKind(kind) && st.proved) {
+      var s = document.createElement('span');
+      s.style.cssText = 'color:#1CAC78;font-size:0.8em;font-weight:bold;';
+      s.textContent = 'Complete (proved)';
+      btnRow.appendChild(s);
+    }
+  }
+}
+
+function renderComments(thm, comments) {
+  var existing = thm.querySelector('.ext-review-comments');
+  if (existing) existing.remove();
+  if (!comments || !comments.length) return;
+  var topicColors = {review:'#E69F00',align:'#009E73',verify:'#1CAC78',general:'#666'};
+  var div = document.createElement('div');
+  div.className = 'ext-review-comments';
+  div.style.cssText = 'margin-top:4px;';
+  for (var i = 0; i < comments.length; i++) {
+    var c = comments[i];
+    var tc = topicColors[c.topic] || '#666';
+    var entry = document.createElement('div');
+    entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
+    entry.innerHTML = '<span style="color:'+tc+';font-weight:bold;font-size:0.85em;">'+(c.topic||'general')+'</span> '+
+      (c.text||'').replace(/</g,'&lt;')+
+      ' <span style="color:#999;font-size:0.9em;"> \u2014 '+(c.by||'?')+(c.at ? ', '+c.at : '')+'</span>';
+    div.appendChild(entry);
+  }
+  var badges = thm.querySelector('.ext-status-badges');
+  if (badges) badges.parentNode.insertBefore(div, badges.nextSibling);
+}
+
+// On page load: fetch live status and update all nodes
+var STATE_COLORS = {
+  draft:    {border:'#999999', fill:''},
+  reviewed: {border:'#E69F00', fill:''},
+  bound:    {border:'#0072B2', fill:''},
+  aligned:  {border:'#009E73', fill:'#D4EFDF'},
+  proved:   {border:'#1CAC78', fill:'#1CAC78'}
+};
+
+function updateSvgNode(nodeId, state) {
+  // Find SVG node by its <title> element
+  var titles = document.querySelectorAll('#graph .node title');
+  for (var i = 0; i < titles.length; i++) {
+    if (titles[i].textContent.trim() === nodeId) {
+      var g = titles[i].parentNode;
+      var shape = g.querySelector('ellipse, polygon, path');
+      if (!shape) break;
+      var colors = STATE_COLORS[state] || STATE_COLORS.draft;
+      shape.setAttribute('stroke', colors.border);
+      if (colors.fill) {
+        shape.setAttribute('fill', colors.fill);
+      } else {
+        shape.setAttribute('fill', 'none');
+      }
+      break;
+    }
+  }
+}
+
+function refreshAllStatus() {
+  fetch('api/status')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var nodes = data.nodes || {};
+      for (var nodeId in nodes) {
+        var st = nodes[nodeId];
+        var state = nodeState(st);
+        // Update SVG graph node colors
+        updateSvgNode(nodeId, state);
+        // Update lifecycle badges
+        var badges = document.querySelector('.ext-status-badges[data-node-id="'+nodeId+'"]');
+        if (badges) renderLifecycle(badges, state, st.kind || '');
+        // Update review panel buttons
+        var panel = document.querySelector('.review-panel[data-node-id="'+nodeId+'"]');
+        if (panel) updateButtons(panel, st);
+        // Update comments
+        var thm = badges ? badges.closest('.thm') : null;
+        if (thm && st.comments) renderComments(thm, st.comments);
+      }
+    })
+    .catch(function() { /* API not available, keep static HTML */ });
+}
+
+
+function updateBadge(panel, state, reviewer) {
+  var badges = panel.closest('.thm').querySelector('.ext-status-badges');
+  if (!badges) return;
+  var nodeId = panel.getAttribute('data-node-id');
+  var kindEl = panel.querySelector('.review-reclassify-select');
+  var kind = 'theorem';
+  if (kindEl) {
+    var defOpt = kindEl.querySelector('option[value="definition"]');
+    var axOpt = kindEl.querySelector('option[value="axiom"]');
+    if (defOpt && defOpt.disabled) kind = 'definition';
+    else if (axOpt && axOpt.disabled) kind = 'axiom';
+  }
+  renderLifecycle(badges, state, kind);
+  // Also update SVG graph node color
+  if (nodeId) updateSvgNode(nodeId, state);
+}
+
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.review-btn');
+  if (!btn) return;
+  var panel = btn.closest('.review-panel');
+  if (!panel) return;
+  var nodeId = panel.getAttribute('data-node-id');
+  var action = btn.getAttribute('data-action');
+  var feedback = panel.querySelector('.review-feedback');
+  var reviewerInput = panel.querySelector('.review-reviewer-input');
+  var reviewer = reviewerInput ? reviewerInput.value.trim() : '';
+
+  var body = {node_id: nodeId, action: action, reviewer: reviewer || 'web-reviewer'};
+
+  if (action === 'comment') {
+    var input = panel.querySelector('.review-comment-input');
+    body.text = input ? input.value.trim() : '';
+    if (!body.text) { feedback.textContent = 'Please enter a comment.'; return; }
+    var topicSel = panel.querySelector('.review-comment-topic');
+    body.topic = topicSel ? topicSel.value : 'general';
+  }
+  if (action === 'reclassify') {
+    var sel = panel.querySelector('.review-reclassify-select');
+    body.kind = sel ? sel.value : '';
+    if (!body.kind) { feedback.textContent = 'Please select a type.'; return; }
+  }
+
+  btn.disabled = true;
+  feedback.textContent = 'Sending...';
+  feedback.style.color = '#666';
+
+  fetch('api/review', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    if (data.error) {
+      feedback.textContent = 'Error: ' + data.error;
+      feedback.style.color = '#c00';
+    } else {
+      feedback.textContent = 'Done! State: ' + data.state;
+      feedback.style.color = '#009E73';
+      updateBadge(panel, data.state, body.reviewer);
+      // Update buttons based on new state from API response
+      updateButtons(panel, data);
+      if (action === 'comment') {
+        var input = panel.querySelector('.review-comment-input');
+        if (input) input.value = '';
+        // Append comment to the comment list in the modal
+        var thm = panel.closest('.thm');
+        if (thm) {
+          var commentsDiv = thm.querySelector('.ext-review-comments');
+          if (!commentsDiv) {
+            commentsDiv = document.createElement('div');
+            commentsDiv.className = 'ext-review-comments';
+            commentsDiv.style.cssText = 'margin-top:4px;';
+            var badges = thm.querySelector('.ext-status-badges');
+            if (badges) badges.parentNode.insertBefore(commentsDiv, badges.nextSibling);
+          }
+          var topicColors = {review:'#E69F00',align:'#009E73',verify:'#1CAC78',general:'#666'};
+          var tc = topicColors[body.topic] || '#666';
+          var entry = document.createElement('div');
+          entry.style.cssText = 'padding:3px 8px;background:#FAFAFA;border-left:3px solid '+tc+';font-size:0.82em;margin-bottom:2px;';
+          entry.innerHTML = '<span style="color:'+tc+';font-weight:bold;font-size:0.85em;">'+body.topic+'</span> '+
+            body.text.replace(/</g,'&lt;')+
+            ' <span style="color:#999;font-size:0.9em;"> — '+body.reviewer+'</span>';
+          commentsDiv.appendChild(entry);
+        }
+      }
+    }
+  })
+  .catch(function(err) {
+    btn.disabled = false;
+    feedback.textContent = 'Network error (is leanblueprint serve running?)';
+    feedback.style.color = '#c00';
+  });
+});
+
+// Lean 4 syntax highlighter (Catppuccin Mocha palette)
+var leanHL = (function() {
+  var KW = '\\b(?:def|theorem|lemma|axiom|structure|class|instance|inductive|abbrev|' +
+    'where|let|have|by|match|with|if|then|else|do|return|fun|assume|show|calc|' +
+    'import|open|namespace|section|end|variable|noncomputable|private|protected|' +
+    'extends|deriving|sorry|admit|example|mutual|partial|unsafe|set_option|' +
+    'attribute|export|prefix|infix|infixl|infixr|notation|macro|syntax|' +
+    'for|in|at|from)\\b';
+  var TACTIC = '\\b(?:exact|apply|intro|intros|constructor|cases|induction|rfl|simp|' +
+    'rw|ring|omega|linarith|norm_num|ext|funext|congr|trivial|decide|' +
+    'refine|use|obtain|rcases|rintro|push_neg|contrapose|contradiction|' +
+    'specialize|generalize|revert|clear|rename_i|subst|injection|' +
+    'norm_cast|field_simp|aesop|tauto|positivity|gcongr|rel|' +
+    'split|first|try|repeat|all_goals|any_goals|focus|done|assumption)\\b';
+  var TYPE = '\\b(?:Type|Prop|Sort|Nat|Int|Bool|True|False|Unit|String|Float|' +
+    'List|Array|Option|Fin|Subobject|WithTop|WithBot)\\b';
+  var rules = [
+    // doc comments /-- ... -/
+    { re: /\/--[\s\S]*?-\//g,            cls: 'lean-doc' },
+    // block comments /- ... -/
+    { re: /\/-[\s\S]*?-\//g,             cls: 'lean-comment' },
+    // line comments
+    { re: /--.*$/gm,                      cls: 'lean-comment' },
+    // strings
+    { re: /"(?:[^"\\]|\\.)*"/g,           cls: 'lean-string' },
+    // char literals
+    { re: /'(?:[^'\\]|\\.)'/g,            cls: 'lean-string' },
+    // numbers
+    { re: /\b\d+(?:\.\d+)?\b/g,           cls: 'lean-number' },
+    // types
+    { re: new RegExp(TYPE, 'g'),           cls: 'lean-type' },
+    // tactics
+    { re: new RegExp(TACTIC, 'g'),         cls: 'lean-tactic' },
+    // keywords
+    { re: new RegExp(KW, 'g'),             cls: 'lean-keyword' },
+    // universe variables
+    { re: /\b[uvw]\b(?=\s*[:\)])/g,       cls: 'lean-type' },
+    // attributes #[...]
+    { re: /@\[.*?\]/g,                     cls: 'lean-attr' },
+  ];
+
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function highlight(src) {
+    // Tokenize: collect all matches with positions
+    var tokens = [];
+    for (var i = 0; i < rules.length; i++) {
+      var r = rules[i];
+      r.re.lastIndex = 0;
+      var m;
+      while ((m = r.re.exec(src)) !== null) {
+        tokens.push({start: m.index, end: m.index + m[0].length, cls: r.cls, text: m[0]});
+      }
+    }
+    // Sort by start position, longer matches first for ties
+    tokens.sort(function(a,b) { return a.start - b.start || b.end - a.end; });
+    // Remove overlapping tokens (greedy, first-match wins)
+    var used = [];
+    for (var i = 0; i < tokens.length; i++) {
+      var t = tokens[i], ok = true;
+      for (var j = 0; j < used.length; j++) {
+        if (t.start < used[j].end && t.end > used[j].start) { ok = false; break; }
+      }
+      if (ok) used.push(t);
+    }
+    used.sort(function(a,b) { return a.start - b.start; });
+    // Build output
+    var out = '', pos = 0;
+    for (var i = 0; i < used.length; i++) {
+      var t = used[i];
+      if (t.start > pos) out += esc(src.slice(pos, t.start));
+      out += '<span class="' + t.cls + '">' + esc(t.text) + '</span>';
+      pos = t.end;
+    }
+    if (pos < src.length) out += esc(src.slice(pos));
+    return out;
+  }
+
+  return { highlight: highlight };
+})();
+
+// Lean source toggle with highlighting
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.lean-source-toggle');
+  if (!btn) return;
+  var panel = btn.closest('.lean-source-panel');
+  var pre = panel.querySelector('.lean-source-code');
+  var code = pre.querySelector('code');
+  if (pre.style.display === 'none') {
+    // Highlight on first open
+    if (!code.dataset.highlighted) {
+      code.innerHTML = leanHL.highlight(code.textContent);
+      code.dataset.highlighted = '1';
+    }
+    pre.style.display = 'block';
+    btn.textContent = 'Lean \u25BE';
+  } else {
+    pre.style.display = 'none';
+    btn.textContent = 'Lean \u25B8';
+  }
+});
 
 </script>
 {% for js in config.html5.get('extra-js', []) %}

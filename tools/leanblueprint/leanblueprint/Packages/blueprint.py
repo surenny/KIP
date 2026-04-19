@@ -11,6 +11,7 @@ Options:
 
 You can also add options that will be passed to the dependency graph package.
 """
+import re
 import string
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +24,103 @@ from plasTeX.PackageResource import PackageCss, PackageTemplateDir
 from plastexdepgraph.Packages.depgraph import item_kind
 
 log = getLogger()
+
+
+# Lean declaration keywords that start a top-level declaration
+_LEAN_DECL_KW = re.compile(
+    r'^(noncomputable\s+)?(protected\s+)?(private\s+)?'
+    r'(def|theorem|lemma|axiom|abbrev|structure|class|instance|inductive)\s+'
+)
+
+
+def _extract_lean_source(lean_root: Path, decl_name: str, max_lines: int = 40) -> str:
+    """
+    Search .lean files under lean_root for a declaration matching decl_name.
+    Returns the source text of the declaration block, or '' if not found.
+    """
+    # The short name is the last component: KIP.SpectralSequence.SSData → SSData
+    short_name = decl_name.rsplit('.', 1)[-1]
+    # Also try the namespace-qualified path to narrow the file search
+    # KIP.SpectralSequence.SSData → KIP/SpectralSequence as search path hint
+    parts = decl_name.split('.')
+    for lean_file in sorted(lean_root.rglob('*.lean')):
+        try:
+            lines = lean_file.read_text(encoding='utf-8').splitlines()
+        except Exception:
+            continue
+        for i, line in enumerate(lines):
+            # Check if this line declares our target
+            stripped = line.lstrip()
+            if not _LEAN_DECL_KW.match(stripped):
+                continue
+            # Check if short_name appears right after the keyword
+            if short_name not in stripped:
+                continue
+            # More precise: after the keyword, the name should match
+            m = _LEAN_DECL_KW.match(stripped)
+            rest = stripped[m.end():]
+            declared = rest.split()[0].split('(')[0].split('{')[0].split(':')[0].split('[')[0].rstrip()
+            # Match: exact short_name, or declared is a suffix of the full decl_name
+            # e.g. decl_name="KIP.SS.SSData.eInfty", declared="SSData.eInfty" → match
+            #      decl_name="KIP.SS.SSData", declared="SSData" → match
+            declared_short = declared.rsplit('.', 1)[-1]
+            if declared != short_name and declared_short != short_name and \
+               not decl_name.endswith('.' + declared) and declared != decl_name:
+                continue
+            # Found it — extract the block
+            block = [lines[i]]
+            indent = len(line) - len(line.lstrip())
+            for j in range(i + 1, min(i + max_lines, len(lines))):
+                l = lines[j]
+                if l.strip() == '':
+                    block.append(l)
+                    continue
+                cur_indent = len(l) - len(l.lstrip())
+                # Stop at next top-level declaration or dedent
+                if cur_indent <= indent and l.strip() and _LEAN_DECL_KW.match(l.strip()):
+                    break
+                # Stop at blank line followed by top-level code
+                if cur_indent <= indent and l.strip() and not l.strip().startswith('--'):
+                    # Check if it looks like continuation (e.g. `where`, `|`, `:=`)
+                    if not any(l.strip().startswith(kw) for kw in ('where', '|', ':=', '·', '⟨', '⟩', 'with')):
+                        break
+                block.append(l)
+            # Trim trailing blank lines
+            while block and not block[-1].strip():
+                block.pop()
+            return '\n'.join(block)
+    return ''
+
+
+def _truncate_proof(source: str) -> str:
+    """
+    For theorems/lemmas, replace the tactic proof body after `by` with `...`.
+    Keeps the full type signature (statement) but hides proof tactics.
+    Handles: `:= by\\n  tactics`, `:= by tactic`, and term-mode `:= expr`.
+    """
+    lines = source.splitlines()
+    result = []
+    for i, line in enumerate(lines):
+        stripped = line.rstrip()
+        # Pattern 1: line ends with `:= by` (proof starts on next line)
+        if re.search(r':=\s+by\s*$', stripped):
+            result.append(stripped)
+            pad = '  ' * (1 + (len(line) - len(line.lstrip())) // 2)
+            result.append(pad + '...')
+            return '\n'.join(result)
+        # Pattern 2: `:= by <tactic>` on the same line
+        m = re.search(r':=\s+by\s+\S', stripped)
+        if m:
+            result.append(stripped[:m.start()] + ':= by ...')
+            return '\n'.join(result)
+        # Pattern 3: standalone `by` on its own line (after type signature)
+        if stripped.strip() == 'by':
+            result.append(stripped)
+            pad = '  ' * (1 + (len(line) - len(line.lstrip())) // 2)
+            result.append(pad + '...')
+            return '\n'.join(result)
+        result.append(line)
+    return source
 
 PKG_DIR = Path(__file__).parent
 STATIC_DIR = Path(__file__).parent.parent/'static'
@@ -171,34 +269,134 @@ GITHUB_LINK_TPL = Template("""
 STATUS_BADGES_TPL = Template("""
   {% if thm.userdata.get('ext_status') -%}
   {% set st = thm.userdata['ext_status'] -%}
-  <div class="ext-status-badges" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">
-    {%- if st.get('verified') -%}
-    <span class="badge" style="background:#1CAC78;color:#fff;padding:2px 6px;border-radius:3px;font-size:0.8em;">Verified{% if st.get('verify_reviewer') %} by {{ st['verify_reviewer'] }}{% endif %}</span>
-    {%- elif st.get('proved') -%}
-    <span class="badge" style="background:#9CEC8B;color:#333;padding:2px 6px;border-radius:3px;font-size:0.8em;">Proved</span>
-    <span class="badge needs-review" style="background:#eee;color:#666;padding:2px 6px;border-radius:3px;font-size:0.8em;">Needs verification</span>
-    {%- elif st.get('aligned') -%}
-    <span class="badge" style="background:#D4EFDF;color:#333;padding:2px 6px;border-radius:3px;font-size:0.8em;">Aligned{% if st.get('align_reviewer') %} by {{ st['align_reviewer'] }}{% endif %}</span>
-    <span class="badge needs-review" style="background:#eee;color:#666;padding:2px 6px;border-radius:3px;font-size:0.8em;">Needs proof</span>
-    {%- elif st.get('bound') -%}
-    <span class="badge" style="background:#0072B2;color:#fff;padding:2px 6px;border-radius:3px;font-size:0.8em;">Bound</span>
-    <span class="badge needs-review" style="background:#eee;color:#666;padding:2px 6px;border-radius:3px;font-size:0.8em;">Needs alignment review</span>
-    {%- elif st.get('nl_reviewed') -%}
-    <span class="badge" style="background:#E69F00;color:#fff;padding:2px 6px;border-radius:3px;font-size:0.8em;">NL Reviewed{% if st.get('nl_reviewer') %} by {{ st['nl_reviewer'] }}{% endif %}</span>
-    {%- else -%}
-    <span class="badge" style="background:#999;color:#fff;padding:2px 6px;border-radius:3px;font-size:0.8em;">Draft</span>
-    <span class="badge needs-review" style="background:#eee;color:#666;padding:2px 6px;border-radius:3px;font-size:0.8em;">Needs NL review</span>
-    {%- endif -%}
+  {% set kind = st.get('kind', '') -%}
+  {% set is_thm = kind not in ('definition', 'axiom') -%}
+  {#- Determine current stage index -#}
+  {%- if st.get('proved') and is_thm -%}{% set cur = 4 -%}
+  {%- elif st.get('aligned') -%}{% set cur = 3 -%}
+  {%- elif st.get('bound') -%}{% set cur = 2 -%}
+  {%- elif st.get('nl_reviewed') -%}{% set cur = 1 -%}
+  {%- else -%}{% set cur = 0 -%}{%- endif -%}
+  {#- Build stage list depending on node kind -#}
+  {%- if is_thm -%}
+    {%- set stages = [
+      (0, 'draft',    'Draft',    '#999'),
+      (1, 'reviewed', 'Reviewed', '#E69F00'),
+      (2, 'bound',    'Bound',    '#0072B2'),
+      (3, 'aligned',  'Aligned',  '#009E73'),
+      (4, 'proved',   'Proved',   '#1CAC78')
+    ] -%}
+  {%- else -%}
+    {%- set stages = [
+      (0, 'draft',    'Draft',    '#999'),
+      (1, 'reviewed', 'Reviewed', '#E69F00'),
+      (2, 'bound',    'Bound',    '#0072B2'),
+      (3, 'aligned',  'Aligned',  '#009E73')
+    ] -%}
+  {%- endif -%}
+  <div class="ext-status-badges" data-node-id="{{ thm.id }}" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:0;align-items:center;font-size:0.8em;">
+    {%- for idx, key, label, color in stages -%}
+      {%- if idx > 0 -%}<span style="color:#bbb;margin:0 3px;">&rarr;</span>{%- endif -%}
+      {%- if idx == cur -%}
+      <span class="badge badge-{{ key }}" style="background:{{ color }};color:{% if color in ('#9CEC8B','#D4EFDF') %}#333{% else %}#fff{% endif %};padding:2px 6px;border-radius:3px;">{{ label }}</span>
+      {%- elif idx < cur -%}
+      <span style="color:#333;font-weight:500;">{{ label }}</span>
+      {%- else -%}
+      <span style="color:#ccc;">{{ label }}</span>
+      {%- endif -%}
+    {%- endfor -%}
     {%- if st.get('reclassify') -%}
-    <span class="badge" style="background:#CC79A7;color:#fff;padding:2px 6px;border-radius:3px;font-size:0.8em;">⚠ Reclassify → {{ st['reclassify'] }}{% if st.get('reclassify_by') %} ({{ st['reclassify_by'] }}){% endif %}</span>
+    {%- set rc = st['reclassify'] -%}
+    {%- if rc == 'definition' -%}{%- set rc_label = '&#9633; definition' -%}
+    {%- elif rc == 'theorem' -%}{%- set rc_label = '&#9675; theorem' -%}
+    {%- elif rc == 'axiom' -%}{%- set rc_label = '&#9671; axiom' -%}
+    {%- else -%}{%- set rc_label = rc -%}{%- endif -%}
+    <span style="color:#bbb;margin:0 3px;">|</span>
+    <span class="badge badge-reclassify" style="background:#CC79A7;color:#fff;padding:2px 6px;border-radius:3px;">Reclassify &rarr; {{ rc_label }}{% if st.get('reclassify_by') %} ({{ st['reclassify_by'] }}){% endif %}</span>
     {%- endif -%}
   </div>
-  {%- if st.get('nl_review_comment') -%}
-  <div class="ext-review-comment" style="margin-top:4px;padding:4px 8px;background:#FFF8E1;border-left:3px solid #E69F00;font-size:0.85em;">
-    💬 {{ st['nl_review_comment'] }}
-    {%- if st.get('nl_review_comment_by') %} <span style="color:#999;">— {{ st['nl_review_comment_by'] }}{% if st.get('nl_review_comment_at') %}, {{ st['nl_review_comment_at'] }}{% endif %}</span>{% endif -%}
+  {%- if st.get('comments') -%}
+  <div class="ext-review-comments" style="margin-top:4px;">
+    {%- for c in st['comments'] -%}
+    {%- set topic_colors = {'review':'#E69F00','align':'#009E73','verify':'#1CAC78','general':'#666'} -%}
+    {%- set tc = topic_colors.get(c.get('topic','general'), '#666') -%}
+    <div style="padding:3px 8px;background:#FAFAFA;border-left:3px solid {{ tc }};font-size:0.82em;margin-bottom:2px;">
+      <span style="color:{{ tc }};font-weight:bold;font-size:0.85em;">{{ c.get('topic','general') }}</span>
+      {{ c['text'] }}
+      <span style="color:#999;font-size:0.9em;"> — {{ c.get('by','?') }}{% if c.get('at') %}, {{ c['at'] }}{% endif %}</span>
+    </div>
+    {%- endfor -%}
   </div>
   {%- endif -%}
+  {%- if st.get('nl_review_comment') -%}
+  <div class="ext-review-comment" style="margin-top:4px;padding:4px 8px;background:#FFF8E1;border-left:3px solid #E69F00;font-size:0.85em;">
+    {{ st['nl_review_comment'] }}
+    {%- if st.get('nl_review_comment_by') %} <span style="color:#999;">-- {{ st['nl_review_comment_by'] }}{% if st.get('nl_review_comment_at') %}, {{ st['nl_review_comment_at'] }}{% endif %}</span>{% endif -%}
+  </div>
+  {%- endif -%}
+  <div class="review-panel" data-node-id="{{ thm.id }}" style="margin-top:8px;padding:8px;background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;font-size:0.85em;">
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+      {%- if not st.get('nl_reviewed') -%}
+      <button class="review-btn" data-action="review" style="background:#E69F00;color:#fff;border:none;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:0.85em;">Approve NL</button>
+      {%- endif -%}
+      {%- if st.get('bound') and not st.get('aligned') -%}
+      <button class="review-btn" data-action="align" style="background:#009E73;color:#fff;border:none;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:0.85em;">Confirm Alignment</button>
+      {%- endif -%}
+      {%- if st.get('kind') == 'definition' and st.get('aligned') -%}
+      <span style="color:#009E73;font-size:0.8em;font-weight:bold;">Complete (definition)</span>
+      {%- elif st.get('kind') == 'axiom' and st.get('aligned') -%}
+      <span style="color:#CC79A7;font-size:0.8em;font-weight:bold;">Complete (axiom — no proof needed)</span>
+      {%- elif st.get('kind') not in ('definition', 'axiom') and st.get('proved') -%}
+      <span style="color:#1CAC78;font-size:0.8em;font-weight:bold;">Complete (proved)</span>
+      {%- endif -%}
+    </div>
+    <div style="display:flex;gap:4px;align-items:stretch;">
+      <select class="review-comment-topic" style="padding:3px 4px;border:1px solid #ccc;border-radius:3px;font-size:0.85em;">
+        <option value="general">general</option>
+        <option value="review">NL review</option>
+        <option value="align">alignment</option>
+      </select>
+      <input type="text" class="review-comment-input" placeholder="Comment or suggestion..." style="flex:1;padding:3px 6px;border:1px solid #ccc;border-radius:3px;font-size:0.85em;" />
+      <button class="review-btn" data-action="comment" style="background:#666;color:#fff;border:none;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:0.85em;">Send</button>
+    </div>
+    <div style="margin-top:4px;display:flex;gap:4px;align-items:center;">
+      {%- set kind = st.get('kind', 'unknown') -%}
+      {%- if kind in ('theorem', 'lemma', 'proposition', 'corollary') -%}
+        {%- set kind_label = 'theorem &#9675;' -%}
+      {%- elif kind == 'definition' -%}
+        {%- set kind_label = 'definition &#9633;' -%}
+      {%- elif kind == 'axiom' -%}
+        {%- set kind_label = 'axiom &#9671;' -%}
+      {%- else -%}
+        {%- set kind_label = kind -%}
+      {%- endif -%}
+      <span style="font-size:0.8em;color:#555;">Type: <b>{{ kind_label }}</b></span>
+      <select class="review-reclassify-select" style="padding:2px 4px;border:1px solid #ccc;border-radius:3px;font-size:0.85em;">
+        <option value="">Reclassify to...</option>
+        <option value="definition" {% if kind == 'definition' %}disabled{% endif %}>&#9633; definition</option>
+        <option value="theorem" {% if kind in ('theorem', 'lemma', 'proposition', 'corollary') %}disabled{% endif %}>&#9675; theorem</option>
+        <option value="axiom" {% if kind == 'axiom' %}disabled{% endif %}>&#9671; axiom</option>
+      </select>
+      <button class="review-btn" data-action="reclassify" style="background:#CC79A7;color:#fff;border:none;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:0.85em;">Suggest</button>
+    </div>
+    <div style="margin-top:4px;">
+      <label style="font-size:0.8em;color:#666;">Reviewer:
+        <input type="text" class="review-reviewer-input" placeholder="your name" style="padding:2px 4px;border:1px solid #ccc;border-radius:3px;font-size:0.85em;width:120px;" />
+      </label>
+    </div>
+    <div class="review-feedback" style="margin-top:4px;font-size:0.8em;color:#666;"></div>
+  </div>
+  {%- endif -%}
+""")
+
+LEAN_SOURCE_TPL = Template("""
+  {%- if thm.userdata.get('lean_source') -%}
+  <div class="lean-source-panel" style="margin-top:6px;">
+    <button class="lean-source-toggle" style="background:none;border:1px solid #999;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:0.8em;color:#555;">
+      Lean ▸
+    </button>
+    <pre class="lean-source-code" style="display:none;margin-top:4px;padding:10px 12px;background:#1e1e2e;color:#cdd6f4;border-radius:6px;font-size:0.82em;overflow-x:auto;line-height:1.5;tab-size:2;"><code class="language-lean4">{{ thm.userdata['lean_source'] }}</code></pre>
+  </div>
   {%- endif -%}
 """)
 
@@ -269,6 +467,12 @@ def ProcessOptions(options, document):
         status_nodes = _load_status_yaml()
         use_extended_states = bool(status_nodes)
 
+        # Locate Lean project root for source extraction
+        working_dir = Path(document.userdata['working-dir']).resolve()
+        lean_root = working_dir.parent.parent  # blueprint/src → blueprint → project root
+        # Cache: avoid re-searching the same declaration
+        _lean_source_cache = {}
+
         for graph in document.userdata['dep_graph']['graphs'].values():
             nodes = graph.nodes
             for node in nodes:
@@ -280,6 +484,23 @@ def ProcessOptions(options, document):
                          f'{project_dochome}/find/#doc/{leandecl}'))
 
                 node.userdata['lean_urls'] = lean_urls
+
+                # Extract Lean source for inline display
+                if leandecls:
+                    kind = item_kind(node)
+                    truncate = kind in ('theorem', 'lemma', 'proposition', 'corollary')
+                    sources = []
+                    for decl in leandecls:
+                        cache_key = (decl, truncate)
+                        if cache_key not in _lean_source_cache:
+                            src = _extract_lean_source(lean_root, decl)
+                            if src and truncate:
+                                src = _truncate_proof(src)
+                            _lean_source_cache[cache_key] = src
+                        src = _lean_source_cache[cache_key]
+                        if src:
+                            sources.append(src)
+                    node.userdata['lean_source'] = '\n\n'.join(sources) if sources else ''
 
                 used = node.userdata.get('uses', [])
                 node.userdata['can_state'] = all(thm.userdata.get('leanok')
@@ -298,16 +519,26 @@ def ProcessOptions(options, document):
                 if use_extended_states:
                     node_id = node.id
                     st = status_nodes.get(node_id, {})
+                    kind = item_kind(node)
+                    st['kind'] = kind
                     has_lean_binding = bool(leandecls)
                     st['bound'] = has_lean_binding
-                    is_proved = node.userdata.get('proved', False)
-                    if is_proved:
-                        st['proved'] = True
-                    # Enforce monotonic cumulative: proved → aligned → bound → reviewed
-                    if st.get('proved'):
-                        st['aligned'] = True
-                    if st.get('aligned'):
-                        st['bound'] = True
+                    # Definitions: max lifecycle is aligned (human confirms NL↔Lean match)
+                    #   bound + leanok does NOT auto-promote to aligned
+                    # Axioms: never proved (max lifecycle = aligned)
+                    # Only theorems/lemmas/propositions go through proved
+                    if kind == 'definition':
+                        st['proved'] = False
+                    elif kind == 'axiom':
+                        st['proved'] = False
+                    else:
+                        is_proved = node.userdata.get('proved', False)
+                        if is_proved:
+                            st['proved'] = True
+                    # Monotonic auto-derive (only for machine-derivable gates):
+                    #   bound → nl_reviewed  (having Lean binding implies NL was seen)
+                    # aligned is NEVER auto-promoted — it requires human confirmation
+                    # proved → aligned is NOT automatic
                     if st.get('bound'):
                         st['nl_reviewed'] = True
                     node.userdata['ext_status'] = st
@@ -332,8 +563,7 @@ def ProcessOptions(options, document):
         'reviewed':    ('#E69F00', 'Orange'),
         'bound':       ('#0072B2', 'Blue'),
         'aligned':     ('#009E73', 'Green'),
-        'proved':      ('#9CEC8B', 'Light green'),
-        'verified':    ('#1CAC78', 'Dark green'),
+        'proved':      ('#1CAC78', 'Dark green'),
         'aligned_fill': ('#D4EFDF', 'Light green'),
         # Legacy keys kept for backward compat with \graphcolor
         'mathlib':     ('darkgreen', 'Dark green'),
@@ -359,13 +589,11 @@ def ProcessOptions(options, document):
         ext = data.get('ext_status')
 
         if ext:
-            if ext.get('verified'):
-                return colors['aligned'][0]
-            if ext.get('proved') or data.get('proved'):
-                return colors['aligned'][0]
+            if ext.get('proved'):
+                return colors['proved'][0]
             if ext.get('aligned'):
                 return colors['aligned'][0]
-            if ext.get('bound') or data.get('leandecls'):
+            if ext.get('bound'):
                 return colors['bound'][0]
             if ext.get('nl_reviewed'):
                 return colors['reviewed'][0]
@@ -388,9 +616,7 @@ def ProcessOptions(options, document):
         ext = data.get('ext_status')
 
         if ext:
-            if ext.get('verified'):
-                return colors['verified'][0]
-            if ext.get('proved') or data.get('proved'):
+            if ext.get('proved'):
                 return colors['proved'][0]
             if ext.get('aligned'):
                 return colors['aligned_fill'][0]
@@ -437,20 +663,16 @@ def ProcessOptions(options, document):
         ])
         if _has_status_yaml():
             legend.extend([
-                (f"<span style='color:{colors['draft'][0]}'>■</span> {colors['draft'][1]} border",
-                 "AI-generated, unreviewed"),
-                (f"<span style='color:{colors['reviewed'][0]}'>■</span> {colors['reviewed'][1]} border",
+                (f"<span style='color:{colors['draft'][0]}'>■</span> Draft",
+                 "AI-generated, not yet reviewed"),
+                (f"<span style='color:{colors['reviewed'][0]}'>■</span> Reviewed",
                  "human confirmed NL content"),
-                (f"<span style='color:{colors['bound'][0]}'>■</span> {colors['bound'][1]} border",
-                 "has <code>\\lean{{}}</code> binding"),
-                (f"<span style='color:{colors['aligned'][0]}'>■</span> {colors['aligned'][1]} border",
-                 "human confirmed NL↔Lean match"),
-                (f"<span style='color:{colors['aligned_fill'][0]}; background:{colors['aligned_fill'][0]}'>■</span> {colors['aligned_fill'][1]} background",
-                 "aligned — NL↔Lean binding confirmed"),
-                (f"<span style='color:{colors['proved'][0]}; background:{colors['proved'][0]}'>■</span> {colors['proved'][1]} background",
-                 "Lean proof exists"),
-                (f"<span style='color:{colors['verified'][0]}; background:{colors['verified'][0]}'>■</span> {colors['verified'][1]} background",
-                 "human reviewed proof quality"),
+                (f"<span style='color:{colors['bound'][0]}'>■</span> Bound",
+                 "has <code>\\lean{{}}</code> binding to Lean declaration"),
+                (f"<span style='display:inline-block;width:12px;height:12px;border:2px solid {colors['aligned'][0]};background:{colors['aligned_fill'][0]}'></span> Aligned",
+                 "human confirmed NL↔Lean semantic match"),
+                (f"<span style='display:inline-block;width:12px;height:12px;border:2px solid {colors['proved'][0]};background:{colors['proved'][0]}'></span> Proved",
+                 "Lean proof compiled (theorems only)"),
             ])
         else:
             legend.extend([
@@ -477,4 +699,4 @@ def ProcessOptions(options, document):
     document.userdata.setdefault('thm_header_hidden_extras_tpl', []).extend([LEAN_DECLS_TPL,
                                                                              GITHUB_ISSUE_TPL])
     document.userdata['dep_graph'].setdefault('extra_modal_links_tpl', []).extend([
-        LEAN_LINKS_TPL, GITHUB_LINK_TPL, STATUS_BADGES_TPL])
+        LEAN_LINKS_TPL, LEAN_SOURCE_TPL, GITHUB_LINK_TPL, STATUS_BADGES_TPL])

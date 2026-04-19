@@ -1,4 +1,5 @@
 import http.server
+import json
 import logging
 import os
 import platform
@@ -518,20 +519,134 @@ def all() -> None:
 
 
 
+def _make_review_handler(status_yaml_path: Path):
+    """Create an HTTP handler that serves static files + review API."""
+
+    class ReviewHandler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == '/api/status':
+                self._send_json(_load_status())
+            elif self.path.startswith('/api/status/'):
+                node_id = self.path[len('/api/status/'):]
+                data = _load_status()
+                nodes = data.get('nodes', {})
+                if node_id in nodes:
+                    resp = {'node_id': node_id, 'state': _node_state(nodes[node_id]), **nodes[node_id]}
+                    self._send_json(resp)
+                else:
+                    self._send_json({'error': 'not found'}, 404)
+            else:
+                super().do_GET()
+
+        def do_POST(self):
+            if self.path == '/api/review':
+                length = int(self.headers.get('Content-Length', 0))
+                body = json.loads(self.rfile.read(length)) if length else {}
+                result = self._handle_review(body)
+                self._send_json(result, 200 if 'error' not in result else 400)
+            else:
+                self._send_json({'error': 'not found'}, 404)
+
+        def _handle_review(self, body: dict) -> dict:
+            node_id = body.get('node_id')
+            action = body.get('action')  # 'review', 'align', 'comment', 'reclassify'
+            reviewer = body.get('reviewer', 'web-reviewer')
+            now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+            if not node_id or not action:
+                return {'error': 'node_id and action are required'}
+
+            data = _load_status()
+            nodes = data.setdefault('nodes', {})
+            if node_id not in nodes:
+                return {'error': f'node {node_id} not found'}
+
+            st = nodes[node_id]
+
+            if action == 'review':
+                st['nl_reviewed'] = True
+                st['nl_reviewer'] = reviewer
+                st['nl_reviewed_at'] = now
+            elif action == 'align':
+                st['aligned'] = True
+                st['align_reviewer'] = reviewer
+                st['aligned_at'] = now
+                st['bound'] = True
+                st.setdefault('nl_reviewed', True)
+            elif action == 'comment':
+                text = body.get('text', '')
+                if not text:
+                    return {'error': 'text is required for comment'}
+                topic = body.get('topic', 'general')
+                comments = st.setdefault('comments', [])
+                # Migrate legacy single-comment field if present
+                if 'nl_review_comment' in st:
+                    comments.insert(0, {
+                        'topic': 'review',
+                        'text': st.pop('nl_review_comment'),
+                        'by': st.pop('nl_review_comment_by', 'unknown'),
+                        'at': st.pop('nl_review_comment_at', ''),
+                    })
+                comments.append({
+                    'topic': topic,
+                    'text': text,
+                    'by': reviewer,
+                    'at': now,
+                })
+            elif action == 'reclassify':
+                kind = body.get('kind', '')
+                if kind not in VALID_KINDS:
+                    return {'error': f'kind must be one of {VALID_KINDS}'}
+                st['reclassify'] = kind
+                st['reclassify_by'] = reviewer
+                st['reclassify_at'] = now
+            else:
+                return {'error': f'unknown action: {action}'}
+
+            data['nodes'] = nodes
+            _save_status(data)
+            return {'ok': True, 'node_id': node_id, 'state': _node_state(st), **st}
+
+        def _send_json(self, obj, code=200):
+            body = json.dumps(obj, ensure_ascii=False).encode('utf-8')
+            self.send_response(code)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Length', str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_OPTIONS(self):
+            self.send_response(204)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            self.end_headers()
+
+    return ReviewHandler
+
+
 @cli.command()
 def serve() -> None:
     """
-    Launch a web server to see the (already compiled) blueprint.
+    Launch a web server with review API to see the blueprint.
 
-    This is useful is order to see the dependency graph in particular.
+    Static files are served from blueprint/web/.
+    Review API endpoints:
+      GET  /api/status          — all node statuses
+      GET  /api/status/<id>     — single node status
+      POST /api/review          — update node (action: review/align/comment/reclassify)
     """
     cwd = os.getcwd()
     os.chdir(blueprint_root/'web')
-    Handler = http.server.SimpleHTTPRequestHandler
+    status_yaml_path = blueprint_root / "status.yaml"
+    Handler = _make_review_handler(status_yaml_path)
+    socketserver.TCPServer.allow_reuse_address = True
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
     httpd = None
     for port in range(8000, 8010):
         try:
-            httpd = socketserver.TCPServer(("", port), Handler)
+            httpd = socketserver.ThreadingTCPServer(("", port), Handler)
             break
         except OSError:
             pass
@@ -541,7 +656,7 @@ def serve() -> None:
     try:
         (ip, port) = httpd.server_address
         ip = ip or 'localhost'
-        print(f'Serving http://{ip}:{port}/ \nPress Ctrl-c to interrupt.')
+        print(f'Serving http://{ip}:{port}/ \nReview API enabled.\nPress Ctrl-c to interrupt.')
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
@@ -573,8 +688,16 @@ def _get_reviewer(reviewer_flag: Optional[str]) -> str:
 
 
 def _node_state(st: dict) -> str:
-    if st.get('verified'):
-        return 'verified'
+    kind = st.get('kind', '')
+    # Definitions and axioms: max lifecycle is 'aligned'
+    if kind in ('definition', 'axiom'):
+        if st.get('aligned'):
+            return 'aligned'
+        if st.get('bound'):
+            return 'bound'
+        if st.get('nl_reviewed'):
+            return 'reviewed'
+        return 'draft'
     if st.get('proved'):
         return 'proved'
     if st.get('aligned'):
@@ -591,8 +714,7 @@ STATE_COLORS = {
     'reviewed': 'yellow',
     'bound': 'blue',
     'aligned': 'green',
-    'proved': 'bright_green',
-    'verified': 'bold green',
+    'proved': 'bold green',
 }
 
 
@@ -603,19 +725,18 @@ VALID_KINDS = ['definition', 'theorem', 'lemma', 'proposition', 'corollary', 'ax
 @click.argument('label', required=False)
 @click.option('--review', is_flag=True, help='Mark node as NL-reviewed')
 @click.option('--align', is_flag=True, help='Mark node as aligned (NL↔Lean confirmed)')
-@click.option('--verify', is_flag=True, help='Mark node as verified (proof quality reviewed)')
 @click.option('--reviewer', default=None, help='Reviewer name (default: git user.name)')
 @click.option('--comment', default=None, help='Review comment (free text)')
 @click.option('--reclassify', default=None, type=click.Choice(VALID_KINDS, case_sensitive=False),
               help='Suggest reclassification (definition/theorem/lemma/proposition/corollary/axiom)')
-def status(label: Optional[str], review: bool, align: bool, verify: bool,
+def status(label: Optional[str], review: bool, align: bool,
            reviewer: Optional[str], comment: Optional[str], reclassify: Optional[str]) -> None:
     """
     Show or update the extended node status.
 
     Without arguments, prints a summary table of all nodes.
     With a LABEL argument, shows detailed status for that node.
-    Use --review, --align, or --verify to advance a node's state.
+    Use --review or --align to advance a node's state.
     Use --comment to leave a review note, --reclassify to suggest a type change.
     """
     data = _load_status()
@@ -624,10 +745,10 @@ def status(label: Optional[str], review: bool, align: bool, verify: bool,
     if not nodes:
         error("No status.yaml found or it has no nodes. Run 'leanblueprint web' first to auto-populate.")
 
-    is_mutation = review or align or verify or comment or reclassify
+    is_mutation = review or align or comment or reclassify
 
     if is_mutation and not label:
-        error("Please specify a node label when using --review, --align, --verify, --comment, or --reclassify.")
+        error("Please specify a node label when using --review, --align, --comment, or --reclassify.")
 
     if is_mutation:
         if label not in nodes:
@@ -649,20 +770,22 @@ def status(label: Optional[str], review: bool, align: bool, verify: bool,
             st['bound'] = True
             st.setdefault('nl_reviewed', True)
             console.print(f"[green]Marked '{label}' as aligned by {reviewer_name}[/]")
-        if verify:
-            st['verified'] = True
-            st['verify_reviewer'] = reviewer_name
-            st['verified_at'] = now
-            # Monotonic: verified → proved → aligned → bound → reviewed
-            st['proved'] = True
-            st['aligned'] = True
-            st['bound'] = True
-            st.setdefault('nl_reviewed', True)
-            console.print(f"[green]Marked '{label}' as verified by {reviewer_name}[/]")
         if comment:
-            st['nl_review_comment'] = comment
-            st['nl_review_comment_by'] = reviewer_name
-            st['nl_review_comment_at'] = now
+            comments = st.setdefault('comments', [])
+            # Migrate legacy single-comment field if present
+            if 'nl_review_comment' in st:
+                comments.insert(0, {
+                    'topic': 'review',
+                    'text': st.pop('nl_review_comment'),
+                    'by': st.pop('nl_review_comment_by', 'unknown'),
+                    'at': st.pop('nl_review_comment_at', ''),
+                })
+            comments.append({
+                'topic': 'general',
+                'text': comment,
+                'by': reviewer_name,
+                'at': now,
+            })
             console.print(f"[green]Added comment on '{label}' by {reviewer_name}[/]")
         if reclassify:
             st['reclassify'] = reclassify
