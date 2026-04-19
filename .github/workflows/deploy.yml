@@ -18,9 +18,7 @@ jobs:
   build_project:
     runs-on: ubuntu-latest
     name: Build Project
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    environment: ${{ github.event_name != 'pull_request' && 'github-pages' || '' }}
     steps:
       - name: Cleanup to free disk space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
@@ -47,3 +45,4 @@ jobs:
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
         with:
           blueprint: true
+          deploy: ${{ github.event_name != 'pull_request' }}
