@@ -622,10 +622,10 @@
     A spectrum $X$ is \emph{$n$-connected} if $\pi_i(X) = 0$ for all $i \le n$.
 \end{definition}
 
-\begin{axiom}\label{prereq:ax:sphere-connected}
+\begin{theorem}\label{prereq:thm:sphere-connected}
     \uses{prereq:def:connected,prereq:def:sphere-spectrum}
     The sphere spectrum $\bS$ is $(-1)$-connected.
-\end{axiom}
+\end{theorem}
 
 \begin{definition}\label{prereq:def:bounded-below}
     \uses{prereq:def:connected}
@@ -633,10 +633,10 @@
     A spectrum $X$ is \emph{bounded below} if it is $n$-connected for some $n \in \bZ$.
 \end{definition}
 
-\begin{axiom}\label{prereq:ax:connected-homology-vanishing}
+\begin{theorem}\label{prereq:thm:connected-homology-vanishing}
     \uses{prereq:def:connected,prereq:def:mod2-homology}
     If $X$ is $n$-connected, then $H_i(X; \bF_2) = 0$ for all $i \le n$.
-\end{axiom}
+\end{theorem}
 
 \subsubsection{Finite Type}\label{sec:prereq-finite-type}
 
@@ -645,19 +645,19 @@
     A spectrum $X$ is of \emph{finite type} if for each $n$, there exists a finite spectrum $X_n \in \calS^{fin}$ and a map $X_n \to X$ whose cofiber is $n$-connected.
 \end{definition}
 
-\begin{axiom}\label{prereq:ax:finite-type-char}
+\begin{theorem}\label{prereq:thm:finite-type-char}
     \uses{prereq:def:finite-type,prereq:def:bounded-below,prereq:def:homotopy-groups}
     A spectrum $X$ is of finite type if and only if:
     \begin{enumerate}
         \item $X$ is bounded below, and
         \item for each $i$, the homotopy group $\pi_i(X)$ is finitely generated as an abelian group.
     \end{enumerate}
-\end{axiom}
+\end{theorem}
 
-\begin{axiom}\label{prereq:ax:finite-type-homology}
+\begin{theorem}\label{prereq:thm:finite-type-homology}
     \uses{prereq:def:finite-type,prereq:def:mod2-homology}
     If $X$ is of finite type, then $H_i(X; \bF_2)$ is a finite-dimensional $\bF_2$-vector space for each $i$.
-\end{axiom}
+\end{theorem}
 
 \subsubsection{Adams Convergence and Boundedness}\label{sec:prereq-adams-convergence}
 
@@ -668,34 +668,34 @@ In this subsection, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
     A map $f \in [X, Y]$ has \emph{Adams filtration $\infty$} if $\AF(f) \ge n$ for all $n$.
 \end{definition}
 
-\begin{axiom}\label{prereq:ax:odd-order-af-infinity}
+\begin{theorem}\label{prereq:thm:odd-order-af-infinity}
     \uses{prereq:def:adams-filtration-infinity}
     If $f$ has odd order in $[X,Y]$, then $f$ has Adams filtration $\infty$.
-\end{axiom}
+\end{theorem}
 
-\begin{axiom}\label{prereq:ax:not-odd-order-af-finite}
+\begin{theorem}\label{prereq:thm:not-odd-order-af-finite}
     \uses{prereq:def:adams-filtration-infinity}
     If $f$ does not have odd order, then $f$ does not have Adams filtration $\infty$.
-\end{axiom}
+\end{theorem}
 
-\begin{axiom}\label{prereq:ax:adams-weak-convergence}
+\begin{theorem}\label{prereq:thm:adams-weak-convergence}
     \uses{prereq:ax:adams-ss,prereq:def:convergence,prereq:def:finite-spectra,prereq:def:finite-type}
     For $X \in \calS^{fin}$ and $Y$ of finite type, the Adams spectral sequence $Adams(X,Y)$ weakly converges to $[X, Y]$: there is a natural isomorphism between the graded pieces of the Adams filtration on $[X, Y]$ and the $E_\infty$-page of $Adams(X,Y)$.
-\end{axiom}
+\end{theorem}
 
-\begin{axiom}\label{prereq:ax:adams-separated}
-    \uses{prereq:ax:adams-weak-convergence,prereq:ax:odd-order-af-infinity}
+\begin{theorem}\label{prereq:thm:adams-separated}
+    \uses{prereq:thm:adams-weak-convergence,prereq:thm:odd-order-af-infinity}
     The quotient $[X, Y] / \{\text{odd-order elements}\}$ carries an induced Adams filtration that is separated (Hausdorff).
-\end{axiom}
+\end{theorem}
 
-\begin{axiom}\label{prereq:ax:adams-boundedness}
-    \uses{prereq:ax:adams-separated,prereq:def:finite-type}
+\begin{theorem}\label{prereq:thm:adams-boundedness}
+    \uses{prereq:thm:adams-separated,prereq:def:finite-type}
     Suppose $X$ is of finite type and $H_i(X; \bQ) = 0$ for some $i$. Then:
     \begin{enumerate}
         \item The Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ is bounded.
         \item All subquotients of this filtration are finite groups.
     \end{enumerate}
-\end{axiom}
+\end{theorem}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
