@@ -627,9 +627,10 @@
     The sphere spectrum $\bS$ is $(-1)$-connected.
 \end{axiom}
 
-\begin{definition}\label{prereq:def:connective}
+\begin{definition}\label{prereq:def:bounded-below}
     \uses{prereq:def:connected}
-    A spectrum $X$ is \emph{connective} if it is $n$-connected for some $n \in \bZ$.
+    \lean{KIP.StableHomotopy.IsBoundedBelow}\leanok
+    A spectrum $X$ is \emph{bounded below} if it is $n$-connected for some $n \in \bZ$.
 \end{definition}
 
 \begin{axiom}\label{prereq:ax:connected-homology-vanishing}
@@ -645,10 +646,10 @@
 \end{definition}
 
 \begin{axiom}\label{prereq:ax:finite-type-char}
-    \uses{prereq:def:finite-type,prereq:def:connective,prereq:def:homotopy-groups}
+    \uses{prereq:def:finite-type,prereq:def:bounded-below,prereq:def:homotopy-groups}
     A spectrum $X$ is of finite type if and only if:
     \begin{enumerate}
-        \item $X$ is connective, and
+        \item $X$ is bounded below, and
         \item for each $i$, the homotopy group $\pi_i(X)$ is finitely generated as an abelian group.
     \end{enumerate}
 \end{axiom}
