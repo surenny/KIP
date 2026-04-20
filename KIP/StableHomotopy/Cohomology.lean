@@ -185,4 +185,13 @@ noncomputable def cohomologyRepresentable_neg (n : ℤ) (X : 𝒮) :
     Mod2Cohomology n X ≃ (X ⟶ (shiftFunctor 𝒮 (-n)).obj (EilenbergMacLane 𝒮)) :=
   (shiftEquiv 𝒮 n).toAdjunction.homEquiv X (EilenbergMacLane 𝒮)
 
+/-! ## Universal Coefficient Theorem -/
+
+/-- BHS Universal Coefficient Theorem (§0.2.3): mod 2 cohomology is the
+    F₂-linear dual of mod 2 homology: H^n(X; F₂) ≃ Hom(H_n(X; F₂), F₂)
+    as abelian groups. Uses `→+` (AddMonoidHom) since `Module (ZMod 2)`
+    instance is not available on `Mod2Homology`. -/
+axiom universal_coefficient (n : ℤ) (X : 𝒮) :
+    Mod2Cohomology n X ≃+ (Mod2Homology n X →+ ZMod 2)
+
 end KIP.StableHomotopy

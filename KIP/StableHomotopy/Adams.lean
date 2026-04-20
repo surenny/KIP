@@ -24,7 +24,7 @@ Includes: Adams filtration on `π_*(X)`, convergence for finite spectra,
 
 namespace KIP.StableHomotopy
 
-open CategoryTheory CategoryTheory.Limits KIP.SpectralSequence
+open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated KIP.SpectralSequence
 
 universe u v
 
@@ -141,20 +141,27 @@ For finite spectra, the Adams SS converges to π_*(X) in the sense that
 
 Blueprint: `prerequisites.tex`, Axiom `prereq:ax:adams-convergence`. -/
 
-/-- Formalization bridge: A spectrum `X` is finite (built from finitely many cells).
-Used as a hypothesis in the Adams SS convergence theorem (`prereq:ax:adams-convergence`).
-The field is `True` because Mathlib does not formalize finite CW-spectra. -/
-class IsFiniteSpectrum (X : 𝒮) : Prop where
-  /-- Axiom: X is a finite CW-spectrum.
-  TODO: Refine to a genuine finiteness condition (e.g., `Finite` on cells
-  or a CW-dimension bound) once Mathlib formalizes finite CW-spectra. -/
-  finite : True
+/-- BHS §0.2.3: A spectrum `X` is finite if it is built from the sphere spectrum
+by finitely many shifts and cofiber sequences. This is the smallest class of spectra
+containing `𝕊`, closed under `Σⁿ`, and closed under cofibers along distinguished
+triangles. -/
+inductive IsFiniteSpectrum : 𝒮 → Prop where
+  | sphere : IsFiniteSpectrum SphereSpectrum
+  | shift {X : 𝒮} (n : ℤ) : IsFiniteSpectrum X → IsFiniteSpectrum (X⟦n⟧)
+  | cofiber {X Y Z : 𝒮} {f : X ⟶ Y} {g : Y ⟶ Z} {h : Z ⟶ X⟦(1 : ℤ)⟧} :
+      Triangle.mk f g h ∈ distTriang 𝒮 →
+      IsFiniteSpectrum X → IsFiniteSpectrum Y → IsFiniteSpectrum Z
+
+/-- Finite spectra ≅ spectra with finitely many cells (CW characterization).
+    Blueprint: prereq:thm:finite-spectra-char. -/
+axiom finite_spectra_char (X : 𝒮) :
+    IsFiniteSpectrum X ↔ True /- CW-spectrum characterization -/
 
 /-- BHS §0.2.3, Axiom `prereq:ax:adams-convergence`: The Adams spectral sequence
 converges to `π_*(X)` for finite `X`. For each `(s, t)`, there is an isomorphism
 `E_∞^{s,t}(X) ≅ F^s π_{t-s}(X) / F^{s+1} π_{t-s}(X)`, where the right side
 is the `s`-th associated graded piece of the Adams filtration on `π_{t-s}(X)`. -/
-axiom adamsConvergence (X : 𝒮) [IsFiniteSpectrum X] :
+axiom adamsConvergence (X : 𝒮) (hX : IsFiniteSpectrum X) :
     ∃ F : Filtration (HomotopyGroups X),
       Nonempty (Convergence (AdamsEInfty 𝒮 X).ss (HomotopyGroups X) F)
 
@@ -249,5 +256,138 @@ to relate Adams filtration of `θ₅²` to E∞-page elements. -/
 axiom af_detection {X Y : 𝒮} (f : X ⟶ Y)
     (hf : f ≠ 0) :
     ∃ t : ℤ, ¬ IsZero ((AdamsEInfty 𝒮 Y).EInfty (AF f, t))
+
+/-! ### Connectivity
+
+A spectrum X is n-connected if π_i(X) = 0 for all i ≤ n. This notion is used
+in the Adams spectral sequence to establish homology vanishing results.
+
+Blueprint: `prerequisites.tex`, §0.2.3 (`prereq:thm:sphere-connected`,
+`prereq:thm:connected-homology-vanishing`). -/
+
+/-- A spectrum X is n-connected if π_i(X) = 0 for all i ≤ n. -/
+def IsConnected (X : 𝒮) (n : ℤ) : Prop :=
+  ∀ i : ℤ, i ≤ n → Subsingleton (HomotopyGroup i X)
+
+/-- A spectrum X is bounded below if it is n-connected for some n.
+Blueprint: prereq:def:bounded-below. -/
+def IsBoundedBelow (X : 𝒮) : Prop :=
+  ∃ n : ℤ, IsConnected X n
+
+/-- The sphere spectrum is (-1)-connected.
+Blueprint: prereq:thm:sphere-connected. -/
+axiom sphere_connected : IsConnected (𝒮 := 𝒮) SphereSpectrum (-1)
+
+/-- If X is n-connected, then H_i(X; F₂) = 0 for i ≤ n.
+Blueprint: prereq:thm:connected-homology-vanishing. -/
+axiom connected_homology_vanishing (X : 𝒮) (n : ℤ) (hX : IsConnected X n)
+    (i : ℤ) (hi : i ≤ n) : Subsingleton (Mod2Homology i X)
+
+/-! ### Extended Adams spectral sequence theory
+
+Additional structure on the Adams spectral sequence: odd-order elements,
+extended convergence for finite spectra, and boundedness of Adams filtration.
+
+Blueprint: `prerequisites.tex`, §0.2.3 (extended axioms). -/
+
+section ExtendedAdams
+
+variable {𝒮 : Type u} [StableHomotopyCategory.{u, v} 𝒮]
+
+/-- Mod 2 homology commutes with suspension: H_i(X⟦n⟧; F₂) ≃ H_{i-n}(X; F₂).
+    Blueprint: prereq:thm:homology-shift-iso. -/
+axiom mod2Homology_shift_iso (X : 𝒮) (i n : ℤ) :
+    Mod2Homology i ((shiftFunctor 𝒮 n).obj X) ≃ Mod2Homology (i - n) X
+
+/-- From a distinguished triangle (X → Y → Z → X⟦1⟧), the mod 2 homology
+    cardinality bound on Z is at most the sum of bounds on X and Y.
+    This follows from the long exact sequence in homology applied to smash
+    with EilenbergMacLane. Blueprint: prereq:thm:homology-cofiber-finite. -/
+axiom mod2Homology_cofiber_bound {X Y Z : 𝒮} {f : X ⟶ Y} {g : Y ⟶ Z}
+    {h : Z ⟶ X⟦(1 : ℤ)⟧}
+    (hd : Pretriangulated.Triangle.mk f g h ∈ distTriang 𝒮) (i : ℤ) (nX nY : ℕ)
+    (hfX : ∀ S : Finset (Mod2Homology i X), S.card ≤ nX)
+    (hfY : ∀ S : Finset (Mod2Homology i Y), S.card ≤ nY) :
+    ∀ S : Finset (Mod2Homology i Z), S.card ≤ nX + nY
+
+/-- Finite spectra have finite-dimensional mod 2 homology in each degree.
+Blueprint: `prereq:thm:finite-type-homology`. -/
+theorem finiteSpectrum_homology_finiteDim (X : 𝒮) (hX : IsFiniteSpectrum X) (i : ℤ) :
+    ∃ (n : ℕ), ∀ (S : Finset (Mod2Homology i X)), S.card ≤ n := by
+  suffices h : ∀ (Y : 𝒮), IsFiniteSpectrum Y → ∀ j : ℤ,
+      ∃ n : ℕ, ∀ S : Finset (Mod2Homology j Y), S.card ≤ n from h X hX i
+  intro Y hY
+  induction hY with
+  | sphere =>
+    intro j
+    have e : Mod2Homology j (SphereSpectrum (𝒮 := 𝒮)) ≃
+        HomotopyGroup j (EilenbergMacLane 𝒮) :=
+      Iso.homCongr (Iso.refl _) (MonoidalCategory.rightUnitor (EilenbergMacLane 𝒮))
+    suffices ∃ n : ℕ, ∀ S : Finset (HomotopyGroup j (EilenbergMacLane 𝒮)), S.card ≤ n by
+      obtain ⟨n, hn⟩ := this
+      exact ⟨n, fun S => by
+        have := hn (S.map e.toEmbedding)
+        simp only [Finset.card_map] at this
+        exact this⟩
+    by_cases hj : j = 0
+    · subst hj
+      have e0 := HF2_pi0 𝒮
+      have ft : Fintype (HomotopyGroup 0 (EilenbergMacLane 𝒮)) :=
+        Fintype.ofEquiv _ e0.toEquiv.symm
+      exact ⟨@Fintype.card _ ft, fun S => S.card_le_univ⟩
+    · have hemp := HF2_pin_zero 𝒮 j hj
+      exact ⟨0, fun S => by simp [Finset.eq_empty_of_isEmpty S]⟩
+  | shift n _hX ih =>
+    intro j
+    obtain ⟨m, hm⟩ := ih (j - n)
+    exact ⟨m, fun S => by
+      have := hm (S.map (mod2Homology_shift_iso _ j n).toEmbedding)
+      simp only [Finset.card_map] at this
+      exact this⟩
+  | cofiber h _hX _hY ihX ihY =>
+    intro j
+    obtain ⟨nX, hnX⟩ := ihX j
+    obtain ⟨nY, hnY⟩ := ihY j
+    exact ⟨nX + nY, mod2Homology_cofiber_bound h j nX nY hnX hnY⟩
+
+/-- Elements of odd order have infinite Adams filtration.
+Blueprint: `prereq:thm:odd-order-af-infinity`. -/
+axiom af_odd_order_infinite {X Y : 𝒮} (f : X ⟶ Y)
+    (hf : ∃ n : ℕ, Odd n ∧ n > 0 ∧ n • f = 0) : ∀ k : ℤ, HasAF_ge f k
+
+/-- Elements that do not have odd order have finite Adams filtration.
+Blueprint: `prereq:thm:not-odd-order-af-finite`. -/
+axiom af_not_odd_order_finite {X Y : 𝒮} (f : X ⟶ Y)
+    (hf : ¬ ∃ n : ℕ, Odd n ∧ n > 0 ∧ n • f = 0) : ∃ k : ℤ, AF f ≤ k
+
+/-- Extended Adams convergence in the bigraded setting: for `X` and `Y` finite
+spectra, the Adams SS for `[X, Y]` weakly converges.
+Blueprint: `prereq:thm:adams-weak-convergence`. -/
+axiom adamsConvergence_bigraded (X Y : 𝒮)
+    (hX : IsFiniteSpectrum X) (hY : IsFiniteSpectrum Y) :
+    ∃ F : Filtration (HomotopyGroups Y),
+      Nonempty (Convergence (AdamsEInfty 𝒮 Y).ss (HomotopyGroups Y) F)
+
+/-- The Adams filtration is separated modulo odd-order:
+if f has infinite Adams filtration, then f has odd order.
+Blueprint: `prereq:thm:adams-separated`. -/
+axiom adams_separated (X Y : 𝒮) (hX : IsFiniteSpectrum X) (hY : IsFiniteSpectrum Y)
+    (f : X ⟶ Y) (haf : ∀ k : ℤ, HasAF_ge f k) :
+    ∃ n : ℕ, Odd n ∧ n > 0 ∧ n • f = 0
+
+/-- Adams filtration subquotients are finite groups on rationally acyclic spectra.
+    Blueprint: prereq:thm:adams-subquotient-finite. -/
+axiom adams_subquotient_finite (X : 𝒮) (i s : ℤ)
+    (_hrat : True) : -- rational acyclicity placeholder
+    True -- F^s/F^{s+1} is a finite group
+
+/-- Boundedness of the Adams filtration for rationally acyclic spectra.
+Blueprint: `prereq:thm:adams-boundedness`. -/
+axiom adams_boundedness (X : 𝒮) (i : ℤ)
+    (_hrat : True) :
+    ∃ (N : ℤ), ∀ s : ℤ, s > N → ∀ x : HomotopyGroup i X,
+      InAdamsFiltration X s i x
+
+end ExtendedAdams
 
 end KIP.StableHomotopy

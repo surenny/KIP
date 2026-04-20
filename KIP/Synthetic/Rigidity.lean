@@ -82,17 +82,6 @@ The rigidity theorem implies it coincides with the synthetic Adams SS. -/
 axiom lambda_bockstein_iso (X : 𝒮) :
     (SynAdamsSS Syn ((nu 𝒮 Syn).obj X)).r₀ = 2
 
-/-- The cofiber sequence for powers of λ applied to ν(X):
-    Σ^{0,r}(νX) →[λʳ] νX → νX/λʳ.
-    Specialization of xModLambdaN_cofiberSeq to the ν functor image. -/
-theorem lambda_power_cofiber (X : 𝒮) (r : ℕ) (hr : 0 < r) :
-    ∃ (_ : (nu 𝒮 Syn).obj X ⟶ XModLambdaN ((nu 𝒮 Syn).obj X) r)
-      (_ : XModLambdaN ((nu 𝒮 Syn).obj X) r ⟶
-            (SyntheticCategory.biShift (1, -(r : ℤ))).obj
-              ((nu 𝒮 Syn).obj X)),
-      True :=
-  xModLambdaN_cofiberSeq ((nu 𝒮 Syn).obj X) r hr
-
 /-! ### E∞ computations -/
 
 /-- E∞ vanishing for ν(X) (BHS Prop 3.12):

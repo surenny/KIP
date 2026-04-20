@@ -1190,7 +1190,7 @@ nodes:
     bound: false
     nl_hash: d4915bb9addf144e
     proved: false
-  prereq:def:connective:
+  prereq:def:bounded-below:
     kind: definition
     bound: false
     nl_hash: 492471fb12270f1f

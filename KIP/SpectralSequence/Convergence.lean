@@ -48,9 +48,9 @@ structure Filtration.IsBounded {ω : Type w} {A : ω → C}
   /-- `lo ≤ hi`. -/
   lo_le_hi : ∀ (k : ω), lo k ≤ hi k
   /-- `F^s = A` for `s ≤ lo`. -/
-  exhaustive : ∀ (k : ω) (s : ℤ), s ≤ lo k → fil.F s k = ⊤
+  boundedBelow : ∀ (k : ω) (s : ℤ), s ≤ lo k → fil.F s k = ⊤
   /-- `F^s = 0` for `s ≥ hi`. -/
-  hausdorff : ∀ (k : ω) (s : ℤ), hi k ≤ s → fil.F s k = ⊥
+  boundedAbove : ∀ (k : ω) (s : ℤ), hi k ≤ s → fil.F s k = ⊥
 
 /-! ### Associated graded
 
@@ -277,34 +277,62 @@ theorem detect_difference {ω : Type w} [AddCommGroup ω] [DecidableEq ω]
 
 /-! ### One-sided filtration conditions
 
-Exhaustive and Hausdorff are the one-sided analogues of `IsBounded`.
-A bounded filtration is both exhaustive and Hausdorff. -/
+Bounded below and bounded above are the one-sided analogues of `IsBounded`.
+A bounded filtration is both bounded below and bounded above. -/
 
-/-- A filtration is **exhaustive** if for each `k`, the filtration eventually
+/-- A filtration is **bounded below** if for each `k`, the filtration eventually
     covers everything from below: `∃ s₀, ∀ s ≤ s₀, F^s A^k = ⊤`. -/
-structure Filtration.IsExhaustive {ω : Type w} {A : ω → C}
+structure Filtration.IsBoundedBelow {ω : Type w} {A : ω → C}
     (fil : Filtration A) where
   lo : ω → ℤ
-  exhaustive : ∀ (k : ω) (s : ℤ), s ≤ lo k → fil.F s k = ⊤
+  boundedBelow : ∀ (k : ω) (s : ℤ), s ≤ lo k → fil.F s k = ⊤
 
-/-- A filtration is **Hausdorff** if for each `k`, the filtration eventually
+/-- A filtration is **bounded above** if for each `k`, the filtration eventually
     becomes trivial from above: `∃ s₀, ∀ s ≥ s₀, F^s A^k = ⊥`. -/
-structure Filtration.IsHausdorff {ω : Type w} {A : ω → C}
+structure Filtration.IsBoundedAbove {ω : Type w} {A : ω → C}
     (fil : Filtration A) where
   hi : ω → ℤ
-  hausdorff : ∀ (k : ω) (s : ℤ), hi k ≤ s → fil.F s k = ⊥
+  boundedAbove : ∀ (k : ω) (s : ℤ), hi k ≤ s → fil.F s k = ⊥
 
-/-- A bounded filtration is exhaustive. -/
-def Filtration.IsBounded.toIsExhaustive {ω : Type w} {A : ω → C}
-    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsExhaustive where
+/-- A bounded filtration is bounded below. -/
+def Filtration.IsBounded.toIsBoundedBelow {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsBoundedBelow where
   lo := hb.lo
-  exhaustive := hb.exhaustive
+  boundedBelow := hb.boundedBelow
 
-/-- A bounded filtration is Hausdorff. -/
-def Filtration.IsBounded.toIsHausdorff {ω : Type w} {A : ω → C}
-    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsHausdorff where
+/-- A bounded filtration is bounded above. -/
+def Filtration.IsBounded.toIsBoundedAbove {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBounded) : fil.IsBoundedAbove where
   hi := hb.hi
-  hausdorff := hb.hausdorff
+  boundedAbove := hb.boundedAbove
+
+/-! ### True exhaustive and Hausdorff conditions
+
+These are the standard mathematical definitions, weaker than bounded below/above. -/
+
+/-- A filtration is **exhaustive** if for each `k`, every element eventually lies
+    in some filtration level: `∀ k, ∃ s, F^s A^k = ⊤`.
+    This is weaker than `IsBoundedBelow` (which gives a uniform bound). -/
+def Filtration.IsExhaustive {ω : Type w} {A : ω → C}
+    (fil : Filtration A) : Prop :=
+  ∀ (k : ω), ∃ (s : ℤ), fil.F s k = ⊤
+
+/-- A filtration is **Hausdorff** (separated) if for each `k`, the filtration
+    eventually becomes trivial: `∀ k, ∃ s, F^s A^k = ⊥`.
+    This is weaker than `IsBoundedAbove` (which gives a uniform bound). -/
+def Filtration.IsHausdorff {ω : Type w} {A : ω → C}
+    (fil : Filtration A) : Prop :=
+  ∀ (k : ω), ∃ (s : ℤ), fil.F s k = ⊥
+
+/-- A filtration bounded below is exhaustive. -/
+theorem Filtration.IsBoundedBelow.toIsExhaustive {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBoundedBelow) : fil.IsExhaustive := by
+  sorry
+
+/-- A filtration bounded above is Hausdorff. -/
+theorem Filtration.IsBoundedAbove.toIsHausdorff {ω : Type w} {A : ω → C}
+    {fil : Filtration A} (hb : fil.IsBoundedAbove) : fil.IsHausdorff := by
+  sorry
 
 /-! ### Filtered morphisms
 

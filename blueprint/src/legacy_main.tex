@@ -251,7 +251,7 @@ We also extend our heartfelt thanks to Soren Galatius, Lars Hesselholt, Mike Hil
 This work is dedicated to the memory of Mark Mahowald, whose groundbreaking contributions to algebraic topology continue to inspire generations of mathematicians. His deep insights and unwavering passion for the field remain a guiding light in our endeavors.
 
 \section{A Spectral Sequence for Extensions}\label{sec:e6be737c}
-In this paper, we assume that all symbols $X,Y,Z,W,\dots$ for spectra represent 2-completed connective spectra of finite type. In particular, their $\HF$-Adams spectral sequences converge strongly.
+In this paper, we assume that all symbols $X,Y,Z,W,\dots$ for spectra represent 2-completed bounded below spectra of finite type. In particular, their $\HF$-Adams spectral sequences converge strongly.
 
 Consider a map $f: X\to Y$ between two spectra and we can construct the following chain complex
 $$0\to \pi_*X\fto{\pi_*f} \pi_*Y\to 0$$
@@ -672,7 +672,7 @@ These results can also be implemented in a computer program to facilitate their 
 
 
 % \begin{theorem} [Rigidity of the synthetic Adams spectral sequence for $\nu X$] \label{thm:rigid}
-%     Let $X$ be a connective spectrum of finite type. 
+%     Let $X$ be a bounded below spectrum of finite type.
 %     \begin{enumerate}
 %       \item
 %       { this item should be split into to items. should write $E_2^{***}\cong E_2^{**}\otimes -$}
@@ -705,7 +705,7 @@ These results can also be implemented in a computer program to facilitate their 
 
 % {
 % 
-% Fix $X$ to be a  connective spectrum of finite type.
+% Fix $X$ to be a  bounded below spectrum of finite type.
 % \begin{theorem}
 %     The synthetic ASS
 %      $$\SynSS_2^{s,t,w}(\nu X)\Longrightarrow \pi_{t-s,w}(\nu X)$$
@@ -996,7 +996,7 @@ With the notation above, we can rewrite Proposition \ref{prop:41561db2} into the
 \end{remark}
 
 \section{Synthetic Extensions} \label{sec:synext}
-The extension spectral sequence introduced in Section \ref{sec:e6be737c} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two connective finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
+The extension spectral sequence introduced in Section \ref{sec:e6be737c} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two bounded below finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
 $$0\to \pi_{*,*}X\fto{\pi_{*,*}f} \pi_{*,*}Y\to 0$$
 using the Adams filtration, we obtain an $f$-extension spectral sequence:
 $$\ESS{f}_0^{s,t,w} \cong E_\infty^{s,t,w}(X) \oplus E_\infty^{s,t,w}(Y) \Longrightarrow \Ker(\pi_{*,*}f)\oplus \Coker(\pi_{*,*}f)$$

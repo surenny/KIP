@@ -2,7 +2,7 @@
   KIP.SpectralSequence.Commutativity
   §2.12–2.19 Commutativity of ESS differentials
 
-  Blueprint: §2.12–2.19 from arXiv:2412.10879 (BHS)
+  Blueprint: §2.12–2.19 from arXiv:2412.10879 (LWX)
   Informal: informal/commutativity_ss.md
 
   Defines the homotopy commutative square of converging spectral

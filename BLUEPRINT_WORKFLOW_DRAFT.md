@@ -604,7 +604,115 @@ Agent 结束
 
 ---
 
-## 10. 待讨论/决策点
+## 10. 外部参考：Matlas 的依赖图模型及启示
+
+### 10.1 Matlas 是什么
+
+北大 AI4Math 团队的工作。从 43.5 万篇论文 + 1900 本教材中提取 807 万条数学陈述，构建依赖图，然后在图上做拓扑展开使每条陈述 self-contained，最后做向量检索。
+
+### 10.2 他们的依赖图数据模型
+
+**节点：** 每条数学陈述，包含三个字段：
+- `type` — 陈述类型（definition / theorem / lemma / ...）
+- `content` — 文本内容
+- `local dependency links` — 指向同文档内其他节点的依赖
+
+**边：** 有向边 A → B 表示"B 的成立依赖 A"
+
+**作用域：** 每个文档（paper/book）一张独立的有向依赖图，**没有跨文档依赖**。
+
+**提取方式：** 两阶段 pipeline：
+1. Locator：LLM 生成文档专用的正则表达式，定位陈述候选段
+2. Structurer：DeepSeek-V3.2 对候选段（batch size=5, context window=4000 chars）生成结构化输出（type + content + dependency links）
+
+### 10.3 关键创新：拓扑展开（Unfolding）
+
+他们不把依赖图直接用于调度，而是做了一个**展开操作**使每条陈述变成 self-contained：
+
+```
+Layer 0: 无依赖的节点（定义、公理）
+Layer 1: 只依赖 Layer 0 的节点
+Layer 2: 只依赖 Layer 0-1 的节点
+...
+```
+
+对每个节点，按拓扑序递归地把上游依赖的内容**内联展开**到自身文本中。最终每条陈述包含了理解它所需的所有前置知识。
+
+### 10.4 对我们 blueprint 工作流的启示
+
+#### 启示 1：展开后的 NL 是更好的 formalize 输入
+
+当前 Formalize Agent 拿到的是一条孤立的 NL 陈述 + 一个依赖列表。Agent 需要自己去读每个依赖的 NL 内容来理解上下文。
+
+Matlas 的做法提示我们：**可以在生成 manifest 时，为每个节点预计算一个"展开后的 NL"**，把所有被依赖的定义/定理的文本内联进来。这样 agent 拿到的是一个 self-contained 的数学陈述，不需要反复跳转读依赖。
+
+```yaml
+# manifest 中的 expanded_nl 字段
+- node_id: prereq:thm:adams-weak-convergence
+  nl_text: |
+    The Adams spectral sequence for bounded below spectra
+    of finite type weakly converges.
+  expanded_nl: |
+    [Definition: Bounded Below] A spectrum X is bounded below if...
+    [Definition: Finite Type] A spectrum is of finite type if...
+    [Theorem: Adams Spectral Sequence] For any spectrum X, there is a spectral sequence...
+
+    The Adams spectral sequence for bounded below spectra
+    of finite type weakly converges.
+```
+
+这对 AI agent 的效果应该显著——减少上下文跳转，减少误解依赖的风险。
+
+#### 启示 2：分层调度更好理解优先级
+
+Matlas 的分层（layer 0, 1, 2, ...）本质上就是我们依赖图的拓扑层级。但他们用层级来组织展开顺序，我们可以用层级来组织**调度优先级**：
+
+```
+Layer 0 (叶节点/定义): 最先 formalize，无依赖
+Layer 1: 只依赖 Layer 0 的定理
+Layer 2: 依赖 Layer 0-1 的定理
+...
+```
+
+这比当前草稿中的"按依赖深度浅的优先"更精确——直接用拓扑分层编号。
+
+#### 启示 3：他们没有做跨文档依赖——我们也不必跨项目
+
+Matlas 的一个有意义的设计选择：每个文档的依赖图是独立的，不试图建立跨文档的引用关系。类似地，我们的 blueprint 依赖图也应该保持在**单个项目内闭合**。对外部数学结果用 `axiom` 节点封装边界，而不是试图建立到 Mathlib 或其他项目的依赖链。
+
+#### 启示 4：他们的 SearchResult 数据模型非常扁平
+
+Matlas 的 API 返回：
+```json
+{
+  "type": "paper",
+  "entity_name": "Theorem 3.1",
+  "doi": "...",
+  "title": "...",
+  "authors": "...",
+  "statement": "The expanded, self-contained statement text",
+  "candidate_id": "unique-id"
+}
+```
+
+注意：**没有依赖图结构、没有层级信息、没有生命周期状态**。这是一个纯检索接口——所有图结构都在构建时消化掉了（展开成 self-contained 文本），检索时只需要扁平的文本匹配。
+
+这和我们的需求不同——我们需要依赖图在运行时持续存在（用于调度）。但他们的"构建时展开、查询时扁平"的思路可以用在 agent 交互上：**agent 看到的是展开后的扁平 manifest，编排器在后台维护完整的图结构。**
+
+#### 启示 5：Matlas 作为工具可以辅助我们的 Extract Agent
+
+Matlas 有 807 万条数学陈述的检索库。我们的 Extract Agent 在分析论文依赖时，可以用 Matlas API 检索论文引用的外部结果（如 "by Hiblot 1975"），获取该结果的 self-contained 陈述，作为 axiom 节点的 NL 内容。
+
+```python
+# Extract Agent 遇到未定义的引用时
+result = matlas_search("Hiblot 1975 finite type spectrum")
+axiom_nl = result[0]['statement']  # self-contained 展开文本
+# → 生成 axiom 节点，NL 内容来自 Matlas
+```
+
+---
+
+## 11. 待讨论/决策点
 
 1. **编排器语言**：鉴于需要图遍历和 YAML 解析，建议 Python。
 2. **Formalize Agent 粒度**：一次处理一个文件中的所有待 formalize 节点（减少启动开销）。

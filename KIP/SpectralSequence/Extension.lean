@@ -2,7 +2,7 @@
   KIP.SpectralSequence.Extension
   §2 Extension spectral sequence
 
-  Blueprint: §2 from arXiv:2412.10879 (BHS)
+  Blueprint: §2 from arXiv:2412.10879 (LWX)
   Informal: informal/extension_ss.md
 
   Defines the extension spectral sequence (ESS) for a morphism of

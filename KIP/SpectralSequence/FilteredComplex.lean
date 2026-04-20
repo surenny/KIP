@@ -53,7 +53,7 @@ structure FilteredComplex (C : Type u) [Category.{v} C] [Abelian C] where
 
 /-- A filtered complex has a **bounded** filtration if for each degree `k`,
     there exist bounds `lo k ≤ hi k` such that `F^s = ⊤` for `s ≤ lo k`
-    (exhaustive) and `F^s = ⊥` for `s ≥ hi k` (Hausdorff).
+    (bounded below) and `F^s = ⊥` for `s ≥ hi k` (bounded above).
 
     This mirrors `Filtration.IsBounded` in `Convergence.lean`. -/
 structure FilteredComplex.IsBounded (FC : FilteredComplex C) where
@@ -63,10 +63,10 @@ structure FilteredComplex.IsBounded (FC : FilteredComplex C) where
   hi : ℤ → ℤ
   /-- `lo ≤ hi`. -/
   lo_le_hi : ∀ k, lo k ≤ hi k
-  /-- `F^s A^k = A^k` for `s ≤ lo k` (exhaustive). -/
-  exhaustive : ∀ k s, s ≤ lo k → FC.fil s k = ⊤
-  /-- `F^s A^k = 0` for `s ≥ hi k` (Hausdorff). -/
-  hausdorff : ∀ k s, hi k ≤ s → FC.fil s k = ⊥
+  /-- `F^s A^k = A^k` for `s ≤ lo k` (bounded below). -/
+  boundedBelow : ∀ k s, s ≤ lo k → FC.fil s k = ⊤
+  /-- `F^s A^k = 0` for `s ≥ hi k` (bounded above). -/
+  boundedAbove : ∀ k s, hi k ≤ s → FC.fil s k = ⊥
 
 /-! ### Associated graded -/
 
@@ -487,7 +487,7 @@ noncomputable def FilteredComplex.toSSData (FC : FilteredComplex C)
     -- Pick N large enough that FC.fil (s + ↑N) (k - 1) = ⊥ (Hausdorff)
     obtain ⟨N, hN⟩ : ∃ N : ℕ, FC.fil (s + ↑N) (k - 1) = ⊥ := by
       use (bnd.hi (k - 1) - s).toNat
-      apply bnd.hausdorff; omega
+      apply bnd.boundedAbove; omega
     -- Key: cokernel.π(0) is iso
     have h_zero : (FC.fil (s + ↑N) (k - 1)).arrow = 0 := by
       rw [hN, Subobject.bot_arrow]
@@ -545,7 +545,7 @@ noncomputable def FilteredComplex.toSSData (FC : FilteredComplex C)
     -- Pick N large enough that FC.fil (s - ↑N + 1) (k + 1) = ⊤ (exhaustive)
     obtain ⟨N, hN⟩ : ∃ N : ℕ, FC.fil (s - ↑N + 1) (k + 1) = ⊤ := by
       use (s + 1 - bnd.lo (k + 1)).toNat
-      apply bnd.exhaustive; omega
+      apply bnd.boundedBelow; omega
     -- When fil = ⊤, its arrow is iso
     haveI : IsIso (FC.fil (s - ↑N + 1) (k + 1)).arrow := by
       rw [Subobject.isIso_arrow_iff_eq_top]; exact hN

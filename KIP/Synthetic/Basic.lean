@@ -49,6 +49,7 @@ We axiomatize the category of HF₂-synthetic spectra. The key features are:
 class SyntheticCategory (Syn : Type u) [Category.{v} Syn] [Preadditive Syn]
     [HasZeroObject Syn] [HasShift Syn ℤ]
     [∀ n : ℤ, Functor.Additive (shiftFunctor Syn n)]
+    [MonoidalCategory Syn]
     [Pretriangulated Syn] where
   /-- Bigraded suspension functors Σ^{m,n} -/
   biShift : ℤ × ℤ → Syn ⥤ Syn
@@ -60,6 +61,10 @@ class SyntheticCategory (Syn : Type u) [Category.{v} Syn] [Preadditive Syn]
   biShift_compat : ∀ n : ℤ, biShift (n, 0) ≅ shiftFunctor Syn n
   /-- λ : Σ^{0,-1} → Id  — the key deformation parameter -/
   lam : biShift (0, -1) ⟶ 𝟭 Syn
+  /-- BHS §3: biShift commutes with tensor: Σ^p(X ⊗ Y) ≅ Σ^p(X) ⊗ Y -/
+  biShift_tensor_comm : ∀ (p : ℤ × ℤ) (X Y : Syn),
+    (biShift p).obj (MonoidalCategory.tensorObj X Y) ≅
+      MonoidalCategory.tensorObj ((biShift p).obj X) Y
 
 variable {Syn : Type u} [Category.{v} Syn] [Preadditive Syn]
   [HasZeroObject Syn] [HasShift Syn ℤ]
@@ -107,45 +112,51 @@ theorem XModLambda.lam_comp_incl (X : Syn) :
     SyntheticCategory.lam.app X ≫ XModLambda.incl X = 0 :=
   comp_distTriang_mor_zero₁₂ _ (XModLambda.triangle_distinguished X)
 
-attribute [local instance] HasZeroObject.zero'
+/-! ### λⁿ: iterated λ morphism
 
-/-- The cofiber of λⁿ on X, giving X/λⁿ.
-    For n = 0, this is the zero object.
-    For n = 1, this is XModLambda X. -/
+BHS §3, Definition 3.3: The n-th power of λ is the composite
+  Σ^{0,-n}X → Σ^{0,-(n-1)}X → ⋯ → Σ^{0,-1}X → X
+constructed by induction using `biShift_comp` and `lam`. -/
+
+/-- The n-th power of λ: a morphism Σ^{0,-n}X → X defined by induction.
+    - `lambdaPow 0 X` = `biShift_zero.hom.app X` (the identity via Σ^{0,0} ≅ Id)
+    - `lambdaPow (n+1) X` = biShift_comp⁻¹ ≫ Σ^{0,-n}(λ_X) ≫ lambdaPow n X -/
+noncomputable def lambdaPow : (n : ℕ) → (X : Syn) →
+    (SyntheticCategory.biShift (0, -(n : ℤ))).obj X ⟶ X
+  | 0, X => SyntheticCategory.biShift_zero.hom.app X
+  | n + 1, X => by
+    have step1 : (SyntheticCategory.biShift ((0 : ℤ), -1) ⋙
+        SyntheticCategory.biShift ((0 : ℤ), -(n : ℤ))).obj X ⟶ X :=
+      (SyntheticCategory.biShift ((0 : ℤ), -(n : ℤ))).map (SyntheticCategory.lam.app X) ≫
+        lambdaPow n X
+    have step2 : (SyntheticCategory.biShift ((0, -1) + (0, -(n : ℤ)))).obj X ⟶ X :=
+      (SyntheticCategory.biShift_comp (0, -1) (0, -(n : ℤ))).inv.app X ≫ step1
+    have heq : ((0 : ℤ), (-1 : ℤ)) + ((0 : ℤ), -(n : ℤ)) = ((0 : ℤ), -(↑(n + 1) : ℤ)) := by
+      simp
+    exact heq ▸ step2
+
+/-- The cofiber of λⁿ on X, giving X/λⁿ = cofib(lambdaPow n X).
+    BHS §3, Definition 3.3. -/
 noncomputable def XModLambdaN (X : Syn) (n : ℕ) : Syn :=
-  match n with
-  | 0 => (0 : Syn)
-  | n + 1 => XModLambda (XModLambdaN X n)
+  syn_functorial_cofiber.cofib (lambdaPow n X)
 
-/-- The cofiber sequence Σ^{0,-1}X →[λ_X] X → X/λ → (Σ^{0,-1}X)⟦1⟧
-    is a distinguished triangle. This replaces the old axiom — it's now
-    a theorem derived from `distinguished_cocone_triangle`. -/
-theorem xModLambda_cofiberSeq (X : Syn) :
-    ∃ (i : X ⟶ XModLambda X)
-      (p : XModLambda X ⟶ ((SyntheticCategory.biShift (0, -1)).obj X)⟦(1 : ℤ)⟧),
-      Triangle.mk (SyntheticCategory.lam.app X) i p ∈ distTriang Syn :=
-  ⟨XModLambda.incl X, XModLambda.proj X, XModLambda.triangle_distinguished X⟩
-
-/-- BHS §3, Definition 3.3 (iterated cofibers): For n ≥ 1, there is a cofiber
-    sequence Σ^{0,-n}X →[λⁿ] X → X/λⁿ.
-    The full cofiber sequence structure requires iterated triangle construction.
-    Kept as axiom — the `True` conclusion documents that the real statement
-    involves iterated cofiber data that depends on the biShift composition isos. -/
-axiom xModLambdaN_cofiberSeq (X : Syn) (n : ℕ) (hn : 0 < n) :
-  ∃ (_i : X ⟶ XModLambdaN X n)
-    (_p : XModLambdaN X n ⟶ (SyntheticCategory.biShift (1, -(n : ℤ))).obj X),
-    True -- Cofiber sequence structure
+/-- The cofiber triangle for λⁿ is distinguished. -/
+theorem XModLambdaN.triangle_distinguished (X : Syn) (n : ℕ) :
+    Triangle.mk (lambdaPow n X)
+      (syn_functorial_cofiber.cofibι (lambdaPow n X))
+      (syn_functorial_cofiber.cofibδ (lambdaPow n X)) ∈ distTriang Syn :=
+  syn_functorial_cofiber.cofib_distinguished (lambdaPow n X)
 
 /-! ### Z[λ]-module enrichment -/
 
-/-- BHS §3, Remark after Definition 3.3: The homotopy category of synthetic
-    spectra is enriched over Z[λ]-modules. This means Hom-sets carry a
-    Z[λ]-module structure compatible with composition.
-    Here Z[λ] = Polynomial ℤ and ModuleCat (Polynomial ℤ) is the
-    monoidal category of Z[λ]-modules (with tensor product). -/
+/-- BHS §3, Proposition 3.2: Syn is enriched over ℤ[λ]-modules.
+    Axiomatized: requires graded Hom-set construction or MonoidalClosed infrastructure
+    not currently available.
+    Blueprint: `synthetic.tex`, §3 (zlambda-enrichment). -/
 axiom zlambda_enrichment (Syn : Type u) [Category.{v} Syn] [Preadditive Syn]
     [HasZeroObject Syn] [HasShift Syn ℤ]
     [∀ n : ℤ, Functor.Additive (shiftFunctor Syn n)]
+    [MonoidalCategory Syn]
     [Pretriangulated Syn]
     [SyntheticCategory Syn] : EnrichedCategory (ModuleCat (Polynomial ℤ)) Syn
 

@@ -65,6 +65,7 @@ KIP.StableHomotopy.adams_2torsion
 KIP.StableHomotopy.InAdamsFiltration
 KIP.StableHomotopy.AF
 KIP.StableHomotopy.adamsFiltration_functorial
+KIP.StableHomotopy.IsConnected
 KIP.StableHomotopy.IsBoundedBelow
 KIP.Synthetic.SyntheticCategory
 KIP.Synthetic.SyntheticCategory.biShift
@@ -76,7 +77,7 @@ KIP.Synthetic.lambdaAction
 KIP.Synthetic.SynAdamsSS
 KIP.Synthetic.nu
 KIP.Synthetic.nu_susp
-KIP.Synthetic.nu_cofiber_iff
+KIP.Synthetic.nu_cofiber_ses
 KIP.Synthetic.rigidity_degeneration
 KIP.Synthetic.lambda_bockstein_iso
 KIP.Synthetic.einfty_nuX
