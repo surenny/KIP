@@ -1,8 +1,20 @@
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '*.md'
+      - '.gitignore'
+      - 'draft-hint/**'
+      - 'agents/**'
+      - 'LICENSE'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '*.md'
+      - '.gitignore'
+      - 'draft-hint/**'
+      - 'agents/**'
+      - 'LICENSE'
   workflow_dispatch:
 
 concurrency:
