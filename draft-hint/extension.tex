@@ -1,0 +1,175 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{sfmath}
+\usepackage{hyperref}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=0cm,right=0cm,top=0cm,bottom=0.1cm, footskip=0cm, includefoot=true}
+%\usepackage[contents = \thepage, color=yellow, angle=0, scale = 20]{background}
+\pagestyle{empty}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{}
+%\fancyfoot{}
+%\cfoot{}
+%\lfoot{{\small \color{red} \slshape \thepage 页}}
+%\fancyfoot[R]{\thepage}
+
+\usepackage[all]{xy}
+\usepackage{color}
+
+\renewenvironment{proof}{{\noindent\it\textbf{Proof}}\quad\it}{\hfill$\square$}
+
+%\theoremstyle{definition}
+
+\newtheorem{thm}[equation]{Theorem}
+\newtheorem{cor}[equation]{Corollary}
+\newtheorem{lem}[equation]{Lemma}
+\newtheorem{prop}[equation]{Proposition}
+\newtheorem{defn}[equation]{Definition}
+\newtheorem{rem}[equation]{Remark}
+\newtheorem{conj}[equation]{Conjecture}
+
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{}
+\author{}
+
+
+\begin{document}
+
+\sffamily
+\maketitle
+\thispagestyle{empty}
+
+\abstract{}
+\tableofcontents
+
+\large
+
+\begin{sloppy}
+\clubpenalty=-100
+\widowpenalty=-100
+ \section{extension SS} \label{ess}
+Let $f$ be a morphism of converging spectral sequences
+$$f_E: V_1\rightarrow V_2$$
+这是谱序列的态射
+$$f_A:A_1\rightarrow A_2$$
+这是收敛到的群的态射
+
+\paragraph{(1)} 将$f_A$看作只有两项的filtered complex
+
+\paragraph{(2)} Extension谱序列定义为上述filtered complex诱导的谱序列
+
+\paragraph{(3)} 证明Extension谱序列的$E_0$页同构于V的$E_\infty$页
+
+\paragraph{(4)}证明如下结论：
+
+
+\begin{defn}[Notation 2.4]
+For $x \in E_\infty^{s}(V_1)$（这个notation表示在filtration degree s）, we denote by $\{x\}$ the set of all classes in $A_1$ that are detected by $x$. We use $[x]$ to refer to a specific class or a general class in $\{x\}$, with the choice understood from the context.
+\end{defn}
+
+\begin{prop}[Proposition 2.5]
+Consider $f: V_1 \to V_2$, $x \in E_\infty^{s}(V_1)$, $y \in E_\infty^{s+n}(V_2)$ and $y' \in E_\infty^{s+m}(V_2)$ for $m, n \geq 0$.
+\begin{enumerate}
+\item[(1)] There is an $f$-extension from $x$ to $y$, i.e., $d_n^f(x) = y$ in the $f$-ESS if and only if there is a class $[x] \in \{x\}$ such that $f[x] \in \{y\}$.
+\item[(2)] An $f$-extension from $x$ to $y$ is inessential, i.e., $y$ is trivial in the $E_n$-page of the $f$-ESS if and only if there exists an element $x' \in E_\infty^{s+a}(V_1)$ for $0 < a \leq n$ such that we have an essential differential $d_{n-a}^f(x') = y$. Equivalently, there exists a class $[x'] \in \{x'\} \subset A_1$ with $\mathrm{Fil}(x') > \mathrm{Fil}(x)$, such that $f[x'] \in \{y\}$.
+\item[(3)] Suppose we have an $f$-extension from $x$ to both $y$ and $y'$.
+\begin{enumerate}
+\item[(a)] If $m = n$, then $y - y' \in {{}^f\!B}_{n-1}^{s+n}(V_2)$ and there exists an element $x' \in E_\infty^{s+a}(V_1)$ for $0 < a \leq n$ such that we have an essential differential $d_{n-a}^f(x') = y - y'$ in $f$-ESS. Equivalently, there exists a class $[x'] \in \{x'\} \subset A_1$ with $\mathrm{Fil}(x') > \mathrm{Fil}(x)$, such that $f[x'] \in \{y - y'\}$.
+\item[(b)] If $m > n$, then the $f$-extension from $x$ to $y$ is inessential.
+\end{enumerate}
+\end{enumerate}
+\end{prop}
+\begin{proof}
+Part (1) is straightforward from the setup of the extension spectral sequence and Definition。 Parts (2) and (3) follow from Part (1).
+\end{proof}
+
+\paragraph{(5)} 根据一般的理论建立estension谱序列中微分crossing的相关定义
+
+\paragraph{(6)}证明：
+
+\begin{rem}[Remark 2.8]
+The following statements are equivalent.
+\begin{itemize}
+\item An $f$-extension $d_n^f(x) = y$ has no crossing that hits the range $\mathrm{Fil} \geq p$.
+\item If for any $a > 0$ there is an $f$-extension from $x' \in E_\infty^{s+a}(V_1)$ to some nontrivial $y'$, then $\mathrm{Fil}(y') < p$ or $\mathrm{Fil}(y') > \mathrm{Fil}(y)$.
+\end{itemize}
+\end{rem}
+
+\paragraph{(7)}证明：
+
+\begin{prop}[Proposition 2.10]
+An $f$-extension from $x$ to $y$ has no crossing in the range $\mathrm{Fil} \geq p$ if and only if for all $[x] \in \{x\}$ such that $\mathrm{Fil}(f[x]) \geq p$ we have $f[x] \in \{y\}$. In particular, we have
+\begin{enumerate}
+\item[(1)] An $f$-extension from $x$ to $y$ has no crossing if and only if for all $[x] \in \{x\}$ we have $f[x] \in \{y\}$.
+\item[(2)] An $f$-extension $d_n^f(x) = 0$ has no crossing if and only if for all $[x] \in \{x\}$,
+$$\mathrm{Fil}(f[x]) > \mathrm{Fil}(x) + n.$$
+\end{enumerate}
+\end{prop}
+\begin{proof}
+First we prove the only if part. Assume by contradiction that there exists $[x] \in \{x\}$ such that $f[x] = [y'] \notin \{y\}$ is detected by $y' \in E_\infty(V_2)$ with $\mathrm{Fil}(y') \geq p$. Then there is an $f$-extension from $x$ to $y'$. By Proposition 2.5 (3), $y'$ (if $\mathrm{Fil}(y) > \mathrm{Fil}(y')$) or $y - y'$ (if $\mathrm{Fil}(y) = \mathrm{Fil}(y')$) should be hit by a shorter $d^f$-differential. This shorter differential is a crossing of the $f$-extension from $x$ to $y$ that hits $\mathrm{Fil} \geq p$, which is a contradiction. Now we prove the if part. Assume that the $f$-extension has a crossing from $x'$ to $y'$ with $p \leq \mathrm{Fil}(y') \leq \mathrm{Fil}(y)$. Then there exists $[x'] \in \{x'\}$ such that $f([x']) \in \{y'\}$. Note that $[x] + [x'] \in \{x\}$ since $\mathrm{Fil}(x') > \mathrm{Fil}(x)$, we have
+$$f([x] + [x']) = f([x]) + f([x']) \in \begin{cases} \{y'\} & \text{if } \mathrm{Fil}(y') < \mathrm{Fil}(y), \\ \{y + y'\} & \text{if } \mathrm{Fil}(y') = \mathrm{Fil}(y). \end{cases}$$
+However, by assumption we should have $f([x] + [x']) \in \{y\}$ and it is contradictory to the equation above in either case.
+
+Hence the main statement is true. Part (1) (2) are special cases of the main statement and Part (3) holds for degree reasons.
+\end{proof}
+
+\paragraph{(8)}证明如下结论，可以根据我们已有的谱序列收敛性的条件加相关的有界性或mittag-leffler条件：
+
+\begin{prop}[Proposition 2.20]
+Suppose that the sequence of converging spectral sequences
+$$V_1 \xrightarrow{f} V_2 \xrightarrow{g} V_3$$
+induces an exact sequence of target groups
+$$A_1 \xrightarrow{\pi_*f} A_2 \xrightarrow{\pi_*g} A_3$$
+that is exact in $A_2$. Then all permanent cycles in $E_\infty^{*,*}(V_2)$ of the $g$-ESS are boundaries in the $f$-ESS.
+\end{prop}
+\begin{proof}
+If we consider the following sequence
+$$0 \to \pi_*V_1 \xrightarrow{\pi_*f} \pi_*V_2 \xrightarrow{\pi_*g} \pi_*V_3 \to 0$$
+and treat it as a chain complex filtered by the Adams filtration, we obtain an extension spectral sequence comprising $d^f$ and $d^g$ differentials. The abutment of this spectral sequence, when projected onto the $V_2$ component, is zero. Therefore, all permanent $d^g$-cycles are killed by $d^f$-differentials.
+
+Again we offer another proof via homotopy groups. Assume that $y \in E_\infty^{*,*}(V_2)$ is a permanent $d^g$-cycle. By the convergence of ESS we know that it detects a $g$-torsion $[y] \in \{y\}$ with $g([y]) = 0$. Hence there exists $[x] \in \pi_*V_1$ such that $f([x]) = [y]$ by exactness. Assume that $[x]$ is detected by $x \in E_\infty^{*,*}(V_1)$. Then there exists an $f$-extension from $x$ to $y$.
+\end{proof}
+
+\section{修改意见}
+
+\paragraph{} ExtensionSS 里面，\begin{enumerate}
+    \item 删除 assDiff和essBoundary
+    \item 增加 underlyingComplex,定义为，$A_1\rightarrow A_2$，viewed as filtered chain complex 
+    \item 增加 ess，定义为 FilteredComplex.toSpectralSequence underlyingComplex, 可以加bounded条件
+\end{enumerate}
+
+\paragraph{}FourSpectraChain的名字改成ThreeSpectraChian，并且
+\begin{enumerate}
+    \item 增加 $cm_{13}$ 定义为 $cm_12$ composed with $cm_{23}$
+    \item 增加 $essH = ExtensionSS\; cm_{13}$
+\end{enumerate}
+
+\paragraph{}
+￥$ess\_exists$ 调用FilteredComplex的定理，可以假设bounded
+
+\paragraph{}
+$ess\_boundary\_zero$彻底删除，改为：
+\paragraph{} $ess\_boundary\_nesteing$ 和 $ess\_boundary_subobject$ 删除
+
+\paragraph{} $ess\_e0\_iso$删除，改为：
+\begin{enumerate}
+    \item 证明$ess$的$E_0$page 标准同构于 $E_1$的$E_\infty$和$E_2$的$E_\infty$的直和
+    \item 证明ess的微分只有$E_1.page \infty$(的sub)到$E_2.page \infty$（的quotient）的分量，其他三个分量为0
+    \item 该分量定义为$d_n^f$
+    \item 证明$d_0^f$等于f诱导的A的accosiated graded上面的map
+
+\end{enumerate}
+
+\paragraph{}之后的axiom全部删除，按照 Section \ref{ess} 再生成一遍
+
+\begin{thebibliography}{99}
+
+
+\end{thebibliography}
+
+\end{sloppy}
+\end{document}

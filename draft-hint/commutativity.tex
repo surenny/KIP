@@ -1,0 +1,173 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{sfmath}
+\usepackage{hyperref}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=0cm,right=0cm,top=0cm,bottom=0.1cm, footskip=0cm, includefoot=true}
+%\usepackage[contents = \thepage, color=yellow, angle=0, scale = 20]{background}
+\pagestyle{empty}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{}
+%\fancyfoot{}
+%\cfoot{}
+%\lfoot{{\small \color{red} \slshape \thepage 页}}
+%\fancyfoot[R]{\thepage}
+
+\usepackage[all]{xy}
+\usepackage{color}
+
+\renewenvironment{proof}{{\noindent\it\textbf{Proof}}\quad\it}{\hfill$\square$}
+
+%\theoremstyle{definition}
+
+\newtheorem{thm}[equation]{Theorem}
+\newtheorem{cor}[equation]{Corollary}
+\newtheorem{lem}[equation]{Lemma}
+\newtheorem{prop}[equation]{Proposition}
+\newtheorem{defn}[equation]{Definition}
+\newtheorem{rem}[equation]{Remark}
+\newtheorem{conj}[equation]{Conjecture}
+
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{}
+\author{}
+
+
+\begin{document}
+
+\sffamily
+\maketitle
+\thispagestyle{empty}
+
+\abstract{}
+\tableofcontents
+
+\large
+
+\begin{sloppy}
+\clubpenalty=-100
+\widowpenalty=-100
+
+\begin{thm}[Theorem 2.12]
+Consider a homotopy commutative diagram of converging spectral sequences
+$$\xymatrix{V_1 \ar[r]^f & V_2 \\ V_3 \ar[u]^p \ar[r]_g & V_4 \ar[u]_q}$$
+Suppose $m, n, l \geq 0$, $0 < k \leq m + l - n$,
+$$x \in E_\infty^{s}(V_1), \quad y \in E_\infty^{s+n}(V_2),$$
+$$z \in E_\infty^{s+m}(V_3), \quad w \in E_\infty^{s+m+l}(V_4),$$
+and
+\begin{enumerate}
+\item[(1)] $d_n^f(x) = y$,
+\item[(2)] $d_m^p(x) = z$,
+\item[(3)] the differential in (1) or the differential in (2) has no crossing,
+\item[(4)] $d_l^g(z) = w$, and has no crossing that hits the range $\mathrm{Fil} \geq s + n + k$,
+\item[(5)] $d_{k-1}^q y = 0$, and has no crossing.
+\end{enumerate}
+Then $d_{m+l-n}^q(y) = w$.
+\end{thm}
+\begin{proof}
+First we find a representative $[x]$ of $x$ such that
+$$p[x] \in \{z\} \eqno{(1)}$$
+and
+$$f[x] \in \{y\}. \eqno{(2)}$$
+If (1) has no crossing, by (2) we can pick $[x] \in \{x\}$ such that (1) holds; if (2) has no crossing, by (1) we can pick $[x] \in \{x\}$ such that (2) holds. In both cases the other equation also holds because of the no crossing condition.
+
+By (5), (2) and Proposition 2.10 (2) we know that $qf[x]$ has $\mathrm{Fil} \geq s + n + k$. Since the diagram on the $E_\infty$-pages commutes, we have
+$$\mathrm{Fil}(gp[x]) = \mathrm{Fil}(qf[x]) \geq s + n + k.$$
+Combining with (4), (1) and Proposition 2.10（no\_crossing\_iff\_all\_reps, 在extension。lean文件里面找） we have
+$$gp[x] \in \{w\}.$$
+Therefore, $qf[x] \in \{w\}$ and by (2) there is a $q$-extension from $y$ to $w$.
+\end{proof}
+
+\begin{cor}[Corollary 2.15]
+Consider a homotopy commutative diagram of converging spectral sequences
+$$\xymatrix{
+V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
+V_3 \ar[r]_{g} & V_4}$$
+Suppose $m,n,l\ge 0$,
+$$x\in E^{s}_\infty(V_1), \quad y\in E^{s+n}_\infty(V_2),$$
+$$z\in E^{s+m}_\infty(V_3), \quad w\in E^{s+m+l}_\infty(V_4),$$
+and
+\begin{enumerate}
+\item[(1)] $d^{f}_{n}(x)=y$,
+\item[(2)] $d^{p}_{m}(x)=z$,
+\item[(3)] the differential in (1) or the differential in (2) has no crossing,
+\item[(4)] $d^{g}_{l}(z)=w$, and has no crossing.
+\end{enumerate}
+Then $d^{q}_{m+l-n}(y)=w$.
+\end{cor}
+
+\begin{cor}[Corollary 2.16]
+Consider a homotopy commutative diagram of converging spectral sequences
+$$\xymatrix{V_1 \ar[r]^f \ar[dr]_p & V_2 \ar[d]^q \\ & V_3}$$
+Suppose $n, m \geq 0$,
+$$x \in E_\infty^{s}(V_1), \quad y \in E_\infty^{s+n}(V_2), \quad z \in E_\infty^{s+m}(V_3)$$
+and
+\begin{enumerate}
+\item[(1)] $d_n^f(x) = y$,
+\item[(2)] $d_m^p(x) = z$,
+\item[(3)] the differential in (1) or the differential in (2) has no crossing.
+\end{enumerate}
+Then $d_{m-n}^q(y) = z$.
+\end{cor}
+\begin{proof}
+This is a special case of Corollary 2.15 when $V_3 = V_4$ and $g = \mathrm{id}_{V_3}$.
+\end{proof}
+
+\begin{cor}[Corollary 2.17]
+Consider a homotopy commutative diagram of converging spectral sequences
+$$\xymatrix{
+V_1 \ar[d]_{p}\ar[dr]^{q} & \\
+V_3\ar[r]_{g} & V_4
+}$$
+Suppose $n,m\ge 0$,
+$$x\in E^{s}_\infty(V_1), \quad z\in E^{s+m}_\infty(V_3), \quad w\in E^{s+m+l}_\infty(V_4)$$
+and
+\begin{enumerate}
+\item[(1)] $d^{p}_{m}(x)=z$,
+\item[(2)] $d^{g}_{l}(z)=w$, and has no crossing.
+\end{enumerate}
+Then $d^{q}_{m+l}(x)=w$.
+\end{cor}
+\begin{proof}
+This is a special case of Corollary 2.15 when $V_1=V_2$ and $f=\mathrm{id}_{V_1}$.
+\end{proof}
+
+\begin{cor}[Corollary 2.18]
+Consider a homotopy commutative diagram of converging spectral sequences
+$$\xymatrix{
+V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
+V_3 \ar[r]_{g} & V_4
+}.$$
+Assume ${}^{p}E_0^{*,*}={}^{p}E_r^{*,*}$ and ${}^{q}E_0^{*,*}={}^{q}E_r^{*,*}$ for some $r\ge 0$. Then
+$$(d^p_r, d^q_r): E_\infty^{*,*}(V_1)\oplus E_\infty^{*,*}(V_2)\to E_\infty^{*,*}(V_3)\oplus E_\infty^{*,*}(V_4)$$
+induces a map from the $f$-ESS to the $g$-ESS.
+\end{cor}
+\begin{proof}
+Since ${}^{p}E_0^{*,*}={}^{p}E_r^{*,*}$ and ${}^{q}E_0^{*,*}={}^{q}E_r^{*,*}$, we know that $d^p_r$, $d^q_r$ have no crossings. By Corollary 2.15, we have $d^g_0\circ d^p_r = d^q_r\circ d^f_0$ and therefore $(d^p_r, d^q_r)$ induces a map from ${}^{f}E_1^{*,*}$ to ${}^{g}E_1^{*,*}$. Inductively we can apply Corollary 2.15 again and show that $(d^p_r, d^q_r)$ induces a map from ${}^{f}E_n^{*,*}$ to ${}^{g}E_n^{*,*}$ and $d^g_n\circ d^p_r = d^q_r\circ d^f_n$ for all $n$.
+\end{proof}
+
+\begin{cor}[Corollary 2.19]
+If the composition $g\circ f$ of two maps $f:V_1\to V_2$, $g:V_2\to V_3$ is trivial, and $d_n^f(x)=y$ for $x\in E_\infty^{s}(V_1)$ and $y\in E_\infty^{s+n}(V_2)$, then $y$ is a permanent cycle in the $g$-ESS, i.e., we have $d^g_m(y)=0$ for all $m\ge 0$.
+\end{cor}
+\begin{proof}
+This follows immediately from the following commutative diagram
+$$\xymatrix{
+V_1 \ar[r]^{f}\ar[d] & V_2\ar[d]^{g}\\
+0 \ar[r] & V_3
+}$$
+and Corollary 2.15.
+
+There is a second short proof using homotopy groups. By Proposition 2.5, we know that there exists $[x]\in \{x\}$ such that $f([x])\in \{y\}$. Let $[y]=f([x])\in \{y\}$ and we have $g([y])=g(f([x]))=0$. Hence $y$ is a permanent $d^g$ cycle.
+\end{proof}
+
+\begin{thebibliography}{99}
+
+
+\end{thebibliography}
+
+\end{sloppy}
+\end{document}

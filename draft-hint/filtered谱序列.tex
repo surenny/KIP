@@ -1,0 +1,72 @@
+
+\documentclass[12pt]{article}
+
+% Chinese support
+\usepackage{xeCJK}
+\setCJKmainfont{Microsoft YaHei}
+\setCJKsansfont{Microsoft YaHei}
+\setCJKmonofont{FangSong}
+
+% Sans-serif font (fontspec for XeLaTeX)
+\usepackage{fontspec}
+\setmainfont{Arial}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+% Sans-serif math font
+\usepackage[T1]{fontenc}
+\usepackage{sfmath}
+\usepackage{amssymb}
+
+% Page margins
+\usepackage[margin=0.1cm]{geometry}
+
+% Section title sizes
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\section}{\fontsize{36}{43}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\fontsize{28}{34}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\fontsize{22}{27}\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\sffamily\fontsize{22}{27}\bfseries}{\theparagraph}{1em}{}
+
+\begin{document}
+\sffamily
+\huge
+
+我们的谱序列都要求
+$$Z_\infty = \cap_n Z_n$$
+$$B_\infty = \cup_n B_n$$
+
+
+\section{filtered谱序列}
+\subsection{filtered complex}
+\paragraph{}filtered graded abelian group 的范畴：对象是decreasing filtration的具有n个指标的分次abelian group
+
+\paragraph{}filtered complex是filtred abelian group范畴中的complex，带一个保filtration的微分d
+
+\paragraph{} filtered complexd的同调上具有自然的filtratoin，给出证明
+
+\paragraph{}associated graded 也构成一个complex
+
+\paragraph{}我们假设完备性： $\cup F^nA =A$, $\cap F^nA=0$
+
+\subsection{谱序列}
+给定filtered complex A，
+我们定义一个SSData的结构
+\paragraph{}谱序列从$E_0$项开始，谱序列分次的个数为$n+1$
+
+\paragraph{}定义$V$ 为A的associated graded
+
+\paragraph{}定义$Z_n$为如下元素的像：
+$x$的filtraton 为k，使得$dx$的filtration至少是n+k-1
+
+\paragraph{}定义$B_n$为如下元素：
+$x$的filtration为k，且形如$dy$，$y$的filtration至少k-n+1
+
+\paragraph{}定义谱序列的微分为d自然诱导的映射，证明这个是良定义的
+
+\paragraph{}证明如此的定义满足谱序列的公理
+
+\paragraph{}证明按照我们的弱的收敛性的定义，这个谱序列收敛到A的同调
+
+\end{document}

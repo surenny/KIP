@@ -1,0 +1,57 @@
+
+\documentclass[12pt]{article}
+
+% Chinese support
+\usepackage{xeCJK}
+\setCJKmainfont{Microsoft YaHei}
+\setCJKsansfont{Microsoft YaHei}
+\setCJKmonofont{FangSong}
+
+% Sans-serif font (fontspec for XeLaTeX)
+\usepackage{fontspec}
+\setmainfont{Arial}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+% Sans-serif math font
+\usepackage[T1]{fontenc}
+\usepackage{sfmath}
+\usepackage{amssymb}
+
+\newcommand{\AF}{\mathrm{AF}}
+
+% Page margins
+\usepackage[margin=0.1cm]{geometry}
+
+% Section title sizes
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\section}{\fontsize{36}{43}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\fontsize{28}{34}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\fontsize{22}{27}\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\sffamily\fontsize{22}{27}\bfseries}{\theparagraph}{1em}{}
+
+\begin{document}
+\sffamily
+\huge
+
+\section{crossing}
+\paragraph{}给定一个谱序列E，收敛到的A
+\paragraph{}假设谱序列都从至少第0页或正的某页开始
+\paragraph{}假设E的微分满足：$d_n$将filtration增加n
+
+\paragraph{}essential 微分指作为$E_n$页上的映射，打过去非零
+
+\subsection{定义2.7（来自2412.10879）}
+
+\begin{enumerate}
+    \item For $x\in V$，假设x的filtration为s, we say that the an 微分 $d_n(x)=y$ has a crossing that hits filtration $p$ for some $p \leq s+n$, if there exists an element $x^\prime\in V$，在filtraton a+s， with $a>0$ and an essential 微分 $d_m(x^\prime)=y^\prime$ for $0\neq y^\prime$，在filtration s+a+m, such that
+    $$p = \textup{Fil}(y^\prime) = s+a+m\le \textup{Fil}(y) = s+n.$$
+    \item We say that an 微分 $d_n(x)=y$ has no crossing that hits the range Fil $\ge p$ if there does not exist an element $x^\prime\in V$，filtration $s+a$ with $a>0$ and an essential 微分 $d_m(x^\prime)=y^\prime$ for $0\neq y^\prime\in V$，filtration s+a+m， such that
+    $$p\le \textup{Fil}(y^\prime) = s+a+m\le \textup{Fil}(y) = s+n.$$
+    \item We say that an 微分 $d_n(x)=y$ has no crossing if it has no crossing that hits the range Fil $\ge Fil(x) + 1$.
+\end{enumerate}
+
+
+
+\end{document}
