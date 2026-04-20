@@ -1,13 +1,13 @@
 \section{Synthetic Extensions} \label{sec:synext}
-The extension spectral sequence introduced in Section \ref{sec:ess} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two bounded below finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
+The extension spectral sequence introduced in Section \ref{sec:prereq-ess} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two bounded below finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
 $$0\to \pi_{*,*}X\fto{\pi_{*,*}f} \pi_{*,*}Y\to 0$$
 using the Adams filtration, we obtain an $f$-extension spectral sequence:
 $$\ESS{f}_0^{s,t,w} \cong E_\infty^{s,t,w}(X) \oplus E_\infty^{s,t,w}(Y) \Longrightarrow \Ker(\pi_{*,*}f)\oplus \Coker(\pi_{*,*}f)$$
 with differential
 $$d_n^f: \ZESS{f}_{n-1}^{s,t,w}(X)\to E_\infty^{s+n,t+n,w}(Y)/\BESS{f}_{n-1}^{s+n,t+n,w}(Y)$$
-where $\ZESS{f}_*^{*,*,*}$ and $\BESS{f}_*^{*,*,*}$ are  analogous to the notations in Notation \ref{nota:ess-notation}, with the addition of an extra degree.
+where $\ZESS{f}_*^{*,*,*}$ and $\BESS{f}_*^{*,*,*}$ are  analogous to the notations in Notation \ref{prereq:not:representatives}, with the addition of an extra degree.
 
-In fact all the definitions and results in Section \ref{sec:ess} remain valid in this synthetic setting, provided we include the extra weight degree in addition to the topological degree and ensure that all maps also preserve the weight degree. For convenience, we will not restate these results here but will occasionally refer to them and apply their synthetic versions when needed.
+In fact all the definitions and results in Section \ref{sec:prereq-ess} remain valid in this synthetic setting, provided we include the extra weight degree in addition to the topological degree and ensure that all maps also preserve the weight degree. For convenience, we will not restate these results here but will occasionally refer to them and apply their synthetic versions when needed.
 
 \begin{notation} \label{not:deltaandrho}
 There are certain special maps between synthetic spectra that we want to consider. For any $n<m\le \infty$ and a spectrum $X$, we have the following  distinguished triangles of $\HF$-synthetic spectra
@@ -26,7 +26,7 @@ We also note that our grading for the triangulation translation functor is smash
 %First we show that there are no $\lambda^n$ or $\rho$-hidden extensions.
 
 \begin{proposition}\label{prop:lambda-rho-trivial}
-    \uses{prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda,cor:composition-zero,not:deltaandrho}
+    \uses{prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda,prereq:cor:composition-zero,not:deltaandrho}
 The only nonzero differentials in the extension spectral sequences for the maps $\lambda^n$ and $\rho$ from Notation~\ref{not:deltaandrho} are the $d_0$'s:
 $$d^{\lambda^n}_0=\lambda^n \ \text{and} \ d^{\rho}_0=\rho.$$ 
 As a result, these $d_0$'s have no crossings.
@@ -48,7 +48,7 @@ As a result, these $d_0$'s have no crossings.
     $$Z^{s,t}_{m-t+w}(X)/B^{s,t}_{1+t-w-n}(X)\to Z^{s,t}_{m-t+w}(X)/B^{s,t}_{1+t-w}(X)\to 0$$
     which is exact in the middle because the first map is clearly surjective.
 
-    Thus, we have shown that (\ref{eq:lambda-rho-exact}) is always exact in the middle. Combined with Corollary \ref{cor:composition-zero} we conclude that all $d^{\lambda^n}_i$, $d^{\rho}_i$ are trivial for $i>0$.
+    Thus, we have shown that (\ref{eq:lambda-rho-exact}) is always exact in the middle. Combined with Corollary \ref{prereq:cor:composition-zero} we conclude that all $d^{\lambda^n}_i$, $d^{\rho}_i$ are trivial for $i>0$.
 \end{proof}
 
 \begin{remark}
@@ -70,7 +70,7 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \end{remark}
 
 \begin{proposition}\label{prop:delta-ess-adams}
-    \uses{prereq:ax:lambda-bockstein,cor:triangle-map,cor:composition-ext,not:deltaandrho,prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda}
+    \uses{prereq:ax:lambda-bockstein,prereq:cor:triangle-map,prereq:cor:composition-ext,not:deltaandrho,prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda}
     Suppose in the classical Adams spectral sequence of $X$ we have $d_r(x)=y$, where $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_\infty^{s+r,t+r-1}(X)$. Consider the map
     $$\delta:\nu X/\lambda^n\to \Sus^{1,-n}\nu X/\lambda^{m-n}.$$
     \begin{enumerate}
@@ -95,7 +95,7 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
     \nu X/\lambda^n\ar[d]_-{\delta_{n,\infty}} \ar[rd]^{\delta_{n,m}} & \\
     \Sus^{1,-n}\nu X\ar[r]_-{\rho} & \Sus^{1,-n}\nu X/\lambda^{m-n}
     }$$
-    it suffices to prove the case when $m=\infty$ by Corollary \ref{cor:composition-ext}. In the rest of the proof we will write $\delta_n=\delta_{n,\infty}$.
+    it suffices to prove the case when $m=\infty$ by Corollary \ref{prereq:cor:composition-ext}. In the rest of the proof we will write $\delta_n=\delta_{n,\infty}$.
 
     First, we prove by induction on $n$ that
     \begin{equation}\label{eq:delta-induction-ge}
@@ -112,7 +112,7 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
         \Sus^{0,-1}\nu X/\lambda^{n-1} \ar[rd]_-{\delta_{n-1}} \ar[r]^-\lambda &  \nu X/\lambda^{n}\ar[d]^-{\delta_{n}}\\
         & \Sus^{1,-n}\nu X\\
     }$$
-    By Corollary \ref{cor:triangle-map}, if $r\le n$, we have
+    By Corollary \ref{prereq:cor:triangle-map}, if $r\le n$, we have
     $$d^{\delta_{n}}_r(\lambda^{n+1-r}x)=d^{\delta_{n-1}}_r(\lambda^{n-r}x)\equiv y\mod B_{r-1}^{s+r,t+r-1}(X).$$
     If $r\ge n+1$, $x$ can be viewed as an element of the $E_\infty$-pages of $\nu X/\lambda^{n-1}$ or $\nu X/\lambda^n$. We then have
     $$\lambda d^{\delta_{n}}_r(x)=d^{\delta_{n}}_r(\lambda x)=d^{\delta_{n-1}}_r(x)\equiv \lambda^{r-n}y \mod B_{r-1}^{s+r,t+r-1}(X)$$
@@ -156,7 +156,7 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \end{remark}
 
 \begin{definition} \label{def:classicalcrossdiff}
-    \uses{def:ess}
+    \uses{prereq:def:ess}
     Suppose $r\ge n+1$ and $d_r(x)=y$, where
     $$x\in E_2^{s,t}(X), \hspace{0.5cm} y\in E_2^{s+r,t+r-1}(X).$$
     A crossing of $d_r(x)=y$ on the $E_{n+1}$-page refers to an essential Adams differential

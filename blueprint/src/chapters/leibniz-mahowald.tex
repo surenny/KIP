@@ -3,7 +3,7 @@
 Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool for computing new Adams differentials.
 
 \begin{theorem}[Generalized Leibniz Rule]\label{thm:gen-leibniz}
-    \uses{prop:delta-ess-adams,prop:cross-dr-En,prop:cross-f-Er,cor:four-spectra,def:f-Er-extension}
+    \uses{prop:delta-ess-adams,prop:cross-dr-En,prop:cross-f-Er,prereq:cor:four-spectra,def:f-Er-extension}
     Let $f: X\to Y$ be a map between two classical spectra.
     Suppose that $2\le n\le r$, $e(f)\le m\le n-2+e(f)$, $l\ge e(f)$, and we have
     $$x\in Z_{r-1}^{s,t}(X), \hspace{0.5cm} y\in Z_{r-1-m+e(f)}^{s+m,t+m}(Y)$$
@@ -45,14 +45,14 @@ Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool f
     
     Applying Proposition \ref{prop:cross-dr-En} and Proposition \ref{prop:cross-f-Er} to conditions (4) and (5), we know that the differential in (\ref{eq:leibniz-delta-diff}) or (\ref{eq:leibniz-fhat-diff}) has no crossing, and that the differential in (\ref{eq:leibniz-fhat-xinfty}) has no crossing.
     
-    Therefore, we can apply Corollary \ref{cor:four-spectra} and obtain
+    Therefore, we can apply Corollary \ref{prereq:cor:four-spectra} and obtain
     $$d^{\delta_Y}_{r+l-m}(\lambda^{m-e(f)} y)=\lambda^{r+l-n-e(f)} y_\infty.$$
     By Remark \ref{rmk:delta-ess-equiv-classical}, this is equivalent to
     $$d_{r+l-m}(y)= y_\infty.$$
 \end{proof}
 
 \begin{remark}
-    We can further generalize Theorem \ref{thm:gen-leibniz} by using the conditions in Theorem \ref{thm:four-spectra} rather than those Corollary \ref{cor:four-spectra}. We leave this generalization to the reader.
+    We can further generalize Theorem \ref{thm:gen-leibniz} by using the conditions in Theorem \ref{prereq:thm:four-spectra} rather than those Corollary \ref{prereq:cor:four-spectra}. We leave this generalization to the reader.
 \end{remark}
 
 We emphasize that the no-crossing conditions in Theorem \ref{thm:gen-leibniz}, the Generalized Leibniz Rule, are crucial. Without the no-crossing condition, the conclusion could be false.
@@ -87,7 +87,7 @@ $$d_3(h_0h_4) = 0, \ d_3(h_0h_4) = h_0 d_0.$$
         $$d_2^{f, E_\infty} (h_0 h_3^2) = h_0 d_0$$
         implies the existence of another synthetic homotopy class $[h_0 h_3^2]$ in $\pi_{14, 17} S^{0,0}$, such that
         $$[h_0 h_3^2] \cdot [h_0] = [h_0d_0] \ \text{in} \ \pi_{14,18}S^{0,0}.$$
-        Between these two lifts of $h_0h_3^2$, the first $[h_0h_3^2]$ is clearly the maximal $[h_0]$-extension according to Chua’s definition \cite[Definition~12.5]{Chua}. Consequently, the incorrect version of the Generalized Leibniz Rule in \cite[Theorem~12.9]{Chua}, would lead to an incorrect conclusion:
+        Between these two lifts of $h_0h_3^2$, the first $[h_0h_3^2]$ is clearly the maximal $[h_0]$-extension according to Chua's definition \cite[Definition~12.5]{Chua}. Consequently, the incorrect version of the Generalized Leibniz Rule in \cite[Theorem~12.9]{Chua}, would lead to an incorrect conclusion:
         $$d_3(h_0h_4) = 0.$$
 \end{remark}
 
@@ -273,7 +273,7 @@ Since $a$ and $b$ map to the same element in $\pi_n(Y\sma Z')$, we know that we 
 The outcome of the Generalized Mahowald Trick, as stated in Theorem~\ref{thm:gen-mahowald}, is an $f$-extension on a specific Adams page. In practice, the source of an $(f, E_r)$-extension may survive to later Adams pages, prompting interest in the $(f, E_{>r})$-extensions. The following Propositions~\ref{prop:ext-across-pages} and \ref{cor:stretch-extension} describe the relationships between extensions across different pages.
 
 \begin{proposition}\label{prop:ext-across-pages}
-    \uses{cor:ess-naturality,def:f-Er-extension}
+    \uses{prereq:cor:ess-naturality,def:f-Er-extension}
     Suppose that we have an $(f,E_r)$-extension $d^{f,E_r}_n(x)=y$, where $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_{r-1-n+e(f)}^{s+n,t+n}(Y)$. Then for all $2\le r'<r$, we also have
     \begin{equation}\label{eq:dr'}
         d^{f,E_{r'}}_n(x)=y.
@@ -293,7 +293,7 @@ The outcome of the Generalized Mahowald Trick, as stated in Theorem~\ref{thm:gen
         \Sus^{0,e(f)}\nu X/\lambda^{r-1} \ar[r]^-{\hat f_{r-1}}\ar[d]_{\rho_X} & \nu Y/\lambda^{r-1} \ar[d]_{\rho_Y}\\
         \Sus^{0,e(f)}\nu X/\lambda^{r'-1} \ar[r]^-{\hat f_{r'-1}} & \nu Y/\lambda^{r'-1}
     }$$
-    By Corollary \ref{cor:ess-naturality}, $(\rho_X,\rho_Y)$ induces a map from the $\hat f_{r-1}$-ESS to the $\hat f_{r'-1}$-ESS. Therefore, by naturality,
+    By Corollary \ref{prereq:cor:ess-naturality}, $(\rho_X,\rho_Y)$ induces a map from the $\hat f_{r-1}$-ESS to the $\hat f_{r'-1}$-ESS. Therefore, by naturality,
     $$d^{\hat f_{r-1}}_n(x)=\lambda^{n-e(f)} y\ \text{implies} \ d^{\hat f_{r'-1}}_n(x)=\lambda^{n-e(f)} y,$$
     which, by definition, is
     $$d^{f,E_{r'}}_n(x)=y.$$

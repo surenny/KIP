@@ -2,9 +2,9 @@
 \newcommand{\labelar}[1]{\overset{\uparrow}{#1}}
 \newdimen\widthA\newcommand{\resizelabel}[2]{\settowidth{\widthA}{#2}\pgfmathsetmacro{\ratio}{min((1cm)/max(\widthA, 1cm), #1)}\scalebox{\ratio}{#2}}
 
-\begin{figure}
+\begin{figure}[p]
 \centering
-\scalebox{1}{
+\scalebox{0.85}{
 \begin{tikzpicture}[line width=0.1pt]
 \draw (121.5,-0.5) rectangle (127.5,19.5);
 \node at (122,-1) {$122$};

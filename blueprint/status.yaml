@@ -734,7 +734,7 @@ nodes:
     nl_hash: 2478096e234dc052
   a0000000004:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: e839acd444e194a9
   thm:main:
     bound: false
@@ -796,7 +796,7 @@ nodes:
     nl_hash: 7baae54d6206b811
   a0000000005:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 6343a41675fa7cdf
   cor:af-vanishing:
     bound: false
@@ -1285,7 +1285,7 @@ nodes:
     nl_hash: a0d7273048f468ad
   prereq:prop:ess-diff-components:
     kind: proposition
-    bound: true
+    bound: false
     nl_hash: 926cb0ee0a75321c
     nl_reviewed: true
   prereq:def:f-extension-diff:
@@ -1317,7 +1317,7 @@ nodes:
     nl_reviewed: true
   prereq:def:ess-underlying-complex:
     kind: definition
-    bound: true
+    bound: false
     nl_hash: d71b4b60bcf6aa75
     proved: false
     nl_reviewed: true
