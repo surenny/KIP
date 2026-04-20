@@ -285,7 +285,7 @@
 
 \begin{definition}\label{prereq:def:ess-underlying-complex}
     \uses{prereq:def:filtered-complex,prereq:def:convergence}
-    \lean{KIP.SpectralSequence.ExtensionSS.underlyingComplex}\leanok
+    \lean{KIP.SpectralSequence.ExtensionSS}
     Let $f: V_1 \to V_2$ be a morphism of converging spectral sequences, with underlying map $f_A: A_1 \to A_2$ on the target groups. The \emph{underlying filtered chain complex} of $f$ is the two-term chain complex
     $$C_1 = A_1 \xrightarrow{f_A} C_0 = A_2,$$
     equipped with the filtrations on $A_1$ and $A_2$ inherited from the convergence data: $F^s C_1 = F^s A_1$ and $F^s C_0 = F^s A_2$. Since $f_A$ preserves the filtration, this is a filtered chain complex in the sense of Definition~\ref{prereq:def:filtered-complex}.
@@ -301,7 +301,7 @@
 
 \begin{proposition}\label{prereq:prop:ess-e0-iso}
     \uses{prereq:def:ess,prereq:def:associated-graded}
-    \lean{KIP.SpectralSequence.ExtensionSS.e0_iso}\leanok
+    \lean{KIP.SpectralSequence.ess_e0_iso}\leanok
     The $E_0$-page of the $f$-ESS is canonically isomorphic to the direct sum of the $E_\infty$-pages of the source and target:
     $$\mathrm{ESS}(f)_0^{s} \cong E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2).$$
     This follows from $E_0^s = \mathrm{gr}^s C_* = \mathrm{gr}^s A_1 \oplus \mathrm{gr}^s A_2 \cong E_\infty^s(V_1) \oplus E_\infty^s(V_2)$.
@@ -309,7 +309,7 @@
 
 \begin{proposition}\label{prereq:prop:ess-diff-components}
     \uses{prereq:prop:ess-e0-iso}
-    \lean{KIP.SpectralSequence.ExtensionSS.diff_components}\leanok
+    \lean{KIP.SpectralSequence.ExtensionSS}
     Under the decomposition $\mathrm{ESS}(f)_0^{s} \cong E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2)$, the differentials of the $f$-ESS have the form
     $$d_n^{\mathrm{ESS}}: E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2) \to E_\infty^{s+n}(V_1) \oplus E_\infty^{s+n}(V_2),$$
     and only the component $E_\infty^{s}(V_1) \to E_\infty^{s+n}(V_2)$ can be nonzero; the other three components (source-to-source, target-to-source, target-to-target) vanish. This follows from the chain complex structure: the differential of $C_*$ maps $C_1 = A_1$ to $C_0 = A_2$ and is zero in the reverse direction.
@@ -323,7 +323,7 @@
 
 \begin{proposition}\label{prereq:prop:ess-d0}
     \uses{prereq:def:f-extension-diff,prereq:def:associated-graded}
-    \lean{KIP.SpectralSequence.ExtensionSS.d0_eq_gr}\leanok
+    \lean{KIP.SpectralSequence.ess_diff_zero_page}\leanok
     The zeroth extension differential $d_0^f$ equals the map induced by $f$ on the associated graded:
     $$d_0^f = \mathrm{gr}^s(f_A): \mathrm{gr}^s A_1 \to \mathrm{gr}^s A_2.$$
     Under the identification $\mathrm{gr}^s A_i \cong E_\infty^s(V_i)$, this is the map $E_\infty^s(V_1) \to E_\infty^s(V_2)$ induced by $f$ on $E_\infty$-pages.

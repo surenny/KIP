@@ -235,15 +235,15 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 8fc52a93f8dce043
+    nl_hash: a4e41d078f4bb5e5
   prereq:prop:no-crossing-iff:
     lean_decl: KIP.SpectralSequence.ess_no_crossing_char
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: proposition
-    nl_hash: c3d66f4ad4e6e4a0
+    nl_hash: 6b4fe0d2c987a014
   prereq:def:ess:
     lean_decl: KIP.SpectralSequence.ExtensionSS
     nl_reviewed: true
@@ -251,7 +251,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: eeb5058bd9d3a459
+    nl_hash: 7600ebeaed0cf2cc
   prereq:def:f-extension:
     lean_decl: KIP.SpectralSequence.HasFExtension
     nl_reviewed: true
@@ -267,45 +267,45 @@ nodes:
     aligned: false
     proved: false
     kind: notation
-    nl_hash: d492652a3c01a396
+    nl_hash: 34a95c6c5299a5e8
   prereq:prop:f-ext-characterization:
     lean_decl: KIP.SpectralSequence.ess_diff_char
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: proposition
-    nl_hash: 48057673f62a34f7
+    nl_hash: 0fff8ddfc8cb1b1e
   prereq:cor:af-vanishing:
     lean_decl: KIP.SpectralSequence.af_vanishing
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
-    nl_hash: 9db3b228e065b567
+    nl_hash: e09cd3aff02baa7b
   prereq:prop:ess-exactness:
     lean_decl: KIP.SpectralSequence.ess_exactness
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: proposition
-    nl_hash: 974e076ae4e81222
+    nl_hash: c078f5441fc15571
   prereq:thm:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_exact
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: theorem
-    nl_hash: 3aa7ab03a1164c8f
+    nl_hash: 83fbcc8217fa38e8
   prereq:cor:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_cor
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
     nl_hash: 161ea4d7767e16a7
   prereq:cor:triangle-map:
@@ -313,33 +313,33 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
-    nl_hash: 04bc9b3def8c6e83
+    nl_hash: d78b78560bd66839
   prereq:cor:composition-ext:
     lean_decl: KIP.SpectralSequence.ess_composition
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
-    nl_hash: 3813424223bd18dc
+    nl_hash: 9000ce2b40afb8bf
   prereq:cor:composition-zero:
     lean_decl: KIP.SpectralSequence.ess_composition_zero
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
-    nl_hash: 12d97e7724341f15
+    nl_hash: 0e954057b528f1e0
   prereq:cor:ess-naturality:
     lean_decl: KIP.SpectralSequence.essCommutativity_induces_map
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: false
+    proved: true
     kind: corollary
-    nl_hash: a606f3bb0659e825
+    nl_hash: 7dddd7bad1c3bedc
   prereq:cor:stationary-page:
     lean_decl: KIP.SpectralSequence.essCommutativity_eInfty_compat
     nl_reviewed: true
@@ -515,7 +515,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: ef443e5f750327d6
+    nl_hash: 5ae1f123a5e2103e
   prereq:ax:adams-convergence:
     lean_decl: KIP.StableHomotopy.adamsConvergence
     nl_reviewed: true
@@ -547,7 +547,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 4d3971a33cad7227
+    nl_hash: 03c80d77b4609a35
   prereq:prop:adams-filtration-characterization:
     lean_decl: KIP.StableHomotopy.adamsFiltration_functorial
     nl_reviewed: true
@@ -734,7 +734,7 @@ nodes:
     nl_hash: 2478096e234dc052
   a0000000004:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: e839acd444e194a9
   thm:main:
     bound: false
@@ -796,7 +796,7 @@ nodes:
     nl_hash: 7baae54d6206b811
   a0000000005:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 6343a41675fa7cdf
   cor:af-vanishing:
     bound: false
@@ -841,11 +841,11 @@ nodes:
     nl_hash: b211f41c38eb91c6
   a0000000008:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 7bb29815f0942e22
   a0000000009:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 2337fba42bf2d2f9
     nl_reviewed: false
     aligned: false
@@ -863,11 +863,11 @@ nodes:
     aligned: false
   a0000000012:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 4a3c3f93b2df7744
   a0000000013:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: d4b541323c42bbe7
     nl_reviewed: false
     aligned: false
@@ -919,13 +919,13 @@ nodes:
     nl_hash: 83b5f0ed0a69dfe4
   a0000000018:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 1b36ea2e00cebea2
     nl_reviewed: false
     aligned: false
   a0000000019:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 3654fbdff0b25f39
     nl_reviewed: false
     aligned: false
@@ -1052,13 +1052,13 @@ nodes:
     nl_hash: 67a3c2fc453903a4
   a0000000027:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 3e7601ad86cc2418
     nl_reviewed: false
     aligned: false
   a0000000028:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: f32c25f209f26615
     nl_reviewed: false
     aligned: false
@@ -1143,8 +1143,10 @@ nodes:
   prereq:ax:finite-type-char:
     kind: axiom
     bound: false
-    nl_hash: 408a8716063deaac
+    nl_hash: 14ba83a281f78d6c
     proved: false
+    nl_reviewed: false
+    aligned: false
   prereq:ax:connected-homology-vanishing:
     kind: axiom
     bound: false
@@ -1281,3 +1283,41 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: a0d7273048f468ad
+  prereq:prop:ess-diff-components:
+    kind: proposition
+    bound: true
+    nl_hash: 926cb0ee0a75321c
+    nl_reviewed: true
+  prereq:def:f-extension-diff:
+    kind: definition
+    bound: true
+    nl_hash: 410c2bd7a5b73811
+    proved: false
+    nl_reviewed: true
+  prereq:prop:f-ext-inessential:
+    kind: proposition
+    bound: true
+    nl_hash: 251504847230c29f
+    proved: true
+    nl_reviewed: true
+  prereq:prop:ess-e0-iso:
+    kind: proposition
+    bound: true
+    nl_hash: 815a80bc8a569956
+    nl_reviewed: true
+  prereq:rem:no-crossing-equiv:
+    kind: remark
+    bound: false
+    nl_hash: 8c0bbb45f887ec01
+  prereq:prop:ess-d0:
+    kind: proposition
+    bound: true
+    nl_hash: 9d0a665e6fb4c787
+    proved: true
+    nl_reviewed: true
+  prereq:def:ess-underlying-complex:
+    kind: definition
+    bound: true
+    nl_hash: d71b4b60bcf6aa75
+    proved: false
+    nl_reviewed: true
