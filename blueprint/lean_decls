@@ -27,9 +27,7 @@ KIP.SpectralSequence.DifferentialDatum
 KIP.SpectralSequence.HasCrossingAt
 KIP.SpectralSequence.ess_no_crossing_char
 KIP.SpectralSequence.ExtensionSS
-KIP.SpectralSequence.ExtensionSS
 KIP.SpectralSequence.ess_e0_iso
-KIP.SpectralSequence.ExtensionSS
 KIP.SpectralSequence.HasFExtension
 KIP.SpectralSequence.ess_diff_zero_page
 KIP.SpectralSequence.DetectionSet

@@ -56,6 +56,7 @@ jobs:
             pip install -e ./tools/plastexdepgraph
             pip install -e ./tools/leanblueprint
             cd blueprint && leanblueprint pdf && leanblueprint web && cd ..
+            leanblueprint checkdecls
             mkdir -p docs && cp blueprint/print/print.pdf docs/blueprint.pdf
             cp -r blueprint/web docs/blueprint
 
