@@ -56,9 +56,11 @@ jobs:
             pip install -e ./tools/plastexdepgraph
             pip install -e ./tools/leanblueprint
             cd blueprint && leanblueprint pdf && leanblueprint web && cd ..
-            leanblueprint checkdecls
             mkdir -p docs && cp blueprint/print/print.pdf docs/blueprint.pdf
             cp -r blueprint/web docs/blueprint
+
+      - name: Check blueprint declarations
+        run: lake exe checkdecls blueprint/lean_decls
 
       - name: Compile documentation and deploy
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
