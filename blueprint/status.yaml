@@ -179,7 +179,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 5410c664c5e279f3
+    nl_hash: 62cb8b90db38f64f
   prereq:def:filtered-complex-ssdata:
     lean_decl: KIP.SpectralSequence.FilteredComplex.toSSData
     nl_reviewed: true
@@ -719,7 +719,7 @@ nodes:
     nl_hash: cda248a7a43d920b
   a0000000003:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: c39633b332fdd3bc
     nl_reviewed: false
     aligned: false
@@ -796,7 +796,7 @@ nodes:
     nl_hash: 7baae54d6206b811
   a0000000005:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 6343a41675fa7cdf
   cor:af-vanishing:
     bound: false
@@ -833,7 +833,7 @@ nodes:
     nl_hash: 72d241409030dd3c
   a0000000007:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: add0a104495f4766
   nota:ess-notation:
     bound: false
@@ -841,7 +841,7 @@ nodes:
     nl_hash: b211f41c38eb91c6
   a0000000008:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 7bb29815f0942e22
   a0000000009:
     bound: false
@@ -851,7 +851,7 @@ nodes:
     aligned: false
   a0000000010:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: a29dd213d4dfc81d
     nl_reviewed: false
     aligned: false
@@ -867,7 +867,7 @@ nodes:
     nl_hash: 4a3c3f93b2df7744
   a0000000013:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: d4b541323c42bbe7
     nl_reviewed: false
     aligned: false
@@ -1016,7 +1016,7 @@ nodes:
     aligned: false
   a0000000025:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 2339bd35ca31252a
     nl_reviewed: false
     aligned: false
@@ -1052,7 +1052,7 @@ nodes:
     nl_hash: 67a3c2fc453903a4
   a0000000027:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 3e7601ad86cc2418
     nl_reviewed: false
     aligned: false
@@ -1244,3 +1244,45 @@ nodes:
     nl_hash: ca33a2963d77f060
     proved: false
     nl_reviewed: true
+  prereq:thm:finite-type-homology:
+    kind: theorem
+    bound: false
+    nl_hash: 4a0082243f6e972e
+  prereq:thm:finite-type-char:
+    kind: theorem
+    bound: false
+    nl_hash: 14ba83a281f78d6c
+  prereq:thm:connected-homology-vanishing:
+    kind: theorem
+    bound: false
+    nl_hash: c46deefb86c12757
+  prereq:thm:sphere-connected:
+    kind: theorem
+    bound: false
+    nl_hash: 6d218bc7088c6878
+  prereq:thm:adams-boundedness:
+    kind: theorem
+    bound: false
+    nl_hash: d4915bb9addf144e
+  prereq:thm:adams-separated:
+    kind: theorem
+    bound: false
+    nl_hash: 0e0bcee1d10255b9
+  prereq:thm:odd-order-af-infinity:
+    kind: theorem
+    bound: false
+    nl_hash: 70c5624b37269250
+  prereq:thm:not-odd-order-af-finite:
+    kind: theorem
+    bound: false
+    nl_hash: 3083a6865fee819c
+  prereq:def:bounded-below:
+    kind: definition
+    bound: true
+    nl_hash: 9b5ac92e22604ec3
+    proved: false
+    nl_reviewed: true
+  prereq:thm:adams-weak-convergence:
+    kind: theorem
+    bound: false
+    nl_hash: a0d7273048f468ad
