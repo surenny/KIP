@@ -10,6 +10,7 @@ blueprint/src/web.bbl
 blueprint/src/web.paux
 blueprint/src/web_content.paux
 blueprint/src/*.aux
+blueprint/src/*.blg
 blueprint/src/*.log
 blueprint/src/*.fls
 blueprint/src/*.fdb_latexmk
@@ -24,6 +25,7 @@ blueprint/src/content.tex.bak
 blueprint/src/src/
 blueprint/src/web/
 blueprint/src/core.*
+blueprint/lean_decls
 blueprint/missfont.log
 blueprint/texput.log
 blueprint/template.*
