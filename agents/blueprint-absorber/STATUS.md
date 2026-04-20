@@ -1,0 +1,15 @@
+# Hint Absorption Status
+
+## Absorbed
+<!-- agent appends here after successful absorption -->
+- `SyntheticNu.md` — 2026-04-20
+- `syntheticbasic.md` — 2026-04-20
+- `syntheticsphere.md` — 2026-04-20
+- `adams.tex` — 2026-04-20
+- `commutativity.tex` — 2026-04-20
+- `crossing.tex` — 2026-04-20
+- `extension.tex` — 2026-04-20
+- `filtered谱序列.tex` — 2026-04-20
+
+## Pending
+<!-- new hints go here -->
