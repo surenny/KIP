@@ -11,7 +11,6 @@
 约定如下：
 
 - 原始论文源码保持不变。
-- `src/legacy_main.tex` 是原 `main.tex` 的副本。
 - `src/content.tex` 是从原稿自动抽取出的正文。
 - `src/macros/common.tex` 保留原有 preamble，并额外加载 `blueprint` 包。
 - `src/web.tex` 和 `src/print.tex` 是 leanblueprint 的两个入口。

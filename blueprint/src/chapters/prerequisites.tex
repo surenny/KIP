@@ -243,137 +243,218 @@
 \begin{definition}\label{prereq:def:crossing}
     \uses{prereq:def:convergence,prereq:def:essential-differential,prereq:def:differential-data}
     \lean{KIP.SpectralSequence.HasCrossingAt}\leanok
-    Let $E$ be a spectral sequence converging to $A$. Let $x \in E$ be an element of filtration $s$, and suppose $d_n(x) = y$ is a differential (so $y$ has filtration $s + n$). Assume the spectral sequence starts at page $\ge 0$ and that $d_n$ increases filtration by $n$.
+    Let $f: V_1 \to V_2$ be a morphism of converging spectral sequences, and suppose $d_n^f(x) = y$ is an $f$-extension differential with $x \in E_\infty^{s}(V_1)$ and $y \in E_\infty^{s+n}(V_2)$.
     \begin{enumerate}
-        \item We say that $d_n(x) = y$ \emph{has a crossing that hits filtration $p$} for some $p \le s+n$, if there exists an element $x' \in E$ of filtration $s + a$ with $a > 0$ and an essential differential $d_m(x') = y'$ for $0 \ne y'$ of filtration $s + a + m$, such that
-        $$p = \mathrm{Fil}(y') = s + a + m \le \mathrm{Fil}(y) = s + n.$$
-        \item We say that $d_n(x) = y$ \emph{has no crossing that hits the range $\mathrm{Fil} \ge p$} if there does not exist $x'$ of filtration $s + a$ with $a > 0$ and an essential differential $d_m(x') = y'$ for $0 \ne y'$ of filtration $s + a + m$ such that
-        $$p \le \mathrm{Fil}(y') = s + a + m \le \mathrm{Fil}(y) = s + n.$$
-        \item We say that $d_n(x) = y$ \emph{has no crossing} if it has no crossing that hits the range $\mathrm{Fil} \ge \mathrm{Fil}(x) + 1$.
+        \item We say that $d_n^f(x) = y$ \emph{has a crossing that hits filtration $p$} for some $p \le s+n$, if there exists $x' \in E_\infty^{s+a}(V_1)$ with $a > 0$ and an essential differential $d_{n-a}^f(x') = y'$ for $0 \ne y' \in E_\infty^{s+a+(n-a)}(V_2)$ such that
+        $$p \le \mathrm{Fil}(y') \le \mathrm{Fil}(y) = s + n.$$
+        \item We say that $d_n^f(x) = y$ \emph{has no crossing that hits the range $\mathrm{Fil} \ge p$} if there does not exist such $x'$ and $y'$ with $p \le \mathrm{Fil}(y') \le \mathrm{Fil}(y)$.
+        \item We say that $d_n^f(x) = y$ \emph{has no crossing} if it has no crossing that hits the range $\mathrm{Fil} \ge \mathrm{Fil}(x) + 1 = s + 1$.
     \end{enumerate}
 \end{definition}
 
-\begin{proposition}\label{prereq:prop:no-crossing-iff}
+\begin{remark}\label{prereq:rem:no-crossing-equiv}
     \uses{prereq:def:crossing}
+    The following are equivalent:
+    \begin{itemize}
+        \item An $f$-extension $d_n^f(x) = y$ has no crossing that hits the range $\mathrm{Fil} \ge p$.
+        \item For any $a > 0$, if there is an $f$-extension from $x' \in E_\infty^{s+a}(V_1)$ to some nontrivial $y'$, then $\mathrm{Fil}(y') < p$ or $\mathrm{Fil}(y') > \mathrm{Fil}(y)$.
+    \end{itemize}
+\end{remark}
+
+\begin{proposition}\label{prereq:prop:no-crossing-iff}
+    \uses{prereq:def:crossing,prereq:prop:f-ext-characterization,prereq:prop:f-ext-inessential}
     \lean{KIP.SpectralSequence.ess_no_crossing_char}\leanok
-    An $f$-extension from $x$ to $y$ has no crossing in the range $\mathrm{AF} \ge p$ if and only if for all $[x] \in \{x\}$ such that $\mathrm{AF}(f[x]) \ge p$ we have $f[x] \in \{y\}$. In particular:
+    An $f$-extension from $x$ to $y$ has no crossing in the range $\mathrm{Fil} \ge p$ if and only if for all $[x] \in \{x\}$ such that $\mathrm{Fil}(f_A[x]) \ge p$ we have $f_A[x] \in \{y\}$. In particular:
     \begin{enumerate}
-        \item An $f$-extension from $x$ to $y$ has no crossing if and only if for all $[x] \in \{x\}$ we have $f[x] \in \{y\}$.
-        \item An $f$-extension $d_n^f(x) = 0$ has no crossing if and only if for all $[x] \in \{x\}$, $\mathrm{AF}(f[x]) > \mathrm{AF}(x) + n$.
+        \item An $f$-extension from $x$ to $y$ has no crossing if and only if for all $[x] \in \{x\}$ we have $f_A[x] \in \{y\}$.
+        \item An $f$-extension $d_n^f(x) = 0$ has no crossing if and only if for all $[x] \in \{x\}$, $\mathrm{Fil}(f_A[x]) > \mathrm{Fil}(x) + n$.
         \item If $\mathrm{AF}(f) = n$, then all $d_n^f$-differentials have no crossing.
     \end{enumerate}
 \end{proposition}
+\begin{proof}\leanok
+    \emph{Only if.} Suppose the extension has no crossing in $\mathrm{Fil} \ge p$. Assume for contradiction that there exists $[x] \in \{x\}$ with $\mathrm{Fil}(f_A[x]) \ge p$ but $f_A[x] \notin \{y\}$. Let $y'$ be the element of $E_\infty(V_2)$ detecting $f_A[x]$, so $f_A[x] \in \{y'\}$ with $\mathrm{Fil}(y') \ge p$. By Proposition~\ref{prereq:prop:f-ext-characterization} there is an $f$-extension from $x$ to $y'$. By Proposition~\ref{prereq:prop:f-ext-inessential}~(2), $y'$ (if $\mathrm{Fil}(y) > \mathrm{Fil}(y')$) or $y - y'$ (if $\mathrm{Fil}(y) = \mathrm{Fil}(y')$) is hit by a shorter $d^f$-differential from some $x'$ with $\mathrm{Fil}(x') > \mathrm{Fil}(x)$. This gives a crossing that hits $\mathrm{Fil} \ge p$, contradicting the assumption.
+
+    \emph{If.} Suppose the extension has a crossing: there exist $x' \in E_\infty^{s+a}(V_1)$ with $a > 0$ and essential $d_{n-a}^f(x') = y'$ with $p \le \mathrm{Fil}(y') \le \mathrm{Fil}(y)$. By Proposition~\ref{prereq:prop:f-ext-characterization}, there exists $[x'] \in \{x'\}$ with $f_A([x']) \in \{y'\}$. Since $\mathrm{Fil}(x') > \mathrm{Fil}(x)$, the element $[x] + [x'] \in \{x\}$ (as $[x']$ lies in higher filtration). Then
+    $$f_A([x] + [x']) = f_A([x]) + f_A([x']),$$
+    and this element is detected by $y'$ (if $\mathrm{Fil}(y') < \mathrm{Fil}(y)$) or by $y + y'$ (if $\mathrm{Fil}(y') = \mathrm{Fil}(y)$). In either case $f_A([x] + [x']) \notin \{y\}$ while $\mathrm{Fil}(f_A([x] + [x'])) \ge p$, contradicting the assumption.
+
+    Parts~(1) and~(2) are special cases. Part~(3) holds for degree reasons: if $\mathrm{AF}(f) = n$, then $f_A$ raises filtration by at least $n$, so $\mathrm{Fil}(f_A[x]) \ge s + n$ for all $[x] \in F^s A_1$.
+\end{proof}
 
 \subsubsection{Extension Spectral Sequence}\label{sec:prereq-ess}
 
-\begin{definition}\label{prereq:def:ess}
-    \uses{prereq:def:convergence,prereq:def:adams-filtration}
-    \lean{KIP.SpectralSequence.ExtensionSS}\leanok
-    For a map $f: X \to Y$ between spectra, the \emph{$f$-extension spectral sequence} ($f$-ESS) is the spectral sequence derived from filtering the chain complex
-    $$0 \to \pi_* X \xrightarrow{\pi_* f} \pi_* Y \to 0$$
-    by the Adams filtration. Its $E_0$-page is isomorphic to $E_\infty^{s,t}(X) \oplus E_\infty^{s,t}(Y)$, and it converges to $\ker(\pi_* f) \oplus \mathrm{coker}(\pi_* f)$. Differentials have the form
-    $$d_n^f: \mathrm{ESS}(f)_n^{s,t} \to \mathrm{ESS}(f)_n^{s+n,t+n}.$$
+\begin{definition}\label{prereq:def:ess-underlying-complex}
+    \uses{prereq:def:filtered-complex,prereq:def:convergence}
+    \lean{KIP.SpectralSequence.ExtensionSS.underlyingComplex}\leanok
+    Let $f: V_1 \to V_2$ be a morphism of converging spectral sequences, with underlying map $f_A: A_1 \to A_2$ on the target groups. The \emph{underlying filtered chain complex} of $f$ is the two-term chain complex
+    $$C_1 = A_1 \xrightarrow{f_A} C_0 = A_2,$$
+    equipped with the filtrations on $A_1$ and $A_2$ inherited from the convergence data: $F^s C_1 = F^s A_1$ and $F^s C_0 = F^s A_2$. Since $f_A$ preserves the filtration, this is a filtered chain complex in the sense of Definition~\ref{prereq:def:filtered-complex}.
 \end{definition}
 
-\begin{definition}\label{prereq:def:f-extension}
-    \uses{prereq:def:ess}
-    \lean{KIP.SpectralSequence.HasFExtension}\leanok
-    We say there is an \emph{$f$-extension} from $x \in E_\infty^{s,t}(X)$ to $y \in E_\infty^{s+n,t+n}(Y)$ if $d_n^f(x) = y$ in the $f$-ESS. The extension is \emph{essential} if $y$ is nontrivial on the $E_n$-page; otherwise it is \emph{inessential}.
+\begin{definition}\label{prereq:def:ess}
+    \uses{prereq:def:ess-underlying-complex,prereq:thm:filtered-complex-ss,prereq:thm:filtered-complex-convergence}
+    \lean{KIP.SpectralSequence.ExtensionSS}\leanok
+    The \emph{$f$-extension spectral sequence} ($f$-ESS) is the spectral sequence
+    $$\mathrm{ESS}(f) = \mathrm{FilteredComplex.toSpectralSequence}(C_*(f)),$$
+    obtained by applying the filtered complex construction (Theorem~\ref{prereq:thm:filtered-complex-ss}) to the underlying filtered chain complex of Definition~\ref{prereq:def:ess-underlying-complex}. By Theorem~\ref{prereq:thm:filtered-complex-convergence}, if the filtrations on $A_1$ and $A_2$ are exhaustive and Hausdorff (which holds when they are bounded), then the $f$-ESS converges to the homology of the underlying complex, i.e., to $\ker(f_A) \oplus \mathrm{coker}(f_A)$.
 \end{definition}
+
+\begin{proposition}\label{prereq:prop:ess-e0-iso}
+    \uses{prereq:def:ess,prereq:def:associated-graded}
+    \lean{KIP.SpectralSequence.ExtensionSS.e0_iso}\leanok
+    The $E_0$-page of the $f$-ESS is canonically isomorphic to the direct sum of the $E_\infty$-pages of the source and target:
+    $$\mathrm{ESS}(f)_0^{s} \cong E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2).$$
+    This follows from $E_0^s = \mathrm{gr}^s C_* = \mathrm{gr}^s A_1 \oplus \mathrm{gr}^s A_2 \cong E_\infty^s(V_1) \oplus E_\infty^s(V_2)$.
+\end{proposition}
+
+\begin{proposition}\label{prereq:prop:ess-diff-components}
+    \uses{prereq:prop:ess-e0-iso}
+    \lean{KIP.SpectralSequence.ExtensionSS.diff_components}\leanok
+    Under the decomposition $\mathrm{ESS}(f)_0^{s} \cong E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2)$, the differentials of the $f$-ESS have the form
+    $$d_n^{\mathrm{ESS}}: E_\infty^{s}(V_1) \oplus E_\infty^{s}(V_2) \to E_\infty^{s+n}(V_1) \oplus E_\infty^{s+n}(V_2),$$
+    and only the component $E_\infty^{s}(V_1) \to E_\infty^{s+n}(V_2)$ can be nonzero; the other three components (source-to-source, target-to-source, target-to-target) vanish. This follows from the chain complex structure: the differential of $C_*$ maps $C_1 = A_1$ to $C_0 = A_2$ and is zero in the reverse direction.
+\end{proposition}
+
+\begin{definition}\label{prereq:def:f-extension-diff}
+    \uses{prereq:prop:ess-diff-components}
+    \lean{KIP.SpectralSequence.HasFExtension}\leanok
+    The \emph{$f$-extension differential} $d_n^f: E_\infty^{s}(V_1) \to E_\infty^{s+n}(V_2)$ is the unique nonzero component of the $n$-th differential of the $f$-ESS (Proposition~\ref{prereq:prop:ess-diff-components}). We say there is an \emph{$f$-extension} from $x \in E_\infty^{s}(V_1)$ to $y \in E_\infty^{s+n}(V_2)$ if $d_n^f(x) = y$. The extension is \emph{essential} if $y$ is nontrivial on the $E_n$-page; otherwise it is \emph{inessential}.
+\end{definition}
+
+\begin{proposition}\label{prereq:prop:ess-d0}
+    \uses{prereq:def:f-extension-diff,prereq:def:associated-graded}
+    \lean{KIP.SpectralSequence.ExtensionSS.d0_eq_gr}\leanok
+    The zeroth extension differential $d_0^f$ equals the map induced by $f$ on the associated graded:
+    $$d_0^f = \mathrm{gr}^s(f_A): \mathrm{gr}^s A_1 \to \mathrm{gr}^s A_2.$$
+    Under the identification $\mathrm{gr}^s A_i \cong E_\infty^s(V_i)$, this is the map $E_\infty^s(V_1) \to E_\infty^s(V_2)$ induced by $f$ on $E_\infty$-pages.
+\end{proposition}
+\begin{proof}\leanok This is the standard formula for the $E_0$-differential of a filtered complex (Definition~\ref{prereq:def:filtered-complex-ssdata}): $d_0$ is induced by the chain differential on the associated graded.\end{proof}
 
 \begin{notation}\label{prereq:not:representatives}
     \uses{prereq:def:detect}
     \lean{KIP.SpectralSequence.DetectionSet}\leanok
-    For $x \in E_\infty^{s,t}(X)$, let $\{x\} \subseteq \pi_{t-s}X$ denote the set of elements detected by $x$:
-    $$\{x\} = \{ \alpha \in F^s \pi_{t-s}X \mid \bar{\alpha} \mapsto x \text{ under } E_\infty^{s,t} \cong \mathrm{gr}^s \pi_{t-s}X \}.$$
-    For $[x] \in \{x\}$, we call $[x]$ a \emph{representative} of $x$. Note that $\{x\}$ is a coset of $F^{s+1}\pi_{t-s}X$ in $F^s\pi_{t-s}X$.
+    For $x \in E_\infty^{s}(V_1)$, let $\{x\} \subseteq A_1$ denote the set of elements detected by $x$:
+    $$\{x\} = \{ \alpha \in F^s A_1 \mid \bar{\alpha} \mapsto x \text{ under } E_\infty^{s} \cong \mathrm{gr}^s A_1 \}.$$
+    For $[x] \in \{x\}$, we call $[x]$ a \emph{representative} of $x$. Note that $\{x\}$ is a coset of $F^{s+1}A_1$ in $F^s A_1$.
 \end{notation}
 
 \begin{proposition}\label{prereq:prop:f-ext-characterization}
-    \uses{prereq:def:f-extension,prereq:not:representatives}
+    \uses{prereq:def:f-extension-diff,prereq:not:representatives}
     \lean{KIP.SpectralSequence.ess_diff_char}\leanok
-    An $f$-extension $d_n^f(x) = y$ holds if and only if there exists $[x] \in \{x\}$ such that $f[x] \in \{y\}$.
+    An $f$-extension $d_n^f(x) = y$ holds if and only if there exists $[x] \in \{x\}$ such that $f_A[x] \in \{y\}$.
 \end{proposition}
+\begin{proof}\leanok Follows directly from the filtered complex construction: $d_n^f(x) = y$ means there is a lift of $x$ in $F^s A_1$ whose image under $f_A$ lies in $F^{s+n} A_2$ and represents $y$ in $\mathrm{gr}^{s+n} A_2$.\end{proof}
 
-\begin{corollary}\label{prereq:cor:af-vanishing}
-    \uses{prereq:def:ess,prereq:def:adams-filtration-maps}
-    \lean{KIP.SpectralSequence.af_vanishing}\leanok
-    If $\mathrm{AF}(f) = k$, then $d_i^f = 0$ for $i < k$.
-\end{corollary}
+\begin{proposition}\label{prereq:prop:f-ext-inessential}
+    \uses{prereq:prop:f-ext-characterization,prereq:not:representatives}
+    \lean{KIP.SpectralSequence.ess_diff_inessential}\leanok
+    Consider $f: V_1 \to V_2$, $x \in E_\infty^{s}(V_1)$, $y \in E_\infty^{s+n}(V_2)$ and $y' \in E_\infty^{s+m}(V_2)$ for $m, n \ge 0$.
+    \begin{enumerate}
+        \item An $f$-extension from $x$ to $y$ is inessential, i.e., $y$ is trivial on the $E_n$-page of the $f$-ESS, if and only if there exists $x' \in E_\infty^{s+a}(V_1)$ for some $0 < a \le n$ with an essential differential $d_{n-a}^f(x') = y$. Equivalently, there exists $[x'] \in \{x'\} \subseteq A_1$ with $\mathrm{Fil}(x') > \mathrm{Fil}(x)$ such that $f_A[x'] \in \{y\}$.
+        \item Suppose $d_n^f(x) = y$ and $d_m^f(x) = y'$.
+        \begin{enumerate}
+            \item If $m = n$, then $y - y' \in {}^f\!B_{n-1}^{s+n}(V_2)$: there exists $x' \in E_\infty^{s+a}(V_1)$ for some $0 < a \le n$ with an essential differential $d_{n-a}^f(x') = y - y'$.
+            \item If $m > n$, then the $f$-extension from $x$ to $y$ is inessential.
+        \end{enumerate}
+    \end{enumerate}
+\end{proposition}
+\begin{proof}\leanok Part~(1) follows from the definition of the page boundaries in the filtered complex construction. Parts~(2a) and~(2b) follow from Part~(1) and Proposition~\ref{prereq:prop:f-ext-characterization}.\end{proof}
 
 \begin{proposition}\label{prereq:prop:ess-exactness}
     \uses{prereq:prop:f-ext-characterization,prereq:cor:composition-zero,prereq:not:representatives}
     \lean{KIP.SpectralSequence.ess_exactness}\leanok
-    If $X \xrightarrow{f} Y \xrightarrow{g} Z$ induces an exact sequence on homotopy groups, then all permanent $d^g$-cycles in $E_\infty(Y)$ are boundaries in the $f$-ESS.
+    Suppose the sequence of converging spectral sequences $V_1 \xrightarrow{f} V_2 \xrightarrow{g} V_3$ induces an exact sequence on target groups $A_1 \xrightarrow{f_A} A_2 \xrightarrow{g_A} A_3$ that is exact at $A_2$. Then all permanent $d^g$-cycles in $E_\infty(V_2)$ are boundaries in the $f$-ESS.
 \end{proposition}
+\begin{proof}\leanok
+    \emph{First proof} (via chain complexes). Treat the three-term sequence $A_1 \xrightarrow{f_A} A_2 \xrightarrow{g_A} A_3$ as a filtered chain complex. Its associated spectral sequence comprises both the $d^f$ and $d^g$ differentials. By exactness at $A_2$, the abutment projected to the $A_2$-component is zero. Therefore every permanent $d^g$-cycle must be killed by a $d^f$-differential.
+
+    \emph{Second proof} (via representatives). Let $y \in E_\infty(V_2)$ be a permanent $d^g$-cycle. By convergence, there exists $[y] \in \{y\}$ with $g_A([y]) = 0$. By exactness, there exists $[x] \in A_1$ with $f_A([x]) = [y]$. Let $x \in E_\infty(V_1)$ detect $[x]$. Then $f_A[x] \in \{y\}$, so by Proposition~\ref{prereq:prop:f-ext-characterization} there is an $f$-extension from $x$ to $y$.
+\end{proof}
 
 \subsubsection{Commutativity of Extension Differentials}\label{sec:prereq-commutativity}
 
 \begin{theorem}\label{prereq:thm:four-spectra}
-    \uses{prereq:prop:no-crossing-iff}
+    \uses{prereq:prop:no-crossing-iff,prereq:prop:f-ext-characterization}
     \lean{KIP.SpectralSequence.fourSpectra_exact}\leanok
-    Consider a homotopy commutative diagram of spectra
+    Consider a homotopy commutative diagram of converging spectral sequences
     $$\xymatrix{
-    X \ar[r]^{f}\ar[d]_{p} & Y\ar[d]^{q}\\
-    Z \ar[r]_{g} & W
+    V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
+    V_3 \ar[r]_{g} & V_4
     }$$
-    Suppose $m, n, l \ge 0$, $0 < k \le m + l - n$, and
+    Suppose $m, n, l \ge 0$, $0 < k \le m + l - n$,
+    $$x \in E_\infty^{s}(V_1), \quad y \in E_\infty^{s+n}(V_2), \quad z \in E_\infty^{s+m}(V_3), \quad w \in E_\infty^{s+m+l}(V_4),$$
+    and
     \begin{enumerate}
         \item $d_n^f(x) = y$,
         \item $d_m^p(x) = z$,
         \item the differential in (1) or (2) has no crossing,
-        \item $d_l^g(z) = w$, and has no crossing that hits $\mathrm{AF} \ge s + n + k$,
+        \item $d_l^g(z) = w$, and has no crossing that hits $\mathrm{Fil} \ge s + n + k$,
         \item $d_{k-1}^q y = 0$, and has no crossing.
     \end{enumerate}
     Then $d_{m+l-n}^q(y) = w$.
 \end{theorem}
+\begin{proof}\leanok
+    First we find a representative $[x] \in \{x\}$ such that $p_A[x] \in \{z\}$ and $f_A[x] \in \{y\}$.
+
+    If the differential in~(2) has no crossing, by Proposition~\ref{prereq:prop:no-crossing-iff} we can pick $[x] \in \{x\}$ such that $p_A[x] \in \{z\}$; by Proposition~\ref{prereq:prop:f-ext-characterization}, $f_A[x] \in \{y'\}$ for some $y'$, but the no-crossing condition forces $f_A[x] \in \{y\}$. Symmetrically, if the differential in~(1) has no crossing, we pick $[x]$ with $f_A[x] \in \{y\}$ and the no-crossing forces $p_A[x] \in \{z\}$.
+
+    By~(5) and Proposition~\ref{prereq:prop:no-crossing-iff}~(2), since $d_{k-1}^q y = 0$ has no crossing, $\mathrm{Fil}(q_A f_A[x]) \ge s + n + k$. Since the diagram commutes on target groups, $g_A p_A[x] = q_A f_A[x]$, so $\mathrm{Fil}(g_A p_A[x]) \ge s + n + k$.
+
+    Combining with~(4) ($d_l^g(z) = w$ has no crossing that hits $\mathrm{Fil} \ge s + n + k$) and $p_A[x] \in \{z\}$, Proposition~\ref{prereq:prop:no-crossing-iff} gives $g_A p_A[x] \in \{w\}$.
+
+    Therefore $q_A f_A[x] \in \{w\}$, and since $f_A[x] \in \{y\}$, there is a $q$-extension from $y$ to $w$ by Proposition~\ref{prereq:prop:f-ext-characterization}.
+\end{proof}
 
 \begin{corollary}\label{prereq:cor:four-spectra}
     \uses{prereq:thm:four-spectra}
     \lean{KIP.SpectralSequence.fourSpectra_cor}\leanok
     In the setting of Theorem~\ref{prereq:thm:four-spectra}, if condition~(4) is strengthened to ``$d_l^g(z) = w$ has no crossing'' (and condition~(5) is dropped), then $d_{m+l-n}^q(y) = w$.
 \end{corollary}
+\begin{proof}\leanok If $d_l^g(z) = w$ has no crossing, then in particular it has no crossing that hits $\mathrm{Fil} \ge s + n + k$ for any $k$. Taking $k = 1$ and observing that $d_0^q y = 0$ trivially has no crossing, the result follows from Theorem~\ref{prereq:thm:four-spectra}.\end{proof}
 
 \begin{corollary}\label{prereq:cor:triangle-map}
     \uses{prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.essCommutativity_triangle}\leanok
-    Consider a homotopy commutative diagram $X \xrightarrow{f} Y \xrightarrow{q} Z$ with $p = q \circ f$. If $d_n^f(x) = y$, $d_m^p(x) = z$, and one of the two extensions has no crossing, then $d_{m-n}^q(y) = z$.
+    Consider a homotopy commutative diagram of converging spectral sequences $V_1 \xrightarrow{f} V_2 \xrightarrow{q} V_3$ with $p = q \circ f$. If $d_n^f(x) = y$, $d_m^p(x) = z$, and one of the two extensions has no crossing, then $d_{m-n}^q(y) = z$.
 \end{corollary}
+\begin{proof}\leanok This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_3 = V_4$ and $g = \mathrm{id}_{V_3}$: since $d_0^g(z) = z$ and the identity extension always has no crossing, the conditions are satisfied with $l = 0$.\end{proof}
 
 \begin{corollary}\label{prereq:cor:composition-ext}
     \uses{prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.ess_composition}\leanok
-    For $q = g \circ p$, if $d_m^p(x) = z$ and $d_l^g(z) = w$ has no crossing, then $d_{m+l}^q(x) = w$.
+    Consider a homotopy commutative diagram of converging spectral sequences $V_1 \xrightarrow{p} V_3 \xrightarrow{g} V_4$ with $q = g \circ p$. If $d_m^p(x) = z$ and $d_l^g(z) = w$ has no crossing, then $d_{m+l}^q(x) = w$.
 \end{corollary}
+\begin{proof}\leanok This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_1 = V_2$ and $f = \mathrm{id}_{V_1}$: since $d_0^f(x) = x$ with $n = 0$ and the identity extension has no crossing, the conditions give $d_{m+l-0}^q(y) = d_{m+l}^q(x) = w$.\end{proof}
 
 \begin{corollary}\label{prereq:cor:composition-zero}
     \uses{prereq:cor:four-spectra,prereq:prop:f-ext-characterization}
     \lean{KIP.SpectralSequence.ess_composition_zero}\leanok
-    If $g \circ f = 0$ and $d_n^f(x) = y$, then $y$ is a permanent cycle in the $g$-ESS: $d_m^g(y) = 0$ for all $m \ge 0$.
+    If $g \circ f = 0$ (as morphisms of converging spectral sequences) and $d_n^f(x) = y$, then $y$ is a permanent cycle in the $g$-ESS: $d_m^g(y) = 0$ for all $m \ge 0$.
 \end{corollary}
+\begin{proof}\leanok
+    Consider the commutative diagram
+    $$\xymatrix{
+    V_1 \ar[r]^{f}\ar[d] & V_2\ar[d]^{g}\\
+    0 \ar[r] & V_3
+    }$$
+    with $p = 0$ and $g \circ f = 0$. All extensions from $x$ to $0$ are trivial and have no crossing. By Corollary~\ref{prereq:cor:four-spectra}, $d_m^g(y) = 0$.
+
+    \emph{Alternative proof.} By Proposition~\ref{prereq:prop:f-ext-characterization}, there exists $[x] \in \{x\}$ with $f_A[x] \in \{y\}$. Let $[y] = f_A[x]$. Then $g_A([y]) = g_A(f_A([x])) = 0$. Hence $y$ is a permanent $d^g$-cycle.
+\end{proof}
 
 \begin{corollary}\label{prereq:cor:ess-naturality}
     \uses{prereq:def:ess,prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.essCommutativity_induces_map}\leanok
-    Consider a homotopy commutative diagram
+    Consider a homotopy commutative diagram of converging spectral sequences
     $$\xymatrix{
-    X \ar[r]^{f}\ar[d]_{p} & Y\ar[d]^{q}\\
-    Z \ar[r]_{g} & W
+    V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
+    V_3 \ar[r]_{g} & V_4
     }$$
-    If $\mathrm{ESS}(p)_0 = \mathrm{ESS}(p)_r$ and $\mathrm{ESS}(q)_0 = \mathrm{ESS}(q)_r$ for some $r \ge 0$, then $(d_r^p, d_r^q)$ induces a map from the $f$-ESS to the $g$-ESS.
+    Assume ${}^{p}\!E_0 = {}^{p}\!E_r$ and ${}^{q}\!E_0 = {}^{q}\!E_r$ for some $r \ge 0$ (i.e., the $p$-ESS and $q$-ESS have stationary pages up to $r$). Then $(d_r^p, d_r^q)$ induces a map from the $f$-ESS to the $g$-ESS.
 \end{corollary}
-
-\begin{corollary}\label{prereq:cor:stationary-page}
-    \uses{prereq:thm:four-spectra}
-    \lean{KIP.SpectralSequence.essCommutativity_eInfty_compat}\leanok
-    In the setting of Theorem~\ref{prereq:thm:four-spectra}, if the $g$-ESS and the $q$-ESS have stationary pages (i.e., $E_0 = E_r$ for all $r$), then the differentials commute with the induced maps on $E_\infty$-pages.
-\end{corollary}
-
-\begin{corollary}\label{prereq:cor:vanishing-target}
-    \uses{prereq:thm:four-spectra}
-    \lean{KIP.SpectralSequence.essCommutativity_null}\leanok
-    In the setting of Theorem~\ref{prereq:thm:four-spectra}, if $W = 0$, then $d_n^f(x) = y$ and $d_m^p(x) = z$ implies $d_{m+l-n}^q(y) = 0$ for all $l$, i.e., $y$ is a permanent cycle in the $q$-ESS.
-\end{corollary}
+\begin{proof}\leanok
+    Since ${}^{p}\!E_0 = {}^{p}\!E_r$ and ${}^{q}\!E_0 = {}^{q}\!E_r$, the differentials $d_r^p$ and $d_r^q$ have no crossings. By Corollary~\ref{prereq:cor:four-spectra}, $d_0^g \circ d_r^p = d_r^q \circ d_0^f$ and therefore $(d_r^p, d_r^q)$ induces a map from ${}^{f}\!E_1$ to ${}^{g}\!E_1$. Inductively, applying Corollary~\ref{prereq:cor:four-spectra} shows that $(d_r^p, d_r^q)$ induces a map from ${}^{f}\!E_n$ to ${}^{g}\!E_n$ and $d_n^g \circ d_r^p = d_r^q \circ d_n^f$ for all $n$.
+\end{proof}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -559,20 +640,14 @@
 
 \subsubsection{Adams Spectral Sequence}\label{sec:prereq-adams}
 
+\paragraph{Construction.}
+
 \begin{axiom}\label{prereq:ax:adams-ss}
     \uses{prereq:def:spectral-sequence,prereq:def:stable-homotopy-category,prereq:def:converging-ss-morphism}
     \lean{KIP.StableHomotopy.AdamsSS}\leanok
-    The \emph{$\HF$-Adams spectral sequence} is a functor from $\mathcal{S}$ to the category of bigraded converging spectral sequences. For each spectrum $X$, it produces a spectral sequence $\{E_r^{s,t}(X), d_r\}$ with $r \ge 2$ and differentials
+    The \emph{$\HF$-Adams spectral sequence} is a functor from $\mathcal{S}^{op} \times \mathcal{S}$ to the category of bigraded converging spectral sequences. For spectra $X$ and $Y$, it produces a spectral sequence $\{E_r^{s,t}(X, Y), d_r\}$ with $r \ge 2$ and differentials
     $$d_r: E_r^{s,t} \to E_r^{s+r, t+r-1}.$$
-    A map $f: X \to Y$ induces maps $f_*: E_r^{s,t}(X) \to E_r^{s,t}(Y)$ compatible with differentials.
-\end{axiom}
-
-\begin{axiom}\label{prereq:ax:adams-convergence}
-    \uses{prereq:ax:adams-ss,prereq:def:convergence}
-    \lean{KIP.StableHomotopy.adamsConvergence}\leanok
-    For a finite spectrum $X$, the Adams spectral sequence converges:
-    $$E_2^{s,t}(X) \Longrightarrow \pi_{t-s} X.$$
-    More precisely, $E_\infty^{s,t}(X) \cong F^s \pi_{t-s} X / F^{s+1} \pi_{t-s} X$.
+    A map $f: X' \to X$ induces maps $f^*: E_r^{s,t}(X, Y) \to E_r^{s,t}(X', Y)$, and a map $g: Y \to Y'$ induces maps $g_*: E_r^{s,t}(X, Y) \to E_r^{s,t}(X, Y')$, both compatible with differentials. When $X = \mathbb{S}$, we write $E_r^{s,t}(Y) = E_r^{s,t}(\mathbb{S}, Y)$.
 \end{axiom}
 
 \begin{axiom}\label{prereq:ax:adams-e2-order2}
@@ -580,26 +655,6 @@
     \lean{KIP.StableHomotopy.adams_2torsion}\leanok
     All elements in the $E_2$-page of the mod~2 Adams spectral sequence have order~2, i.e., $2x = 0$ for all $x \in E_2^{s,t}(X)$. This holds because $E_2^{s,t}(X)$ is an $\bF_2$-vector space.
 \end{axiom}
-
-\begin{definition}\label{prereq:def:adams-filtration}
-    \uses{prereq:ax:adams-ss,prereq:def:filtration,prereq:def:homotopy-groups}
-    \lean{KIP.StableHomotopy.InAdamsFiltration}\leanok
-    The Adams spectral sequence induces a natural decreasing filtration on $\pi_* X$, called the \emph{Adams filtration}. An element $\alpha \in \pi_n X$ has \emph{Adams filtration} $\ge s$ if it lies in $F^s \pi_n X$.
-\end{definition}
-
-\begin{definition}\label{prereq:def:adams-filtration-maps}
-    \uses{prereq:def:adams-filtration,prereq:def:mod2-homology}
-    \lean{KIP.StableHomotopy.AF}\leanok
-    The Adams filtration extends to maps between spectra. For a map $f: X \to Y$, the \emph{Adams filtration} $\AF(f)$ is the largest $k$ such that $f$ factors as a composition of $k$ maps, each inducing the zero map on $\HF$-homology.
-\end{definition}
-
-\begin{proposition}\label{prereq:prop:adams-filtration-characterization}
-    \uses{prereq:def:adams-filtration-maps}
-    \lean{KIP.StableHomotopy.adamsFiltration_functorial}\leanok
-    A map $f: X \to Y$ with $\AF(f) = k$ maps $F^s \pi_* X$ into $F^{s+k} \pi_* Y$ for all $s$.
-\end{proposition}
-
-\subsubsection{Finite Spectra}\label{sec:prereq-finite-spectra}
 
 \begin{definition}\label{prereq:def:finite-spectra}
     \uses{prereq:def:stable-homotopy-category,prereq:def:sphere-spectrum,prereq:def:cofiber-sequence}
@@ -615,17 +670,17 @@
     \end{enumerate}
 \end{theorem}
 
-\subsubsection{Connectivity}\label{sec:prereq-connectivity}
+\paragraph{Connectivity.}
 
 \begin{definition}\label{prereq:def:connected}
     \uses{prereq:def:homotopy-groups}
     A spectrum $X$ is \emph{$n$-connected} if $\pi_i(X) = 0$ for all $i \le n$.
 \end{definition}
 
-\begin{theorem}\label{prereq:thm:sphere-connected}
+\begin{axiom}\label{prereq:ax:sphere-connected}
     \uses{prereq:def:connected,prereq:def:sphere-spectrum}
     The sphere spectrum $\bS$ is $(-1)$-connected.
-\end{theorem}
+\end{axiom}
 
 \begin{definition}\label{prereq:def:bounded-below}
     \uses{prereq:def:connected}
@@ -633,35 +688,62 @@
     A spectrum $X$ is \emph{bounded below} if it is $n$-connected for some $n \in \bZ$.
 \end{definition}
 
-\begin{theorem}\label{prereq:thm:connected-homology-vanishing}
+\begin{axiom}\label{prereq:ax:connected-homology-vanishing}
     \uses{prereq:def:connected,prereq:def:mod2-homology}
     If $X$ is $n$-connected, then $H_i(X; \bF_2) = 0$ for all $i \le n$.
-\end{theorem}
+\end{axiom}
 
-\subsubsection{Finite Type}\label{sec:prereq-finite-type}
+\paragraph{Finite type.}
 
 \begin{definition}\label{prereq:def:finite-type}
     \uses{prereq:def:finite-spectra,prereq:def:connected}
     A spectrum $X$ is of \emph{finite type} if for each $n$, there exists a finite spectrum $X_n \in \calS^{fin}$ and a map $X_n \to X$ whose cofiber is $n$-connected.
 \end{definition}
 
-\begin{theorem}\label{prereq:thm:finite-type-char}
+\begin{axiom}\label{prereq:ax:finite-type-char}
     \uses{prereq:def:finite-type,prereq:def:bounded-below,prereq:def:homotopy-groups}
     A spectrum $X$ is of finite type if and only if:
     \begin{enumerate}
         \item $X$ is bounded below, and
         \item for each $i$, the homotopy group $\pi_i(X)$ is finitely generated as an abelian group.
     \end{enumerate}
-\end{theorem}
+\end{axiom}
 
-\begin{theorem}\label{prereq:thm:finite-type-homology}
+\begin{axiom}\label{prereq:ax:finite-type-homology}
     \uses{prereq:def:finite-type,prereq:def:mod2-homology}
     If $X$ is of finite type, then $H_i(X; \bF_2)$ is a finite-dimensional $\bF_2$-vector space for each $i$.
-\end{theorem}
+\end{axiom}
 
-\subsubsection{Adams Convergence and Boundedness}\label{sec:prereq-adams-convergence}
+\paragraph{Convergence and boundedness.}
 
-In this subsection, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
+In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
+
+\begin{definition}\label{prereq:def:adams-filtration}
+    \uses{prereq:ax:adams-ss,prereq:def:filtration,prereq:def:homotopy-groups}
+    \lean{KIP.StableHomotopy.InAdamsFiltration}\leanok
+    The Adams spectral sequence induces a natural decreasing filtration on $\pi_* X$, called the \emph{Adams filtration}. An element $\alpha \in \pi_n X$ has \emph{Adams filtration} $\ge s$ if it lies in $F^s \pi_n X$.
+\end{definition}
+
+\begin{definition}\label{prereq:def:adams-filtration-maps}
+    \uses{prereq:def:adams-filtration,prereq:def:mod2-homology,prereq:def:finite-spectra}
+    \lean{KIP.StableHomotopy.AF}\leanok
+    The Adams filtration extends to maps between spectra. For $X \in \calS^{fin}$ and $Y$ of finite type, a map $f \in [X, Y]$ has \emph{Adams filtration} $\AF(f) \ge k$ if $f$ factors as a composition
+    $$X \xrightarrow{f_1} X_1 \xrightarrow{f_2} X_2 \xrightarrow{f_3} \cdots \xrightarrow{f_{k-1}} X_{k-1} \xrightarrow{f_k} Y$$
+    where each $f_i$ induces the zero map on mod~2 homology: $(f_i)_* = 0: H_*(X_{i-1}; \bF_2) \to H_*(X_i; \bF_2)$. The \emph{Adams filtration} $\AF(f)$ is the largest such $k$.
+\end{definition}
+
+\begin{proposition}\label{prereq:prop:adams-filtration-characterization}
+    \uses{prereq:def:adams-filtration-maps}
+    \lean{KIP.StableHomotopy.adamsFiltration_functorial}\leanok
+    A map $f: X \to Y$ with $\AF(f) = k$ maps $F^s \pi_* X$ into $F^{s+k} \pi_* Y$ for all $s$.
+\end{proposition}
+
+\begin{corollary}\label{prereq:cor:af-vanishing}
+    \uses{prereq:def:adams-filtration-maps,prereq:def:ess,prereq:prop:f-ext-characterization}
+    \lean{KIP.SpectralSequence.af_vanishing}\leanok
+    If $\mathrm{AF}(f) = k$, then $d_i^f = 0$ for $i < k$ in the $f$-extension spectral sequence.
+\end{corollary}
+\begin{proof}\leanok By Proposition~\ref{prereq:prop:f-ext-characterization}, $d_i^f(x) = y$ requires $[x] \in \{x\}$ with $f_A[x] \in \{y\}$, which forces $\mathrm{Fil}(f_A[x]) \ge s + i$. But $\mathrm{AF}(f) = k$ means $f_A$ raises filtration by at least $k$, so $\mathrm{Fil}(f_A[x]) \ge s + k > s + i$ for $i < k$, hence $y = 0$.\end{proof}
 
 \begin{definition}\label{prereq:def:adams-filtration-infinity}
     \uses{prereq:def:adams-filtration-maps}
@@ -673,29 +755,29 @@ In this subsection, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
     If $f$ has odd order in $[X,Y]$, then $f$ has Adams filtration $\infty$.
 \end{theorem}
 
-\begin{theorem}\label{prereq:thm:not-odd-order-af-finite}
+\begin{axiom}\label{prereq:ax:not-odd-order-af-finite}
     \uses{prereq:def:adams-filtration-infinity}
     If $f$ does not have odd order, then $f$ does not have Adams filtration $\infty$.
-\end{theorem}
+\end{axiom}
 
-\begin{theorem}\label{prereq:thm:adams-weak-convergence}
+\begin{axiom}\label{prereq:ax:adams-weak-convergence}
     \uses{prereq:ax:adams-ss,prereq:def:convergence,prereq:def:finite-spectra,prereq:def:finite-type}
     For $X \in \calS^{fin}$ and $Y$ of finite type, the Adams spectral sequence $Adams(X,Y)$ weakly converges to $[X, Y]$: there is a natural isomorphism between the graded pieces of the Adams filtration on $[X, Y]$ and the $E_\infty$-page of $Adams(X,Y)$.
-\end{theorem}
+\end{axiom}
 
 \begin{theorem}\label{prereq:thm:adams-separated}
-    \uses{prereq:thm:adams-weak-convergence,prereq:thm:odd-order-af-infinity}
+    \uses{prereq:ax:adams-weak-convergence,prereq:thm:odd-order-af-infinity}
     The quotient $[X, Y] / \{\text{odd-order elements}\}$ carries an induced Adams filtration that is separated (Hausdorff).
 \end{theorem}
 
-\begin{theorem}\label{prereq:thm:adams-boundedness}
+\begin{axiom}\label{prereq:ax:adams-boundedness}
     \uses{prereq:thm:adams-separated,prereq:def:finite-type}
     Suppose $X$ is of finite type and $H_i(X; \bQ) = 0$ for some $i$. Then:
     \begin{enumerate}
         \item The Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ is bounded.
         \item All subquotients of this filtration are finite groups.
     \end{enumerate}
-\end{theorem}
+\end{axiom}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -845,7 +927,7 @@ In this subsection, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 
 \begin{axiom}\label{prereq:ax:nu-cofiber-ses}
     \uses{prereq:def:nu-functor,prereq:def:cofiber-sequence,prereq:def:mod2-homology}
-    \lean{KIP.Synthetic.nu_cofiber_iff}\leanok
+    \lean{KIP.Synthetic.nu_cofiber_ses}\leanok
     Suppose $X \xrightarrow{f} Y \xrightarrow{g} Z$ is a cofiber sequence of spectra such that
     $$0 \to {\HF}_*X \xrightarrow{{\HF}_*f} {\HF}_*Y \xrightarrow{{\HF}_*g} {\HF}_*Z \to 0$$
     is a short exact sequence of $\HF$-homology. Then $\nu X \xrightarrow{\nu f} \nu Y \xrightarrow{\nu g} \nu Z$ is a distinguished triangle in $h\mathrm{Syn}$.

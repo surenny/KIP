@@ -833,7 +833,7 @@ nodes:
     nl_hash: 72d241409030dd3c
   a0000000007:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: add0a104495f4766
   nota:ess-notation:
     bound: false
@@ -841,7 +841,7 @@ nodes:
     nl_hash: b211f41c38eb91c6
   a0000000008:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 7bb29815f0942e22
   a0000000009:
     bound: false
@@ -863,11 +863,11 @@ nodes:
     aligned: false
   a0000000012:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 4a3c3f93b2df7744
   a0000000013:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: d4b541323c42bbe7
     nl_reviewed: false
     aligned: false
@@ -919,13 +919,13 @@ nodes:
     nl_hash: 83b5f0ed0a69dfe4
   a0000000018:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 1b36ea2e00cebea2
     nl_reviewed: false
     aligned: false
   a0000000019:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 3654fbdff0b25f39
     nl_reviewed: false
     aligned: false
@@ -1016,7 +1016,7 @@ nodes:
     aligned: false
   a0000000025:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 2339bd35ca31252a
     nl_reviewed: false
     aligned: false
@@ -1052,7 +1052,7 @@ nodes:
     nl_hash: 67a3c2fc453903a4
   a0000000027:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 3e7601ad86cc2418
     nl_reviewed: false
     aligned: false
@@ -1192,9 +1192,10 @@ nodes:
     proved: false
   prereq:def:bounded-below:
     kind: definition
-    bound: false
-    nl_hash: 492471fb12270f1f
+    bound: true
+    nl_hash: 9b5ac92e22604ec3
     proved: false
+    nl_reviewed: true
   prereq:thm:finite-spectra-char:
     kind: theorem
     bound: false
@@ -1276,12 +1277,6 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: 3083a6865fee819c
-  prereq:def:bounded-below:
-    kind: definition
-    bound: true
-    nl_hash: 9b5ac92e22604ec3
-    proved: false
-    nl_reviewed: true
   prereq:thm:adams-weak-convergence:
     kind: theorem
     bound: false

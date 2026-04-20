@@ -65,7 +65,6 @@ KIP.StableHomotopy.adams_2torsion
 KIP.StableHomotopy.InAdamsFiltration
 KIP.StableHomotopy.AF
 KIP.StableHomotopy.adamsFiltration_functorial
-KIP.StableHomotopy.IsConnected
 KIP.StableHomotopy.IsBoundedBelow
 KIP.Synthetic.SyntheticCategory
 KIP.Synthetic.SyntheticCategory.biShift
