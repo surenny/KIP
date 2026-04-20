@@ -1,0 +1,457 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{AR PL SungtiL GB}
+\setCJKsansfont{Droid Sans Fallback}
+\setCJKmonofont{Droid Sans Fallback}
+\setmainfont{TeX Gyre Termes}[NFSSFamily=tgtermes]
+\setsansfont{TeX Gyre Heros}[NFSSFamily=tgheros]
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+\xeCJKDeclareCharClass{CJK}{%
+  "3000->"9FFF,  % CJK unified + punctuation
+  "F900->"FAFF,  % CJK compat
+  "FE30->"FE4F,  % CJK compat forms
+  "FF01->"FFEF   % fullwidth forms (skip halfwidth)
+}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!70!black,citecolor=green!50!black}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{fancyvrb}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric}
+\usepackage{titlesec}
+
+\definecolor{draft}{HTML}{999999}
+\definecolor{reviewed}{HTML}{E69F00}
+\definecolor{bound}{HTML}{0072B2}
+\definecolor{aligned}{HTML}{009E73}
+\definecolor{alignedfill}{HTML}{D4EFDF}
+\definecolor{proved}{HTML}{1CAC78}
+\definecolor{lightbg}{HTML}{F7F7F7}
+\definecolor{accentblue}{HTML}{2C5F8A}
+
+\newcommand{\gearsymbol}{\raisebox{-0.5pt}{\scriptsize$\diamond$}}
+\newcommand{\colorswatch}[1]{\tikz[baseline=-0.5ex]\draw[fill=#1,draw=#1] (0,0) rectangle (0.8em,0.8em);}
+
+\newtcolorbox{infobox}[1][]{
+  colback=blue!3,colframe=accentblue,
+  fonttitle=\bfseries\sffamily,
+  title=#1,
+  breakable,
+  boxrule=0.5pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt
+}
+
+\newtcolorbox{codebox}{
+  colback=lightbg,colframe=gray!40,
+  breakable,boxrule=0.4pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fontupper=\ttfamily\small
+}
+
+\newtcolorbox{tipbox}[1][]{
+  colback=green!3,colframe=aligned,
+  fonttitle=\bfseries\sffamily,
+  title=#1,
+  breakable,
+  boxrule=0.5pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt
+}
+
+\newtcolorbox{warnbox}[1][]{
+  colback=orange!5,colframe=reviewed,
+  fonttitle=\bfseries\sffamily,
+  title=#1,
+  breakable,
+  boxrule=0.5pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt
+}
+
+\titleformat{\section}{\Large\bfseries\sffamily\color{accentblue}}{第\,\thesection\,章}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily\color{accentblue!80!black}}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily}{\thesubsubsection}{0.5em}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\begin{center}
+{\Huge\bfseries\sffamily\color{accentblue} KIP Blueprint 审稿指南}\\[12pt]
+{\large\color{gray} Kervaire Invariant Problem 形式化项目}\\[6pt]
+{\normalsize\color{gray} \today}
+\end{center}
+
+\vspace{8pt}
+\noindent\rule{\textwidth}{0.8pt}
+\vspace{4pt}
+
+本指南面向参与 KIP 形式化项目的数学家，介绍蓝图系统的设计逻辑、依赖图的阅读方式，以及如何在 GitHub Pages 上对蓝图节点进行审核。
+
+\begin{infobox}[蓝图地址]
+\url{https://surenny.github.io/KIP/blueprint/}
+\end{infobox}
+
+\tableofcontents
+
+\newpage
+
+%% ========================================
+\section{蓝图是什么}
+
+蓝图 (Blueprint) 把论文中的数学内容拆成一个个独立的\textbf{节点} (node)，每个节点是一条数学声明 (definition / theorem / axiom 等)。节点之间通过 \verb|\uses{...}| 标注建立依赖关系，形成一张有向无环的\textbf{依赖图}。
+
+蓝图的作用不是展示，而是\textbf{调度}：
+
+\begin{itemize}[nosep]
+  \item 哪些结果已经足够稳定，可以开始形式化？
+  \item 哪些结果卡在同一个瓶颈上？
+  \item 哪些任务可以并行推进？
+  \item 主定理还缺哪些上游节点？
+\end{itemize}
+
+%% ========================================
+\section{三类节点}
+
+蓝图中的数学声明被分为三类，在依赖图中用不同的\textbf{形状}区分：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{ccll}
+\toprule
+\textbf{形状} & \textbf{类型} & \textbf{包含的 \LaTeX{} 环境} & \textbf{说明} \\
+\midrule
+\tikz[baseline=-2pt]{\draw[thick] (0,0) rectangle (0.8em,0.8em);}\; 方形
+  & \textbf{定义}
+  & \texttt{definition}
+  & 引入新概念 \\
+\tikz[baseline=-2pt]{\draw[thick] (0.4em,0.4em) ellipse (0.5em and 0.35em);}\; 椭圆
+  & \textbf{定理}
+  & \texttt{theorem}, \texttt{lemma}, \texttt{proposition}, \texttt{corollary}
+  & 需要证明 \\
+\tikz[baseline=-2pt]{\draw[thick] (0.4em,0) -- (0.8em,0.4em) -- (0.4em,0.8em) -- (0,0.4em) -- cycle;}\; 菱形
+  & \textbf{公理}
+  & \texttt{axiom}
+  & 外部假设 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+分类的意义：定义只需要"陈述"就算完成；定理需要走完整的证明流程；公理则标记了我们与外部数学知识的边界。
+
+%% ========================================
+\section{节点的生命周期}
+
+每个节点从创建到完成，经过以下阶段。不同阶段在依赖图中用\textbf{边框颜色}表示。
+
+\subsection{生命周期流程}
+
+\begin{center}
+\begin{tikzpicture}[
+  stage/.style={rounded corners=4pt, minimum width=2.2cm, minimum height=0.9cm,
+    font=\sffamily\small\bfseries, text=white, align=center},
+  arr/.style={->, thick, >=stealth, gray!70},
+  node distance=0.6cm
+]
+\node[stage, fill=draft]    (d) {Draft\\{\scriptsize 草稿}};
+\node[stage, fill=reviewed, right=of d] (r) {Reviewed\\{\scriptsize 已审核}};
+\node[stage, fill=bound,    right=of r] (b) {Bound\\{\scriptsize 已绑定}};
+\node[stage, fill=aligned,  right=of b] (a) {Aligned\\{\scriptsize 已对齐}};
+\node[stage, fill=proved,   right=of a] (p) {Proved\\{\scriptsize 已证明}};
+\draw[arr] (d) -- (r);
+\draw[arr] (r) -- (b);
+\draw[arr] (b) -- (a);
+\draw[arr] (a) -- (p);
+\end{tikzpicture}
+\end{center}
+
+\subsection{各阶段详解}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{lccXc}
+\toprule
+\textbf{阶段} & \textbf{边框} & \textbf{填充} & \textbf{含义} & \textbf{谁来做} \\
+\midrule
+\textbf{Draft}\,(草稿) & \colorswatch{draft} & 无 & 节点刚被创建，自然语言陈述尚未审核 & AI \\
+\textbf{Reviewed}\,(已审核) & \colorswatch{reviewed} & 无 & 数学家确认自然语言陈述准确 & 数学家 \\
+\textbf{Bound}\,(已绑定) & \colorswatch{bound} & 无 & 节点已通过 \verb|\lean{...}| 绑定到 Lean 声明 & AI \\
+\textbf{Aligned}\,(已对齐) & \colorswatch{aligned} & \colorswatch{alignedfill} & 数学家确认 Lean 声明与自然语言一致 & 人类 \\
+\textbf{Proved}\,(已证明) & \colorswatch{proved} & \colorswatch{proved} & Lean 证明已通过编译 (仅限定理) & AI \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{不同类型节点的完成标准}
+
+\begin{itemize}[nosep]
+  \item \textbf{定义 (\tikz[baseline=-2pt]{\draw[thick] (0,0) rectangle (0.7em,0.7em);})}：到达 \textbf{Aligned} 即为完成——定义没有"证明"
+  \item \textbf{定理 (\tikz[baseline=-2pt]{\draw[thick] (0.35em,0.35em) ellipse (0.45em and 0.3em);})}：到达 \textbf{Proved} 才算完成——需要 Lean 证明通过编译
+  \item \textbf{公理 (\tikz[baseline=-2pt]{\draw[thick] (0.35em,0) -- (0.7em,0.35em) -- (0.35em,0.7em) -- (0,0.35em) -- cycle;})}：到达 \textbf{Aligned} 即为完成——公理不需要证明
+\end{itemize}
+
+\subsection{NL 内容变更检测}
+
+\begin{warnbox}[自动重置]
+系统会自动跟踪每个节点的自然语言内容哈希值。如果作者修改了某个节点的 \LaTeX{} 文本，系统会自动重置该节点的 Reviewed 和 Aligned 状态，要求重新审核。
+
+如果你之前审核过的节点突然变回了 Draft 状态，说明它的内容已被作者修改。
+\end{warnbox}
+
+%% ========================================
+\section{依赖图的阅读方式}
+
+\subsection{章节对应关系}
+
+依赖图按照蓝图的\textbf{章节}组织。每个章节有自己的依赖图页面：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{章节} & \textbf{内容} \\
+\midrule
+Prerequisites & 预备知识：谱、同伦群、Adams 谱序列、合成谱等 \\
+Synthetic Spectra & 合成谱的基本构造和性质 \\
+Synthetic Extensions & 合成扩张谱序列 \\
+Extension Spectral Sequence & 扩张谱序列 \\
+Extensions on $E_r$ page & $E_r$ 页上的扩张 \\
+Leibniz--Mahowald & Leibniz--Mahowald 定理 \\
+Proof of Main Theorem & 主定理的证明 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+从蓝图首页点击进入每个章节，即可查看该章节的依赖图。
+
+\subsection{如何看图}
+
+\begin{itemize}[nosep]
+  \item \textbf{箭头方向}：$A \to B$ 表示"$B$ 的证明依赖 $A$"
+  \item \textbf{节点颜色}：反映当前所处的生命周期阶段（见第 3 节）
+  \item \textbf{点击节点}：弹出详情面板，可以查看自然语言陈述、Lean 代码（如已绑定）、评论，以及进行审核操作
+\end{itemize}
+
+%% ========================================
+\section{如何在 GitHub Pages 上审核}
+
+蓝图部署在 GitHub Pages 上后，你可以直接在浏览器中进行审核操作，无需搭建本地环境。
+
+\subsection{打开蓝图}
+
+访问 \url{https://surenny.github.io/KIP/blueprint/}，进入你要审核的章节的依赖图页面。
+
+\subsection{点击节点}
+
+点击依赖图中的任意节点，会弹出详情面板，包含：
+
+\begin{itemize}[nosep]
+  \item 节点的自然语言陈述
+  \item Lean 声明（如果已绑定）
+  \item 当前状态 (Draft / Reviewed / Bound / Aligned / Proved)
+  \item 审核操作按钮
+\end{itemize}
+
+\subsection{审核操作}
+
+\subsubsection*{Approve NL（审核自然语言）}
+
+\begin{itemize}[nosep]
+  \item \textbf{按钮}：橙色的 \textbf{``Approve NL''}
+  \item \textbf{作用}：确认节点的自然语言陈述是准确、完整的
+  \item \textbf{什么时候点}：当你读完陈述，认为它正确地描述了数学内容
+  \item \textbf{状态变化}：Draft $\to$ Reviewed
+\end{itemize}
+
+\subsubsection*{Confirm Alignment（确认对齐）}
+
+\begin{itemize}[nosep]
+  \item \textbf{按钮}：绿色的 \textbf{``Confirm Alignment''}
+  \item \textbf{作用}：确认 Lean 声明与自然语言陈述一致
+  \item \textbf{什么时候点}：当节点已有 Lean 绑定 (Bound)，且你确认两者表达的是同一个数学内容
+  \item \textbf{状态变化}：Bound $\to$ Aligned
+  \item \textbf{前提}：节点必须已处于 Bound 状态
+\end{itemize}
+
+\subsubsection*{发表评论}
+
+\begin{itemize}[nosep]
+  \item \textbf{话题选择}：\texttt{general}（一般评论）、\texttt{review}（NL 审核相关）、\texttt{align}（对齐相关）
+  \item \textbf{文本框}：输入你的评论内容
+  \item \textbf{按钮}：灰色的 \textbf{``Send''}
+\end{itemize}
+
+\subsubsection*{建议重分类}
+
+\begin{itemize}[nosep]
+  \item \textbf{下拉菜单}：选择 \texttt{definition}、\texttt{theorem} 或 \texttt{axiom}
+  \item \textbf{按钮}：粉色的 \textbf{``Suggest''}
+  \item \textbf{作用}：如果你认为某个节点的分类不对（比如一个 axiom 实际上应该是 theorem），可以建议修改
+\end{itemize}
+
+\subsubsection*{填写审核人}
+
+面板中有一个\textbf{审核人姓名}输入框，请填写你的名字。系统会记住你的名字，下次自动填充。
+
+\subsection{提交审核}
+
+在 GitHub Pages 模式下，你的所有审核操作\textbf{不会立即生效}，而是暂存在浏览器的 localStorage 中。
+
+页面右下角会出现一个浮动工具栏：
+
+\begin{codebox}
+\textnormal{N pending change(s)\quad [\,Commit Reviews\,]\quad \gearsymbol{}}
+\end{codebox}
+
+\begin{itemize}[nosep]
+  \item \textbf{N pending change(s)}：你有多少条待提交的审核
+  \item \textbf{Commit Reviews}：点击后，所有待提交的审核合并为\textbf{一次 Git commit}，写入仓库的 \texttt{status.yaml}
+  \item \textbf{\gearsymbol{}\,(设置)}：打开设置面板
+\end{itemize}
+
+\subsection{首次使用：配置 GitHub PAT}
+
+第一次点击 ``Commit Reviews'' 时，系统会要求你提供一个 GitHub Personal Access Token (PAT)。这是因为 GitHub Pages 是静态页面，需要通过 GitHub API 才能向仓库写入数据。
+
+\begin{infobox}[如何创建 PAT]
+\begin{enumerate}[nosep]
+  \item 打开 \href{https://github.com/settings/tokens?type=beta}{GitHub Token 设置页面}
+  \item 点击 \textbf{``Generate new token''}
+  \item 填写 Token 名称，例如 \texttt{KIP Blueprint Review}
+  \item \textbf{Repository access} 选择 \textbf{``Only select repositories''}，然后选中 \texttt{surenny/KIP}
+  \item \textbf{Permissions} $\to$ \textbf{Repository permissions} $\to$ \textbf{Contents} 设置为 \textbf{Read and write}
+  \item 点击 \textbf{Generate token}，复制生成的 token
+\end{enumerate}
+然后在蓝图页面的设置面板（\gearsymbol{}）中粘贴 token。
+\end{infobox}
+
+\begin{tipbox}[安全说明]
+Token 仅存储在你的浏览器 localStorage 中，不会被发送到任何第三方服务器。页面只会在你点击 ``Commit Reviews'' 时，通过 GitHub API 直接与 GitHub 通信。
+\end{tipbox}
+
+\subsection{设置面板}
+
+点击浮动工具栏的 \gearsymbol{} 按钮，打开设置面板：
+
+\begin{itemize}[nosep]
+  \item \textbf{Reviewer Name}：你的审核人姓名（会预填到所有审核操作中）
+  \item \textbf{GitHub PAT}：你的 Personal Access Token
+  \item \textbf{Save}：保存设置
+  \item \textbf{Clear Pending}：清除所有未提交的审核（如果你想放弃当前的修改）
+\end{itemize}
+
+%% ========================================
+\section{审核工作流建议}
+
+\subsection{推荐流程}
+
+\begin{enumerate}[nosep]
+  \item \textbf{按章节审核}：选择一个章节，从依赖图的叶节点（没有出边的节点）开始，逐步向上游审核
+  \item \textbf{先看定义}：确保定义准确无歧义
+  \item \textbf{再看定理陈述}：确认定理陈述与论文原文一致
+  \item \textbf{最后看依赖}：确认 \verb|\uses| 标注的依赖关系是正确的（如发现缺失或错误，请通过评论指出）
+  \item \textbf{一次性提交}：完成一个章节的审核后，点击 ``Commit Reviews'' 统一提交
+\end{enumerate}
+
+\subsection{审核要点}
+
+\begin{tipbox}[审核 NL（自然语言）时]
+\begin{itemize}[nosep]
+  \item 陈述是否数学上准确？
+  \item 是否遗漏了重要的条件或假设？
+  \item 符号使用是否一致？
+  \item 分类是否正确？（是定义、定理还是公理？）
+\end{itemize}
+\end{tipbox}
+
+\begin{tipbox}[审核 Alignment（对齐）时]
+\begin{itemize}[nosep]
+  \item Lean 声明的类型签名是否与自然语言陈述匹配？
+  \item 是否有信息在形式化过程中丢失？
+  \item 泛化程度是否合适？（既不过度泛化也不过度特化）
+\end{itemize}
+\end{tipbox}
+
+\subsection{遇到问题时}
+
+\begin{itemize}[nosep]
+  \item 如果某个节点的陈述有问题，\textbf{不要点 Approve NL}，而是通过评论功能说明问题
+  \item 如果 Lean 声明与自然语言不一致，\textbf{不要点 Confirm Alignment}，而是添加评论
+  \item 如果提交时遇到 ``Conflict'' 错误，说明有人在你之前提交了修改——请刷新页面后重试
+\end{itemize}
+
+%% ========================================
+\section{图例速查}
+
+\subsection{形状}
+
+\begin{center}
+\begin{tikzpicture}[node distance=3.5cm]
+  \node[draw, thick, minimum size=1.2cm] (def) {};
+  \node[below=2pt of def, font=\small\sffamily] {定义 (Definition)};
+
+  \node[draw, thick, ellipse, minimum width=1.6cm, minimum height=1cm, right=of def] (thm) {};
+  \node[below=2pt of thm, font=\small\sffamily] {定理 (Theorem)};
+
+  \node[draw, thick, diamond, minimum size=1.2cm, right=of thm] (ax) {};
+  \node[below=6pt of ax, font=\small\sffamily] {公理 (Axiom)};
+\end{tikzpicture}
+\end{center}
+
+\subsection{颜色}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{clll}
+\toprule
+& \textbf{阶段} & \textbf{边框} & \textbf{填充} \\
+\midrule
+\colorswatch{draft}      & Draft (草稿)    & 灰色 \texttt{\#999999}  & 无 \\
+\colorswatch{reviewed}   & Reviewed (已审核) & 橙色 \texttt{\#E69F00} & 无 \\
+\colorswatch{bound}      & Bound (已绑定)   & 蓝色 \texttt{\#0072B2}  & 无 \\
+\colorswatch{aligned}    & Aligned (已对齐)  & 绿色 \texttt{\#009E73} & \colorswatch{alignedfill}\;浅绿 \\
+\colorswatch{proved}     & Proved (已证明)   & 深绿 \texttt{\#1CAC78} & \colorswatch{proved}\;深绿 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%% ========================================
+\section{常见问题}
+
+\textbf{Q: 我不懂 Lean，能参与审核吗？}
+
+当然可以。审核自然语言 (Approve NL) 完全不需要 Lean 知识——你只需要判断数学陈述本身是否准确。Confirm Alignment 需要对 Lean 声明有基本的理解，但如果你不确定，可以跳过这一步。
+
+\medskip
+
+\textbf{Q: 我的审核会影响其他人吗？}
+
+会。你的审核状态会写入仓库的 \texttt{status.yaml} 文件，其他人刷新页面后会看到更新后的节点颜色。如果作者后来修改了节点内容，系统会自动重置该节点的审核状态。
+
+\medskip
+
+\textbf{Q: 我能撤回审核吗？}
+
+在点击 ``Commit Reviews'' 之前，你可以通过设置面板的 ``Clear Pending'' 清除所有未提交的操作。提交之后，需要联系项目维护者手动修改 \texttt{status.yaml}。
+
+\medskip
+
+\textbf{Q: PAT 过期了怎么办？}
+
+重新生成一个新的 PAT，然后在设置面板（\gearsymbol{}）中更新即可。
+
+\medskip
+
+\textbf{Q: 为什么某个节点之前是 Reviewed，现在变回 Draft 了？}
+
+这说明作者修改了该节点的 \LaTeX{} 文本内容。系统检测到文本变更后，会自动重置审核状态，需要重新审核。
+
+\end{document}
