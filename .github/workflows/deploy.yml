@@ -74,8 +74,57 @@ jobs:
       - name: Check blueprint declarations
         run: lake exe checkdecls blueprint/lean_decls
 
-      - name: Compile documentation and deploy
+      - name: Build API documentation
+        if: github.event_name == 'push'
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
         with:
           blueprint: false
-          deploy: ${{ github.event_name != 'pull_request' }}
+          deploy: false
+
+      - name: Merge Mathlib declarations into find index
+        if: github.event_name == 'push'
+        run: |
+          DECL_DATA="docs/_site/docs/declarations/declaration-data.bmp"
+          if [ ! -f "$DECL_DATA" ]; then
+            DECL_DATA="docs/docs/declarations/declaration-data.bmp"
+          fi
+          if [ ! -f "$DECL_DATA" ]; then
+            echo "::warning::declaration-data.bmp not found, skipping merge"
+            exit 0
+          fi
+          curl -sL -o /tmp/mathlib-decls.bmp \
+            'https://leanprover-community.github.io/mathlib4_docs/declarations/declaration-data.bmp'
+          python3 -c "
+          import json, sys
+          with open(sys.argv[1]) as f:
+              project = json.load(f)
+          with open('/tmp/mathlib-decls.bmp') as f:
+              mathlib = json.load(f)
+          merged = mathlib.get('declarations', {})
+          merged.update(project.get('declarations', {}))
+          project['declarations'] = merged
+          instances = project.get('instances', [])
+          ml_instances = mathlib.get('instances', [])
+          if ml_instances:
+              seen = set(map(json.dumps, instances))
+              for inst in ml_instances:
+                  key = json.dumps(inst)
+                  if key not in seen:
+                      instances.append(inst)
+                      seen.add(key)
+              project['instances'] = instances
+          with open(sys.argv[1], 'w') as f:
+              json.dump(project, f, separators=(',', ':'))
+          n_before = len(project['declarations']) - len(mathlib.get('declarations', {}))
+          print(f'Merged {len(mathlib.get(\"declarations\", {}))} mathlib declarations into index (project had {n_before})')
+          " "$DECL_DATA"
+
+      - name: Upload pages artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: docs/_site
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
