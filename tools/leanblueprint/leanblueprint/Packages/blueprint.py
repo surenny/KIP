@@ -491,7 +491,7 @@ def ProcessOptions(options, document):
         def _lean_decl_url(decl: str) -> str:
             """Return the doc URL for a Lean declaration, using the mathlib
             doc host for declarations outside the project's own libraries."""
-            if project_dochome != MATHLIB_DOCHOME and \
+            if project_dochome != MATHLIB_DOCHOME and _project_prefixes and \
                not any(decl == p or decl.startswith(p + '.') for p in _project_prefixes):
                 return f'{MATHLIB_DOCHOME}/find/#doc/{decl}'
             return f'{project_dochome}/find/#doc/{decl}'
