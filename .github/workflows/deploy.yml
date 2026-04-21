@@ -75,14 +75,14 @@ jobs:
         run: lake exe checkdecls blueprint/lean_decls
 
       - name: Build API documentation
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
         with:
           blueprint: false
           deploy: false
 
       - name: Merge Mathlib declarations into find index
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
           DECL_DATA="docs/_site/docs/declarations/declaration-data.bmp"
           if [ ! -f "$DECL_DATA" ]; then
@@ -92,38 +92,48 @@ jobs:
             echo "::warning::declaration-data.bmp not found, skipping merge"
             exit 0
           fi
-          curl -sL -o /tmp/mathlib-decls.bmp \
+          curl -sSfL -o /tmp/mathlib-decls.bmp \
             'https://leanprover-community.github.io/mathlib4_docs/declarations/declaration-data.bmp'
-          python3 -c "
+          python3 - "$DECL_DATA" <<'PY'
           import json, sys
           with open(sys.argv[1]) as f:
               project = json.load(f)
           with open('/tmp/mathlib-decls.bmp') as f:
               mathlib = json.load(f)
+          n_ml = len(mathlib.get('declarations', {}))
+          n_proj = len(project.get('declarations', {}))
           # Merge declarations (project wins on collision)
-          merged_decls = mathlib.get('declarations', {})
+          merged_decls = dict(mathlib.get('declarations', {}))
           merged_decls.update(project.get('declarations', {}))
           project['declarations'] = merged_decls
-          # Merge dict-keyed fields: instances, instancesFor, modules
+          # Merge dict-keyed fields with per-key value merging
           for key in ('instances', 'instancesFor', 'modules'):
               proj_dict = project.get(key, {})
               ml_dict = mathlib.get(key, {})
               if isinstance(proj_dict, dict) and isinstance(ml_dict, dict):
-                  merged = {**ml_dict, **proj_dict}
+                  merged = {}
+                  for k in set(ml_dict) | set(proj_dict):
+                      ml_val = ml_dict.get(k)
+                      pj_val = proj_dict.get(k)
+                      if isinstance(ml_val, list) and isinstance(pj_val, list):
+                          seen = set(pj_val)
+                          merged[k] = pj_val + [v for v in ml_val if v not in seen]
+                      elif isinstance(ml_val, dict) and isinstance(pj_val, dict):
+                          merged[k] = {**ml_val, **pj_val}
+                      else:
+                          merged[k] = pj_val if pj_val is not None else ml_val
                   project[key] = merged
           with open(sys.argv[1], 'w') as f:
               json.dump(project, f, separators=(',', ':'))
-          n_proj = len(project['declarations']) - len(mathlib.get('declarations', {}))
-          n_ml = len(mathlib.get('declarations', {}))
           print(f'Merged {n_ml} mathlib declarations (project had {n_proj})')
-          " "$DECL_DATA"
+          PY
 
       - name: Upload pages artifact
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: docs/_site
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
