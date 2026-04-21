@@ -29,3 +29,12 @@ blueprint/lean_decls
 blueprint/missfont.log
 blueprint/texput.log
 blueprint/template.*
+
+# Agent logs (runtime output)
+agents/*/logs/
+
+# UI build artifacts
+ui/server/node_modules/
+ui/server/dist/
+ui/client/node_modules/
+ui/client/dist/
