@@ -383,7 +383,8 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
         \item The \emph{truncated abutment} is the quotient
         $$A^{[\le s]} = A \big/ F^{s+1} A,$$
         equipped with the induced filtration
-        $$F^{[\le s],p} A^{[\le s]} = \begin{cases} A^{[\le s]} & \text{if } p \le 0, \\ F^p A \big/ F^{s+1} A & \text{if } 0 \le p \le s, \\ 0 & \text{if } p > s. \end{cases}$$
+        $$F^{[\le s],p} A^{[\le s]} = \begin{cases} \big(F^p A + F^{s+1} A\big) \big/ F^{s+1} A & \text{if } p \le s, \\ 0 & \text{if } p > s. \end{cases}$$
+        When $F^p A = A$ (which holds for all sufficiently negative $p$ by the bounded below assumption), this reduces to $F^{[\le s],p} A^{[\le s]} = A^{[\le s]}$.
     \end{enumerate}
     The truncation $(E^{[\le s]}, A^{[\le s]}, F^{[\le s]})$ is a converging spectral sequence with bounded (hence exhaustive and Hausdorff) filtration.
 \end{definition}
@@ -395,36 +396,41 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     which is compatible with the truncated filtrations and with the spectral sequence page maps.
 \end{proposition}
 
-\begin{proposition}\label{prereq:prop:invlim-of-truncations}
-    \uses{prereq:prop:truncations-inverse-system,prereq:def:spectral-sequence,prereq:def:convergence,prereq:def:exhaustive,prereq:def:hausdorff}
-    Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below and Hausdorff. Then $(E, A)$ is naturally isomorphic to the inverse limit of the inverse system of truncations:
+\begin{proposition}\label{prereq:prop:invlim-of-truncations-ss}
+    \uses{prereq:prop:truncations-inverse-system,prereq:def:spectral-sequence}
+    Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below. Then the spectral sequence $E$ is the inverse limit of the spectral sequences of the truncations: at each filtration degree $p$ and page $r$ one has
+    $$E_r^p \cong \varprojlim_{s \ge p}\, E_r^{[\le s],p}.$$
+\end{proposition}
+
+\begin{proposition}\label{prereq:prop:invlim-of-truncations-complete}
+    \uses{prereq:prop:truncations-inverse-system,prereq:prop:invlim-of-truncations-ss,prereq:def:spectral-sequence,prereq:def:convergence,prereq:def:filtration-completion}
+    Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below. If the filtration on $A$ is \emph{complete} (Definition~\ref{prereq:def:filtration-completion}), then the converging spectral sequence $(E, A)$ is the inverse limit of the inverse system of truncations in the category of converging spectral sequences:
     $$(E, A) \cong \varprojlim_{s}\, (E^{[\le s]}, A^{[\le s]}).$$
-    Explicitly, $A \cong \varprojlim_{s} A^{[\le s]}$ by the Hausdorff condition; at each filtration degree $p$ and page $r$ one has $E_r^p \cong \varprojlim_{s \ge p}\, E_r^{[\le s],p}$.
 \end{proposition}
 
 \begin{definition}\label{prereq:def:unbounded-ess}
-    \uses{prereq:def:ess,prereq:def:truncated-ss,prereq:prop:truncations-inverse-system,prereq:prop:invlim-of-truncations}
-    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below (not necessarily bounded above). For each integer $s$, let $f^{[\le s]}: (E_1^{[\le s]}, A_1^{[\le s]}) \to (E_2^{[\le s]}, A_2^{[\le s]})$ denote the induced morphism of truncated converging spectral sequences. The \emph{unbounded $f$-extension spectral sequence} is the inverse limit
+    \uses{prereq:def:ess,prereq:def:truncated-ss,prereq:prop:truncations-inverse-system,prereq:prop:unbounded-ess-stabilization}
+    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below (not necessarily bounded above). For each integer $s$, let $f^{[\le s]}: (E_1^{[\le s]}, A_1^{[\le s]}) \to (E_2^{[\le s]}, A_2^{[\le s]})$ denote the induced morphism of truncated converging spectral sequences. The \emph{unbounded $f$-extension spectral sequence} is the spectral sequence (without converging data) defined as the inverse limit in the category of spectral sequences:
     $$\mathrm{ESS}^{\mathrm{unbd}}(f) = \varprojlim_{s}\, \mathrm{ESS}(f^{[\le s]}),$$
-    where the inverse limit is taken over the inverse system of Proposition~\ref{prereq:prop:truncations-inverse-system}, and each $\mathrm{ESS}(f^{[\le s]})$ is the (bounded) extension spectral sequence of Definition~\ref{prereq:def:ess}. The page isomorphism is established by the stabilization property (Proposition~\ref{prereq:prop:unbounded-ess-stabilization}).
+    where each $\mathrm{ESS}(f^{[\le s]})$ is the (bounded) extension spectral sequence of Definition~\ref{prereq:def:ess}. The inverse limit is well-defined as a spectral sequence by the stabilization property (Proposition~\ref{prereq:prop:unbounded-ess-stabilization}).
 \end{definition}
 
 \begin{proposition}\label{prereq:prop:unbounded-ess-stabilization}
-    \uses{prereq:def:unbounded-ess,prereq:def:f-extension-diff,prereq:def:truncated-ss}
-    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below. Fix a filtration degree $p \in \bZ$ and a page index $r \ge 1$. Then for all integers $s \ge p + r$, the component of the unbounded $f$-extension spectral sequence at filtration degree $p$ and page $r$ is canonically isomorphic to the corresponding component of the $s$-truncated extension spectral sequence:
-    $$\mathrm{ESS}^{\mathrm{unbd}}(f)_r^{p,*} \;\cong\; \mathrm{ESS}(f^{[\le s]})_r^{p,*}.$$
-    In other words, once the truncation level $s \ge p + r$ (so that the truncated ESS retains both the source filtration degree $p$ and the target filtration degree $p + r$), the $d_r^f$-differential at filtration degree $p$ is fully determined and equals that of the $s$-truncated ESS.
+    \uses{prereq:def:ess,prereq:def:f-extension-diff,prereq:def:truncated-ss,prereq:prop:truncations-inverse-system}
+    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below. Fix a filtration degree $p \in \bZ$ and a page index $r \ge 1$. Then for all integers $s \ge p + r$, the component of the $s$-truncated extension spectral sequence at filtration degree $p$ and page $r$ is canonically isomorphic to the corresponding component of the $s'$-truncated extension spectral sequence for any $s' \ge s$:
+    $$\mathrm{ESS}(f^{[\le s]})_r^{p,*} \;\cong\; \mathrm{ESS}(f^{[\le s']})_r^{p,*}.$$
+    In other words, once the truncation level $s \ge p + r$ (so that the truncated ESS retains both the source filtration degree $p$ and the target filtration degree $p + r$), the $d_r^f$-differential at filtration degree $p$ is fully determined and independent of the truncation level.
 \end{proposition}
 
 \begin{definition}\label{prereq:def:filtration-completion}
     \uses{prereq:def:truncated-ss,prereq:prop:truncations-inverse-system,prereq:def:filtration}
     Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below. The \emph{completion} of $A$ with respect to the filtration $F$ is the inverse limit
     $$\widehat{A} = \varprojlim_{s}\, A^{[\le s]} = \varprojlim_{s}\, A \big/ F^{s+1} A.$$
-    There is a natural map $\iota: A \to \widehat{A}$ induced by the projections $A \to A/F^{s+1}A$. The filtration is called \emph{complete} if $\iota$ is an isomorphism. The Hausdorff condition ensures $\iota$ is injective; completeness further requires $\iota$ to be surjective.
+    There is a natural map $\iota: A \to \widehat{A}$ induced by the projections $A \to A/F^{s+1}A$. The filtration is called \emph{complete} if $\iota$ is an isomorphism. The Hausdorff condition (Definition~\ref{prereq:def:hausdorff}) ensures $\iota$ is injective; completeness further requires $\iota$ to be surjective.
 \end{definition}
 
 \begin{theorem}\label{prereq:thm:unbounded-ess-convergence}
-    \uses{prereq:def:unbounded-ess,prereq:def:filtration-completion,prereq:prop:invlim-of-truncations}
+    \uses{prereq:def:unbounded-ess,prereq:def:filtration-completion,prereq:prop:unbounded-ess-stabilization}
     Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below. Suppose that the inverse systems $\{A_i^{[\le s]}\}_{s \in \bZ}$ (for $i = 1, 2$) satisfy the \emph{Mittag-Leffler condition}: for each $s$, the images of the transition maps $A_i^{[\le s']} \to A_i^{[\le s]}$ stabilize as $s' \to \infty$. Then the unbounded $f$-extension spectral sequence $\mathrm{ESS}^{\mathrm{unbd}}(f)$ converges to the bigraded associated-graded homology of the completions:
     $$E_\infty\!\left(\mathrm{ESS}^{\mathrm{unbd}}(f)\right) \cong H_*\!\left(\widehat{A}_1 \xrightarrow{\hat{f}_A} \widehat{A}_2\right),$$
     where $\hat{f}_A: \widehat{A}_1 \to \widehat{A}_2$ is the completion of $f_A$, and the right-hand side denotes the bigraded associated-graded homology of the two-term complex equipped with the filtrations induced on $\widehat{A}_1$ and $\widehat{A}_2$.
