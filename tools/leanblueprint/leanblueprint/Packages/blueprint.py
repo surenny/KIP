@@ -229,7 +229,7 @@ LEAN_DECLS_TPL = Template("""
     {% call modal('Lean declarations') %}
         <ul class="uses">
           {% for lean, url in obj.userdata.lean_urls %}
-          <li><a href="{{ url }}" class="lean_decl">{{ lean }}</a></li>
+          <li><a href="{{ url }}" class="lean_decl" target="_blank" rel="noopener">{{ lean }}</a></li>
           {% endfor %}
         </ul>
     {% endcall %}
@@ -249,12 +249,12 @@ LEAN_LINKS_TPL = Template("""
       <span class="lean_link">Lean</span>
       <ul class="tooltip_list">
         {% for name, url in thm.userdata['lean_urls'] %}
-           <li><a href="{{ url }}" class="lean_decl">{{ name }}</a></li>
+           <li><a href="{{ url }}" class="lean_decl" target="_blank" rel="noopener">{{ name }}</a></li>
         {% endfor %}
       </ul>
   </div>
     {%- else -%}
-    <a class="lean_link lean_decl" href="{{ thm.userdata['lean_urls'][0][1] }}">Lean</a>
+    <a class="lean_link lean_decl" href="{{ thm.userdata['lean_urls'][0][1] }}" target="_blank" rel="noopener">Lean</a>
     {%- endif -%}
     {%- endif -%}
 """)
