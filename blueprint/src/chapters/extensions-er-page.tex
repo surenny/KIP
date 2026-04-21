@@ -209,10 +209,11 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
         d_{n-a-b}^{\hat f_r}(\lambda^ax')=\lambda^{n-b-e(f)}y'
     \end{equation}
     for some $x'\in Z_{r-1-a}^{s+a,t+a}(X)$ and $y'\in Z_{r-1-n+b+e(f)}^{s+n-b,t+n-b}(Y)$. Consider the following commutative diagram
-    $$\xymatrix{
-        \Sus^{0,e(f)}\nu X/\lambda^{r-1-a} \ar[r]^-{\hat f_{r-1-a}} \ar[d]_{\lambda^a} & \nu Y/\lambda^{r-1-a} \ar[d]^{\lambda^a}\\
-        \Sus^{0,e(f)+a}\nu X/\lambda^{r-1}\ar[r]_-{\hat f_{r-1}} & \Sus^{0,a}\nu Y/\lambda^{r-1}\\
-    }$$
+    $$\begin{CD}
+        \Sus^{0,e(f)}\nu X/\lambda^{r-1-a} @>{\hat f_{r-1-a}}>> \nu Y/\lambda^{r-1-a} \\
+        @V{\lambda^a}VV @VV{\lambda^a}V \\
+        \Sus^{0,e(f)+a}\nu X/\lambda^{r-1} @>{\hat f_{r-1}}>> \Sus^{0,a}\nu Y/\lambda^{r-1}
+    \end{CD}$$
     We see that (\ref{eq:syn-crossing-form}) lifts to
     \begin{equation}\label{eq:syn-crossing-lift}
         d_{n-a-b}^{\hat f_{r-1-a}}(x')= \lambda^{n-a-b-e(f)}y''
@@ -237,10 +238,11 @@ The above Definition~\ref{def:f-Er-crossing}, and Proposition~\ref{prop:cross-f-
 \begin{proof}
   %  By \cite[Proposition 4.40]{Pst} we consider the $\lambda$-inverting functor $\lambda^{-1}:\calS yn\to \calS p$ such that $\lambda^{-1}\circ \nu=id$. The localization map induces a map from the $\hat f$-ESS to the $f$-ESS whose $E_0$ pages are isomorphic to the following
   This follows directly from inverting $\lambda$, which induces a map of spectral sequences from the $\hat f$-ESS to the $f$-ESS. The induced map on the $E_0$-pages are of the following form:
-    $$\xymatrix{
-    Z_\infty^{s,t}(X)/B_{1+t-w}^{s,t}(X)\ar[r]^-{d^{\hat f}_0}\ar[d]_{\lambda^{-1}} & Z_\infty^{s,t}(Y)/B_{1+t-w-e(f)}^{s,t}(Y)\ar[d]^{\lambda^{-1}}\\
-    E_\infty^{s,t}(X)\ar[r]^-{d^{f}_0} & E_\infty^{s, t}(Y)
-    }$$
+    $$\begin{CD}
+    Z_\infty^{s,t}(X)/B_{1+t-w}^{s,t}(X) @>{d^{\hat f}_0}>> Z_\infty^{s,t}(Y)/B_{1+t-w-e(f)}^{s,t}(Y) \\
+    @V{\lambda^{-1}}VV @VV{\lambda^{-1}}V \\
+    E_\infty^{s,t}(X) @>{d^{f}_0}>> E_\infty^{s, t}(Y)
+    \end{CD}$$
  %   The proposition follows from the naturality of this map between spectral sequences.
 \end{proof}
 \begin{remark}

@@ -369,16 +369,78 @@
     \emph{Second proof} (via representatives). Let $y \in E_\infty(V_2)$ be a permanent $d^g$-cycle. By convergence, there exists $[y] \in \{y\}$ with $g_A([y]) = 0$. By exactness, there exists $[x] \in A_1$ with $f_A([x]) = [y]$. Let $x \in E_\infty(V_1)$ detect $[x]$. Then $f_A[x] \in \{y\}$, so by Proposition~\ref{prereq:prop:f-ext-characterization} there is an $f$-extension from $x$ to $y$.
 \end{proof}
 
+\paragraph{Unbounded Extension Spectral Sequence.}\label{sec:prereq-unbounded-ess}
+
+Throughout this subsection, all filtrations are assumed to be \emph{bounded below}: the filtration $F^\bullet A$ satisfies $F^p A = A$ for all sufficiently negative $p$. Filtrations need not be bounded above. We extend the $f$-ESS construction to this setting by defining it as the inverse limit of bounded truncations.
+
+\begin{definition}\label{prereq:def:truncated-ss}
+    \uses{prereq:def:spectral-sequence,prereq:def:convergence,prereq:def:filtration,prereq:def:bounded-filtration}
+    Let $(E, A, F)$ be a converging spectral sequence with filtration $F^\bullet A$ bounded below. For an integer $s$, the \emph{$s$-truncation} of $(E, A, F)$ is the converging spectral sequence $(E^{[\le s]}, A^{[\le s]}, F^{[\le s]})$ defined as follows:
+    \begin{enumerate}
+        \item The \emph{truncated spectral sequence}: for each filtration degree $p$, set
+        $$V^{[\le s],p} = \begin{cases} V^p & \text{if } p \le s, \\ 0 & \text{otherwise,} \end{cases}$$
+        so that $E_r^{[\le s],p} = E_r^p$ for $p \le s$ and $E_r^{[\le s],p} = 0$ for $p > s$.
+        \item The \emph{truncated abutment} is the quotient
+        $$A^{[\le s]} = A \big/ F^{s+1} A,$$
+        equipped with the induced filtration
+        $$F^{[\le s],p} A^{[\le s]} = \begin{cases} A^{[\le s]} & \text{if } p \le 0, \\ F^p A \big/ F^{s+1} A & \text{if } 0 \le p \le s, \\ 0 & \text{if } p > s. \end{cases}$$
+    \end{enumerate}
+    The truncation $(E^{[\le s]}, A^{[\le s]}, F^{[\le s]})$ is a converging spectral sequence with bounded (hence exhaustive and Hausdorff) filtration.
+\end{definition}
+
+\begin{proposition}\label{prereq:prop:truncations-inverse-system}
+    \uses{prereq:def:truncated-ss,prereq:def:converging-ss-morphism}
+    The collection $\{(E^{[\le s]}, A^{[\le s]})\}_{s \in \bZ}$ forms an \emph{inverse system} in the category of converging spectral sequences, indexed by $s$ with order $s \ge s'$. For $s \ge s'$, the transition morphism is the natural projection
+    $$A^{[\le s]} = A \big/ F^{s+1} A \;\longrightarrow\; A \big/ F^{s'+1} A = A^{[\le s']},$$
+    which is compatible with the truncated filtrations and with the spectral sequence page maps.
+\end{proposition}
+
+\begin{proposition}\label{prereq:prop:invlim-of-truncations}
+    \uses{prereq:prop:truncations-inverse-system,prereq:def:spectral-sequence,prereq:def:convergence,prereq:def:exhaustive,prereq:def:hausdorff}
+    Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below and Hausdorff. Then $(E, A)$ is naturally isomorphic to the inverse limit of the inverse system of truncations:
+    $$(E, A) \cong \varprojlim_{s}\, (E^{[\le s]}, A^{[\le s]}).$$
+    Explicitly, $A \cong \varprojlim_{s} A^{[\le s]}$ by the Hausdorff condition; at each filtration degree $p$ and page $r$ one has $E_r^p \cong \varprojlim_{s \ge p}\, E_r^{[\le s],p}$.
+\end{proposition}
+
+\begin{definition}\label{prereq:def:unbounded-ess}
+    \uses{prereq:def:ess,prereq:def:truncated-ss,prereq:prop:truncations-inverse-system,prereq:prop:invlim-of-truncations}
+    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below (not necessarily bounded above). For each integer $s$, let $f^{[\le s]}: (E_1^{[\le s]}, A_1^{[\le s]}) \to (E_2^{[\le s]}, A_2^{[\le s]})$ denote the induced morphism of truncated converging spectral sequences. The \emph{unbounded $f$-extension spectral sequence} is the inverse limit
+    $$\mathrm{ESS}^{\mathrm{unbd}}(f) = \varprojlim_{s}\, \mathrm{ESS}(f^{[\le s]}),$$
+    where the inverse limit is taken over the inverse system of Proposition~\ref{prereq:prop:truncations-inverse-system}, and each $\mathrm{ESS}(f^{[\le s]})$ is the (bounded) extension spectral sequence of Definition~\ref{prereq:def:ess}. The page isomorphism is established by the stabilization property (Proposition~\ref{prereq:prop:unbounded-ess-stabilization}).
+\end{definition}
+
+\begin{proposition}\label{prereq:prop:unbounded-ess-stabilization}
+    \uses{prereq:def:unbounded-ess,prereq:def:f-extension-diff,prereq:def:truncated-ss}
+    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below. Fix a filtration degree $p \in \bZ$ and a page index $r \ge 1$. Then for all integers $s \ge p + r$, the component of the unbounded $f$-extension spectral sequence at filtration degree $p$ and page $r$ is canonically isomorphic to the corresponding component of the $s$-truncated extension spectral sequence:
+    $$\mathrm{ESS}^{\mathrm{unbd}}(f)_r^{p,*} \;\cong\; \mathrm{ESS}(f^{[\le s]})_r^{p,*}.$$
+    In other words, once the truncation level $s \ge p + r$ (so that the truncated ESS retains both the source filtration degree $p$ and the target filtration degree $p + r$), the $d_r^f$-differential at filtration degree $p$ is fully determined and equals that of the $s$-truncated ESS.
+\end{proposition}
+
+\begin{definition}\label{prereq:def:filtration-completion}
+    \uses{prereq:def:truncated-ss,prereq:prop:truncations-inverse-system,prereq:def:filtration}
+    Let $(E, A, F)$ be a converging spectral sequence with filtration bounded below. The \emph{completion} of $A$ with respect to the filtration $F$ is the inverse limit
+    $$\widehat{A} = \varprojlim_{s}\, A^{[\le s]} = \varprojlim_{s}\, A \big/ F^{s+1} A.$$
+    There is a natural map $\iota: A \to \widehat{A}$ induced by the projections $A \to A/F^{s+1}A$. The filtration is called \emph{complete} if $\iota$ is an isomorphism. The Hausdorff condition ensures $\iota$ is injective; completeness further requires $\iota$ to be surjective.
+\end{definition}
+
+\begin{theorem}\label{prereq:thm:unbounded-ess-convergence}
+    \uses{prereq:def:unbounded-ess,prereq:def:filtration-completion,prereq:prop:invlim-of-truncations}
+    Let $f: (E_1, A_1) \to (E_2, A_2)$ be a morphism of converging spectral sequences with filtrations bounded below. Suppose that the inverse systems $\{A_i^{[\le s]}\}_{s \in \bZ}$ (for $i = 1, 2$) satisfy the \emph{Mittag-Leffler condition}: for each $s$, the images of the transition maps $A_i^{[\le s']} \to A_i^{[\le s]}$ stabilize as $s' \to \infty$. Then the unbounded $f$-extension spectral sequence $\mathrm{ESS}^{\mathrm{unbd}}(f)$ converges to the bigraded associated-graded homology of the completions:
+    $$E_\infty\!\left(\mathrm{ESS}^{\mathrm{unbd}}(f)\right) \cong H_*\!\left(\widehat{A}_1 \xrightarrow{\hat{f}_A} \widehat{A}_2\right),$$
+    where $\hat{f}_A: \widehat{A}_1 \to \widehat{A}_2$ is the completion of $f_A$, and the right-hand side denotes the bigraded associated-graded homology of the two-term complex equipped with the filtrations induced on $\widehat{A}_1$ and $\widehat{A}_2$.
+\end{theorem}
+
 \subsubsection{Commutativity of Extension Differentials}\label{sec:prereq-commutativity}
 
 \begin{theorem}\label{prereq:thm:four-spectra}
     \uses{prereq:prop:no-crossing-iff,prereq:prop:f-ext-characterization}
     \lean{KIP.SpectralSequence.fourSpectra_exact}\leanok
     Consider a homotopy commutative diagram of converging spectral sequences
-    $$\xymatrix{
-    V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
-    V_3 \ar[r]_{g} & V_4
-    }$$
+    $$\begin{CD}
+    V_1 @>{f}>> V_2 \\
+    @V{p}VV @VV{q}V \\
+    V_3 @>{g}>> V_4
+    \end{CD}$$
     Suppose $m, n, l \ge 0$, $0 < k \le m + l - n$,
     $$x \in E_\infty^{s}(V_1), \quad y \in E_\infty^{s+n}(V_2), \quad z \in E_\infty^{s+m}(V_3), \quad w \in E_\infty^{s+m+l}(V_4),$$
     and
@@ -431,10 +493,11 @@
 \end{corollary}
 \begin{proof}\leanok
     Consider the commutative diagram
-    $$\xymatrix{
-    V_1 \ar[r]^{f}\ar[d] & V_2\ar[d]^{g}\\
-    0 \ar[r] & V_3
-    }$$
+    $$\begin{CD}
+    V_1 @>{f}>> V_2 \\
+    @VVV @VV{g}V \\
+    0 @>>> V_3
+    \end{CD}$$
     with $p = 0$ and $g \circ f = 0$. All extensions from $x$ to $0$ are trivial and have no crossing. By Corollary~\ref{prereq:cor:four-spectra}, $d_m^g(y) = 0$.
 
     \emph{Alternative proof.} By Proposition~\ref{prereq:prop:f-ext-characterization}, there exists $[x] \in \{x\}$ with $f_A[x] \in \{y\}$. Let $[y] = f_A[x]$. Then $g_A([y]) = g_A(f_A([x])) = 0$. Hence $y$ is a permanent $d^g$-cycle.
@@ -444,10 +507,11 @@
     \uses{prereq:def:ess,prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.essCommutativity_induces_map}\leanok
     Consider a homotopy commutative diagram of converging spectral sequences
-    $$\xymatrix{
-    V_1 \ar[r]^{f}\ar[d]_{p} & V_2\ar[d]^{q}\\
-    V_3 \ar[r]_{g} & V_4
-    }$$
+    $$\begin{CD}
+    V_1 @>{f}>> V_2 \\
+    @V{p}VV @VV{q}V \\
+    V_3 @>{g}>> V_4
+    \end{CD}$$
     Assume ${}^{p}\!E_0 = {}^{p}\!E_r$ and ${}^{q}\!E_0 = {}^{q}\!E_r$ for some $r \ge 0$ (i.e., the $p$-ESS and $q$-ESS have stationary pages up to $r$). Then $(d_r^p, d_r^q)$ induces a map from the $f$-ESS to the $g$-ESS.
 \end{corollary}
 \begin{proof}\leanok
@@ -486,10 +550,11 @@
     \uses{prereq:def:cofiber-sequence}
     \lean{KIP.StableHomotopy.HasFunctorialCofiber}\leanok
     A \emph{functorial cofiber} on a triangulated category $\mathcal{T}$ is an assignment that to each morphism $f: X \to Y$ in $\mathcal{T}$ associates a distinguished triangle $X \xrightarrow{f} Y \to Cf \to \Sigma X$ that is functorial: given a commutative square
-    $$\xymatrix{
-    X \ar[r]^{f}\ar[d]_{\alpha} & Y\ar[d]^{\beta}\\
-    X' \ar[r]_{f'} & Y'
-    }$$
+    $$\begin{CD}
+    X @>{f}>> Y \\
+    @V{\alpha}VV @VV{\beta}V \\
+    X' @>{f'}>> Y'
+    \end{CD}$$
     there is an induced map $C\alpha\beta: Cf \to Cf'$ making the diagram of distinguished triangles commute.
 \end{definition}
 
@@ -985,10 +1050,12 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
     \uses{prereq:ax:nu-cofiber-ses}
     \lean{KIP.Synthetic.synthetic_lift}\leanok
     If a map $f: X \to Y$ has Adams filtration $\AF(f) = k$, then there exists a factorization
-    $$\xymatrix{
-     & \Sigma^{0,-k}\nu Y \ar[d]^{\lambda^k} \\
-     \nu X \ar[r]_{\nu f} \ar@{-->}[ru]^{\Sigma^{0,-k}\tilde{f}} & \nu Y
-    }$$
+    $$\begin{CD}
+    @. \Sigma^{0,-k}\nu Y \\
+    @. @VV{\lambda^k}V \\
+    \nu X @>{\nu f}>> \nu Y
+    \end{CD}$$
+    with a dashed lift $\Sigma^{0,-k}\tilde{f}: \nu X \dashrightarrow \Sigma^{0,-k}\nu Y$ such that $\lambda^k \circ \Sigma^{0,-k}\tilde{f} = \nu f$,
     where $\tilde{f}: \Sigma^{0,k}\nu X \to \nu Y$ is called a \emph{synthetic lift} of $f$.
 \end{axiom}
 

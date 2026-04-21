@@ -281,10 +281,10 @@ From Axiom~\ref{fact:x1239}(1), the element $x_{123,9}+h_0x_{123,8}$ survives to
 
 Let $\alpha_1 = [x_{123,9}+h_0x_{123,8}] \in \pi_{123,123+9} S^{0,0}/\lambda^{11}$ denote any homotopy class detected by $x_{123,9}+h_0x_{123,8}$. For simplicity, we also use  $\alpha_1$ to denote its images in $\pi_{123,123+9} S^{0,0}/\lambda^r$ for $1 \leq r \leq 10$, under the following sequence of maps:
 $$
-\xymatrix{
-S^{0,0}/\lambda^{11} \ar[r] & S^{0,0}/\lambda^{10} \ar[r] & \cdots \ar[r] & S^{0,0}/\lambda \\
-\alpha_1 = [x_{123,9}+h_0x_{123,8}] \ar@{|->}[r] & \alpha_1 \ar@{|->}[r] & \cdots \ar@{|->}[r] & x_{123,9}+h_0x_{123,8}
-}$$
+\begin{CD}
+S^{0,0}/\lambda^{11} @>>> S^{0,0}/\lambda^{10} @>>> \cdots @>>> S^{0,0}/\lambda \\
+\alpha_1 = [x_{123,9}+h_0x_{123,8}] @>{\mapsto}>> \alpha_1 @>{\mapsto}>> \cdots @>{\mapsto}>> x_{123,9}+h_0x_{123,8}
+\end{CD}$$
 
 From the nonzero $d_2$-differential in Axiom~\ref{fact:x1239},  we have 
 $$h_1 \cdot (x_{123,9}+h_0x_{123,8}) = h_0^2x_{124,8},$$
@@ -500,11 +500,11 @@ From Table~\ref{Table:S122} in the Appendix, we have
     From Axiom~\ref{fact:h1x1217}, we know that the element $h_1x_{121,7}$ may only support a nonzero $d_r$-differential for $r \ge 6$. By Proposition~\ref{prop:delta-ess-adams}, $\lambda^4 h_1 x_{121,7}$ detects nonzero homotopy classes in $\pi_{122,122+4}S^{0,0}/\lambda^9$, and hence the required existence of such a homotopy class.
 
     For the desired relation, we apply the Generalized Mahowald Trick Theorem~\ref{thm:gen-mahowald}. Consider the distinguished triangle
-        $$\xymatrix{S^3 \ar[r]^{\nu} & S^0 \ar[r]^-{i} & S^0/\nu \ar[r]^{q} & S^4.}$$
+        $$S^3 \xrightarrow{\nu} S^0 \xrightarrow{i} S^0/\nu \xrightarrow{q} S^4.$$
 The short exact sequence on $\HF$-homology
-$$\xymatrix{0 \ar[r] & {\HF}_*S^0 \ar[r]^-{i_*} & {\HF}_*S^0/\nu \ar[r]^-{q_*} & {\HF}_*S^4 \ar[r] & 0,}$$
+$$0 \to {\HF}_*S^0 \xrightarrow{i_*} {\HF}_*S^0/\nu \xrightarrow{q_*} {\HF}_*S^4 \to 0,$$
 induces a long exact sequence on Ext-groups
-$$\xymatrix{\cdots \ar[r]^-{\cdot h_2} & {\Ext}_A^{*,*}(S^0) \ar[r]^-{i_*} & {\Ext}_A^{*,*}(S^0/\nu) \ar[r]^-{q_*} & {\Ext}_A^{*,*}(S^4) \ar[r]^-{\cdot h_2} & \cdots}.$$
+$$\cdots \xrightarrow{\cdot h_2} {\Ext}_A^{*,*}(S^0) \xrightarrow{i_*} {\Ext}_A^{*,*}(S^0/\nu) \xrightarrow{q_*} {\Ext}_A^{*,*}(S^4) \xrightarrow{\cdot h_2} \cdots.$$
 Also recall for notations, if an element $x$ in ${\Ext}_A^{*,*}(S^0/\nu)$ satisfies 
 $$q_*(x) = a \neq 0 \in \Ext_A^{*,*}(S^4),$$ 
 we denote $x$ by $a[4]$; otherwise, due to exactness, 

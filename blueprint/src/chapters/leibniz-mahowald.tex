@@ -22,10 +22,11 @@ Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool f
 
 \begin{proof}
     Consider the commutative diagram of synthetic spectra
-    $$\xymatrix{
-        \Sus^{0,e(f)}\nu X/\lambda^{n-1} \ar[rr]^{\hat f_{n-1}}\ar[d]_{\delta_X} && \nu Y/\lambda^{n-1}\ar[d]_{\delta_Y}\\
-        \Sus^{1,-n+1+e(f)} \nu X \ar[rr]_{\hat f} && \Sus^{1,-n+1}\nu Y.
-    }$$
+    $$\begin{CD}
+        \Sus^{0,e(f)}\nu X/\lambda^{n-1} @>{\hat f_{n-1}}>> \nu Y/\lambda^{n-1} \\
+        @V{\delta_X}VV @VV{\delta_Y}V \\
+        \Sus^{1,-n+1+e(f)} \nu X @>{\hat f}>> \Sus^{1,-n+1}\nu Y
+    \end{CD}$$
     By condition (1) and Proposition \ref{prop:delta-ess-adams}, we have
     \begin{equation}\label{eq:leibniz-delta-diff}
         d^{\delta_X}_r(x)=\lambda^{r-n}x_\infty.
@@ -96,11 +97,13 @@ Next, we discuss the Generalized Mahowald Trick.
 In order to apply the Generalized Leibniz Rule, we need to provide a method for computing extensions on specific Adams $E_k$-pages. This is provided by Theorem~\ref{thm:gen-mahowald} (the Generalized Mahowald Trick). The crux of the proof of the Generalized Mahowald Trick lies in the following lemma.
 \begin{lemma}[May \cite{May01}]\label{lem:may-smash}
     Let $X\to Y\to Z\to \Sus X$ and $X'\to Y'\to Z'\to \Sus X'$ be distinguished triangles of (synthetic) spectra. By smashing these distinguished triangles together, we obtain the following commutative diagram of cofiber sequences:
-    $$\xymatrix{
-    X\sma X' \ar[r] \ar[d] & Y\sma X' \ar[r] \ar[d] & Z\sma X' \ar[d]\\
-    X\sma Y' \ar[d] \ar[r] & Y\sma Y' \ar[d] \ar[r] & Z\sma Y' \ar[d]\\
-    X\sma Z' \ar[r] & Y\sma Z' \ar[r] & Z\sma Z'\\
-    }$$
+    $$\begin{CD}
+    X\sma X' @>>> Y\sma X' @>>> Z\sma X' \\
+    @VVV @VVV @VVV \\
+    X\sma Y' @>>> Y\sma Y' @>>> Z\sma Y' \\
+    @VVV @VVV @VVV \\
+    X\sma Z' @>>> Y\sma Z' @>>> Z\sma Z'
+    \end{CD}$$
     If $a\in \pi_n(X\sma Z')$ and $b\in\pi_n(Y\sma Y')$ map to the same element in $\pi_n(Y\sma Z')$, then there exists $c\in \pi_n(Z\sma X')$ such that
     \begin{enumerate}
         \item $b$ and $c$ map to the same element in $\pi_n(Z\sma Y')$, and
@@ -112,10 +115,12 @@ In order to apply the Generalized Leibniz Rule, we need to provide a method for 
 The proof follows directly from \cite[Lemma 4.6]{May01}.
 
 In fact, consider $V$ in Axiom TC3 of \cite[Section 4]{May01} and the corresponding commutative diagram. By \cite[Lemma 4.6]{May01} we know that $V$ is the pull back of the following diagram.
-$$\xymatrix{
-\ar@{}[dr]|\lrcorner V\ar[d]\ar[r]& Y\sma Y'\ar[d]\\
-X\sma Z'\ar[r] & Y\sma Z'
-}$$
+$$\begin{CD}
+V @>>> Y\sma Y' \\
+@VVV @VVV \\
+X\sma Z' @>>> Y\sma Z'
+\end{CD}$$
+where the square is a pullback.
 Since $a$ and $b$ map to the same element in $\pi_n(Y\sma Z')$, we know that we can find $v\in V$ such that $v$ maps to $a$ in $\pi_n(X\sma Z')$ and $b$ in $\pi_n(Y\sma Y')$. Then we let $c=j_3(v)\in \pi_n(Z\sma X')$, where $j_3: V \rightarrow Z \sma X'$ is the map in the commutative diagram in Axiom TC3 of \cite[Section 4]{May01}. This lemma follows from the commutativity of the diagram.
 \end{proof}
  
@@ -190,14 +195,17 @@ Since $a$ and $b$ map to the same element in $\pi_n(Y\sma Z')$, we know that we 
 
 \begin{figure}
 \centering
-    \scalebox{0.85}{$\xymatrix@C=1em{
-        \bigwedge & \nu X \ar[r]^-{\hat f} & \Sus^{0,-\!e(f)}\nu Y \ar[r]^-{\hat g} &  \Sus^{0,-\!e(f)\!-\!e(g)}\nu Z \ar[r]^-{\hat h} & \Sus^{1,0}\nu X\\
-        S^{0,0}/\lambda^{r} \ar[d]_{\rho} & & & & [\lambda^{l_1}x] \ar[d]\\
-        S^{0,0}/\lambda^{r'-1} \ar[d]_{\delta_{r'-1}} & & & [\bar x] \ar[r] \ar[d] & [\lambda^{l_1}x]\\
-        S^{1,-r'+1}/\lambda^{m_1+1} \ar[d]_{\lambda^{r'-1}} & & [y] \ar[r] \ar[d] & [\lambda^{m_1}\bar y] & \\
-        S^{1,0}/\lambda^{r} & [\lambda^{l_1}x] \ar[r] & [\lambda^{r'-1}y] & & \\
-    }$}
-\caption{Elements in the homotopy groups of the smash products}\label{fig:smash-homotopy} 
+    \scalebox{0.85}{$\begin{CD}
+        \bigwedge @. \nu X @>{\hat f}>> \Sus^{0,-\!e(f)}\nu Y @>{\hat g}>> \Sus^{0,-\!e(f)\!-\!e(g)}\nu Z @>{\hat h}>> \Sus^{1,0}\nu X \\
+        S^{0,0}/\lambda^{r} @. @. @. @. [\lambda^{l_1}x] \\
+        @V{\rho}VV @. @. @. @VVV \\
+        S^{0,0}/\lambda^{r'-1} @. @. [\bar x] @>>> [\lambda^{l_1}x] \\
+        @V{\delta_{r'-1}}VV @. @. @VVV @. \\
+        S^{1,-r'+1}/\lambda^{m_1+1} @. [y] @>>> [\lambda^{m_1}\bar y] @. \\
+        @V{\lambda^{r'-1}}VV @. @VVV @. @. \\
+        S^{1,0}/\lambda^{r} @. [\lambda^{l_1}x] @>{\quad}>> [\lambda^{r'-1}y] @.
+    \end{CD}$}
+\caption{Elements in the homotopy groups of the smash products}\label{fig:smash-homotopy}
 \end{figure}
 
 \begin{proof}
@@ -289,10 +297,11 @@ The outcome of the Generalized Mahowald Trick, as stated in Theorem~\ref{thm:gen
 
 \begin{proof}
     Consider the following commutative diagram:
-    $$\xymatrix{
-        \Sus^{0,e(f)}\nu X/\lambda^{r-1} \ar[r]^-{\hat f_{r-1}}\ar[d]_{\rho_X} & \nu Y/\lambda^{r-1} \ar[d]_{\rho_Y}\\
-        \Sus^{0,e(f)}\nu X/\lambda^{r'-1} \ar[r]^-{\hat f_{r'-1}} & \nu Y/\lambda^{r'-1}
-    }$$
+    $$\begin{CD}
+        \Sus^{0,e(f)}\nu X/\lambda^{r-1} @>{\hat f_{r-1}}>> \nu Y/\lambda^{r-1} \\
+        @V{\rho_X}VV @VV{\rho_Y}V \\
+        \Sus^{0,e(f)}\nu X/\lambda^{r'-1} @>{\hat f_{r'-1}}>> \nu Y/\lambda^{r'-1}
+    \end{CD}$$
     By Corollary \ref{prereq:cor:ess-naturality}, $(\rho_X,\rho_Y)$ induces a map from the $\hat f_{r-1}$-ESS to the $\hat f_{r'-1}$-ESS. Therefore, by naturality,
     $$d^{\hat f_{r-1}}_n(x)=\lambda^{n-e(f)} y\ \text{implies} \ d^{\hat f_{r'-1}}_n(x)=\lambda^{n-e(f)} y,$$
     which, by definition, is

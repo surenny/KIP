@@ -91,10 +91,11 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \end{proposition}
 \begin{proof}
     Since $\delta=\delta_{n,m}$ is the composition of $\rho$ and $\delta_{n,\infty}$ as the following
-     $$\xymatrix{
-    \nu X/\lambda^n\ar[d]_-{\delta_{n,\infty}} \ar[rd]^{\delta_{n,m}} & \\
-    \Sus^{1,-n}\nu X\ar[r]_-{\rho} & \Sus^{1,-n}\nu X/\lambda^{m-n}
-    }$$
+     $$\begin{CD}
+    \nu X/\lambda^n @>{\delta_{n,m}}>> \Sus^{1,-n}\nu X/\lambda^{m-n} \\
+    @V{\delta_{n,\infty}}VV @| \\
+    \Sus^{1,-n}\nu X @>{\rho}>> \Sus^{1,-n}\nu X/\lambda^{m-n}
+    \end{CD}$$
     it suffices to prove the case when $m=\infty$ by Corollary \ref{prereq:cor:composition-ext}. In the rest of the proof we will write $\delta_n=\delta_{n,\infty}$.
 
     First, we prove by induction on $n$ that
@@ -108,10 +109,11 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
     when $r\le n+1$. (These two expressions coincide when $r=n+1$.) For $n=1$, the claim holds since the $\tau$-Bockstein spectral sequence is isomorphic to the classical Adams spectral sequence. Now, assume $n\ge 2$ and the claim holds for $n-1$.
     
     Consider the following commutative diagram.
-    $$\xymatrix{
-        \Sus^{0,-1}\nu X/\lambda^{n-1} \ar[rd]_-{\delta_{n-1}} \ar[r]^-\lambda &  \nu X/\lambda^{n}\ar[d]^-{\delta_{n}}\\
-        & \Sus^{1,-n}\nu X\\
-    }$$
+    $$\begin{CD}
+    \Sus^{0,-1}\nu X/\lambda^{n-1} @>{\lambda}>> \nu X/\lambda^{n} \\
+    @V{\delta_{n-1}}VV @VV{\delta_{n}}V \\
+    \Sus^{1,-n}\nu X @= \Sus^{1,-n}\nu X
+    \end{CD}$$
     By Corollary \ref{prereq:cor:triangle-map}, if $r\le n$, we have
     $$d^{\delta_{n}}_r(\lambda^{n+1-r}x)=d^{\delta_{n-1}}_r(\lambda^{n-r}x)\equiv y\mod B_{r-1}^{s+r,t+r-1}(X).$$
     If $r\ge n+1$, $x$ can be viewed as an element of the $E_\infty$-pages of $\nu X/\lambda^{n-1}$ or $\nu X/\lambda^n$. We then have
