@@ -100,23 +100,22 @@ jobs:
               project = json.load(f)
           with open('/tmp/mathlib-decls.bmp') as f:
               mathlib = json.load(f)
-          merged = mathlib.get('declarations', {})
-          merged.update(project.get('declarations', {}))
-          project['declarations'] = merged
-          instances = project.get('instances', [])
-          ml_instances = mathlib.get('instances', [])
-          if ml_instances:
-              seen = set(map(json.dumps, instances))
-              for inst in ml_instances:
-                  key = json.dumps(inst)
-                  if key not in seen:
-                      instances.append(inst)
-                      seen.add(key)
-              project['instances'] = instances
+          # Merge declarations (project wins on collision)
+          merged_decls = mathlib.get('declarations', {})
+          merged_decls.update(project.get('declarations', {}))
+          project['declarations'] = merged_decls
+          # Merge dict-keyed fields: instances, instancesFor, modules
+          for key in ('instances', 'instancesFor', 'modules'):
+              proj_dict = project.get(key, {})
+              ml_dict = mathlib.get(key, {})
+              if isinstance(proj_dict, dict) and isinstance(ml_dict, dict):
+                  merged = {**ml_dict, **proj_dict}
+                  project[key] = merged
           with open(sys.argv[1], 'w') as f:
               json.dump(project, f, separators=(',', ':'))
-          n_before = len(project['declarations']) - len(mathlib.get('declarations', {}))
-          print(f'Merged {len(mathlib.get(\"declarations\", {}))} mathlib declarations into index (project had {n_before})')
+          n_proj = len(project['declarations']) - len(mathlib.get('declarations', {}))
+          n_ml = len(mathlib.get('declarations', {}))
+          print(f'Merged {n_ml} mathlib declarations (project had {n_proj})')
           " "$DECL_DATA"
 
       - name: Upload pages artifact
