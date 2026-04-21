@@ -1,0 +1,74 @@
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import staticFiles from '@fastify/static';
+import websocket from '@fastify/websocket';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { register as registerProject } from './routes/project.js';
+import { register as registerAgents } from './routes/agents.js';
+import { register as registerLogs } from './routes/logs.js';
+import { register as registerSummary } from './routes/summary.js';
+
+export interface ProjectPaths {
+  projectPath: string;
+  agentsPath: string;
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+function parseArgs(): { projectPath: string; port: number } {
+  const args = process.argv.slice(2);
+  let projectPath = process.cwd();
+  let port = 8081;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--project' && i + 1 < args.length) projectPath = args[++i];
+    else if (args[i] === '--port' && i + 1 < args.length) port = parseInt(args[++i], 10);
+  }
+  return { projectPath, port };
+}
+
+export async function createServer(options: { projectPath: string; port: number }) {
+  const { projectPath, port } = options;
+
+  const paths: ProjectPaths = {
+    projectPath,
+    agentsPath: path.join(projectPath, 'agents'),
+  };
+
+  const fastify = Fastify({
+    logger: false,
+    rewriteUrl: (req) => {
+      const url = req.url ?? '/';
+      const proxyMatch = url.match(/\/proxy\/\d+(\/.*)$/);
+      return proxyMatch ? proxyMatch[1] : url;
+    },
+  });
+  await fastify.register(cors);
+  await fastify.register(websocket);
+
+  const clientBuildPath = path.join(__dirname, '../../client/dist');
+  if (fs.existsSync(clientBuildPath)) {
+    await fastify.register(staticFiles, { root: clientBuildPath, prefix: '/' });
+    fastify.setNotFoundHandler((req, reply) => {
+      if (req.url.startsWith('/api/')) return reply.status(404).send({ error: 'Not found' });
+      return reply.sendFile('index.html');
+    });
+  }
+
+  registerProject(fastify, paths);
+  registerAgents(fastify, paths);
+  registerLogs(fastify, paths);
+  registerSummary(fastify, paths);
+
+  await fastify.listen({ port, host: '0.0.0.0' });
+  return fastify;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const { projectPath, port } = parseArgs();
+  console.log(`KIP Dashboard → http://localhost:${port}  (project: ${projectPath})`);
+  createServer({ projectPath, port }).catch(err => { console.error(err); process.exit(1); });
+}

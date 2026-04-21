@@ -41,15 +41,29 @@ Given a specific `draft-hint/` file, you:
 
 ## Validation
 
-After editing, run:
-```bash
-cd blueprint && leanblueprint checkdecls
-```
-If it fails, fix the TeX until it passes.
+After editing, you MUST perform these verification steps in order:
+
+1. **Re-read the edited file** — Use the Read tool to read back the TeX file you just edited. Confirm that your changes are actually present in the file. If the file is unchanged from before your edit, your edit did not persist — retry or report failure.
+2. **Run checkdecls** — `cd blueprint && leanblueprint checkdecls`. If it fails, fix the TeX until it passes.
+3. **Only then update STATUS.md** — see the Status Tracking section below.
+
+Do NOT skip step 1. Do NOT report success if you cannot confirm the file was modified.
 
 ## Status tracking
 
-`agents/blueprint-absorber/STATUS.md` tracks which hints have been absorbed. After a successful absorption (checkdecls passes), move the hint filename from `## Pending` to `## Absorbed` with today's date.
+`agents/blueprint-absorber/STATUS.md` tracks which hints have been absorbed.
+
+**Format** — STATUS.md has exactly two sections: `## Absorbed` and `## Pending`. Do NOT create new sections (no "## Absorbed (continued)", no "## Done", etc.).
+
+**After successful absorption** (checkdecls passes AND you have verified the TeX file was actually modified):
+1. Read the current STATUS.md.
+2. Append a new line `- \`<filename>\` — <YYYY-MM-DD>` to the BOTTOM of the `## Absorbed` list (after the last `- ` entry, before the blank line preceding `## Pending`).
+3. If the hint filename was listed under `## Pending`, remove it from there.
+
+**CRITICAL — verify your own work before updating STATUS.md:**
+- After editing the blueprint TeX, re-read the file you edited and confirm your changes are present.
+- Only update STATUS.md if the TeX file was actually modified AND checkdecls passed.
+- If you cannot confirm the edit was persisted, do NOT update STATUS.md. Report the failure instead.
 
 ## Output
 
