@@ -460,8 +460,8 @@ def ProcessOptions(options, document):
         and writes back updated auto-derived fields.
         Also create the file lean_decls of all Lean names referred to in the blueprint.
         """
-        project_dochome = document.userdata.get('project_dochome',
-                                                'https://leanprover-community.github.io/mathlib4_docs')
+        MATHLIB_DOCHOME = 'https://leanprover-community.github.io/mathlib4_docs'
+        project_dochome = document.userdata.get('project_dochome', MATHLIB_DOCHOME)
 
         status_nodes = _load_status_yaml()
         use_extended_states = bool(status_nodes)
@@ -469,6 +469,33 @@ def ProcessOptions(options, document):
         # Locate Lean project root for source extraction
         working_dir = Path(document.userdata['working-dir']).resolve()
         lean_root = working_dir.parent.parent  # blueprint/src → blueprint → project root
+
+        # Detect project-local Lean library names from lean_lib sections in lakefile
+        _project_prefixes = set()
+        for lakefile_name in ('lakefile.toml', 'lakefile.lean'):
+            lakefile = lean_root / lakefile_name
+            if lakefile.exists():
+                try:
+                    text = lakefile.read_text(encoding='utf-8')
+                    if lakefile_name.endswith('.toml'):
+                        for m in re.finditer(r'\[\[lean_lib\]\]\s*\n\s*name\s*=\s*"([^"]+)"', text):
+                            _project_prefixes.add(m.group(1))
+                    else:
+                        for m in re.finditer(r'lean_lib\s+(\S+)', text):
+                            _project_prefixes.add(m.group(1))
+                except Exception:
+                    pass
+        if not _project_prefixes:
+            _project_prefixes = set()
+
+        def _lean_decl_url(decl: str) -> str:
+            """Return the doc URL for a Lean declaration, using the mathlib
+            doc host for declarations outside the project's own libraries."""
+            if project_dochome != MATHLIB_DOCHOME and \
+               not any(decl == p or decl.startswith(p + '.') for p in _project_prefixes):
+                return f'{MATHLIB_DOCHOME}/find/#doc/{decl}'
+            return f'{project_dochome}/find/#doc/{decl}'
+
         # Cache: avoid re-searching the same declaration
         _lean_source_cache = {}
 
@@ -478,9 +505,7 @@ def ProcessOptions(options, document):
                 leandecls = node.userdata.get('leandecls', [])
                 lean_urls = []
                 for leandecl in leandecls:
-                    lean_urls.append(
-                        (leandecl,
-                         f'{project_dochome}/find/#doc/{leandecl}'))
+                    lean_urls.append((leandecl, _lean_decl_url(leandecl)))
 
                 node.userdata['lean_urls'] = lean_urls
 
