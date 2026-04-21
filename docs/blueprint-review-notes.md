@@ -77,3 +77,44 @@ Lean 代码 `KIP/StableHomotopy/TensorTriangulatedCategory.lean:83-86` 中 `smas
 - **Item 2 不要这个条件。**
 
 **TODO:** 在 Blueprint 中调整该 axiom 的 item 1 和 item 2，把 $H_i(X; \mathbb{Q}) = 0$ 条件仅放在 item 1 中。
+
+---
+
+## Synthetic Adams Spectral Sequence 叙述修正
+
+### 6. 函子的定义域应为 Syn，后一句需假设 X 有限
+
+**Status:** Pending correction
+
+原文：
+> The synthetic Adams spectral sequence is a functor from S to the category of 3-graded converging spectral sequences.
+
+两处修正：
+1. **定义域应为 Syn（synthetic spectra），而非 S（stable homotopy category）。**
+2. **后一句（关于具体谱序列的性质）需要假设 $X$ 有限（finite spectrum）。**
+
+**TODO:** 在 Blueprint 中将该函子的定义域从 $\mathcal{S}$ 改为 $\mathrm{Syn}$；在后续描述具体谱序列性质时加上 "$X$ finite" 假设。
+
+---
+
+## Axiom 0.108
+
+### 7. 加上 finite spectra 条件
+
+**Status:** Pending correction
+
+Axiom 0.108 需要加上 **finite spectra** 的假设条件。
+
+**TODO:** 在 Blueprint 中 Axiom 0.108 的陈述中补充 finite spectra 假设。
+
+---
+
+## Synthetic Rigidity 一节
+
+### 8. 全节加上 finite spectra 条件
+
+**Status:** Pending correction
+
+Synthetic rigidity 一节的结果均需要加上 **finite spectra** 的条件。
+
+**TODO:** 在 Blueprint 中 synthetic rigidity 一节的所有相关陈述中补充 finite spectra 假设。
