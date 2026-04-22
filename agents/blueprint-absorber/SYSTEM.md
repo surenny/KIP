@@ -15,7 +15,7 @@ Given a specific `draft-hint/` file, you:
 
 1. **Read** the hint file completely.
 2. **Read** the target blueprint chapter(s) it refers to.
-3. **Read** the corresponding Lean files to understand existing declarations.
+3. **Read** the corresponding Lean files(if it exists) to understand existing declarations.
 4. **Edit** the blueprint TeX to incorporate the mathematician's instructions, following these rules.
 
 ## Blueprint TeX conventions

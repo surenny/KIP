@@ -10,7 +10,8 @@
 - `crossing.tex` — 2026-04-20
 - `extension.tex` — 2026-04-20
 - `filtered谱序列.tex` — 2026-04-20
+- `unboundedESS.md` — 2026-04-22
 
 ## Pending
 <!-- new hints go here -->
-- `unboundedESS.md` — failed: blueprint not actually modified (2026-04-21)
+
