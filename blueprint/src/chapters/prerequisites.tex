@@ -605,21 +605,29 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     A \emph{closed symmetric tensor triangulated category with functorial cofiber} is a closed symmetric tensor triangulated category $\mathcal{T}$ (Definition~\ref{prereq:def:closed-symmetric-tensor-triangulated}) equipped with:
     \begin{enumerate}
         \item A functorial cofiber (Definition~\ref{prereq:def:functorial-cofiber}).
-        \item A \emph{tensor-cofiber exchange}: for morphisms $f: X \to Y$ and $g: A \to B$, a natural isomorphism
-        $$C(f \wedge g) \cong Cf \wedge Cg$$
-        compatible with the triangulated structure.
+        \item A \emph{tensor-cofiber exchange}: for any morphism $f: X \to Y$ and any object $W$, a natural isomorphism
+        $$C(f \wedge W) \cong C(f) \wedge W,$$
+        where $f \wedge W : X \wedge W \to Y \wedge W$ denotes the right-tensoring of $f$ with $W$ (i.e., $f \otimes \mathrm{id}_W$), compatible with the triangulated structure.
     \end{enumerate}
 \end{definition}
 
 \begin{definition}\label{prereq:def:stable-homotopy-category}
     \uses{prereq:def:tensor-triangulated-functorial-cofiber}
     \lean{KIP.StableHomotopy.StableHomotopyCategory}\leanok
-    The \emph{stable homotopy category} $\mathcal{S}$ is a closed symmetric tensor triangulated category with functorial cofiber (Definition~\ref{prereq:def:tensor-triangulated-functorial-cofiber}). Its objects are called \emph{spectra}. Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide.
+    The \emph{stable homotopy category} $\mathcal{S}$ is a closed symmetric tensor triangulated category with functorial cofiber (Definition~\ref{prereq:def:tensor-triangulated-functorial-cofiber}). Its objects are called \emph{spectra}.
+    % NOTE: The statement "Homotopy pullback squares and homotopy pushout squares in $\mathcal{S}$ coincide"
+    % has been removed, as it cannot be stated in the current axiomatic framework.
+    % Pullbacks are not defined. The pushout is defined separately below (Definition~\ref{prereq:def:pushout}).
 \end{definition}
 
 \begin{remark}
     In this project, $\mathcal{S}$ refers to the homotopy category of spectra (in the sense of stable homotopy theory). It can be constructed as the homotopy category of a stable model category, but we take it as given and work axiomatically with its triangulated and closed symmetric monoidal structure.
 \end{remark}
+
+\begin{definition}\label{prereq:def:pushout}
+    \uses{prereq:def:stable-homotopy-category,prereq:def:cofiber-sequence,prereq:def:functorial-cofiber}
+    Given morphisms $f: X \to Y$ and $g: X \to Z$ in $\mathcal{S}$, the \emph{pushout} of the diagram $Y \xleftarrow{f} X \xrightarrow{g} Z$ is the cofiber $C(f, g)$ of the canonical morphism $(f, g): X \to Y \vee Z$, where $Y \vee Z$ denotes the coproduct (wedge sum) in $\mathcal{S}$.
+\end{definition}
 
 \begin{definition}\label{prereq:def:sphere-spectrum}
     \uses{prereq:def:stable-homotopy-category}
@@ -714,7 +722,7 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
 \begin{axiom}\label{prereq:ax:adams-ss}
     \uses{prereq:def:spectral-sequence,prereq:def:stable-homotopy-category,prereq:def:converging-ss-morphism}
     \lean{KIP.StableHomotopy.AdamsSS}\leanok
-    The \emph{$\HF$-Adams spectral sequence} is a functor from $\mathcal{S}^{op} \times \mathcal{S}$ to the category of bigraded converging spectral sequences. For spectra $X$ and $Y$, it produces a spectral sequence $\{E_r^{s,t}(X, Y), d_r\}$ with $r \ge 2$ and differentials
+    The \emph{$\HF$-Adams spectral sequence} is a functor from $\mathcal{S}^{op} \times \mathcal{S}$ to the category of bigraded spectral sequences. For spectra $X$ and $Y$, it produces a spectral sequence $\{E_r^{s,t}(X, Y), d_r\}$ with $r \ge 2$ and differentials
     $$d_r: E_r^{s,t} \to E_r^{s+r, t+r-1}.$$
     A map $f: X' \to X$ induces maps $f^*: E_r^{s,t}(X, Y) \to E_r^{s,t}(X', Y)$, and a map $g: Y \to Y'$ induces maps $g_*: E_r^{s,t}(X, Y) \to E_r^{s,t}(X, Y')$, both compatible with differentials. When $X = \mathbb{S}$, we write $E_r^{s,t}(Y) = E_r^{s,t}(\mathbb{S}, Y)$.
 \end{axiom}
@@ -841,10 +849,10 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 
 \begin{axiom}\label{prereq:ax:adams-boundedness}
     \uses{prereq:thm:adams-separated,prereq:def:finite-type}
-    Suppose $X$ is of finite type and $H_i(X; \bQ) = 0$ for some $i$. Then:
+    Suppose $X$ is of finite type. Then:
     \begin{enumerate}
-        \item The Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ is bounded.
-        \item All subquotients of this filtration are finite groups.
+        \item If additionally $H_i(X; \bQ) = 0$ for some $i$, then the Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ is bounded.
+        \item All subquotients of the Adams filtration on $\pi_i(X) / \{\text{odd-order elements}\}$ are finite groups.
     \end{enumerate}
 \end{axiom}
 
@@ -958,9 +966,9 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{axiom}\label{prereq:ax:syn-adams-ss}
     \uses{prereq:def:spectral-sequence,prereq:def:synthetic-category,prereq:def:converging-ss-morphism}
     \lean{KIP.Synthetic.SynAdamsSS}\leanok
-    The \emph{synthetic Adams spectral sequence} is a functor from $\mathcal{S}$ to the category of 3-graded converging spectral sequences. For a spectrum $X$, it produces a spectral sequence $\SynSS_r^{s,t,w}(X)$ with differentials
+    The \emph{synthetic Adams spectral sequence} is a functor from $h\mathrm{Syn}$ to the category of 3-graded spectral sequences. For a synthetic spectrum $X \in h\mathrm{Syn}$, it produces a spectral sequence $\SynSS_r^{s,t,w}(X)$ with differentials
     $$d_r: \SynSS_r^{s,t,w} \to \SynSS_r^{s+r, t+r-1, w}.$$
-    It converges to $\pi_{*,*}(\nu X)$.
+    For a finite spectrum $X \in \mathcal{S}^{\mathrm{fin}}$, the synthetic Adams spectral sequence for $\nu X$ converges to $\pi_{*,*}(\nu X)$.
 \end{axiom}
 
 \begin{remark}
@@ -1014,7 +1022,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{axiom}\label{prereq:ax:rigid}
     \uses{prereq:def:lambda,prereq:ax:syn-adams-ss}
     \lean{KIP.Synthetic.rigidity_degeneration}\leanok
-    The synthetic Adams spectral sequence for $\nu X$ has $E_2$-page
+    Let $X \in \mathcal{S}^{\mathrm{fin}}$ be a finite spectrum. The synthetic Adams spectral sequence for $\nu X$ has $E_2$-page
     $$\SynSS_2^{*,*,*}(\nu X) \cong E_2^{*,*}(X) \otimes \bF_2[\lambda],$$
     where an element in $E_2^{s,t}(X)$ has tridegree $(s,t,t)$ and $\lambda$ has tridegree $(0,0,-1)$. Given a classical Adams differential $d_r^{\mathrm{cl}}(x) = y$, the corresponding synthetic differential is $d_r(x) = \lambda^{r-1}y$, which is $\lambda$-linear, and all synthetic Adams differentials arise in this way.
 \end{axiom}
@@ -1022,7 +1030,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{axiom}\label{prereq:ax:lambda-bockstein}
     \uses{prereq:def:lambda,prereq:ax:rigid}
     \lean{KIP.Synthetic.lambda_bockstein_iso}\leanok
-    The synthetic Adams spectral sequence for $\nu X$ is isomorphic to the $\lambda$-Bockstein spectral sequence:
+    Let $X \in \mathcal{S}^{\mathrm{fin}}$ be a finite spectrum. The synthetic Adams spectral sequence for $\nu X$ is isomorphic to the $\lambda$-Bockstein spectral sequence:
     \begin{enumerate}
         \item $E_2^{s,t}(X) \cong \pi_{t-s,t}(\nu X / \lambda)$.
         \item If there is a classical Adams differential $d_r x = y$ for $x \in E_2^{s,t}(X) \cong \pi_{t-s,t}(\nu X / \lambda)$, then $x$ admits a lift to $\pi_{t-s,t}(\nu X / \lambda^{r-1})$ whose image under the Bockstein $\nu X / \lambda^{r-1} \to \Sigma^{1,-r+1} \nu X / \lambda$ equals $d_r(x)$.
@@ -1032,7 +1040,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{proposition}\label{prereq:prop:syn-einfty-nuX}
     \uses{prereq:ax:rigid}
     \lean{KIP.Synthetic.einfty_nuX}\leanok
-    The $E_\infty$-page of the synthetic Adams spectral sequence for $\nu X$ is
+    Let $X \in \mathcal{S}^{\mathrm{fin}}$ be a finite spectrum. The $E_\infty$-page of the synthetic Adams spectral sequence for $\nu X$ is
     $$E_\infty^{s,t,w}(\nu X) \cong \begin{cases}
         Z_\infty^{s,t}(X) / B_{1+t-w}^{s,t}(X) & \text{if } t \ge w, \\
         0 & \text{otherwise}.
@@ -1043,7 +1051,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{proposition}\label{prereq:prop:syn-einfty-mod-lambda}
     \uses{prereq:ax:rigid,prereq:def:lambda}
     \lean{KIP.Synthetic.einfty_nuX_mod_lambda}\leanok
-    For $r \ge 2$, the $E_\infty$-page of the synthetic Adams spectral sequence for $\nu X / \lambda^r$ is
+    Let $X \in \mathcal{S}^{\mathrm{fin}}$ be a finite spectrum. For $r \ge 2$, the $E_\infty$-page of the synthetic Adams spectral sequence for $\nu X / \lambda^r$ is
     $$E_\infty^{s,t,w}(\nu X / \lambda^r) \cong \begin{cases}
         Z_{r-t+w}^{s,t}(X) / B_{1+t-w}^{s,t}(X) & \text{if } 0 \le t - w < r, \\
         0 & \text{otherwise}.
@@ -1055,7 +1063,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 \begin{axiom}\label{prereq:ax:synthetic-lift}
     \uses{prereq:ax:nu-cofiber-ses}
     \lean{KIP.Synthetic.synthetic_lift}\leanok
-    If a map $f: X \to Y$ has Adams filtration $\AF(f) = k$, then there exists a factorization
+    Let $X, Y \in \mathcal{S}^{\mathrm{fin}}$ be finite spectra. If a map $f: X \to Y$ has Adams filtration $\AF(f) = k$, then there exists a factorization
     $$\begin{CD}
     @. \Sigma^{0,-k}\nu Y \\
     @. @VV{\lambda^k}V \\
@@ -1065,30 +1073,42 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
     where $\tilde{f}: \Sigma^{0,k}\nu X \to \nu Y$ is called a \emph{synthetic lift} of $f$.
 \end{axiom}
 
+\begin{axiom}\label{prereq:ax:lambda-g-equals-f}
+    \uses{prereq:ax:nu-cofiber-ses,prereq:ax:synthetic-lift,prereq:def:lambda,prereq:def:finite-spectra}
+    Let $X, Y \in \mathcal{S}^{\mathrm{fin}}$ be finite spectra and let $f: X \to Y$ be a map that induces the zero map on $\HF$-homology: $H_*(f; \bF_2) = 0$. Let
+    $$W \xrightarrow{i} X \xrightarrow{f} Y \xrightarrow{h} \Sigma W$$
+    be a functorial distinguished triangle (so $W = \Sigma^{-1}C(f)$ is the desuspended cofiber). By the $\nu$-functor applied to this triangle, there exists a distinguished triangle of synthetic spectra
+    $$\nu(\Sigma^{-1}Y) \xrightarrow{g} \nu W \xrightarrow{\nu i} \nu X,$$
+    where $g$ denotes the boundary map. Then:
+    $$\lambda g = \nu f,$$
+    i.e., the boundary map $g$ composed with $\lambda$ equals the synthetic image of $f$.
+\end{axiom}
+
 \begin{proposition}\label{prereq:prop:syn-distinguished-triangle}
-    \uses{prereq:ax:nu-cofiber-ses,prereq:ax:synthetic-lift}
+    \uses{prereq:ax:nu-cofiber-ses,prereq:ax:synthetic-lift,prereq:ax:lambda-g-equals-f}
     \lean{KIP.Synthetic.syn_distinguished_triangle}\leanok
-    Suppose that $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is a distinguished triangle of spectra with $\AF(h) > 0$, and consequently a short exact sequence on $\HF$-homology
+    Let $X, Y, Z \in \mathcal{S}^{\mathrm{fin}}$ be finite spectra. Suppose that $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is a distinguished triangle of spectra with $\AF(h) > 0$, and consequently a short exact sequence on $\HF$-homology
     $$0 \to H_*X \xrightarrow{H_*f} H_*Y \xrightarrow{H_*g} H_*Z \to 0.$$
     Then there exists a distinguished triangle of synthetic spectra
     $$\nu X \xrightarrow{\nu f} \nu Y \xrightarrow{\nu g} \nu Z \xrightarrow{\Sigma^{0,-1}\hat{h}} \Sigma^{0,-1}\nu \Sigma X = \Sigma^{1,0}\nu X$$
-    such that $\nu h = \lambda \hat{h}$.
+    such that $\nu h = \lambda \hat{h}$. The last relation $\nu h = \lambda \hat{h}$ follows from Axiom~\ref{prereq:ax:lambda-g-equals-f}.
 \end{proposition}
 
 \begin{notation}\label{prereq:not:fhat}
-    \uses{prereq:prop:syn-distinguished-triangle}
+    \uses{prereq:prop:syn-distinguished-triangle,prereq:ax:lambda-g-equals-f}
     \lean{KIP.Synthetic.eHat}\leanok
     For a map $f: X \to Y$ which is part of a distinguished triangle $X \xrightarrow{f} Y \xrightarrow{g} Cf \to \Sigma X$, define
     $$e(f) = \begin{cases}
         0 & \text{if } \AF(f) = 0, \\
         1 & \text{if } \AF(f) > 0.
     \end{cases}$$
-    When $\AF(f) = 0$, we also denote $\nu f$ by $\hat{f}$. In both cases, we have $\hat{f}: \Sigma^{0,e(f)}\nu X \to \nu Y$ and $\nu f = \lambda^{e(f)}\hat{f}$. Furthermore, $C\hat{f} \simeq \Sigma^{0,-e(g)}\nu Cf$.
+    When $\AF(f) = 0$, we also denote $\nu f$ by $\hat{f}$. In both cases, we have $\hat{f}: \Sigma^{0,e(f)}\nu X \to \nu Y$ and $\nu f = \lambda^{e(f)}\hat{f}$. Furthermore, $C\hat{f} \simeq \Sigma^{0,-e(g)}\nu Cf$ (by Axiom~\ref{prereq:ax:lambda-g-equals-f}).
 \end{notation}
 
 \begin{proposition}\label{prereq:prop:fhat-triangle}
-    \uses{prereq:prop:syn-distinguished-triangle,prereq:not:fhat}
+    \uses{prereq:prop:syn-distinguished-triangle,prereq:not:fhat,prereq:ax:lambda-g-equals-f}
     \lean{KIP.Synthetic.fhat_triangle}\leanok
-    Suppose that $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is a distinguished triangle with $e(f) + e(g) + e(h) = 1$. Then there is a distinguished triangle of synthetic spectra
+    Let $X, Y, Z \in \mathcal{S}^{\mathrm{fin}}$ be finite spectra. Suppose that $X \xrightarrow{f} Y \xrightarrow{g} Z \xrightarrow{h} \Sigma X$ is a distinguished triangle with $e(f) + e(g) + e(h) = 1$. Then there is a distinguished triangle of synthetic spectra
     $$\nu X \xrightarrow{\hat{f}} \Sigma^{0,-e(f)}\nu Y \xrightarrow{\hat{g}} \Sigma^{0,-e(f)-e(g)}\nu Z \xrightarrow{\hat{h}} \Sigma^{0,-1}\nu \Sigma X.$$
+    The construction uses Axiom~\ref{prereq:ax:lambda-g-equals-f} to establish the $\lambda$-relations between the classical and synthetic connecting maps.
 \end{proposition}
