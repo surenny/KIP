@@ -118,3 +118,53 @@ Axiom 0.108 需要加上 **finite spectra** 的假设条件。
 Synthetic rigidity 一节的结果均需要加上 **finite spectra** 的条件。
 
 **TODO:** 在 Blueprint 中 synthetic rigidity 一节的所有相关陈述中补充 finite spectra 假设。
+
+---
+
+## Synthetic Lift 补充公理
+
+### 9. 新增 $\lambda g = f$ 公理，并用于证明 0.114、0.115 及 0.106 最后一句
+
+**Status:** Pending — need to write
+
+**公理陈述：**
+设 $X, Y$ 为 finite spectra，$f: X \to Y$ 在 homology 上诱导零映射。设
+$$W \to X \to Y \to \Sigma W$$
+为 functorial distinguished triangle。则有 distinguished triangle
+$$\nu(\Sigma^{-1} Y) \to \nu W \to \nu X$$
+记其 boundary map 为 $g$。
+
+**Axiom:** $\lambda g = f$。
+
+**用途：** 用此公理证明：
+- **Proposition 0.114**
+- **Proposition 0.115**
+- **Proposition 0.106 的最后一句**
+
+**TODO:** 在 Blueprint 的 synthetic lift 一节中补写此公理；在 0.114、0.115 的证明以及 0.106 最后一句中引用此公理。
+
+---
+
+## 第四章开头段落删除
+
+### 10. 删除 extension spectral sequence 推广段落
+
+**Status:** Pending deletion
+
+第四章开头关于 extension spectral sequence 推广到 $H\mathbb{F}_2$-synthetic spectra 的段落（"The extension spectral sequence introduced in Section ?? can be generalized for $H\mathbb{F}_2$-synthetic spectra. Consider a map $f: X \to Y$ between two bounded below finite $H\mathbb{F}_2$-synthetic spectra filtering..."）应删除。
+
+**原因：** 与我们的逻辑链条不相容。
+
+**TODO:** 在 Blueprint 第四章开头删除该段落。
+
+---
+
+### 11. 删除 "finite $m$ implies $m = \infty$" 段落
+
+**Status:** Pending deletion
+
+第四章中关于 "Many arguments for finite $m$ implies the corresponding statement when $m = \infty$ because of $vX = \lim vX/X_m$..." 以及后续 "We also note that our grading for the triangulation transla..." 的段落应删除。
+
+**原因：** $m = \infty$ 的情形对机器来说单独证更简单，不需要从有限 $m$ 取极限。
+
+**TODO:** 在 Blueprint 第四章中删除该段落。
