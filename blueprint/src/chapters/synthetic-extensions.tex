@@ -1,13 +1,17 @@
 \section{Synthetic Extensions} \label{sec:synext}
-The extension spectral sequence introduced in Section \ref{sec:prereq-ess} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two bounded below finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
-$$0\to \pi_{*,*}X\fto{\pi_{*,*}f} \pi_{*,*}Y\to 0$$
-using the Adams filtration, we obtain an $f$-extension spectral sequence:
-$$\ESS{f}_0^{s,t,w} \cong E_\infty^{s,t,w}(X) \oplus E_\infty^{s,t,w}(Y) \Longrightarrow \Ker(\pi_{*,*}f)\oplus \Coker(\pi_{*,*}f)$$
-with differential
-$$d_n^f: \ZESS{f}_{n-1}^{s,t,w}(X)\to E_\infty^{s+n,t+n,w}(Y)/\BESS{f}_{n-1}^{s+n,t+n,w}(Y)$$
-where $\ZESS{f}_*^{*,*,*}$ and $\BESS{f}_*^{*,*,*}$ are  analogous to the notations in Notation \ref{prereq:not:representatives}, with the addition of an extra degree.
+%The extension spectral sequence introduced in Section \ref{sec:prereq-ess} can be generalized for $\HF$-synthetic spectra. Consider a map $f: X\to Y$ between two bounded below finite $\HF$-synthetic spectra\footnote{In our solution to the Kervaire invariant problem, we only consider finite synthetic spectra. However, the arguments in this section apply to any synthetic spectra for which the synthetic Adams spectral sequence strongly converges.}. By filtering
+%$$0\to \pi_{*,*}X\fto{\pi_{*,*}f} \pi_{*,*}Y\to 0$$
+%using the Adams filtration, we obtain an $f$-extension spectral sequence:
+%$$\ESS{f}_0^{s,t,w} \cong E_\infty^{s,t,w}(X) \oplus E_\infty^{s,t,w}(Y) \Longrightarrow \Ker(\pi_{*,*}f)\oplus \Coker(\pi_{*,*}f)$$
+%with differential
+%$$d_n^f: \ZESS{f}_{n-1}^{s,t,w}(X)\to E_\infty^{s+n,t+n,w}(Y)/\BESS{f}_{n-1}^{s+n,t+n,w}(Y)$$
+%where $\ZESS{f}_*^{*,*,*}$ and $\BESS{f}_*^{*,*,*}$ are  analogous to the notations in Notation \ref{prereq:not:representatives}, with the addition of an extra degree.
 
-In fact all the definitions and results in Section \ref{sec:prereq-ess} remain valid in this synthetic setting, provided we include the extra weight degree in addition to the topological degree and ensure that all maps also preserve the weight degree. For convenience, we will not restate these results here but will occasionally refer to them and apply their synthetic versions when needed.
+%In fact all the definitions and results in Section \ref{sec:prereq-ess} remain valid in this synthetic setting, provided we include the extra weight degree in addition to the topological degree and ensure that all maps also preserve the weight degree. For convenience, we will not restate these results here but will occasionally refer to them and apply their synthetic versions when needed.
+
+For any map $f:X\rightarrow Y$ of synthetic spectra, we have the induced morphism of converging spectral sequences. The resulting extension spectral sequence is denoted by the ESS of $f$.
+
+\subsection{Lambda extensions}
 
 \begin{notation} \label{not:deltaandrho}
 There are certain special maps between synthetic spectra that we want to consider. For any $n<m\le \infty$ and a spectrum $X$, we have the following  distinguished triangles of $\HF$-synthetic spectra
@@ -16,11 +20,11 @@ We simply write $\rho=\rho_{n,m}$, $\delta=\delta_{n,m}$ by abuse of notation if
 When $m=\infty$, this sequence is interpreted  as
 $$\Sus^{0,-n}\nu X\fto{\lambda^n} \nu X\fto{~\rho~} \nu X/\lambda^n\fto{~\delta~} \Sus^{1,-n}\nu X.$$
 
-Many arguments for finite $m$ implies the corresponding statement when $m=\infty$ because of
-$$\nu X=\varprojlim_{m} \nu X/\lambda^m$$
-as shown in \cite[Proposition A.13]{BHS}.
+%Many arguments for finite $m$ implies the corresponding statement when $m=\infty$ because of
+%$$\nu X=\varprojlim_{m} \nu X/\lambda^m$$
+%as shown in \cite[Proposition A.13]{BHS}.
 
-We also note that our grading for the triangulation translation functor is smashing with $S^{1,0}$, which is consistent with \cite[Appendix A]{BHS} but is different from \cite[Section 7]{BurklundXu}.
+%We also note that our grading for the triangulation translation functor is smashing with $S^{1,0}$, which is consistent with \cite[Appendix A]{BHS} but is different from \cite[Section 7]{BurklundXu}.
 \end{notation}
 
 %First we show that there are no $\lambda^n$ or $\rho$-hidden extensions.
@@ -54,6 +58,8 @@ As a result, these $d_0$'s have no crossings.
 \begin{remark}
     From the proof above, we see that in (\ref{eq:lambda-rho-exact}), $\lambda^n$ is surjective or trivial, while $\rho$ is injective or trivial.
 \end{remark}
+
+\subsection{Delta extensions}
 
 However, the $\delta$-extension spectral sequence for
 $$\delta:\nu X/\lambda^n\to \Sus^{1,-n}\nu X/\lambda^{m-n}$$
@@ -142,6 +148,8 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \end{remark}
 
 
+\subsection{Delta ESS and Adams differentials}
+
 \begin{corollary}\label{cor:delta-ess-general}
     \uses{prop:delta-ess-adams}
     For $x,y,\delta$ in Proposition \ref{prop:delta-ess-adams} we always have
@@ -154,8 +162,10 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 \begin{remark}\label{rmk:delta-ess-equiv-classical}
     As indicated in the proof, the right-hand side of equation (\ref{eq:delta-ess-formula}) (considered as a subset of $Z_\infty^{s+r,t+r-1}(X)$) is a coset of
     $$B_{r-1}^{s+r,t+r-1}(X)$$
-    which is the same as the value of the classical Adams differential $d_r(x)=y$. This implies that the equation (\ref{eq:delta-ess-formula}) holds if and only if $d_r(x)=y$. Therefore the $\delta$-ESS encodes the same information as the classical Adams spectral sequence.
+    which is the same as the value of the classical Adams differential $d_r(x)=y$. This implies that the equation (\ref{eq:delta-ess-formula}) holds and is essential if and only if $d_r(x)=y$ holds and is essential. Therefore the $\delta$-ESS encodes the same information as the classical Adams spectral sequence.
 \end{remark}
+
+\subsection{Crossings on the $E_r$-page}
 
 \begin{definition} \label{def:classicalcrossdiff}
     \uses{prereq:def:ess}
@@ -209,7 +219,9 @@ is more complicated, as it encodes classical Adams differentials $d_2$ through $
 
 
 
-The emphasis on a crossing occurring ``on the $E_{n+1}$-page" in Definition~\ref{def:classicalcrossdiff} may seem counter-intuitive. However, this is clarified in Proposition~\ref{prop:cross-dr-En} that follows.
+\subsection{Comparison of crossings}
+
+The emphasis on a crossing occurring ``on the $E_{n+1}$-page" in Definition~\ref{def:classicalcrossdiff} may seem counter-intuitive. However, this is clarified in Proposition~\ref{prop:cross-dr-En} and Example~\ref{exam:classcrossdiff} that follow.
 
 \begin{proposition}\label{prop:cross-dr-En}
     \uses{prereq:prop:syn-einfty-nuX,prereq:prop:syn-einfty-mod-lambda,prop:delta-ess-adams,cor:delta-ess-general,def:classicalcrossdiff}
@@ -232,5 +244,10 @@ The emphasis on a crossing occurring ``on the $E_{n+1}$-page" in Definition~\ref
 
 \begin{remark} \label{nocrossE2}
     From Definition~\ref{def:classicalcrossdiff}, it immediately follows that there are no crossings of any differential on the $E_2$-page, as this would require $0< a \le n-1 = 0$. According to Proposition~\ref{prop:cross-dr-En}, this reflects the fact that $\delta_1$-extensions have no crossings for degree reasons.
+\end{remark}
+
+\begin{remark}
+    When $d_r^{\delta_n}(x) = \lambda^{r-n-1}y$ has no crossing, then
+    $d_r^{\delta_n}(\lambda^a x) = \lambda^{a+r-n-1}y$ also has no crossing.
 \end{remark}
 

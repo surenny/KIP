@@ -11,6 +11,7 @@
 - `extension.tex` — 2026-04-20
 - `filtered谱序列.tex` — 2026-04-20
 - `unboundedESS.md` — 2026-04-22
+- `sec4_standalone.tex` — 2026-04-22
 
 ## Pending
 <!-- new hints go here -->

@@ -212,6 +212,10 @@ for line in sys.stdin:
         if summary:
             print(summary, flush=True)
 
+        JSONL.close()
+        if RAW: RAW.close()
+        sys.exit(0)
+
 JSONL.close()
 if RAW: RAW.close()
 " || true
