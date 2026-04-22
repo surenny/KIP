@@ -71,21 +71,21 @@ def _compile_tikz_to_svg(tikz_source: str) -> str:
             f.write(doc)
         try:
             result = subprocess.run(
-                ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', 'tikz.tex'],
+                ['latex', '-interaction=nonstopmode', '-halt-on-error', 'tikz.tex'],
                 cwd=tmpdir,
                 capture_output=True,
                 timeout=120,
             )
-            pdf_path = os.path.join(tmpdir, 'tikz.pdf')
+            dvi_path = os.path.join(tmpdir, 'tikz.dvi')
             svg_path = os.path.join(tmpdir, 'tikz.svg')
-            if not os.path.exists(pdf_path):
+            if not os.path.exists(dvi_path):
                 stdout = result.stdout.decode(errors='replace')
                 errors = [l for l in stdout.split('\n') if l.startswith('!')]
-                log.warning('tikzpicture: pdflatex produced no PDF. Errors: %s',
+                log.warning('tikzpicture: latex produced no DVI. Errors: %s',
                             '; '.join(errors[:5]) or '(none found)')
                 return ''
             result = subprocess.run(
-                ['dvisvgm', '--pdf', '--no-fonts', '--exact-bbox', '-o', svg_path, pdf_path],
+                ['dvisvgm', '--no-fonts', '--exact-bbox', '-o', svg_path, dvi_path],
                 cwd=tmpdir,
                 capture_output=True,
                 timeout=120,
