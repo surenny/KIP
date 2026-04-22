@@ -1,8 +1,15 @@
 % web rendering only needs structure; graphical scaling wrappers confuse plasTeX.
-\newcommand{\scalebox}[2]{#2}
-\newcommand{\resizebox}[3]{#3}
-\newcommand{\rotatebox}[2]{#2}
+% Use noop macros that let the content through without consuming it as a
+% braced argument (which would tokenize everything before VerbatimEnvironment
+% can set verbatim catcodes).
+\renewcommand{\scalebox}[1]{}
+\renewcommand{\resizebox}[2]{}
+\renewcommand{\rotatebox}[1]{}
 
 % multirow causes \ifdim crash in plasTeX; provide a simple stub.
-\newcommand{\multirow}[3]{#3}
-\newcommand{\cline}[1]{}
+\providecommand{\multirow}[3]{#3}
+\providecommand{\cline}[1]{}
+
+% tikz: the Python tikz package (tikz.py) handles verbatim capture and
+% pre-compilation to SVG; just load it so plasTeX finds the environment.
+\usepackage{tikz}

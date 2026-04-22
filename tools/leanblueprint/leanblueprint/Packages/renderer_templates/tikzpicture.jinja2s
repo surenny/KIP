@@ -1,0 +1,12 @@
+name: tikzpicture usetikzlibrary
+{% if obj.nodeName == 'tikzpicture' %}
+{% if obj.userdata.get('tikz_svg_file') %}
+<div class="tikz-figure">
+<img src="{{ obj.userdata['tikz_svg_file'] }}" alt="tikz diagram" style="max-width:100%;height:auto;" />
+</div>
+{% else %}
+<div class="tikz-figure tikz-fallback" style="background:#f8f8f8;border:1px solid #ddd;padding:1em;font-size:0.85em;overflow-x:auto;">
+<pre><code>\begin{tikzpicture}{{ obj._verbatim }}\end{tikzpicture}</code></pre>
+</div>
+{% endif %}
+{% endif %}
