@@ -168,3 +168,17 @@ $$\nu(\Sigma^{-1} Y) \to \nu W \to \nu X$$
 **原因：** $m = \infty$ 的情形对机器来说单独证更简单，不需要从有限 $m$ 取极限。
 
 **TODO:** 在 Blueprint 第四章中删除该段落。
+
+---
+
+## Theorem 6.7 (Generalized Mahowald Trick)
+
+### 12. 需补充 ESS 微分的 vanishing 条件
+
+**Status:** Pending correction
+
+Theorem 6.7（Generalized Mahowald Trick）最后一个等式中涉及的 ESS 微分需要额外假设：
+
+**需增加条件：** $d_0, d_1, \ldots, d_{n-1}$ 的 target 位置上的 ESS $E_0$ 项均为 $0$。
+
+**TODO:** 在 Blueprint 中 Theorem 6.7 的陈述中补充此 vanishing 条件。
