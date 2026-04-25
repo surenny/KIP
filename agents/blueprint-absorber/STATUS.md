@@ -15,6 +15,7 @@
 - `blueprint-review-notes.md` — 2026-04-22
 - `sec5_standalone.tex` — 2026-04-25
 - `sec6_standalone_044500.tex` — 2026-04-25
+- `5+6.tex` — 2026-04-25
 
 ## Pending
 <!-- new hints go here -->

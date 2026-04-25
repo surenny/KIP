@@ -106,6 +106,52 @@ Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool f
     $$d_{r+l-m}(y)= y_\infty.$$
 \end{proof}
 
+\begin{theorem}[Generalized Leibniz Rule, first direction]\label{thm:gen-leibniz-k-fwd}
+    \uses{prop:delta-ess-adams,prop:cross-dr-En,prop:cross-f-Er-level,prereq:cor:four-spectra,def:f-Er-level-extension}
+    Let $f: X\to Y$ be a map between two classical spectra.
+    Suppose that $2\le n\le r$, $e(f)\le m\le n-2+e(f)$, $l\ge e(f)$, $k\ge 0$, and we have
+    $$x\in Z_{r-1}^{s,t}(X), \hspace{0.5cm} y\in Z_{r-1-m+e(f)}^{s+m,t+m}(Y)$$
+    $$x_\infty\in Z_\infty^{s+r,t+r-1}(X), \hspace{0.5cm} y_\infty\in Z_\infty^{s+r+l,t+r+l-1}(Y)$$
+    and the following conditions hold:
+    \begin{enumerate}
+        \item $d_{r}(x)=x_\infty$,
+        \item $d_{m}^{f,E_n, k}(x)=y$,
+        \item $d_{r+l-m}(y)= y_\infty$,
+        \item the differential in (1) has no crossing on the $E_n$-page or (2) has no crossing,
+        \item the differential in (3) has no crossing.
+    \end{enumerate}
+    Then we have an $(f,E_\infty)$-extension
+    $$d_{l}^{f,E_\infty, r-n+k}(x_\infty)=y_\infty.$$
+\end{theorem}
+
+\begin{proof}
+    Consider the commutative diagram of synthetic spectra
+    $$\begin{CD}
+        \Sus^{0,e(f)}\nu X/\lambda^{n-1} @>{\hat f_{n-1}}>> \nu Y/\lambda^{n-1} \\
+        @V{\delta_X}VV @VV{\delta_Y}V \\
+        \Sus^{1,-n+1+e(f)} \nu X @>{\hat f}>> \Sus^{1,-n+1}\nu Y
+    \end{CD}$$
+    By condition (1) and Proposition \ref{prop:delta-ess-adams}, we have
+    \begin{equation}\label{eq:leibniz-fwd-delta-diff}
+        d^{\delta_X}_r(\lambda^k x)=\lambda^{r-n+k}x_\infty.
+    \end{equation}
+    By condition (2) and Definition \ref{def:f-Er-level-extension}, we have
+    \begin{equation}\label{eq:leibniz-fwd-fhat-diff}
+        d^{\hat f_{n-1}}_m(\lambda^k x)=\lambda^{m-e(f)+k} y.
+    \end{equation}
+    By condition (3) and Remark \ref{rmk:delta-ess-equiv-classical}, we have
+    \begin{equation}\label{eq:leibniz-fwd-delta-y}
+        d^{\delta_Y}_{r+l-m}(\lambda^{m-e(f)+k} y)=\lambda^{r+l-n-e(f)+k} y_\infty.
+    \end{equation}
+
+    Applying Proposition \ref{prop:cross-dr-En} and Proposition \ref{prop:cross-f-Er-level} to conditions (4) and (5), we know that the differential in (\ref{eq:leibniz-fwd-delta-diff}) or (\ref{eq:leibniz-fwd-fhat-diff}) has no crossing, and that the differential in (\ref{eq:leibniz-fwd-delta-y}) has no crossing.
+
+    Therefore, we can apply Corollary \ref{prereq:cor:four-spectra} to the transposed commutative diagram (with $\delta_X$ as the first map, $\hat f_{n-1}$ as the second map, and $\delta_Y$ as the known target extension) and obtain
+    $$d^{\hat f}_l(\lambda^{r-n+k}x_\infty)=\lambda^{r+l-n-e(f)+k}y_\infty.$$
+    By definition, this is equivalent to
+    $$d_{l}^{f,E_\infty, r-n+k}(x_\infty)=y_\infty.$$
+\end{proof}
+
 We emphasize that the no-crossing conditions in Theorem \ref{thm:gen-leibniz}, the Generalized Leibniz Rule, are crucial. Without the no-crossing condition, the conclusion could be false.
 
 \begin{remark}

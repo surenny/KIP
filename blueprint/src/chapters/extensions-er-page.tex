@@ -136,7 +136,18 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
     For $r=\infty$, we similarly define an $(f,E_\infty)$-extension of level $l$ using the corresponding synthetic $\hat f$-extension.
 \end{definition}
 
+For $l < l'$, an $(f,E_r)$-extension of level $l$ implies an extension of the same type of level $l'$, but the latter might be inessential.
 
+\begin{proposition}\label{prop:level-comparison}
+    \uses{def:f-Er-level-extension}
+    Suppose we have an $(f,E_r)$-extension of level $l'$,
+    $$d_n^{f,E_r,l'}(x) = y.$$
+    Then either
+    \begin{enumerate}
+        \item there is an essential $(f,E_r)$-extension of level $l$, $d_m^{f,E_r,l}(x) = z$, for some $m < n$, or
+        \item we have $d_n^{f,E_r,l}(x) = y + z$ for some $z$ lying in the indeterminacy of $d_n^{f,E_r,l'}$.
+    \end{enumerate}
+\end{proposition}
 
 \begin{definition}\label{def:f-Er-crossing}
     \uses{def:f-Er-extension}
@@ -271,6 +282,19 @@ Similarly, the crossing notion extends to extensions of level $l$.
 \begin{proposition}\label{prop:cross-f-Er-level}
     \uses{def:f-Er-level-crossing,def:f-Er-level-extension}
     An $(f,E_r)$-extension of level $l$ $d_{n}^{f,E_r,l}(x)=y$ (\ref{eq:f-Er-level-ext-classical}) has a crossing if and only if the corresponding synthetic $\hat f_{r-1}$-extension $d_{n}^{\hat f_{r-1}}(\lambda^l x)=\lambda^{n-e(f)+l} y$ (\ref{eq:f-Er-level-ext-synthetic}) has a crossing.
+\end{proposition}
+
+\begin{proposition}\label{prop:level-crossing-from-zero}
+    \uses{def:f-Er-level-crossing,def:f-Er-level-extension,prop:level-comparison}
+    If an $(f,E_r)$-extension of level $l$, $d_n^{f,E_r,l}(x)=y$, has a crossing, then there is an essential $(f,E_r)$-extension of level $0$, $d_m^{f,E_r,0}(x')=z'$, such that the implied extension at level $a+l$ satisfies the degree conditions of a crossing.
+\end{proposition}
+\begin{proof}
+    If there is a crossing, we apply the alternatives of Proposition~\ref{prop:level-comparison}.
+\end{proof}
+
+\begin{proposition}\label{prop:level-no-crossing-stable}
+    \uses{def:f-Er-level-crossing,def:f-Er-level-extension}
+    If an $(f,E_r)$-extension of level $l$, $d_n^{f,E_r,l}(x)=y$, has no crossing, then the induced extension at any level $l' > l$ also has no crossing.
 \end{proposition}
 
 \begin{proposition}\label{prop:enfty-extension-quotient}
