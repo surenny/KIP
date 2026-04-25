@@ -1,0 +1,93 @@
+\documentclass[12pt,a4paper]{article}
+%\usepackage[UTF8]{ctex}
+\usepackage{amsfonts,amsmath,amsthm,amssymb}
+\usepackage{sfmath}
+\usepackage{hyperref}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=0cm,right=0cm,top=0cm,bottom=0.1cm, footskip=0cm, includefoot=true}
+%\usepackage[contents = \thepage, color=yellow, angle=0, scale = 20]{background}
+\pagestyle{empty}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{}
+%\fancyfoot{}
+%\cfoot{}
+%\lfoot{{\small \color{red} \slshape \thepage 页}}
+%\fancyfoot[R]{\thepage}
+
+\usepackage[all]{xy}
+\usepackage{color}
+
+\renewenvironment{proof}{{\noindent\it\textbf{Proof}}\quad\it}{\hfill$\square$}
+
+%\theoremstyle{definition}
+
+\newtheorem{thm}[equation]{Theorem}
+%\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{cor}[equation]{Corollary}
+\newtheorem{lem}[equation]{Lemma}
+\newtheorem{prop}[equation]{Proposition}
+\newtheorem{defn}[equation]{Definition}
+\newtheorem{rem}[equation]{Remark}
+\newtheorem{conj}[equation]{Conjecture}
+
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{Unboundedness}
+\author{}
+
+
+\begin{document}
+
+\sffamily
+\maketitle
+\thispagestyle{empty}
+
+\abstract{}
+\tableofcontents
+
+\large
+
+\begin{sloppy}
+\clubpenalty=-100
+\widowpenalty=-100
+
+\section{stabilize}
+
+\begin{theorem}
+\begin{thm}
+Let $E_1, A_1$ and $E_2, A_2$ be converging spectral sequences, and $f$ a morphism.
+
+Let $s_1<s_2$ two filtration indexes.
+
+Then if $s_1> s +r+1$, the filtration $s$ commponent of the ess for $s_1$-truncation is isomorphism to the ess for $s_2$-truncation.
+\end{thm}
+\begin{proof}
+    By definition, in ess,
+    $V$ is the associated graded of $A_i$, iin filtration degree $s$, this is the same as the graded piece of the truncated ones.
+
+    $Z_r$ is defined to be the projection of the kernel of 
+    $$d: F^sA_1 \rightarrow F^sA_1/F^{s+r-1}A_1$$
+if $s+r<s_1$, this definition is not affected by truncation.
+
+$B_r$ is defined to be the image of 
+$$d: Z_{r-1}\cap Fil^{s-r+1}A_1 \rightarrow Fil^sA_2\rightarrow E_r$$
+
+This also not affected by truncation
+
+$d_r$ is define by 
+$$d: Fil^sA_1\rightarrow Fil^{s+r}A_2$$
+this is not affected by the truncation.
+
+\end{proof}
+
+
+
+\begin{thebibliography}{99}
+
+
+\end{thebibliography}
+
+\end{sloppy}
+\end{document}
