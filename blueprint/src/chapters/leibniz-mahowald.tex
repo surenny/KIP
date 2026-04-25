@@ -56,6 +56,56 @@ Now, we introduce the theorem of the Generalized Leibniz Rule, a valuable tool f
     We can further generalize Theorem \ref{thm:gen-leibniz} by using the conditions in Theorem \ref{prereq:thm:four-spectra} rather than those Corollary \ref{prereq:cor:four-spectra}. We leave this generalization to the reader.
 \end{remark}
 
+\begin{theorem}[Generalized Leibniz Rule, level $k$]\label{thm:gen-leibniz-k}
+    \uses{prop:delta-ess-adams,prop:cross-dr-En,prop:cross-f-Er-level,prereq:cor:four-spectra,def:f-Er-level-extension}
+    Let $f: X\to Y$ be a map between two classical spectra.
+    Suppose that $2\le n\le r$, $e(f)\le m\le n-2+e(f)$, $l\ge e(f)$, $k\ge 0$, and we have
+    $$x\in Z_{r-1}^{s,t}(X), \hspace{0.5cm} y\in Z_{r-1-m+e(f)}^{s+m,t+m}(Y)$$
+    $$x_\infty\in Z_\infty^{s+r,t+r-1}(X), \hspace{0.5cm} y_\infty\in Z_\infty^{s+r+l,t+r+l-1}(Y)$$
+    and the following conditions hold:
+    \begin{enumerate}
+        \item $d_{r}(x)=x_\infty$,
+        \item $d_{m}^{f,E_n, k}(x)=y$,
+        \item $d_{l}^{f,E_\infty, k}(x_\infty)=y_\infty$,
+        \item the differential in (1) has no crossing on the $E_n$-page or (2) has no crossing.
+        \item the differential in (3) has no crossing.
+    \end{enumerate}
+    Then we have an Adams differential
+    $$d_{r+l-m}(y)= y_\infty.$$
+\end{theorem}
+
+\begin{proof}
+    Consider the commutative diagram of synthetic spectra
+    $$\begin{CD}
+        \Sus^{0,e(f)}\nu X/\lambda^{n-1} @>{\hat f_{n-1}}>> \nu Y/\lambda^{n-1} \\
+        @V{\delta_X}VV @VV{\delta_Y}V \\
+        \Sus^{1,-n+1+e(f)} \nu X @>{\hat f}>> \Sus^{1,-n+1}\nu Y
+    \end{CD}$$
+    By condition (1) and Proposition \ref{prop:delta-ess-adams}, we have
+    \begin{equation}\label{eq:leibniz-k-delta-diff}
+        d^{\delta_X}_r(x)=\lambda^{r-n}x_\infty.
+    \end{equation}
+    By conditions (2) and (3), and Definition \ref{def:f-Er-level-extension}, we have
+    \begin{equation}\label{eq:leibniz-k-fhat-diff}
+        d^{\hat f_{n-1}}_m(\lambda^k x)=\lambda^{m-e(f)+k} y
+    \end{equation}
+    and
+    \begin{equation*}
+        d^{\hat f}_l(\lambda^k x_\infty)=\lambda^{l-e(f)+k} y_\infty,
+    \end{equation*}
+    which implies
+    \begin{equation}\label{eq:leibniz-k-fhat-xinfty}
+         d^{\hat f}_l(\lambda^{r-n+k}x_\infty)=\lambda^{r+l-n-e(f)+k}y_\infty.
+    \end{equation}
+
+    Applying Proposition \ref{prop:cross-dr-En} and Proposition \ref{prop:cross-f-Er-level} to conditions (4) and (5), we know that the differential in (\ref{eq:leibniz-k-delta-diff}) or (\ref{eq:leibniz-k-fhat-diff}) has no crossing, and that the differential in (\ref{eq:leibniz-k-fhat-xinfty}) has no crossing.
+
+    Therefore, we can apply Corollary \ref{prereq:cor:four-spectra} and obtain
+    $$d^{\delta_Y}_{r+l-m}(\lambda^{m-e(f)+k} y)=\lambda^{r+l-n-e(f)+k} y_\infty.$$
+    By Remark \ref{rmk:delta-ess-equiv-classical}, this is equivalent to
+    $$d_{r+l-m}(y)= y_\infty.$$
+\end{proof}
+
 We emphasize that the no-crossing conditions in Theorem \ref{thm:gen-leibniz}, the Generalized Leibniz Rule, are crucial. Without the no-crossing condition, the conclusion could be false.
 
 \begin{remark}
@@ -268,6 +318,9 @@ Since $a$ and $b$ map to the same element in $\pi_n(Y\sma Z')$, we know that we 
     $$d^{f, E_{n+m+1+e(h)}}_nx\equiv y \mod B_{r'}^{s+n+l,t+n+l-1}(Y).$$
 \end{proof}
 
+\begin{remark}
+    There is also a version of the Generalized Mahowald Trick where the assumptions involve $(g, E_{m_1+2})$-extensions and $(h, E_{r'})$-extensions of level $k$. We leave this generalization to the reader.
+\end{remark}
 
     We refer to Theorem~\ref{thm:gen-mahowald} as the Generalized Mahowald Trick, as this approach was first utilized by Mahowald and his collaborators in various works (see, for example, \cite{MahowaldTangora}), particularly in the case where $m_1 = l_1 = 0$. The synthetic setting advances this method by allowing for the consideration of cases where $m_1>0, l_1>0$ as well. 
     
@@ -378,12 +431,26 @@ The following Corollary~\ref{cor:stretch-extension} is the contrapositive statem
 
 \begin{corollary}\label{cor:stretch-extension}
     \uses{prop:ext-across-pages}
-    Suppose $r\ge r'$ and there exists an $(f,E_{r'})$-extension 
+    Suppose $r\ge r'$ and there exists an $(f,E_{r'})$-extension
     $$d^{f,E_{r'}}_n(x)=y$$
-    for $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_{r'-1-n+e(f)}^{s+n,t+n}(Y)$. Assume that this extension has no crossing of the form $d^{f,E_{r'-a}}_{n-a-b}(x')=y'$ for any $b>0$, $0<a\le n-e(f)$, and 
-    $$x'\in Z_{r'-1-a}^{s+a,t+a}(X)\backslash Z_{r-1-a}^{s+a,t+a}(X).$$ 
+    for $x\in Z_{r-1}^{s,t}(X)$ and $y\in Z_{r'-1-n+e(f)}^{s+n,t+n}(Y)$. Assume that this extension has no crossing of the form $d^{f,E_{r'-a}}_{n-a-b}(x')=y'$ for any $b>0$, $0<a\le n-e(f)$, and
+    $$x'\in Z_{r'-1-a}^{s+a,t+a}(X)\backslash Z_{r-1-a}^{s+a,t+a}(X).$$
     Under these conditions, we also have an $(f,E_{r})$-extension
     $$d^{f,E_{r}}_n(x)=y.$$
 \end{corollary}
+
+\begin{example}\label{exam:stretchext}
+    \uses{cor:stretch-extension}
+    In Example~\ref{exam:Mahowald}, we use the Generalized Mahowald Trick to establish the $(f, E_3)$-extension:
+    $$d_2^{f, E_3} (h_0h_4^2) = h_0 p,$$
+    for the map $f=\nu:S^3 \rightarrow S^0$, as discussed in Example~\ref{exam:extonEn}(2). However, to apply the Generalized Leibniz Rule in proving the classical Adams differential
+    $$d_3(h_2h_5) = h_0p$$
+    in Example~\ref{exam:Leibnizyes}, we need the $E_\infty$-page version of the $(f, E_3)$-extension:
+    $$d_2^{f, E_\infty} (h_0h_4^2) = h_0 p.$$
+    We apply Corollary~\ref{cor:stretch-extension} to confirm this.
+
+    As checked in Example~\ref{exam:Ercross}(2), the $(f, E_3)$-extension has no crossing. Consequently, by Corollary~\ref{cor:stretch-extension}, we obtain the required $(f, E_\infty)$-extension:
+    $$d_2^{f, E_\infty} (h_0h_4^2) = h_0 p.$$
+\end{example}
 
 

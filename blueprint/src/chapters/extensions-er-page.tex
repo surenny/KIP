@@ -117,6 +117,25 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
     The element $y$ should be interpreted as a coset with indeterminacy given by $B_{1+n-e(f)}^{s+n,t+n}(Y)$, plus the sum of images of $d^{\hat f_{r-1}}_{<n}$ differentials.   This $(f,E_r)$-extension is \emph{essential} if this coset does not contain 0.
 \end{remark}
 
+\begin{definition}\label{def:f-Er-level-extension}
+    \uses{prereq:not:fhat,prereq:prop:syn-einfty-mod-lambda}
+    Let $x\in Z^{s,t}_{r-1}(X)$ and $y\in Z^{s+n,t+n}_{r-1-n+e(f)}(Y)$ for some
+    $$e(f)\le n\le r-2+e(f).$$
+    We say that there is an $(f,E_r)$-extension of level $l$ from $x$ to $y$, denoted by
+    \begin{equation}\label{eq:f-Er-level-ext-classical}
+    d_{n}^{f,E_r,l}(x)=y
+    \end{equation}
+    if there exists a synthetic $\hat f_{r-1}$-extension
+    \begin{equation}\label{eq:f-Er-level-ext-synthetic}
+        d_{n}^{\hat f_{r-1}}(\lambda^l x)=\lambda^{n-e(f)+l} y.
+    \end{equation}
+    where $\lambda^l x$ is viewed as an element of the subgroup (\ref{eq:fhat-ess-source}) with certain $k$, and $\lambda^{n-e(f)+l} y$ is viewed as an element of the quotient group (\ref{eq:fhat-ess-target}).
+
+    We say that this $(f,E_r)$-extension of level $l$ in (\ref{eq:f-Er-level-ext-classical}) is \emph{essential} if the corresponding synthetic $\hat f_{r-1}$-extension in (\ref{eq:f-Er-level-ext-synthetic}) is an essential differential in the $\hat f_{r-1}$-ESS.
+
+    For $r=\infty$, we similarly define an $(f,E_\infty)$-extension of level $l$ using the corresponding synthetic $\hat f$-extension.
+\end{definition}
+
 
 
 \begin{definition}\label{def:f-Er-crossing}
@@ -224,7 +243,35 @@ Consider an $(f,E_r)$-extension $d_{n}^{f,E_r}(x)=y$ in (\ref{eq:f-Er-ext-classi
     Therefore, the differential (\ref{eq:syn-crossing-form}) is essential if and only if the differential (\ref{eq:syn-crossing-lift}) is essential and $y''\notin B_{1+n-b-e(f)}^{s+n-b,t+n-b}(Y)$. This completes the proof.
 \end{proof}
 
-The above Definition~\ref{def:f-Er-crossing}, and Proposition~\ref{prop:cross-f-Er} can be similarly defined and stated for the case $r=\infty$.
+The above Definition~\ref{def:f-Er-crossing} and Proposition~\ref{prop:cross-f-Er} extend to the case $r=\infty$ as follows.
+
+\begin{definition}\label{def:f-Einfty-crossing}
+    \uses{def:f-Er-extension}
+    A crossing of the $(f,E_\infty)$-extension $d_{n}^{f,E_\infty}(x)=y$ is defined as an essential $(f, E_\infty)$-extension from some $x'\in Z_{\infty}^{s+a,t+a}(X)$ to
+    $$y'\in Z_{\infty}^{s+n-b,t+n-b}(Y)\backslash B_{1+n-b-e(f)}^{s+n-b,t+n-b}(Y)$$
+    (where $\backslash$ denotes the difference of sets, meaning $y'$ survives to the classical Adams $E_{\infty}$-page while it is not hit by any Adams differential) for $a>0$ and $0\le b\le n-a-e(f)$.
+\end{definition}
+
+\begin{proposition}\label{prop:cross-f-Einfty}
+    \uses{def:f-Einfty-crossing,def:f-Er-extension}
+    An $(f,E_\infty)$-extension $d_{n}^{f,E_\infty}(x)=y$ has a crossing if and only if the synthetic $\hat f$-extension $d_{n}^{\hat f}(x)=\lambda^{n-e(f)} y$ has a crossing.
+\end{proposition}
+
+Similarly, the crossing notion extends to extensions of level $l$.
+
+\begin{definition}\label{def:f-Er-level-crossing}
+    \uses{def:f-Er-level-extension}
+    A crossing of the $(f,E_r)$-extension of level $l$ $d_{n}^{f,E_r,l}(x)=y$ in (\ref{eq:f-Er-level-ext-classical}) is defined as an essential $(f, E_{r-a})$-extension of level $l$ from some $x'\in Z_{r-1-a}^{s+a,t+a}(X)$ to
+    $$y'\in Z_{r-1-n+b+e(f)}^{s+n-b,t+n-b}(Y)\backslash B_{1+n-b-e(f)}^{s+n-b,t+n-b}(Y)$$
+    for $0<a \le r-2$ and $0\le b\le n-a-e(f)$.
+
+    For $r=\infty$, we similarly define a crossing of an $(f,E_\infty)$-extension of level $l$ as an essential $(f, E_\infty)$-extension of level $l$ from some $x'\in Z_{\infty}^{s+a,t+a}(X)$ to $y'\in Z_{\infty}^{s+n-b,t+n-b}(Y)\backslash B_{1+n-b-e(f)}^{s+n-b,t+n-b}(Y)$ for $a>0$ and $0\le b\le n-a-e(f)$.
+\end{definition}
+
+\begin{proposition}\label{prop:cross-f-Er-level}
+    \uses{def:f-Er-level-crossing,def:f-Er-level-extension}
+    An $(f,E_r)$-extension of level $l$ $d_{n}^{f,E_r,l}(x)=y$ (\ref{eq:f-Er-level-ext-classical}) has a crossing if and only if the corresponding synthetic $\hat f_{r-1}$-extension $d_{n}^{\hat f_{r-1}}(\lambda^l x)=\lambda^{n-e(f)+l} y$ (\ref{eq:f-Er-level-ext-synthetic}) has a crossing.
+\end{proposition}
 
 \begin{proposition}\label{prop:enfty-extension-quotient}
     \uses{def:f-Er-extension}
@@ -248,4 +295,16 @@ The above Definition~\ref{def:f-Er-crossing}, and Proposition~\ref{prop:cross-f-
 \begin{remark}
     Since the synthetic Adams $E_\infty$-page contains more information than the classical Adams $E_\infty$-page, the $(f,E_\infty)$-extensions similarly provide more information compared to the classical $f$-extensions.
 \end{remark}
+
+\begin{proposition}\label{prop:enfty-level-extension-quotient}
+    \uses{def:f-Er-level-extension}
+    Consider $f: X\to Y$, $x\in Z_\infty^{s,t}(X)$ and $y\in Z_\infty^{s+n,t+n}(Y)$.
+    Then
+    $$d^{f,E_\infty, l}_n(x)=y$$
+    implies that
+    $$d^{f}_n(x+B_\infty^{s,t}(X))=y+B_\infty^{s,t}(Y).$$
+\end{proposition}
+\begin{proof}
+    The same as Proposition~\ref{prop:enfty-extension-quotient}, since we invert $\lambda$.
+\end{proof}
 
