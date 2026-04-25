@@ -20,8 +20,21 @@ fi
 #    leanblueprint all = mk_pdf + mk_web + lake build + checkdecls
 #    Since we already ran lake build in step 1, call subcommands directly
 #    to avoid building twice.
+# ── 2.5. Inject annotations into LaTeX source (optional) ──────────────
+ANNOTATIONS_JSON="$PROJECT_ROOT/blueprint/annotations-export.json"
+if [[ -f "$ANNOTATIONS_JSON" ]]; then
+  echo "==> Injecting annotations into LaTeX source"
+  python3 "$PROJECT_ROOT/blueprint/inject_annotations.py" "$ANNOTATIONS_JSON"
+fi
+
 echo "==> leanblueprint pdf"
 leanblueprint pdf
+
+# ── Restore LaTeX source after PDF build (undo injected annotations) ──
+if [[ -f "$ANNOTATIONS_JSON" ]]; then
+  echo "==> Restoring LaTeX source (removing injected annotations)"
+  python3 "$PROJECT_ROOT/blueprint/inject_annotations.py" --restore
+fi
 
 echo "==> leanblueprint web"
 leanblueprint web
