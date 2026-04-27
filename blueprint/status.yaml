@@ -7,18 +7,18 @@ nodes:
     proved: false
     kind: definition
     comments:
-      - topic: align
-        text: SSData字段顺序和NL不一致，建议p q互换
-        by: surenny
-        at: '2026-04-19'
-      - topic: general
-        text: 这个定义是整个谱序列的基础
-        by: wangguozhen
-        at: '2026-04-19'
-      - topic: general
-        text: 这是一个非常正确的形式化
-        by: web-reviewer
-        at: '2026-04-19'
+    - topic: align
+      text: SSData字段顺序和NL不一致，建议p q互换
+      by: surenny
+      at: '2026-04-19'
+    - topic: general
+      text: 这个定义是整个谱序列的基础
+      by: wangguozhen
+      at: '2026-04-19'
+    - topic: general
+      text: 这是一个非常正确的形式化
+      by: web-reviewer
+      at: '2026-04-19'
     nl_reviewer: test
     align_reviewer: web-reviewer
     nl_hash: 192c2f3b92f48706
@@ -301,7 +301,7 @@ nodes:
     aligned: false
     proved: true
     kind: theorem
-    nl_hash: 6e275e11af8a730c
+    nl_hash: 6a25232db9fa243c
   prereq:cor:four-spectra:
     lean_decl: KIP.SpectralSequence.fourSpectra_cor
     nl_reviewed: true
@@ -341,7 +341,7 @@ nodes:
     aligned: false
     proved: true
     kind: corollary
-    nl_hash: 2eeb29430a7da92e
+    nl_hash: 53c7aeda67950db0
   prereq:cor:stationary-page:
     lean_decl: KIP.SpectralSequence.essCommutativity_eInfty_compat
     nl_reviewed: true
@@ -381,7 +381,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: d514cc1a575d2c95
+    nl_hash: 32d4d96b8e0472d0
   prereq:prop:les-hom:
     lean_decl: CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂
     nl_reviewed: true
@@ -413,7 +413,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: cedd10011e2b5858
+    nl_hash: d3dad77990169562
   prereq:def:stable-homotopy-category:
     lean_decl: KIP.StableHomotopy.StableHomotopyCategory
     nl_reviewed: true
@@ -421,7 +421,7 @@ nodes:
     aligned: false
     proved: false
     kind: definition
-    nl_hash: 9a889a3089ee3677
+    nl_hash: 1bc6b948cc6de77e
   prereq:def:sphere-spectrum:
     lean_decl: KIP.StableHomotopy.SphereSpectrum
     nl_reviewed: true
@@ -517,7 +517,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: 5ae1f123a5e2103e
+    nl_hash: c3fc88c4b856bbc5
   prereq:ax:adams-convergence:
     lean_decl: KIP.StableHomotopy.adamsConvergence
     nl_reviewed: true
@@ -613,7 +613,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: 8d3b23acd0b6f72c
+    nl_hash: 4dd13c56ad8e0ce8
   prereq:def:nu-functor:
     lean_decl: KIP.Synthetic.nu
     nl_reviewed: true
@@ -637,7 +637,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: a7c23b5890c3d129
+    nl_hash: 3e0ecca81881981b
   prereq:ax:lambda-bockstein:
     lean_decl: KIP.Synthetic.lambda_bockstein_iso
     nl_reviewed: true
@@ -645,7 +645,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: 5bf47b540c8f0b6d
+    nl_hash: 2a8a4e6ae24c42f0
   prereq:prop:syn-einfty-nuX:
     lean_decl: KIP.Synthetic.einfty_nuX
     nl_reviewed: true
@@ -653,7 +653,7 @@ nodes:
     aligned: false
     proved: true
     kind: proposition
-    nl_hash: 28f001b7064a86ad
+    nl_hash: 0536d05a612bafd8
   prereq:prop:syn-einfty-mod-lambda:
     lean_decl: KIP.Synthetic.einfty_nuX_mod_lambda
     nl_reviewed: true
@@ -661,7 +661,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
-    nl_hash: 97cc8123101942e8
+    nl_hash: c4f69f4fd1a5ba3d
   prereq:ax:synthetic-lift:
     lean_decl: KIP.Synthetic.synthetic_lift
     nl_reviewed: true
@@ -669,7 +669,7 @@ nodes:
     aligned: false
     proved: false
     kind: axiom
-    nl_hash: 1949b431877887f6
+    nl_hash: 0f64bf31bafb2f2c
   prereq:prop:syn-distinguished-triangle:
     lean_decl: KIP.Synthetic.syn_distinguished_triangle
     nl_reviewed: true
@@ -677,7 +677,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
-    nl_hash: 05f7a4bfb98e4da3
+    nl_hash: dafddd89eab50351
   prereq:not:fhat:
     lean_decl: KIP.Synthetic.eHat
     nl_reviewed: true
@@ -685,7 +685,7 @@ nodes:
     aligned: false
     proved: false
     kind: notation
-    nl_hash: 0066745a21a34568
+    nl_hash: 3376aca2cabd787f
   prereq:prop:fhat-triangle:
     lean_decl: KIP.Synthetic.fhat_triangle
     nl_reviewed: true
@@ -693,7 +693,7 @@ nodes:
     aligned: false
     proved: false
     kind: proposition
-    nl_hash: 3d77f92124aaa008
+    nl_hash: 6a59996c2c905d5e
   a0000000001:
     bound: false
     kind: remark
@@ -835,7 +835,7 @@ nodes:
     nl_hash: 72d241409030dd3c
   a0000000007:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: add0a104495f4766
   nota:ess-notation:
     bound: false
@@ -847,7 +847,7 @@ nodes:
     nl_hash: 7bb29815f0942e22
   a0000000009:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 2337fba42bf2d2f9
     nl_reviewed: false
     aligned: false
@@ -927,14 +927,16 @@ nodes:
     aligned: false
   a0000000019:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 3654fbdff0b25f39
     nl_reviewed: false
     aligned: false
   not:deltaandrho:
     bound: false
     kind: notation
-    nl_hash: 565f6f8d249d3f9f
+    nl_hash: bdfdea133afd4516
+    nl_reviewed: false
+    aligned: false
   def:classicalcrossdiff:
     bound: false
     kind: definition
@@ -943,7 +945,9 @@ nodes:
   rmk:delta-ess-equiv-classical:
     bound: false
     kind: remark
-    nl_hash: ee9f8fe67c8f4051
+    nl_hash: 24ff4e56c092d226
+    nl_reviewed: false
+    aligned: false
   prop:cross-f-Er:
     bound: false
     kind: proposition
@@ -985,7 +989,7 @@ nodes:
   lem:may-smash:
     bound: false
     kind: lemma
-    nl_hash: a31b5299f25ce906
+    nl_hash: afe5bd4273bd64ca
     nl_reviewed: false
     aligned: false
   cor:stretch-extension:
@@ -1011,7 +1015,9 @@ nodes:
   thm:gen-mahowald:
     bound: false
     kind: theorem
-    nl_hash: 92952a07db102c54
+    nl_hash: bdfc644cddc2ab64
+    nl_reviewed: false
+    aligned: false
   a0000000024:
     bound: false
     kind: remark
@@ -1194,8 +1200,10 @@ nodes:
   prereq:ax:adams-boundedness:
     kind: axiom
     bound: false
-    nl_hash: d4915bb9addf144e
+    nl_hash: 9567608ab49a37cd
     proved: false
+    nl_reviewed: false
+    aligned: false
   prereq:def:bounded-below:
     kind: definition
     bound: true
@@ -1360,3 +1368,64 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: 0fe575dc179e17ec
+  prereq:ax:lambda-g-equals-f:
+    kind: axiom
+    bound: false
+    nl_hash: f0c2eb5aa1e7d2be
+    proved: false
+  prereq:def:pushout:
+    kind: definition
+    bound: false
+    nl_hash: 67fa567170e771e6
+    proved: false
+  prop:level-no-crossing-stable:
+    kind: proposition
+    bound: false
+    nl_hash: 4978ae6e889f3f39
+  prop:enfty-level-extension-quotient:
+    kind: proposition
+    bound: false
+    nl_hash: c590914683f26a4e
+  prop:level-comparison:
+    kind: proposition
+    bound: false
+    nl_hash: d7ba5631b88428b4
+  prop:cross-f-Er-level:
+    kind: proposition
+    bound: false
+    nl_hash: 11ec38d65102f7a2
+  prop:cross-f-Einfty:
+    kind: proposition
+    bound: false
+    nl_hash: 026fdf9f11a75bd3
+  prop:level-crossing-from-zero:
+    kind: proposition
+    bound: false
+    nl_hash: 86accf88b82f1b23
+  def:f-Er-level-extension:
+    kind: definition
+    bound: false
+    nl_hash: 817d6840d2161a80
+    proved: false
+  def:f-Einfty-crossing:
+    kind: definition
+    bound: false
+    nl_hash: 3734eb35a023c98e
+    proved: false
+  def:f-Er-level-crossing:
+    kind: definition
+    bound: false
+    nl_hash: e8e93c5205c88501
+    proved: false
+  thm:gen-leibniz-k:
+    kind: theorem
+    bound: false
+    nl_hash: 47ebaafc9f956b94
+  exam:stretchext:
+    kind: example
+    bound: false
+    nl_hash: 0fcee820de1789fc
+  thm:gen-leibniz-k-fwd:
+    kind: theorem
+    bound: false
+    nl_hash: 4cfc9e6c2e0c3346
