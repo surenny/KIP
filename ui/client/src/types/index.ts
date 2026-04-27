@@ -78,6 +78,7 @@ export interface NodeData {
   id: string;
   kind: string | null;
   chapter: string | null;
+  subsection: string | null;
   sourceFile: string | null;
   sourceLine: number | null;
   leanDecl: string | null;

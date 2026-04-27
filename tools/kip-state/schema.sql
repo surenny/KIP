@@ -10,6 +10,7 @@ CREATE TABLE nodes (
   id              TEXT PRIMARY KEY,
   kind            TEXT,                  -- definition / theorem / lemma / proposition / corollary / axiom / notation / remark / question / example
   chapter         TEXT,                  -- chapter file stem
+  subsection      TEXT,                  -- deepest LaTeX heading below \section (subsubsection if available, else subsection)
   source_file     TEXT,
   source_line     INTEGER,
   lean_decl       TEXT,                  -- from \lean{...}

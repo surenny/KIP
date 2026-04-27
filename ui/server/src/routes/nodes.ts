@@ -10,6 +10,7 @@ interface NodeRow {
   id: string;
   kind: string | null;
   chapter: string | null;
+  subsection: string | null;
   source_file: string | null;
   source_line: number | null;
   lean_decl: string | null;
@@ -305,6 +306,7 @@ function shapeNode(r: NodeRow) {
     id: r.id,
     kind: r.kind,
     chapter: r.chapter,
+    subsection: r.subsection,
     sourceFile: r.source_file,
     sourceLine: r.source_line,
     leanDecl: r.lean_decl,
@@ -387,8 +389,10 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
         reply.status(503);
         return { error: 'state.db not built' };
       }
-      const allNodes = db.prepare("SELECT id, kind, chapter, phase FROM nodes").all() as
-        { id: string; kind: string | null; chapter: string | null; phase: string }[];
+      const allNodes = db.prepare(
+        "SELECT id, kind, chapter, subsection, phase FROM nodes"
+      ).all() as
+        { id: string; kind: string | null; chapter: string | null; subsection: string | null; phase: string }[];
       const nodes = allNodes.filter(n => !n.kind || BLUEPRINT_KINDS.has(n.kind));
       const visibleIds = new Set(nodes.map(n => n.id));
       const edges = (db.prepare("SELECT from_node, to_node FROM edges").all() as

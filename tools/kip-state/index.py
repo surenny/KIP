@@ -32,6 +32,10 @@ RE_LABEL = re.compile(r"\\label\{([^}]+)\}")
 RE_USES = re.compile(r"\\uses\{([^}]+)\}")
 RE_LEAN = re.compile(r"\\lean\{([^}]+)\}")
 RE_LEANOK = re.compile(r"\\leanok\b")
+RE_SUBSEC = re.compile(r"\\subsection\*?\{([^}]+)\}")
+RE_SUBSUBSEC = re.compile(r"\\subsubsection\*?\{([^}]+)\}")
+# Order matters: \subsubsection contains \subsection, so check the longer
+# prefix first when classifying a heading line.
 
 RE_LEAN_DECL = re.compile(r"^\s*(?:@\[[^\]]*\]\s*)*"
                           r"(?:noncomputable\s+|private\s+|protected\s+|partial\s+)*"
@@ -49,6 +53,11 @@ class ParsedNode:
     chapter: str
     source_file: str
     source_line: int
+    # Deepest LaTeX heading the node sits under (subsubsection if available,
+    # else subsection). The chapter file itself is one \section, so this is
+    # always finer-grained than the chapter and gives the dashboard something
+    # to cluster sub-bodies by.
+    subsection: str | None = None
     lean_decl: str | None = None
     leanok: bool = False
     edges_to: list[str] = field(default_factory=list)
@@ -69,6 +78,11 @@ def parse_chapters(chapters_dir: Path) -> tuple[dict[str, ParsedNode], list[tupl
         block_kind: str | None = None
         block_start: int = 0
         block_text: list[str] = []
+        # Track the most recent LaTeX heading below \section so each parsed
+        # node can be attributed to its tightest container. \subsubsection
+        # wins over \subsection; either resets when a deeper heading opens.
+        cur_subsection: str | None = None
+        cur_subsubsec: str | None = None
 
         def finalize(end_line: int) -> None:
             nonlocal block_kind, block_text, block_start
@@ -87,6 +101,7 @@ def parse_chapters(chapters_dir: Path) -> tuple[dict[str, ParsedNode], list[tupl
                 chapter=chapter,
                 source_file=str(tex),
                 source_line=block_start,
+                subsection=cur_subsubsec or cur_subsection,
             )
             for m in RE_USES.finditer(text):
                 for tgt in m.group(1).split(","):
@@ -104,6 +119,21 @@ def parse_chapters(chapters_dir: Path) -> tuple[dict[str, ParsedNode], list[tupl
             block_text = []
 
         for idx, line in enumerate(lines, start=1):
+            # Heading detection runs whenever we're not inside an environment;
+            # being inside one prevents a stray \subsection in a docstring or
+            # comment-out from changing the section context for following
+            # nodes. Headings can technically be nested deeper than env open,
+            # but that doesn't happen in this project.
+            if block_kind is None:
+                # Check subsubsection first — RE_SUBSEC would match it too.
+                sm3 = RE_SUBSUBSEC.search(line)
+                if sm3:
+                    cur_subsubsec = sm3.group(1).strip()
+                else:
+                    sm2 = RE_SUBSEC.search(line)
+                    if sm2:
+                        cur_subsection = sm2.group(1).strip()
+                        cur_subsubsec = None  # leaving the previous subsubsec
             mb = RE_BEGIN.search(line)
             me = RE_END.search(line)
             if mb and block_kind is None:
@@ -325,6 +355,7 @@ def main(argv: list[str] | None = None) -> int:
         sn = status_nodes.get(nid) or {}
         kind = (cn.kind if cn else None) or sn.get("kind")
         chapter = cn.chapter if cn else None
+        subsection = cn.subsection if cn else None
         source_file = cn.source_file if cn else None
         source_line = cn.source_line if cn else None
         lean_decl = (cn.lean_decl if cn else None) or sn.get("lean_decl")
@@ -340,7 +371,7 @@ def main(argv: list[str] | None = None) -> int:
         last_activity = max(last_activity_candidates) if last_activity_candidates else None
 
         row = dict(
-            id=nid, kind=kind, chapter=chapter,
+            id=nid, kind=kind, chapter=chapter, subsection=subsection,
             source_file=source_file, source_line=source_line,
             lean_decl=lean_decl, leanok=leanok,
             nl_hash=sn.get("nl_hash"),
@@ -356,10 +387,10 @@ def main(argv: list[str] | None = None) -> int:
             )),
         )
         cur.execute("""INSERT INTO nodes
-            (id, kind, chapter, source_file, source_line, lean_decl, leanok,
+            (id, kind, chapter, subsection, source_file, source_line, lean_decl, leanok,
              nl_hash, nl_reviewed, bound, aligned, proved,
              nl_reviewer, align_reviewer, aligned_at, last_activity, phase)
-            VALUES (:id,:kind,:chapter,:source_file,:source_line,:lean_decl,:leanok,
+            VALUES (:id,:kind,:chapter,:subsection,:source_file,:source_line,:lean_decl,:leanok,
                     :nl_hash,:nl_reviewed,:bound,:aligned,:proved,
                     :nl_reviewer,:align_reviewer,:aligned_at,:last_activity,:phase)""",
                     row)
