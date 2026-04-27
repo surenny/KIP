@@ -38,3 +38,4 @@ ui/server/node_modules/
 ui/server/dist/
 ui/client/node_modules/
 ui/client/dist/
+/.kip/

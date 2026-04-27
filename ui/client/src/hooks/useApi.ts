@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiUrl } from '../utils/constants';
-import type { LogEntry, AggregatedStats, LogsResponse, AgentSummary } from '../types';
+import type {
+  LogEntry, AggregatedStats, LogsResponse, AgentSummary,
+  GraphPayload, NodeDetail, StateHealth,
+} from '../types';
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(apiUrl(url));
@@ -38,5 +41,29 @@ export function useLogContent(filename: string) {
     queryFn: () => fetchJson(`/api/logs/${filename}`),
     enabled: !!filename,
     refetchInterval: false,
+  });
+}
+
+export function useGraph() {
+  return useQuery<GraphPayload>({
+    queryKey: ['graph'],
+    queryFn: () => fetchJson('/api/graph'),
+    refetchInterval: 15000,
+  });
+}
+
+export function useNode(id: string) {
+  return useQuery<NodeDetail>({
+    queryKey: ['node', id],
+    queryFn: () => fetchJson(`/api/nodes/${encodeURIComponent(id)}`),
+    enabled: !!id,
+  });
+}
+
+export function useStateHealth() {
+  return useQuery<StateHealth>({
+    queryKey: ['stateHealth'],
+    queryFn: () => fetchJson('/api/state/health'),
+    refetchInterval: 15000,
   });
 }
