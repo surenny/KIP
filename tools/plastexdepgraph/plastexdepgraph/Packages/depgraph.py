@@ -46,11 +46,48 @@ want to influence the dependency graph.
   when clicking on graph nodes.
   The default value is an empty list.
 """
+import json
+import os
 import string
 from pathlib import Path
 from typing import Optional
 
 from jinja2 import Template
+
+
+def _resolve_repo_config_json() -> str:
+    """Build the JSON blob inlined into dep_graph.html for the GitHub-Pages
+    review-commit fallback. Sources, in order of precedence:
+
+      LEAN_BLUEPRINT_REPO              "owner/repo"
+      LEAN_BLUEPRINT_REPO_OWNER        owner
+      LEAN_BLUEPRINT_REPO_NAME         repo
+      LEAN_BLUEPRINT_REPO_BRANCH       branch       (default: main)
+      LEAN_BLUEPRINT_STATUS_PATH       status path  (default: blueprint/status.yaml)
+
+    If owner/repo cannot be determined the JSON is empty `{}`, which disables
+    the in-browser GitHub commit path entirely (the JS treats missing
+    owner/repo as a hard error and refuses to PUT). This is the safe default —
+    callers must opt in by setting the env vars in their build.sh.
+    """
+    owner = os.environ.get('LEAN_BLUEPRINT_REPO_OWNER', '').strip()
+    repo = os.environ.get('LEAN_BLUEPRINT_REPO_NAME', '').strip()
+    combined = os.environ.get('LEAN_BLUEPRINT_REPO', '').strip()
+    if combined and not (owner and repo):
+        if '/' in combined:
+            o, r = combined.split('/', 1)
+            owner = owner or o.strip()
+            repo = repo or r.strip()
+    if not (owner and repo):
+        return '{}'
+    cfg = {
+        'owner': owner,
+        'repo': repo,
+        'status_path': os.environ.get('LEAN_BLUEPRINT_STATUS_PATH',
+                                      'blueprint/status.yaml').strip(),
+        'branch': os.environ.get('LEAN_BLUEPRINT_REPO_BRANCH', 'main').strip(),
+    }
+    return json.dumps(cfg)
 from pygraphviz import AGraph
 
 from plasTeX import Command, Environment
@@ -360,6 +397,7 @@ def ProcessOptions(options, document):
                              legend=document.userdata['dep_graph']['legend'],
                              extra_modal_links=document.userdata['dep_graph'].get('extra_modal_links_tpl', []),
                              status_nodes_json=document.userdata['dep_graph'].get('status_nodes_json', '{}'),
+                             repo_config_json=_resolve_repo_config_json(),
                              document=document,
                              config=document.config).dump(graph_target)
         return files

@@ -37,6 +37,12 @@ if [[ -f "$ANNOTATIONS_JSON" ]]; then
 fi
 
 echo "==> leanblueprint web"
+# Pin the in-browser GitHub-Pages review-commit fallback to this repo. Without
+# these env vars, the patched plastexdepgraph emits an empty REPO_CONFIG and
+# the floating "Commit Reviews" button is hidden.
+LEAN_BLUEPRINT_REPO=surenny/KIP \
+LEAN_BLUEPRINT_REPO_BRANCH=main \
+LEAN_BLUEPRINT_STATUS_PATH=blueprint/status.yaml \
 leanblueprint web
 
 echo "==> leanblueprint checkdecls"
