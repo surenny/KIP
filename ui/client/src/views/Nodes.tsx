@@ -14,6 +14,13 @@ export default function Nodes() {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panZoomRef = useRef<SvgPanZoom.Instance | null>(null);
+  // navigate's reference may not be perfectly stable across renders (or
+  // an upstream provider re-render); keep it behind a ref so the SVG mount
+  // effect doesn't fire just because navigate's identity changed —
+  // re-initialising svg-pan-zoom with `fit:true,center:true` would reset
+  // the user's current zoom/pan on every click.
+  const navRef = useRef(navigate);
+  useEffect(() => { navRef.current = navigate; }, [navigate]);
 
   const [selectedId, setSelectedId] = useState('');
   const [search, setSearch] = useState('');
@@ -99,33 +106,48 @@ export default function Nodes() {
         if (id && id.startsWith('node:')) {
           const nodeId = id.slice('node:'.length);
           setSelectedId(nodeId);
-          navigate(`/nodes/${encodeURIComponent(nodeId)}`);
+          navRef.current(`/nodes/${encodeURIComponent(nodeId)}`);
           return;
         }
         target = target.parentElement;
       }
       // Background click → deselect
       setSelectedId('');
-      navigate('/nodes');
+      navRef.current('/nodes');
     };
     svgEl.addEventListener('click', onClick);
 
-    // Init pan-zoom
+    // Init pan-zoom. If a previous instance exists (filter change → new
+    // SVG), preserve its pan/zoom across the re-init so users don't lose
+    // context. fit/center only fire on the very first mount.
+    let preservedZoom: number | null = null;
+    let preservedPan: { x: number; y: number } | null = null;
     if (panZoomRef.current) {
+      try {
+        preservedZoom = panZoomRef.current.getZoom();
+        preservedPan = panZoomRef.current.getPan();
+      } catch { /* ignore */ }
       try { panZoomRef.current.destroy(); } catch { /* ignore */ }
       panZoomRef.current = null;
     }
+    const isFirstMount = preservedZoom == null;
     panZoomRef.current = svgPanZoom(svgEl, {
       zoomEnabled: true,
       controlIconsEnabled: false,
-      fit: true,
-      center: true,
+      fit: isFirstMount,
+      center: isFirstMount,
       mouseWheelZoomEnabled: true,
       preventMouseEventsDefault: false,
       minZoom: 0.2,
       maxZoom: 8,
       zoomScaleSensitivity: 0.4,
     });
+    if (!isFirstMount && preservedZoom != null && preservedPan) {
+      try {
+        panZoomRef.current.zoom(preservedZoom);
+        panZoomRef.current.pan(preservedPan);
+      } catch { /* ignore */ }
+    }
 
     return () => {
       svgEl.removeEventListener('click', onClick);
@@ -134,7 +156,8 @@ export default function Nodes() {
         panZoomRef.current = null;
       }
     };
-  }, [svgText, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [svgText]);
 
   // Highlight selected node in SVG
   useEffect(() => {
