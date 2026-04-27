@@ -154,8 +154,9 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
         {d.uses.length === 0 ? <div className={styles.empty}>No outgoing dependencies.</div> :
           d.uses.map(e => (
             <div key={e.id} className={styles.refLine}>
-              <a className={e.confirmed ? styles.refConfirmed : styles.refUnconfirmed}
-                 onClick={() => onSelectNode(e.id)}><code>{e.id}</code></a>
+              <a className={styles.refLink} onClick={() => onSelectNode(e.id)}>
+                <code>{e.id}</code>
+              </a>
             </div>
           ))
         }
@@ -166,8 +167,9 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
         {d.usedBy.length === 0 ? <div className={styles.empty}>Leaf node (nothing uses this).</div> :
           d.usedBy.map(e => (
             <div key={e.id} className={styles.refLine}>
-              <a className={e.confirmed ? styles.refConfirmed : styles.refUnconfirmed}
-                 onClick={() => onSelectNode(e.id)}><code>{e.id}</code></a>
+              <a className={styles.refLink} onClick={() => onSelectNode(e.id)}>
+                <code>{e.id}</code>
+              </a>
             </div>
           ))
         }

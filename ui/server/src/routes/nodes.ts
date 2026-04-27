@@ -29,7 +29,6 @@ interface EdgeRow {
   from_node: string;
   to_node: string;
   source: string;
-  confirmed: number;
 }
 
 let dbInstance: Database.Database | null = null;
@@ -151,6 +150,49 @@ function getRenderedNode(projectPath: string, nodeId: string): RenderedNode | nu
   return extractRenderedNode(text, nodeId);
 }
 
+// Canonical chapter order is the order of `\input{chapters/X}` lines in
+// blueprint/src/content.tex. Cached with mtime invalidation since this file
+// rarely changes. Falls back to filename glob (alphabetical) if content.tex
+// is missing or has no `\input` lines.
+let chapterOrderCache: { base: string; mtime: number; order: string[] } | null = null;
+
+function getChapterOrder(projectPath: string): string[] {
+  const contentTex = path.join(projectPath, 'blueprint', 'src', 'content.tex');
+  let mtime = 0;
+  try { mtime = fs.statSync(contentTex).mtimeMs; } catch { /* not present */ }
+
+  if (chapterOrderCache && chapterOrderCache.base === contentTex && chapterOrderCache.mtime === mtime) {
+    return chapterOrderCache.order;
+  }
+
+  let order: string[] = [];
+  if (mtime > 0) {
+    try {
+      const text = fs.readFileSync(contentTex, 'utf-8');
+      const re = /\\input\s*\{\s*chapters\/([A-Za-z0-9_-]+)\s*\}/g;
+      const seen = new Set<string>();
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(text)) !== null) {
+        if (!seen.has(m[1])) { seen.add(m[1]); order.push(m[1]); }
+      }
+    } catch { /* ignore, fall back below */ }
+  }
+
+  if (order.length === 0) {
+    // Fallback: sorted filenames in chapters/ — stable but alphabetical.
+    const dir = path.join(projectPath, 'blueprint', 'src', 'chapters');
+    try {
+      order = fs.readdirSync(dir)
+        .filter(f => f.endsWith('.tex'))
+        .map(f => f.replace(/\.tex$/, ''))
+        .sort();
+    } catch { /* leave empty */ }
+  }
+
+  chapterOrderCache = { base: contentTex, mtime, order };
+  return order;
+}
+
 function openDb(projectPath: string): Database.Database | null {
   const candidate = path.join(projectPath, '.kip', 'state.db');
   if (!fs.existsSync(candidate)) return null;
@@ -233,13 +275,12 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     const db = openDb(projectPath);
     if (!db) return [];
     const rows = db.prepare(
-      "SELECT from_node, to_node, source, confirmed FROM edges"
+      "SELECT from_node, to_node, source FROM edges"
     ).all() as EdgeRow[];
     return rows.map(r => ({
       from: r.from_node,
       to: r.to_node,
       source: r.source,
-      confirmed: !!r.confirmed,
     }));
   });
 
@@ -257,8 +298,8 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
       }
       const nodes = db.prepare("SELECT id, kind, chapter, phase FROM nodes").all() as
         { id: string; kind: string | null; chapter: string | null; phase: string }[];
-      const edges = db.prepare("SELECT from_node, to_node, confirmed FROM edges").all() as
-        { from_node: string; to_node: string; confirmed: number }[];
+      const edges = db.prepare("SELECT from_node, to_node FROM edges").all() as
+        { from_node: string; to_node: string }[];
 
       const filters: GraphFilters = {};
       if (req.query.phases) filters.phases = new Set(req.query.phases.split(',').filter(Boolean));
@@ -281,11 +322,20 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   // Combined payload sized for one round-trip into the DAG view.
   fastify.get('/api/graph', async () => {
     const db = openDb(projectPath);
-    if (!db) return { nodes: [], edges: [] };
+    if (!db) return { nodes: [], edges: [], chapters: [] };
     const nodes = (db.prepare("SELECT * FROM nodes ORDER BY id").all() as NodeRow[]).map(shapeNode);
-    const edges = (db.prepare("SELECT from_node, to_node, source, confirmed FROM edges").all() as EdgeRow[])
-      .map(r => ({ from: r.from_node, to: r.to_node, source: r.source, confirmed: !!r.confirmed }));
-    return { nodes, edges };
+    const edges = (db.prepare("SELECT from_node, to_node, source FROM edges").all() as EdgeRow[])
+      .map(r => ({ from: r.from_node, to: r.to_node, source: r.source }));
+    // Chapters in the order they appear in blueprint/src/content.tex,
+    // restricted to chapters that contain at least one node so the sidebar
+    // doesn't list empty buckets.
+    const present = new Set<string>();
+    for (const n of nodes) if (n.chapter) present.add(n.chapter);
+    const chapters = getChapterOrder(projectPath).filter(c => present.has(c));
+    // Append any chapters that have nodes but aren't listed in content.tex,
+    // so we never silently drop a populated bucket.
+    for (const c of present) if (!chapters.includes(c)) chapters.push(c);
+    return { nodes, edges, chapters };
   });
 
   fastify.get<{ Params: { id: string } }>('/api/nodes/:id', async (req, reply) => {
@@ -300,12 +350,12 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     ).all(id);
 
     const usesEdges = db.prepare(
-      "SELECT to_node, confirmed FROM edges WHERE from_node = ? ORDER BY to_node"
-    ).all(id) as { to_node: string; confirmed: number }[];
+      "SELECT to_node FROM edges WHERE from_node = ? ORDER BY to_node"
+    ).all(id) as { to_node: string }[];
 
     const usedByEdges = db.prepare(
-      "SELECT from_node, confirmed FROM edges WHERE to_node = ? ORDER BY from_node"
-    ).all(id) as { from_node: string; confirmed: number }[];
+      "SELECT from_node FROM edges WHERE to_node = ? ORDER BY from_node"
+    ).all(id) as { from_node: string }[];
 
     const leanDecl = row.lean_decl
       ? db.prepare("SELECT * FROM lean_decls WHERE name = ?").get(row.lean_decl)
@@ -357,8 +407,8 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     return {
       ...shapeNode(row),
       comments,
-      uses: usesEdges.map(e => ({ id: e.to_node, confirmed: !!e.confirmed })),
-      usedBy: usedByEdges.map(e => ({ id: e.from_node, confirmed: !!e.confirmed })),
+      uses: usesEdges.map(e => ({ id: e.to_node })),
+      usedBy: usedByEdges.map(e => ({ id: e.from_node })),
       leanDecl,
       runs,
       nlExcerpt,

@@ -40,9 +40,7 @@ export default function Nodes() {
   // Initialize chapter filter to "all chapters" once we know what they are.
   useEffect(() => {
     if (chaptersInit || !graph) return;
-    const all = new Set<string>();
-    for (const n of graph.nodes) if (n.chapter) all.add(n.chapter);
-    setActiveChapters(all);
+    setActiveChapters(new Set(graph.chapters));
     setChaptersInit(true);
   }, [graph, chaptersInit]);
 
@@ -52,12 +50,9 @@ export default function Nodes() {
     if (next !== selectedId) setSelectedId(next);
   }, [routeId, selectedId]);
 
-  const allChapters = useMemo(() => {
-    if (!graph) return [] as string[];
-    const set = new Set<string>();
-    for (const n of graph.nodes) if (n.chapter) set.add(n.chapter);
-    return Array.from(set).sort();
-  }, [graph]);
+  // Chapter chips render in content.tex order (server returns them already
+  // sorted). Don't re-sort here.
+  const allChapters = graph?.chapters ?? [];
 
   const phaseCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -72,9 +67,11 @@ export default function Nodes() {
   }, [graph]);
 
   const phasesArr = useMemo(() => Array.from(activePhases), [activePhases]);
+  // Preserve content.tex order in the query string so the cache key for
+  // /api/graph/svg matches across renders regardless of toggle order.
   const chaptersArr = useMemo(
-    () => (chaptersInit ? Array.from(activeChapters).sort() : []),
-    [activeChapters, chaptersInit],
+    () => (chaptersInit ? allChapters.filter(c => activeChapters.has(c)) : []),
+    [allChapters, activeChapters, chaptersInit],
   );
 
   const { data: svgText, isFetching, isError } = useGraphSvg({
@@ -242,8 +239,8 @@ export default function Nodes() {
 
         <div className={styles.sidebarTitle}>Edges</div>
         <div className={styles.legend}>
-          <div className={styles.legendRow}>solid → confirmed dependency</div>
-          <div className={styles.legendRow}>dashed → unconfirmed (default)</div>
+          <div className={styles.legendRow}>top → bottom = build order</div>
+          <div className={styles.legendRow}>arrow A → B reads "A is used by B"</div>
         </div>
       </aside>
 

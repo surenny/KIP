@@ -30,7 +30,8 @@ CREATE TABLE edges (
   from_node TEXT NOT NULL,               -- the node that contains \uses{...}
   to_node   TEXT NOT NULL,               -- the dependency
   source    TEXT NOT NULL DEFAULT 'latex',
-  confirmed INTEGER NOT NULL DEFAULT 0,
+  -- No per-edge confirmation: NL review confirms the whole containing node,
+  -- which transitively vouches for its \uses{} list. See PR thread on AUT-41.
   PRIMARY KEY (from_node, to_node)
 );
 CREATE INDEX idx_edges_to ON edges(to_node);

@@ -95,12 +95,13 @@ export interface EdgeData {
   from: string;
   to: string;
   source: string;
-  confirmed: boolean;
 }
 
 export interface GraphPayload {
   nodes: NodeData[];
   edges: EdgeData[];
+  /** Chapters in the order they're \input'd from content.tex (with ≥1 node). */
+  chapters: string[];
 }
 
 export interface NodeComment {
@@ -142,8 +143,8 @@ export interface RenderedNode {
 
 export interface NodeDetail extends Omit<NodeData, 'leanDecl'> {
   comments: NodeComment[];
-  uses: { id: string; confirmed: boolean }[];
-  usedBy: { id: string; confirmed: boolean }[];
+  uses: { id: string }[];
+  usedBy: { id: string }[];
   leanDecl: LeanDeclInfo | null;
   runs: NodeRunInfo[];
   nlExcerpt: string | null;

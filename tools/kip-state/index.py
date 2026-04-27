@@ -375,8 +375,8 @@ def main(argv: list[str] | None = None) -> int:
     orphan_edges = 0
     for src, dst in edges:
         if src in all_ids and dst in all_ids:
-            cur.execute("""INSERT OR IGNORE INTO edges(from_node, to_node, source, confirmed)
-                           VALUES(?,?,?,?)""", (src, dst, "latex", 0))
+            cur.execute("""INSERT OR IGNORE INTO edges(from_node, to_node, source)
+                           VALUES(?,?,?)""", (src, dst, "latex"))
         else:
             orphan_edges += 1
     if orphan_edges:

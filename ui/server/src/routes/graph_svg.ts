@@ -13,7 +13,6 @@ interface NodeRow {
 interface EdgeRow {
   from_node: string;
   to_node: string;
-  confirmed: number;
 }
 
 const PHASE_COLORS: Record<string, string> = {
@@ -114,10 +113,16 @@ export function buildDot(nodes: NodeRow[], edges: EdgeRow[], filters: GraphFilte
 
   for (const e of edges) {
     if (!visible.has(e.from_node) || !visible.has(e.to_node)) continue;
+    // DB semantic: from_node has \uses{to_node}, i.e. from is upper, to is
+    // lower. We flip direction in DOT so low-level definitions land at the
+    // top (source rank) and the theorems they feed land at the bottom (sink
+    // rank). Visually, arrows point downward in completion order:
+    //     definition  ──▶  lemma  ──▶  theorem
+    // The `id`/`eid` keeps the DB direction so SVG-side lookups stay
+    // consistent with the edges table.
     const eid = `edge:${e.from_node}->${e.to_node}`;
-    const style = e.confirmed ? 'solid' : 'dashed';
-    lines.push(`  ${escapeDot(e.from_node)} -> ${escapeDot(e.to_node)} ` +
-               `[id=${escapeDot(eid)}, style=${style}];`);
+    lines.push(`  ${escapeDot(e.to_node)} -> ${escapeDot(e.from_node)} ` +
+               `[id=${escapeDot(eid)}];`);
   }
   lines.push('}');
 

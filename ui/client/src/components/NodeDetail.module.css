@@ -75,9 +75,8 @@
   border-radius: 3px;
 }
 .refLine a { cursor: pointer; }
-.refConfirmed { color: var(--text-secondary); }
-.refUnconfirmed { color: var(--text-muted); }
-.refUnconfirmed::after { content: ' (unconfirmed)'; font-size: 10px; }
+.refLink { color: var(--text-secondary); }
+.refLink:hover { color: var(--blue); }
 
 .empty { color: var(--text-muted); font-size: 11px; font-style: italic; }
 
