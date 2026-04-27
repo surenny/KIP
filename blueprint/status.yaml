@@ -145,10 +145,11 @@ nodes:
     lean_decl: KIP.SpectralSequence.Filtration.associatedGraded
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
     nl_hash: 1c46e40d6cb84948
+    aligned_by: surenny
   prereq:def:associated-graded-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex.assocGraded
     nl_reviewed: true
