@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
-import { useNode } from '../hooks/useApi';
+import { useEffect, useRef, useState } from 'react';
+import { useNode, useReviewAction, type ReviewAction } from '../hooks/useApi';
 import { PHASE_COLORS, PHASE_LABELS } from '../utils/constants';
 import { fmtDuration } from '../utils/format';
 import { typesetMath } from '../utils/mathjax';
 import type { NodeDetail as NodeDetailT, NodeFlags } from '../types';
 import styles from './NodeDetail.module.css';
+
+const REVIEWER_STORAGE_KEY = 'kip:reviewer';
 
 const FLAG_DISPLAY: { key: keyof NodeFlags; label: string }[] = [
   { key: 'nlReviewed', label: 'NL'     },
@@ -13,20 +15,46 @@ const FLAG_DISPLAY: { key: keyof NodeFlags; label: string }[] = [
   { key: 'proved',     label: 'Proved' },
 ];
 
+// Render an `at` value in Beijing time. Date-only legacy entries pass through
+// unchanged (already read as 'YYYY-MM-DD'); full ISO datetimes are formatted
+// as 'YYYY-MM-DD HH:mm' in Asia/Shanghai. `sv-SE` locale gives an unambiguous,
+// ISO-shaped output.
+const beijingFmt = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Shanghai',
+  year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', hour12: false,
+});
+function fmtAt(iso: string | null | undefined): string {
+  if (!iso) return '';
+  if (!iso.includes('T')) return iso;
+  const t = Date.parse(iso);
+  if (isNaN(t)) return iso;
+  return beijingFmt.format(new Date(t));
+}
+
+// Show a relative time when we have a precise instant, otherwise fall back to
+// the date string as-is. Date-only legacy entries (like '2026-04-19') lack
+// time information — guessing midnight in *any* zone is a lie that misleads
+// users by 8–16h, so we just show the date and let them eyeball recency.
 function fmtRelTime(iso: string | null | undefined): string {
   if (!iso) return '';
+  if (!iso.includes('T')) return iso;
   const t = Date.parse(iso);
   if (isNaN(t)) return iso;
   const diff = Date.now() - t;
-  if (diff < 0) return new Date(t).toLocaleString();
+  if (diff < 0) return fmtAt(iso);
   const s = Math.floor(diff / 1000);
+  if (s < 5) return 'just now';
   if (s < 60) return `${s}s ago`;
   const m = Math.floor(s / 60);
   if (m < 60) return `${m}m ago`;
   const h = Math.floor(m / 60);
   if (h < 48) return `${h}h ago`;
   const d = Math.floor(h / 24);
-  return `${d}d ago`;
+  // Beyond 72h, "Nd ago" loses the precision needed to compare two old
+  // comments — show the absolute Beijing-time stamp instead.
+  if (d < 3) return `${d}d ago`;
+  return fmtAt(iso);
 }
 
 interface Props {
@@ -38,6 +66,36 @@ interface Props {
 export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
   const { data, isLoading, isError } = useNode(nodeId);
   const renderedRef = useRef<HTMLDivElement | null>(null);
+
+  const [reviewer, setReviewer] = useState<string>(() =>
+    (typeof window !== 'undefined' && window.localStorage.getItem(REVIEWER_STORAGE_KEY)) || ''
+  );
+  const [reviewComment, setReviewComment] = useState<string>('');
+  const review = useReviewAction();
+
+  // Persist reviewer across reloads (also across drawer reopens for the same
+  // browser session). We trim before storing so stray spaces don't follow.
+  useEffect(() => {
+    const v = reviewer.trim();
+    if (v) window.localStorage.setItem(REVIEWER_STORAGE_KEY, v);
+  }, [reviewer]);
+
+  // Clear the comment box and mutation state when switching nodes — comments
+  // are scoped to a specific approval, never carried across.
+  useEffect(() => {
+    setReviewComment('');
+    review.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeId]);
+
+  // Same reset after a successful submit — but keep the reviewer name.
+  useEffect(() => {
+    if (review.isSuccess) {
+      setReviewComment('');
+      const t = setTimeout(() => review.reset(), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [review.isSuccess, review]);
 
   useEffect(() => {
     // re-run MathJax whenever the rendered block changes
@@ -99,7 +157,85 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
             );
           })}
         </div>
+        {(d.nlReviewer || d.alignReviewer) && (
+          <div className={styles.attribution}>
+            {d.nlReviewer && (
+              <div>NL reviewed by <b>{d.nlReviewer}</b></div>
+            )}
+            {d.alignReviewer && (
+              <div>
+                Aligned by <b>{d.alignReviewer}</b>
+                {d.alignedAt ? ` · ${fmtAt(d.alignedAt)}` : ''}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {(() => {
+        const canApproveNL = !d.flags.nlReviewed;
+        const canConfirmAlign = d.flags.nlReviewed && d.flags.bound && !d.flags.aligned;
+        if (!canApproveNL && !canConfirmAlign) return null;
+        const action: ReviewAction = canApproveNL ? 'approve_nl' : 'confirm_alignment';
+        const title = canApproveNL ? 'Approve NL' : 'Confirm alignment';
+        const hint = canApproveNL
+          ? 'Confirm the natural-language statement is correct as written. This advances phase from drafted → nl_reviewed.'
+          : 'Confirm the Lean declaration faithfully formalizes the NL statement. Advances phase from bound → aligned.';
+        const placeholder = canApproveNL
+          ? 'optional: notes for the review log (e.g. "matches §3.2 wording")'
+          : 'optional: alignment notes (e.g. "types match, p/q convention as in NL")';
+        const reviewerOk = reviewer.trim().length > 0;
+        const submit = (e: React.FormEvent) => {
+          e.preventDefault();
+          if (!reviewerOk || review.isPending) return;
+          review.mutate({
+            nodeId: d.id,
+            action,
+            reviewer: reviewer.trim(),
+            comment: reviewComment.trim() || undefined,
+          });
+        };
+        return (
+          <div className={styles.section}>
+            <div className={styles.sectionLabel}>Review</div>
+            <div className={styles.reviewHint}>{hint}</div>
+            <form className={styles.reviewForm} onSubmit={submit}>
+              <label className={styles.reviewerLabel}>
+                Reviewing as
+                <input
+                  type="text"
+                  className={styles.reviewerInput}
+                  placeholder="your name"
+                  value={reviewer}
+                  onChange={e => setReviewer(e.target.value)}
+                />
+              </label>
+              <textarea
+                className={styles.reviewCommentBox}
+                placeholder={placeholder}
+                value={reviewComment}
+                onChange={e => setReviewComment(e.target.value)}
+                rows={2}
+              />
+              <button
+                type="submit"
+                className={styles.reviewBtn}
+                disabled={!reviewerOk || review.isPending}
+              >
+                {review.isPending ? 'Submitting…' : title}
+              </button>
+              {review.isError && (
+                <div className={styles.reviewError}>
+                  {(review.error as Error)?.message || 'Submit failed'}
+                </div>
+              )}
+              {review.isSuccess && (
+                <div className={styles.reviewOk}>✓ Recorded</div>
+              )}
+            </form>
+          </div>
+        );
+      })()}
 
       {d.leanDecl && (
         <div className={styles.section}>
@@ -149,8 +285,8 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
         </div>
       ) : null}
 
-      <div className={styles.section}>
-        <div className={styles.sectionLabel}>Uses ({d.uses.length})</div>
+      <details className={styles.section}>
+        <summary className={styles.sectionLabel}>Uses ({d.uses.length})</summary>
         {d.uses.length === 0 ? <div className={styles.empty}>No outgoing dependencies.</div> :
           d.uses.map(e => (
             <div key={e.id} className={styles.refLine}>
@@ -160,10 +296,10 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
             </div>
           ))
         }
-      </div>
+      </details>
 
-      <div className={styles.section}>
-        <div className={styles.sectionLabel}>Used by ({d.usedBy.length})</div>
+      <details className={styles.section}>
+        <summary className={styles.sectionLabel}>Used by ({d.usedBy.length})</summary>
         {d.usedBy.length === 0 ? <div className={styles.empty}>Leaf node (nothing uses this).</div> :
           d.usedBy.map(e => (
             <div key={e.id} className={styles.refLine}>
@@ -173,7 +309,7 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
             </div>
           ))
         }
-      </div>
+      </details>
 
       <div className={styles.section}>
         <div className={styles.sectionLabel}>Comments ({d.comments.length})</div>
@@ -183,7 +319,7 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
               <div key={c.idx} className={styles.commentItem}>
                 <div className={styles.commentMeta}>
                   {c.topic && <span className={styles.commentTopic}>{c.topic}</span>}
-                  <span>{c.by || 'anonymous'}{c.at ? ` · ${c.at}` : ''}</span>
+                  <span>{c.by || 'anonymous'}{c.at ? ` · ${fmtAt(c.at)}` : ''}</span>
                 </div>
                 <div className={styles.commentText}>{c.text}</div>
               </div>
@@ -192,8 +328,8 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
         }
       </div>
 
-      <div className={styles.section}>
-        <div className={styles.sectionLabel}>Agent runs touching this node ({d.runs.length})</div>
+      <details className={styles.section}>
+        <summary className={styles.sectionLabel}>Agent runs touching this node ({d.runs.length})</summary>
         {d.runs.length === 0 ? <div className={styles.empty}>No agent runs reference this node.</div> :
           <div className={styles.runsList}>
             {d.runs.map(r => {
@@ -217,7 +353,7 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
             })}
           </div>
         }
-      </div>
+      </details>
     </div>
   );
 }

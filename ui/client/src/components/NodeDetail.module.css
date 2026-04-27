@@ -43,6 +43,16 @@
   margin-bottom: 6px;
   font-weight: 600;
 }
+/* When the section is a <details>/<summary> (collapsible Uses / Used by /
+   Agent runs), the summary needs to feel clickable and keep no extra bottom
+   gap when collapsed. The native disclosure triangle stays. */
+summary.sectionLabel {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0;
+}
+summary.sectionLabel:hover { color: var(--text-secondary); }
+details[open] > summary.sectionLabel { margin-bottom: 6px; }
 
 .flagsGrid {
   display: grid;
@@ -65,6 +75,94 @@
 }
 .flagMark { font-size: 14px; line-height: 1; }
 .flagText { display: block; margin-top: 2px; }
+
+.attribution {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.attribution b {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.reviewHint {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.reviewerLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.reviewerInput {
+  flex: 1;
+  font-size: 12px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.reviewerInput:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.reviewCommentBox {
+  font-size: 12px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 38px;
+}
+.reviewCommentBox:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.reviewBtn {
+  align-self: flex-start;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  background: var(--green);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.reviewBtn:hover:not(:disabled) { filter: brightness(1.06); }
+.reviewBtn:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+.reviewError {
+  font-size: 11px;
+  color: var(--red);
+}
+.reviewOk {
+  font-size: 11px;
+  color: var(--green);
+}
 
 .refLine { font-size: 12px; padding: 2px 0; }
 .refLine code {

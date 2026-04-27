@@ -232,9 +232,8 @@ export default function Nodes() {
         <div className={styles.sidebarTitle}>Shapes</div>
         <div className={styles.legend}>
           <div className={styles.legendRow}>ellipse — definition / notation</div>
-          <div className={styles.legendRow}>rounded box — theorem / prop / lemma / cor / axiom</div>
-          <div className={styles.legendRow}>hexagon — remark</div>
-          <div className={styles.legendRow}>triangles — example / question</div>
+          <div className={styles.legendRow}>rounded box — theorem / proposition / lemma / corollary</div>
+          <div className={styles.legendRow}>diamond — axiom</div>
         </div>
 
         <div className={styles.sidebarTitle}>Edges</div>

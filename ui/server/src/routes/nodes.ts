@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import Database from 'better-sqlite3';
+import yaml from 'js-yaml';
 import type { FastifyInstance } from 'fastify';
 import type { ProjectPaths } from '../index.js';
-import { buildDot, renderSvg, type GraphFilters } from './graph_svg.js';
+import { buildDot, renderSvg, BLUEPRINT_KINDS, type GraphFilters } from './graph_svg.js';
 
 interface NodeRow {
   id: string;
@@ -209,6 +210,96 @@ function openDb(projectPath: string): Database.Database | null {
   return dbInstance;
 }
 
+// Separate write handle, used only by review actions. Each call opens / closes
+// to avoid juggling cache invalidation alongside the readonly handle above.
+function openDbForWrite(projectPath: string): Database.Database | null {
+  const candidate = path.join(projectPath, '.kip', 'state.db');
+  if (!fs.existsSync(candidate)) return null;
+  return new Database(candidate, { readonly: false, fileMustExist: true });
+}
+
+// ---------- status.yaml read/write -------------------------------------------
+
+interface StatusComment {
+  topic?: string;
+  text?: string;
+  by?: string;
+  at?: string;
+  [key: string]: unknown;
+}
+
+interface StatusEntry {
+  lean_decl?: string;
+  nl_reviewed?: boolean;
+  bound?: boolean;
+  aligned?: boolean;
+  proved?: boolean;
+  kind?: string;
+  comments?: StatusComment[];
+  nl_reviewer?: string;
+  nl_reviewed_at?: string;
+  align_reviewer?: string;
+  aligned_at?: string;
+  nl_hash?: string;
+  [key: string]: unknown;
+}
+
+interface StatusFile {
+  nodes?: Record<string, StatusEntry>;
+  [key: string]: unknown;
+}
+
+function loadStatus(yamlPath: string): StatusFile {
+  if (!fs.existsSync(yamlPath)) return { nodes: {} };
+  const text = fs.readFileSync(yamlPath, 'utf-8');
+  const data = yaml.load(text);
+  if (!data || typeof data !== 'object') return { nodes: {} };
+  return data as StatusFile;
+}
+
+function saveStatus(yamlPath: string, data: StatusFile): void {
+  // Match existing style: dates as quoted strings (yaml.dump quotes any
+  // string scalar with quotingType "'" — fine since flags/booleans dump
+  // unquoted). lineWidth: -1 disables auto-wrap so long IDs/strings stay
+  // on one line.
+  const out = yaml.dump(data, {
+    lineWidth: -1,
+    noRefs: true,
+    sortKeys: false,
+    quotingType: "'",
+    forceQuotes: false,
+  });
+  const tmp = yamlPath + '.tmp';
+  fs.writeFileSync(tmp, out, 'utf-8');
+  // Best-effort fsync before rename so a crash mid-write can't leave a
+  // half-written status.yaml.
+  try {
+    const fd = fs.openSync(tmp, 'r');
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+  } catch { /* ignore */ }
+  fs.renameSync(tmp, yamlPath);
+}
+
+// Mirror tools/kip-state/index.py:derive_phase. Keep in sync with that file.
+function derivePhase(flags: {
+  nl_reviewed?: boolean; bound?: boolean; aligned?: boolean; proved?: boolean;
+}): 'drafted' | 'nl_reviewed' | 'bound' | 'aligned' | 'proved' {
+  if (flags.proved) return 'proved';
+  if (flags.aligned) return 'aligned';
+  if (flags.bound) return 'bound';
+  if (flags.nl_reviewed) return 'nl_reviewed';
+  return 'drafted';
+}
+
+function nowIso(): string {
+  // Full ISO-8601 instant with UTC marker (e.g. 2026-04-27T08:15:32.123Z).
+  // The client renders this in Beijing time and computes relative diffs from
+  // it directly — date-only strings like '2026-04-19' (the legacy yaml form)
+  // would be off by up to 8h after parsing as UTC midnight.
+  return new Date().toISOString();
+}
+
 function shapeNode(r: NodeRow) {
   return {
     id: r.id,
@@ -296,10 +387,13 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
         reply.status(503);
         return { error: 'state.db not built' };
       }
-      const nodes = db.prepare("SELECT id, kind, chapter, phase FROM nodes").all() as
+      const allNodes = db.prepare("SELECT id, kind, chapter, phase FROM nodes").all() as
         { id: string; kind: string | null; chapter: string | null; phase: string }[];
-      const edges = db.prepare("SELECT from_node, to_node FROM edges").all() as
-        { from_node: string; to_node: string }[];
+      const nodes = allNodes.filter(n => !n.kind || BLUEPRINT_KINDS.has(n.kind));
+      const visibleIds = new Set(nodes.map(n => n.id));
+      const edges = (db.prepare("SELECT from_node, to_node FROM edges").all() as
+        { from_node: string; to_node: string }[])
+        .filter(e => visibleIds.has(e.from_node) && visibleIds.has(e.to_node));
 
       const filters: GraphFilters = {};
       if (req.query.phases) filters.phases = new Set(req.query.phases.split(',').filter(Boolean));
@@ -323,8 +417,16 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   fastify.get('/api/graph', async () => {
     const db = openDb(projectPath);
     if (!db) return { nodes: [], edges: [], chapters: [] };
-    const nodes = (db.prepare("SELECT * FROM nodes ORDER BY id").all() as NodeRow[]).map(shapeNode);
+    // Restrict to blueprint kinds — remarks/examples/questions are commentary
+    // and don't belong on the dependency DAG or sidebar counts. Detail
+    // endpoints (/api/nodes/:id) still serve them so deep links keep working.
+    const allRows = db.prepare("SELECT * FROM nodes ORDER BY id").all() as NodeRow[];
+    const nodes = allRows
+      .filter(r => !r.kind || BLUEPRINT_KINDS.has(r.kind))
+      .map(shapeNode);
+    const visibleIds = new Set(nodes.map(n => n.id));
     const edges = (db.prepare("SELECT from_node, to_node, source FROM edges").all() as EdgeRow[])
+      .filter(r => visibleIds.has(r.from_node) && visibleIds.has(r.to_node))
       .map(r => ({ from: r.from_node, to: r.to_node, source: r.source }));
     // Chapters in the order they appear in blueprint/src/content.tex,
     // restricted to chapters that contain at least one node so the sidebar
@@ -414,5 +516,124 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
       nlExcerpt,
       nlRendered,
     };
+  });
+
+  // Human review actions. Two kinds, both move the node forward in the
+  // lifecycle and leave a comment trail:
+  //   approve_nl         drafted          → nl_reviewed
+  //   confirm_alignment  nl_reviewed+bound → aligned
+  // Source of truth is blueprint/status.yaml (what tools/kip-state/index.py
+  // reads on rebuild). We mirror the change into .kip/state.db so the dashboard
+  // reflects it immediately without re-running the indexer.
+  fastify.post<{
+    Params: { id: string };
+    Body: { action?: string; reviewer?: string; comment?: string };
+  }>('/api/nodes/:id/review', async (req, reply) => {
+    const id = req.params.id;
+    const action = (req.body?.action || '').trim();
+    const reviewer = (req.body?.reviewer || '').trim();
+    const userComment = (req.body?.comment || '').trim();
+
+    if (action !== 'approve_nl' && action !== 'confirm_alignment') {
+      return reply.status(400).send({ error: 'action must be approve_nl or confirm_alignment' });
+    }
+    if (!reviewer) {
+      return reply.status(400).send({ error: 'reviewer is required' });
+    }
+
+    const db = openDb(projectPath);
+    if (!db) return reply.status(503).send({ error: 'state.db not built' });
+    const row = db.prepare("SELECT * FROM nodes WHERE id = ?").get(id) as NodeRow | undefined;
+    if (!row) return reply.status(404).send({ error: 'Node not found' });
+
+    const flags = {
+      nl_reviewed: !!row.nl_reviewed,
+      bound: !!row.bound,
+      aligned: !!row.aligned,
+      proved: !!row.proved,
+    };
+
+    if (action === 'approve_nl') {
+      if (flags.nl_reviewed) {
+        return reply.status(409).send({ error: 'NL already reviewed' });
+      }
+    } else { // confirm_alignment
+      if (!flags.nl_reviewed) {
+        return reply.status(409).send({ error: 'NL not yet reviewed' });
+      }
+      if (!flags.bound) {
+        return reply.status(409).send({ error: 'Lean declaration not bound yet' });
+      }
+      if (flags.aligned) {
+        return reply.status(409).send({ error: 'already aligned' });
+      }
+    }
+
+    const now = nowIso();
+    const yamlPath = path.join(projectPath, 'blueprint', 'status.yaml');
+    const status = loadStatus(yamlPath);
+    if (!status.nodes) status.nodes = {};
+    const entry: StatusEntry = status.nodes[id] || {};
+
+    const commentTopic = action === 'approve_nl' ? 'nl-review' : 'align';
+    const defaultText = action === 'approve_nl' ? 'NL approved' : 'Alignment confirmed';
+    const newComment: StatusComment = {
+      topic: commentTopic,
+      text: userComment || defaultText,
+      by: reviewer,
+      at: now,
+    };
+    const existingComments = Array.isArray(entry.comments) ? entry.comments : [];
+    entry.comments = [...existingComments, newComment];
+
+    if (action === 'approve_nl') {
+      entry.nl_reviewed = true;
+      entry.nl_reviewer = reviewer;
+      entry.nl_reviewed_at = now;
+    } else {
+      entry.aligned = true;
+      entry.align_reviewer = reviewer;
+      entry.aligned_at = now;
+    }
+    status.nodes[id] = entry;
+
+    // Mirror to DB cache. Wrap in a transaction so a crash midway leaves the DB
+    // either fully updated or untouched (yaml is already saved at this point —
+    // worst case the next index.py run re-derives from yaml and reconciles).
+    saveStatus(yamlPath, status);
+
+    const writeDb = openDbForWrite(projectPath);
+    if (writeDb) {
+      try {
+        const newFlags = {
+          ...flags,
+          nl_reviewed: action === 'approve_nl' ? true : flags.nl_reviewed,
+          aligned: action === 'confirm_alignment' ? true : flags.aligned,
+        };
+        const newPhase = derivePhase(newFlags);
+        const tx = writeDb.transaction(() => {
+          if (action === 'approve_nl') {
+            writeDb.prepare(
+              "UPDATE nodes SET nl_reviewed=1, nl_reviewer=?, last_activity=?, phase=? WHERE id=?"
+            ).run(reviewer, now, newPhase, id);
+          } else {
+            writeDb.prepare(
+              "UPDATE nodes SET aligned=1, align_reviewer=?, aligned_at=?, last_activity=?, phase=? WHERE id=?"
+            ).run(reviewer, now, now, newPhase, id);
+          }
+          const maxIdx = writeDb.prepare(
+            "SELECT COALESCE(MAX(idx), -1) AS m FROM node_comments WHERE node_id=?"
+          ).get(id) as { m: number };
+          writeDb.prepare(
+            "INSERT INTO node_comments(node_id, idx, topic, text, by, at) VALUES (?,?,?,?,?,?)"
+          ).run(id, maxIdx.m + 1, commentTopic, newComment.text, reviewer, now);
+        });
+        tx();
+      } finally {
+        try { writeDb.close(); } catch { /* ignore */ }
+      }
+    }
+
+    return { ok: true, id, action, reviewer, at: now };
   });
 }

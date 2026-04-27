@@ -23,6 +23,8 @@ const PHASE_COLORS: Record<string, string> = {
   proved:      '#28a745',
 };
 
+// Three shape buckets only — non-blueprint kinds (remark/example/question) are
+// filtered out upstream, so we don't need shapes for them.
 const KIND_SHAPES: Record<string, string> = {
   definition:  'ellipse',
   notation:    'ellipse',
@@ -30,11 +32,17 @@ const KIND_SHAPES: Record<string, string> = {
   proposition: 'box',
   lemma:       'box',
   corollary:   'box',
-  axiom:       'box',
-  remark:      'hexagon',
-  question:    'invtriangle',
-  example:     'triangle',
+  axiom:       'diamond',
 };
+
+// Kinds that belong on the formalization roadmap. Remarks, examples, and
+// questions are commentary; they're filtered out of the dependency graph and
+// sidebar counts (but remain reachable via direct /api/nodes/:id lookups).
+export const BLUEPRINT_KINDS: ReadonlySet<string> = new Set([
+  'definition', 'notation',
+  'theorem', 'proposition', 'lemma', 'corollary',
+  'axiom',
+]);
 
 // Pick a contrasting label color for a given fill — keep it readable.
 function labelColorOn(bg: string): string {
@@ -71,6 +79,9 @@ export function buildDot(nodes: NodeRow[], edges: EdgeRow[], filters: GraphFilte
 
   const visible = new Set<string>();
   for (const n of nodes) {
+    // Defense in depth — routes already drop non-blueprint kinds, but if a
+    // caller bypasses that, the DOT shouldn't suddenly grow remark hexagons.
+    if (n.kind && !BLUEPRINT_KINDS.has(n.kind)) continue;
     if (phaseFilter && !phaseFilter.has(n.phase)) continue;
     if (chapterFilter && n.chapter && !chapterFilter.has(n.chapter)) continue;
     if (hideOrphans && !n.chapter && !q) continue;

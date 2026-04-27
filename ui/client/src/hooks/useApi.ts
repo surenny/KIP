@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiUrl } from '../utils/constants';
 import type {
   LogEntry, AggregatedStats, LogsResponse, AgentSummary,
@@ -57,6 +57,45 @@ export function useNode(id: string) {
     queryKey: ['node', id],
     queryFn: () => fetchJson(`/api/nodes/${encodeURIComponent(id)}`),
     enabled: !!id,
+  });
+}
+
+export type ReviewAction = 'approve_nl' | 'confirm_alignment';
+
+export interface ReviewVars {
+  nodeId: string;
+  action: ReviewAction;
+  reviewer: string;
+  comment?: string;
+}
+
+export function useReviewAction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: ReviewVars) => {
+      const res = await fetch(apiUrl(`/api/nodes/${encodeURIComponent(vars.nodeId)}/review`), {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          action: vars.action,
+          reviewer: vars.reviewer,
+          comment: vars.comment || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `API ${res.status}`);
+      }
+      return res.json() as Promise<{ ok: true; id: string; action: ReviewAction; reviewer: string; at: string }>;
+    },
+    onSuccess: (_data, vars) => {
+      // Phase changed — refresh the node detail and the graph payload (which
+      // drives the SVG, sidebar phase counts, and chip filters).
+      qc.invalidateQueries({ queryKey: ['node', vars.nodeId] });
+      qc.invalidateQueries({ queryKey: ['graph'] });
+      qc.invalidateQueries({ queryKey: ['graph-svg'] });
+      qc.invalidateQueries({ queryKey: ['stateHealth'] });
+    },
   });
 }
 
