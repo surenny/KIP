@@ -342,11 +342,11 @@ STATUS_BADGES_TPL = Template("""
       <button class="review-btn" data-action="align" style="background:#009E73;color:#fff;border:none;padding:3px 8px;border-radius:3px;cursor:pointer;font-size:0.85em;">Confirm Alignment</button>
       {%- endif -%}
       {%- if st.get('kind') == 'definition' and st.get('aligned') -%}
-      <span style="color:#009E73;font-size:0.8em;font-weight:bold;">Complete (definition)</span>
+      <span class="completion-label" style="color:#009E73;font-size:0.8em;font-weight:bold;">Complete (definition)</span>
       {%- elif st.get('kind') == 'axiom' and st.get('aligned') -%}
-      <span style="color:#CC79A7;font-size:0.8em;font-weight:bold;">Complete (axiom — no proof needed)</span>
+      <span class="completion-label" style="color:#CC79A7;font-size:0.8em;font-weight:bold;">Complete (axiom — no proof needed)</span>
       {%- elif st.get('kind') not in ('definition', 'axiom') and st.get('proved') -%}
-      <span style="color:#1CAC78;font-size:0.8em;font-weight:bold;">Complete (proved)</span>
+      <span class="completion-label" style="color:#1CAC78;font-size:0.8em;font-weight:bold;">Complete (proved)</span>
       {%- endif -%}
     </div>
     <div style="display:flex;gap:4px;align-items:stretch;">
