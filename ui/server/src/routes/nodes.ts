@@ -61,9 +61,18 @@ function buildRenderedIndex(projectPath: string): Map<string, string> {
 
 function getRenderedIndex(projectPath: string): Map<string, string> {
   const webDir = path.join(projectPath, 'blueprint', 'web');
+  // Use max(mtime) across the actual sec-*.html files. The directory's own
+  // mtime only changes on entry add/remove, so rebuilding blueprint web
+  // (which rewrites file contents in place) wouldn't otherwise invalidate.
   let mtime = 0;
   if (fs.existsSync(webDir)) {
-    try { mtime = fs.statSync(webDir).mtimeMs; } catch { mtime = 0; }
+    try {
+      for (const f of fs.readdirSync(webDir)) {
+        if (!f.startsWith('sec-') || !f.endsWith('.html')) continue;
+        const m = fs.statSync(path.join(webDir, f)).mtimeMs;
+        if (m > mtime) mtime = m;
+      }
+    } catch { mtime = 0; }
   }
   if (renderedIndex && renderedIndexBase === webDir && renderedIndexMtime === mtime) {
     return renderedIndex;
@@ -278,20 +287,32 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
 
     let nlExcerpt: string | null = null;
     if (row.source_file && row.source_line) {
-      try {
-        const text = fs.readFileSync(row.source_file, 'utf-8');
-        const lines = text.split('\n');
-        const start = Math.max(0, row.source_line - 1);
-        // Read until matching \end{kind} or 80-line cap, whichever first.
-        const endRe = new RegExp(`\\\\end\\{${row.kind || '\\w+'}\\*?\\}`);
-        let end = start;
-        for (let i = start; i < Math.min(lines.length, start + 80); i++) {
-          end = i;
-          if (endRe.test(lines[i])) break;
+      // source_file comes from the SQLite cache, which itself derives from
+      // chapter .tex paths. Refuse anything that resolves outside the project
+      // root before touching the filesystem — defends against a poisoned DB.
+      const resolved = path.resolve(row.source_file);
+      const projectAbs = path.resolve(projectPath);
+      const inside = resolved === projectAbs || resolved.startsWith(projectAbs + path.sep);
+      if (inside) {
+        try {
+          const text = fs.readFileSync(resolved, 'utf-8');
+          const lines = text.split('\n');
+          const start = Math.max(0, row.source_line - 1);
+          // Read until matching \end{kind} or 80-line cap, whichever first.
+          // Escape kind defensively in case YAML ever contains regex metas.
+          const escapedKind = row.kind
+            ? row.kind.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            : '\\w+';
+          const endRe = new RegExp(`\\\\end\\{${escapedKind}\\*?\\}`);
+          let end = start;
+          for (let i = start; i < Math.min(lines.length, start + 80); i++) {
+            end = i;
+            if (endRe.test(lines[i])) break;
+          }
+          nlExcerpt = lines.slice(start, end + 1).join('\n');
+        } catch {
+          nlExcerpt = null;
         }
-        nlExcerpt = lines.slice(start, end + 1).join('\n');
-      } catch {
-        nlExcerpt = null;
       }
     }
 

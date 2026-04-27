@@ -129,9 +129,11 @@ export default function Nodes() {
     setChaptersInitialized(true);
   }, [graph, chaptersInitialized]);
 
-  // route → state sync
+  // route → state sync (also clears selection when URL drops the :id segment,
+  // e.g. browser Back from /nodes/:id to /nodes)
   useEffect(() => {
-    if (routeId && routeId !== selectedId) setSelectedId(routeId);
+    const next = routeId || '';
+    if (next !== selectedId) setSelectedId(next);
   }, [routeId, selectedId]);
 
   const allChapters = useMemo(() => {

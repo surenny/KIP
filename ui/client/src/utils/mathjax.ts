@@ -26,7 +26,8 @@ export function ensureMathJax(): Promise<void> {
       startup: { typeset: false },
     };
     const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
+    // Pin to a specific patch (the bare `mathjax@3` tag rolls forward).
+    s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js';
     s.async = true;
     s.onload = () => {
       const mj = window.MathJax as MathJaxV3 | undefined;
