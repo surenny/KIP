@@ -1,136 +1,45 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-import { useGraph } from '../hooks/useApi';
-import { PHASE_COLORS, PHASE_ORDER, PHASE_LABELS, KIND_SHAPES } from '../utils/constants';
+import svgPanZoom from 'svg-pan-zoom';
+import { useGraph, useGraphSvg } from '../hooks/useApi';
+import { PHASE_COLORS, PHASE_ORDER, PHASE_LABELS } from '../utils/constants';
 import NodeDetail from '../components/NodeDetail';
-import type { GraphPayload, NodeData, Phase } from '../types';
+import type { Phase } from '../types';
 import styles from './Nodes.module.css';
-
-cytoscape.use(dagre);
 
 const ALL_PHASES = [...PHASE_ORDER];
 
-function lastSegment(id: string): string {
-  const parts = id.split(':');
-  return parts[parts.length - 1] || id;
-}
-
-function buildElements(graph: GraphPayload, visibleIds: Set<string>) {
-  const els: cytoscape.ElementDefinition[] = [];
-  for (const n of graph.nodes) {
-    if (!visibleIds.has(n.id)) continue;
-    els.push({
-      data: {
-        id: n.id,
-        label: lastSegment(n.id),
-        color: PHASE_COLORS[n.phase] || '#999',
-        shape: KIND_SHAPES[n.kind || ''] || 'ellipse',
-        kind: n.kind,
-        phase: n.phase,
-      },
-    });
-  }
-  for (const e of graph.edges) {
-    if (!visibleIds.has(e.from) || !visibleIds.has(e.to)) continue;
-    els.push({
-      data: {
-        id: `${e.from}__${e.to}`,
-        source: e.from,
-        target: e.to,
-        confirmed: e.confirmed ? 1 : 0,
-      },
-    });
-  }
-  return els;
-}
-
-const CY_STYLE: cytoscape.StylesheetCSS[] = [
-  {
-    selector: 'node',
-    css: {
-      'background-color': 'data(color)' as unknown as string,
-      'shape': 'data(shape)' as cytoscape.Css.NodeShape,
-      'label': 'data(label)',
-      'font-size': 9,
-      'font-family': "'SF Mono', 'Menlo', monospace",
-      'text-valign': 'center',
-      'text-halign': 'center',
-      'color': '#1a1a1a',
-      'text-outline-color': '#fff',
-      'text-outline-width': 2,
-      'width': 60,
-      'height': 28,
-      'border-width': 1,
-      'border-color': 'rgba(0,0,0,0.18)',
-      'text-wrap': 'ellipsis' as 'wrap',
-      'text-max-width': '70px',
-    },
-  },
-  {
-    selector: 'node:selected',
-    css: {
-      'border-width': 3,
-      'border-color': '#0366d6',
-      'border-style': 'solid',
-    },
-  },
-  {
-    selector: 'edge',
-    css: {
-      'width': 1,
-      'line-color': '#c9ccd1',
-      'target-arrow-color': '#c9ccd1',
-      'target-arrow-shape': 'triangle',
-      'arrow-scale': 0.8,
-      'curve-style': 'bezier',
-      'opacity': 0.7,
-    },
-  },
-  {
-    selector: 'edge[confirmed = 0]',
-    css: {
-      'line-style': 'dashed',
-    },
-  },
-  {
-    selector: '.faded',
-    css: { 'opacity': 0.18 },
-  },
-  {
-    selector: '.highlighted',
-    css: { 'opacity': 1, 'z-index': 100 },
-  },
-  {
-    selector: 'edge.highlighted',
-    css: { 'line-color': '#0366d6', 'target-arrow-color': '#0366d6', 'width': 2 },
-  },
-];
-
 export default function Nodes() {
-  const { data: graph } = useGraph();
   const { id: routeId } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const cyRef = useRef<cytoscape.Core | null>(null);
-  const [selectedId, setSelectedId] = useState<string>('');
+  const panZoomRef = useRef<SvgPanZoom.Instance | null>(null);
+
+  const [selectedId, setSelectedId] = useState('');
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [activePhases, setActivePhases] = useState<Set<Phase>>(() => new Set<Phase>(ALL_PHASES));
   const [activeChapters, setActiveChapters] = useState<Set<string>>(() => new Set());
-  const [chaptersInitialized, setChaptersInitialized] = useState(false);
+  const [chaptersInit, setChaptersInit] = useState(false);
 
-  // initialize active chapters once we know what they are
+  const { data: graph } = useGraph();
+
+  // Debounce search → 300 ms before re-fetching SVG
   useEffect(() => {
-    if (chaptersInitialized || !graph) return;
+    const t = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  // Initialize chapter filter to "all chapters" once we know what they are.
+  useEffect(() => {
+    if (chaptersInit || !graph) return;
     const all = new Set<string>();
     for (const n of graph.nodes) if (n.chapter) all.add(n.chapter);
     setActiveChapters(all);
-    setChaptersInitialized(true);
-  }, [graph, chaptersInitialized]);
+    setChaptersInit(true);
+  }, [graph, chaptersInit]);
 
-  // route → state sync (also clears selection when URL drops the :id segment,
-  // e.g. browser Back from /nodes/:id to /nodes)
+  // URL → state sync (also clears selection when URL drops :id)
   useEffect(() => {
     const next = routeId || '';
     if (next !== selectedId) setSelectedId(next);
@@ -143,7 +52,6 @@ export default function Nodes() {
     return Array.from(set).sort();
   }, [graph]);
 
-  // counts per phase / chapter
   const phaseCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     if (graph) for (const n of graph.nodes) counts[n.phase] = (counts[n.phase] || 0) + 1;
@@ -156,87 +64,89 @@ export default function Nodes() {
     return counts;
   }, [graph]);
 
-  // visible node set after filters
-  const visibleIds = useMemo(() => {
-    const set = new Set<string>();
-    if (!graph) return set;
-    const q = search.trim().toLowerCase();
-    for (const n of graph.nodes) {
-      if (!activePhases.has(n.phase)) continue;
-      // chapter filter only applies to nodes with a chapter; orphans (no source) always shown
-      if (n.chapter && !activeChapters.has(n.chapter)) continue;
-      if (q) {
-        const hay = `${n.id} ${n.leanDecl || ''}`.toLowerCase();
-        if (!hay.includes(q)) continue;
-      }
-      // skip orphans (no source) when not searched explicitly
-      if (!n.chapter && !q) continue;
-      set.add(n.id);
-    }
-    return set;
-  }, [graph, activePhases, activeChapters, search]);
+  const phasesArr = useMemo(() => Array.from(activePhases), [activePhases]);
+  const chaptersArr = useMemo(
+    () => (chaptersInit ? Array.from(activeChapters).sort() : []),
+    [activeChapters, chaptersInit],
+  );
 
-  // (re)mount cytoscape when graph or filter changes
-  useEffect(() => {
-    if (!graph || !containerRef.current) return;
-    if (cyRef.current) {
-      cyRef.current.destroy();
-      cyRef.current = null;
-    }
-    const elements = buildElements(graph, visibleIds);
-    const cy = cytoscape({
-      container: containerRef.current,
-      elements,
-      style: CY_STYLE,
-      layout: {
-        name: 'dagre',
-        rankDir: 'TB',
-        nodeSep: 14,
-        rankSep: 40,
-        edgeSep: 8,
-      } as unknown as cytoscape.LayoutOptions,
-      wheelSensitivity: 1,
-      minZoom: 0.1,
-      maxZoom: 4,
-    });
-    // Edges are visual structure only, not interactive targets.
-    cy.edges().unselectify();
-    cy.on('tap', 'node', (evt) => {
-      const id = evt.target.id() as string;
-      setSelectedId(id);
-      navigate(`/nodes/${encodeURIComponent(id)}`);
-    });
-    cy.on('tap', (evt) => {
-      // treat background AND edge taps as "deselect" so an edge click
-      // doesn't leave a stale selection ring or open a drawer.
-      if (evt.target === cy || (evt.target.isEdge && evt.target.isEdge())) {
-        setSelectedId('');
-        navigate('/nodes');
-      }
-    });
-    cyRef.current = cy;
-    return () => { cy.destroy(); cyRef.current = null; };
-  }, [graph, visibleIds, navigate]);
+  const { data: svgText, isFetching, isError } = useGraphSvg({
+    phases: phasesArr,
+    chapters: chaptersArr,
+    q: debouncedSearch,
+    enabled: chaptersInit,
+  });
 
-  // highlight selected + neighborhood
+  // Mount the SVG, init pan-zoom, attach click bridging.
   useEffect(() => {
-    const cy = cyRef.current;
-    if (!cy) return;
-    cy.elements().removeClass('highlighted faded');
+    const container = containerRef.current;
+    if (!container || !svgText) return;
+    container.innerHTML = svgText;
+    const svgEl = container.querySelector('svg') as SVGSVGElement | null;
+    if (!svgEl) return;
+
+    // Let it stretch to its parent box; preserve viewBox aspect.
+    svgEl.removeAttribute('width');
+    svgEl.removeAttribute('height');
+    svgEl.style.width = '100%';
+    svgEl.style.height = '100%';
+    svgEl.style.display = 'block';
+
+    const onClick = (e: MouseEvent) => {
+      let target = e.target as Element | null;
+      while (target && target !== svgEl) {
+        const id = target.getAttribute('id');
+        if (id && id.startsWith('node:')) {
+          const nodeId = id.slice('node:'.length);
+          setSelectedId(nodeId);
+          navigate(`/nodes/${encodeURIComponent(nodeId)}`);
+          return;
+        }
+        target = target.parentElement;
+      }
+      // Background click → deselect
+      setSelectedId('');
+      navigate('/nodes');
+    };
+    svgEl.addEventListener('click', onClick);
+
+    // Init pan-zoom
+    if (panZoomRef.current) {
+      try { panZoomRef.current.destroy(); } catch { /* ignore */ }
+      panZoomRef.current = null;
+    }
+    panZoomRef.current = svgPanZoom(svgEl, {
+      zoomEnabled: true,
+      controlIconsEnabled: false,
+      fit: true,
+      center: true,
+      mouseWheelZoomEnabled: true,
+      preventMouseEventsDefault: false,
+      minZoom: 0.2,
+      maxZoom: 8,
+      zoomScaleSensitivity: 0.4,
+    });
+
+    return () => {
+      svgEl.removeEventListener('click', onClick);
+      if (panZoomRef.current) {
+        try { panZoomRef.current.destroy(); } catch { /* ignore */ }
+        panZoomRef.current = null;
+      }
+    };
+  }, [svgText, navigate]);
+
+  // Highlight selected node in SVG
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    container.querySelectorAll('g.kip-node-selected').forEach(el =>
+      el.classList.remove('kip-node-selected'));
     if (!selectedId) return;
-    const sel = cy.getElementById(selectedId);
-    if (sel.empty()) return;
-    const neighborhood = sel.closedNeighborhood();
-    cy.elements().difference(neighborhood).addClass('faded');
-    neighborhood.addClass('highlighted');
-    sel.select();
-    // gently bring it into view if it's far off-screen
-    const bb = sel.boundingBox({});
-    const ext = cy.extent();
-    if (bb.x1 < ext.x1 || bb.x2 > ext.x2 || bb.y1 < ext.y1 || bb.y2 > ext.y2) {
-      cy.center(sel);
-    }
-  }, [selectedId, visibleIds]);
+    const sel = `#${(window.CSS && CSS.escape) ? CSS.escape('node:' + selectedId) : 'node\\:' + selectedId.replace(/[^a-zA-Z0-9_-]/g, c => '\\' + c)}`;
+    const el = container.querySelector(sel);
+    if (el) el.classList.add('kip-node-selected');
+  }, [selectedId, svgText]);
 
   const togglePhase = (p: Phase) => {
     setActivePhases(prev => {
@@ -253,22 +163,7 @@ export default function Nodes() {
     });
   };
 
-  if (!graph) {
-    return (
-      <div className={styles.canvasMissing}>
-        Loading graph data…
-      </div>
-    );
-  }
-
-  if (graph.nodes.length === 0) {
-    return (
-      <div className={styles.canvasMissing}>
-        State index is empty.<br/>
-        Run <code>python tools/kip-state/index.py</code> from the project root.
-      </div>
-    );
-  }
+  const totalNodes = graph?.nodes.length ?? 0;
 
   return (
     <div className={`${styles.root} ${selectedId ? styles.drawerOpen : ''}`}>
@@ -277,7 +172,7 @@ export default function Nodes() {
         <input
           className={styles.search}
           type="text"
-          placeholder="id or lean decl…"
+          placeholder="id or substring…"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -285,8 +180,9 @@ export default function Nodes() {
         <div className={styles.sidebarTitle}>Phase</div>
         <div className={styles.chips}>
           {ALL_PHASES.map(p => (
-            <span
+            <button
               key={p}
+              type="button"
               className={`${styles.chip} ${activePhases.has(p) ? styles.chipActive : ''}`}
               onClick={() => togglePhase(p)}
               title={PHASE_LABELS[p]}
@@ -294,30 +190,31 @@ export default function Nodes() {
               <span className={styles.chipDot} style={{ background: PHASE_COLORS[p] }} />
               {PHASE_LABELS[p]}
               <span className={styles.chipCount}>{phaseCounts[p] || 0}</span>
-            </span>
+            </button>
           ))}
         </div>
 
         <div className={styles.sidebarTitle}>Chapter</div>
         <div className={styles.chips}>
           {allChapters.map(c => (
-            <span
+            <button
               key={c}
+              type="button"
               className={`${styles.chip} ${activeChapters.has(c) ? styles.chipActive : ''}`}
               onClick={() => toggleChapter(c)}
             >
               {c}
               <span className={styles.chipCount}>{chapterCounts[c] || 0}</span>
-            </span>
+            </button>
           ))}
         </div>
 
         <div className={styles.sidebarTitle}>Shapes</div>
         <div className={styles.legend}>
-          <div className={styles.legendRow}><span className={`${styles.legendShape} ${styles.ellipse}`} />definition / notation</div>
-          <div className={styles.legendRow}><span className={`${styles.legendShape} ${styles.round}`} />theorem / prop / lemma / cor</div>
-          <div className={styles.legendRow}><span className={`${styles.legendShape} ${styles.rect}`} />axiom</div>
-          <div className={styles.legendRow}><span className={`${styles.legendShape} ${styles.hex}`} />remark / question / example</div>
+          <div className={styles.legendRow}>ellipse — definition / notation</div>
+          <div className={styles.legendRow}>rounded box — theorem / prop / lemma / cor / axiom</div>
+          <div className={styles.legendRow}>hexagon — remark</div>
+          <div className={styles.legendRow}>triangles — example / question</div>
         </div>
 
         <div className={styles.sidebarTitle}>Edges</div>
@@ -330,7 +227,11 @@ export default function Nodes() {
       <div className={styles.canvas}>
         <div className={styles.canvasInner} ref={containerRef} />
         <div className={styles.canvasOverlay}>
-          showing {visibleIds.size} / {graph.nodes.length} nodes
+          {isFetching && 'rendering… '}
+          {isError && 'render failed (check server log)'}
+          {!isFetching && !isError && (
+            <>graph rendered server-side via <code>dot</code> · {totalNodes} nodes total</>
+          )}
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import path from 'path';
 import Database from 'better-sqlite3';
 import type { FastifyInstance } from 'fastify';
 import type { ProjectPaths } from '../index.js';
+import { buildDot, renderSvg, type GraphFilters } from './graph_svg.js';
 
 interface NodeRow {
   id: string;
@@ -241,6 +242,41 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
       confirmed: !!r.confirmed,
     }));
   });
+
+  // Server-rendered SVG of the dependency DAG via Graphviz `dot`. Filters
+  // (phases, chapters, q) are honored so the returned SVG only contains the
+  // visible subset — keeps client-side payload small and lets layout focus
+  // on what's shown.
+  fastify.get<{ Querystring: { phases?: string; chapters?: string; q?: string; orphans?: string } }>(
+    '/api/graph/svg',
+    async (req, reply) => {
+      const db = openDb(projectPath);
+      if (!db) {
+        reply.status(503);
+        return { error: 'state.db not built' };
+      }
+      const nodes = db.prepare("SELECT id, kind, chapter, phase FROM nodes").all() as
+        { id: string; kind: string | null; chapter: string | null; phase: string }[];
+      const edges = db.prepare("SELECT from_node, to_node, confirmed FROM edges").all() as
+        { from_node: string; to_node: string; confirmed: number }[];
+
+      const filters: GraphFilters = {};
+      if (req.query.phases) filters.phases = new Set(req.query.phases.split(',').filter(Boolean));
+      if (req.query.chapters) filters.chapters = new Set(req.query.chapters.split(',').filter(Boolean));
+      if (req.query.q) filters.search = req.query.q;
+      if (req.query.orphans === '1') filters.hideOrphans = false;
+
+      const dot = buildDot(nodes, edges, filters);
+      try {
+        const svg = await renderSvg(dot);
+        reply.type('image/svg+xml').header('cache-control', 'no-store');
+        return svg;
+      } catch (err: unknown) {
+        reply.status(500);
+        return { error: String((err as Error)?.message || err) };
+      }
+    },
+  );
 
   // Combined payload sized for one round-trip into the DAG view.
   fastify.get('/api/graph', async () => {

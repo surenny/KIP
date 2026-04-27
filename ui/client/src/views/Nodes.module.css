@@ -76,6 +76,26 @@
   min-width: 0;
 }
 .canvasInner { position: absolute; inset: 0; }
+
+/* Server-rendered Graphviz SVG. dot uses different shape elements per node
+   kind (ellipse / polygon / path / rect), so the highlight selectors cast a
+   wide net. */
+.canvasInner :global(g.kip-node) { cursor: pointer; }
+.canvasInner :global(g.kip-node:hover) ellipse,
+.canvasInner :global(g.kip-node:hover) polygon,
+.canvasInner :global(g.kip-node:hover) path,
+.canvasInner :global(g.kip-node:hover) rect {
+  stroke: #0366d6;
+  stroke-width: 2px;
+}
+.canvasInner :global(g.kip-node-selected) ellipse,
+.canvasInner :global(g.kip-node-selected) polygon,
+.canvasInner :global(g.kip-node-selected) path,
+.canvasInner :global(g.kip-node-selected) rect {
+  stroke: #0366d6;
+  stroke-width: 3px;
+}
+.canvasInner :global(g.kip-node-selected) text { font-weight: 600; }
 .canvasOverlay {
   position: absolute;
   bottom: 12px;

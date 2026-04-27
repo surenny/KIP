@@ -67,3 +67,27 @@ export function useStateHealth() {
     refetchInterval: 15000,
   });
 }
+
+export function useGraphSvg(params: {
+  phases: string[];
+  chapters: string[];
+  q: string;
+  enabled?: boolean;
+}) {
+  const qs = new URLSearchParams();
+  if (params.phases.length) qs.set('phases', params.phases.join(','));
+  if (params.chapters.length) qs.set('chapters', params.chapters.join(','));
+  if (params.q) qs.set('q', params.q);
+  const url = '/api/graph/svg?' + qs.toString();
+  return useQuery<string>({
+    queryKey: ['graph-svg', params.phases.join(','), params.chapters.join(','), params.q],
+    queryFn: async () => {
+      const res = await fetch(apiUrl(url));
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      return res.text();
+    },
+    enabled: params.enabled !== false,
+    staleTime: 5000,
+    placeholderData: (prev) => prev,  // keep old SVG visible while re-fetching
+  });
+}
