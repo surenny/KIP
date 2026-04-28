@@ -147,6 +147,7 @@ export interface NodeDetail extends Omit<NodeData, 'leanDecl'> {
   uses: { id: string }[];
   usedBy: { id: string }[];
   leanDecl: LeanDeclInfo | null;
+  leanSource: string | null;
   runs: NodeRunInfo[];
   nlExcerpt: string | null;
   nlRendered: RenderedNode | null;

@@ -464,8 +464,37 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     ).all(id) as { from_node: string }[];
 
     const leanDecl = row.lean_decl
-      ? db.prepare("SELECT * FROM lean_decls WHERE name = ?").get(row.lean_decl)
+      ? db.prepare("SELECT * FROM lean_decls WHERE name = ?").get(row.lean_decl) as
+          { name: string; file: string; line_start: number; line_end: number; sorry_count: number } | undefined
       : null;
+
+    // Slurp the source span so the dashboard can show the Lean code beside
+    // the NL statement during alignment review. lean_decls.file is stored as
+    // a project-root-relative path (e.g. "KIP/Foundations/Foo.lean"); resolve
+    // and refuse anything that escapes the project root, same shape as the
+    // NL excerpt below.
+    let leanSource: string | null = null;
+    if (leanDecl && leanDecl.file && leanDecl.line_start && leanDecl.line_end) {
+      const fileAbs = path.isAbsolute(leanDecl.file)
+        ? leanDecl.file
+        : path.join(projectPath, leanDecl.file);
+      const resolved = path.resolve(fileAbs);
+      const projectAbs = path.resolve(projectPath);
+      const inside = resolved === projectAbs || resolved.startsWith(projectAbs + path.sep);
+      if (inside) {
+        try {
+          const text = fs.readFileSync(resolved, 'utf-8');
+          const lines = text.split('\n');
+          const start = Math.max(0, leanDecl.line_start - 1);
+          // line_end is inclusive in the indexer; cap at file length so a
+          // stale cache (file shrunk since last index) doesn't blow up.
+          const end = Math.max(start, Math.min(lines.length, leanDecl.line_end));
+          leanSource = lines.slice(start, end).join('\n');
+        } catch {
+          leanSource = null;
+        }
+      }
+    }
 
     const runs = db.prepare(
       `SELECT ar.id, ar.agent, ar.started_at, ar.completed_at, ar.status,
@@ -516,6 +545,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
       uses: usesEdges.map(e => ({ id: e.to_node })),
       usedBy: usedByEdges.map(e => ({ id: e.from_node })),
       leanDecl,
+      leanSource,
       runs,
       nlExcerpt,
       nlRendered,

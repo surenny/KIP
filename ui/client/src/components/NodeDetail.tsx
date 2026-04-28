@@ -3,6 +3,7 @@ import { useNode, useReviewAction, type ReviewAction } from '../hooks/useApi';
 import { PHASE_COLORS, PHASE_LABELS } from '../utils/constants';
 import { fmtDuration } from '../utils/format';
 import { typesetMath } from '../utils/mathjax';
+import { highlightLean } from '../utils/leanHighlight';
 import type { NodeDetail as NodeDetailT, NodeFlags } from '../types';
 import styles from './NodeDetail.module.css';
 
@@ -239,7 +240,17 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
 
       {d.leanDecl && (
         <div className={styles.section}>
-          <div className={styles.sectionLabel}>Lean declaration</div>
+          <div className={styles.sectionLabel}>
+            Lean declaration
+            <span
+              className={styles.betaBadge}
+              title={'Source slice + highlighting are regex-based, not a real Lean parser. ' +
+                     'Boundaries follow next-decl-heading; nested block comments and unicode ' +
+                     'identifiers may render imperfectly.'}
+            >
+              beta
+            </span>
+          </div>
           <div className={styles.leanBox}>
             <div className={styles.leanRow}>
               <span className={styles.leanKey}>name</span>
@@ -257,6 +268,16 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
               </span>
             </div>
           </div>
+          {d.leanSource ? (
+            <pre
+              className={styles.leanSource}
+              dangerouslySetInnerHTML={{ __html: highlightLean(d.leanSource) }}
+            />
+          ) : (
+            <div className={styles.empty}>
+              source unavailable (file moved or out-of-range — rebuild state.db)
+            </div>
+          )}
         </div>
       )}
       {d.leanDecl == null && d.leanDecl !== undefined && d.flags.bound && (
