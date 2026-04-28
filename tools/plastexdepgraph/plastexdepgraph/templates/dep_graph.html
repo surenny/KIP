@@ -104,7 +104,7 @@
 </div> <!-- content -->
 </div> <!-- wrapper -->
 <script id="leanblueprint-status" type="application/json">{{ status_nodes_json }}</script>
-<script id="leanblueprint-repo-config" type="application/json">{"owner":"surenny","repo":"KIP","status_path":"blueprint/status.yaml","branch":"main"}</script>
+<script id="leanblueprint-repo-config" type="application/json">{{ repo_config_json }}</script>
 <script src="js/jquery.min.js" type="text/javascript"></script>
 
 <script src="js/d3.min.js"></script>
@@ -628,6 +628,12 @@ function updateCommitButton() {
   var bar = document.getElementById('github-commit-bar');
   if (!bar) return;
   if (REVIEW_MODE !== 'github') { bar.style.display = 'none'; return; }
+  // Hide the commit bar entirely when REPO_CONFIG is not configured at build
+  // time. Without owner+repo the JS cannot legitimately PUT to GitHub, so
+  // showing a button that always errors is worse than hiding it.
+  if (!REPO_CONFIG.owner || !REPO_CONFIG.repo) {
+    bar.style.display = 'none'; return;
+  }
   var n = countPending();
   bar.style.display = n > 0 ? 'flex' : 'none';
   bar.style.alignItems = 'center';
