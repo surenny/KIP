@@ -9,6 +9,18 @@ import styles from './Nodes.module.css';
 
 const ALL_PHASES = [...PHASE_ORDER];
 
+const DRAWER_WIDTH_KEY = 'kip:drawerWidth';
+const DRAWER_MIN_PX = 320;
+const DRAWER_MAX_PX = 1100;
+const DRAWER_DEFAULT_PX = 420;
+
+function readSavedDrawerWidth(): number {
+  if (typeof window === 'undefined') return DRAWER_DEFAULT_PX;
+  const v = parseInt(window.localStorage.getItem(DRAWER_WIDTH_KEY) || '', 10);
+  if (Number.isFinite(v) && v >= DRAWER_MIN_PX && v <= DRAWER_MAX_PX) return v;
+  return DRAWER_DEFAULT_PX;
+}
+
 export default function Nodes() {
   const { id: routeId } = useParams<{ id?: string }>();
   const navigate = useNavigate();
@@ -28,6 +40,36 @@ export default function Nodes() {
   const [activePhases, setActivePhases] = useState<Set<Phase>>(() => new Set<Phase>(ALL_PHASES));
   const [activeChapters, setActiveChapters] = useState<Set<string>>(() => new Set());
   const [chaptersInit, setChaptersInit] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState<number>(readSavedDrawerWidth);
+
+  // Persist drawer width across page loads.
+  useEffect(() => {
+    try { window.localStorage.setItem(DRAWER_WIDTH_KEY, String(drawerWidth)); } catch { /* ignore */ }
+  }, [drawerWidth]);
+
+  const startDrawerResize = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startW = drawerWidth;
+    const onMove = (ev: MouseEvent) => {
+      // Drawer is anchored to the right; dragging the handle leftwards
+      // (smaller clientX) grows the drawer. Clamp to avoid degenerate widths.
+      const next = Math.max(DRAWER_MIN_PX, Math.min(DRAWER_MAX_PX, startW + (startX - ev.clientX)));
+      setDrawerWidth(next);
+    };
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+    // Lock the cursor + disable text selection while dragging — without
+    // these, fast drags pick up arbitrary text on the page.
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  };
 
   const { data: graph } = useGraph();
 
@@ -108,9 +150,9 @@ export default function Nodes() {
         }
         target = target.parentElement;
       }
-      // Background click → deselect
-      setSelectedId('');
-      navRef.current('/nodes');
+      // Background click is a no-op: closing the drawer should be an
+      // explicit action (the close button or Escape), since users routinely
+      // pan the canvas with click-drag and would otherwise lose context.
     };
     svgEl.addEventListener('click', onClick);
 
@@ -166,6 +208,40 @@ export default function Nodes() {
     const sel = `#${(window.CSS && CSS.escape) ? CSS.escape('node:' + selectedId) : 'node\\:' + selectedId.replace(/[^a-zA-Z0-9_-]/g, c => '\\' + c)}`;
     const el = container.querySelector(sel);
     if (el) el.classList.add('kip-node-selected');
+  }, [selectedId, svgText]);
+
+  // Highlight edges incident to the selected node. Edge group ids are emitted
+  // by the server as `edge:<from>-><to>` (where the DB direction is preserved
+  // even though DOT renders the arrow flipped). Outgoing in the data sense
+  // (from === selectedId) means "selectedId uses ..." and incoming
+  // (to === selectedId) means "... uses selectedId" — coloured separately so
+  // both flow directions are legible at a glance.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    container.querySelectorAll('g.kip-edge-uses, g.kip-edge-usedby').forEach(el => {
+      el.classList.remove('kip-edge-uses');
+      el.classList.remove('kip-edge-usedby');
+    });
+    if (!selectedId) return;
+    const edges = container.querySelectorAll<SVGGElement>('g.edge[id^="edge:"]');
+    edges.forEach(el => {
+      const id = el.getAttribute('id') || '';
+      const rest = id.slice('edge:'.length);
+      const arrow = rest.indexOf('->');
+      if (arrow < 0) return;
+      const from = rest.slice(0, arrow);
+      const to = rest.slice(arrow + 2);
+      if (from === selectedId) {
+        el.classList.add('kip-edge-uses');
+        // Re-append so the highlighted stroke paints over neighbouring
+        // edges instead of being hidden under them.
+        el.parentNode?.appendChild(el);
+      } else if (to === selectedId) {
+        el.classList.add('kip-edge-usedby');
+        el.parentNode?.appendChild(el);
+      }
+    });
   }, [selectedId, svgText]);
 
   const togglePhase = (p: Phase) => {
@@ -240,6 +316,14 @@ export default function Nodes() {
         <div className={styles.legend}>
           <div className={styles.legendRow}>top → bottom = build order</div>
           <div className={styles.legendRow}>arrow A → B reads "A is used by B"</div>
+          <div className={styles.legendRow}>
+            <span className={styles.legendSwatch} style={{ background: '#0366d6' }} />
+            on select: this node's <em>uses</em>
+          </div>
+          <div className={styles.legendRow}>
+            <span className={styles.legendSwatch} style={{ background: '#e36209' }} />
+            on select: <em>used by</em> this node
+          </div>
         </div>
       </aside>
 
@@ -255,7 +339,15 @@ export default function Nodes() {
       </div>
 
       {selectedId && (
-        <div className={styles.drawer}>
+        <div className={styles.drawer} style={{ width: drawerWidth }}>
+          <div
+            className={styles.drawerResize}
+            onMouseDown={startDrawerResize}
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize drawer"
+            title="Drag to resize"
+          />
           <NodeDetail
             nodeId={selectedId}
             onClose={() => { setSelectedId(''); navigate('/nodes'); }}
