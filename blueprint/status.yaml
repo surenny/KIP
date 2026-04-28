@@ -30,7 +30,7 @@ nodes:
     proved: false
     kind: definition
     align_reviewer: web-reviewer
-    aligned_at: '2026-04-19'
+    aligned_at: '2026-04-19T12:00:00+08:00'
     nl_hash: 81e4dfd3fc37ef20
   prereq:def:einfty-data:
     lean_decl: KIP.SpectralSequence.SSData.eInfty
@@ -40,7 +40,7 @@ nodes:
     proved: false
     kind: definition
     align_reviewer: web-reviewer
-    aligned_at: '2026-04-19'
+    aligned_at: '2026-04-19T12:00:00+08:00'
     nl_hash: 83a891b656d5e2ff
   prereq:def:ss-morphism:
     lean_decl: KIP.SpectralSequence.SpectralSequenceMorphism
@@ -74,7 +74,7 @@ nodes:
     proved: false
     kind: definition
     nl_reviewer: test-ping
-    nl_reviewed_at: '2026-04-19'
+    nl_reviewed_at: '2026-04-19T12:00:00+08:00'
     nl_hash: ff79ac43a1565ea2
   prereq:def:filtration-degree:
     lean_decl: KIP.SpectralSequence.Convergence.filtrationDegree
@@ -121,10 +121,17 @@ nodes:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
     nl_hash: 49d94e708caedb2d
+    comments:
+    - topic: align
+      text: Alignment confirmed
+      by: surenny
+      at: '2026-04-27T12:00:00+08:00'
+    align_reviewer: surenny
+    aligned_at: '2026-04-27T12:00:00+08:00'
   prereq:def:filtered-complex:
     lean_decl: KIP.SpectralSequence.FilteredComplex
     nl_reviewed: true
@@ -717,7 +724,7 @@ nodes:
     kind: remark
     nl_reviewed: true
     nl_reviewer: web-reviewer
-    nl_reviewed_at: '2026-04-19'
+    nl_reviewed_at: '2026-04-19T12:00:00+08:00'
     nl_hash: cda248a7a43d920b
   a0000000003:
     bound: false
@@ -1338,6 +1345,14 @@ nodes:
     bound: false
     nl_hash: 5214332db2d05bf8
     proved: false
+    comments:
+    - topic: nl-review
+      text: NL approved
+      by: surenny
+      at: '2026-04-27T12:00:00+08:00'
+    nl_reviewed: true
+    nl_reviewer: surenny
+    nl_reviewed_at: '2026-04-27T12:00:00+08:00'
   prereq:thm:unbounded-ess-convergence:
     kind: theorem
     bound: false
@@ -1350,10 +1365,26 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: ce623afb9a54bec9
+    comments:
+    - topic: nl-review
+      text: NL approved
+      by: surenny
+      at: '2026-04-27T12:00:00+08:00'
+    nl_reviewed: true
+    nl_reviewer: surenny
+    nl_reviewed_at: '2026-04-27T12:00:00+08:00'
   prereq:prop:invlim-of-truncations-ss:
     kind: proposition
     bound: false
     nl_hash: 54cb7bf052d765c5
+    comments:
+    - topic: nl-review
+      text: NL approved
+      by: surenny
+      at: '2026-04-27T12:00:00+08:00'
+    nl_reviewed: true
+    nl_reviewer: surenny
+    nl_reviewed_at: '2026-04-27T12:00:00+08:00'
   prereq:def:unbounded-ess:
     kind: definition
     bound: false

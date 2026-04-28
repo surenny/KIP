@@ -31,3 +31,39 @@ export const STATUS_COLORS: Record<string, string> = {
   error: 'var(--red)',
   pending: 'var(--orange)',
 };
+
+// Phase = node lifecycle stage (drafted → proved). Ordered cool→warm→green.
+// nl_reviewed implicitly includes "dependency edges confirmed" — they're not
+// tracked separately in status.yaml.
+export const PHASE_COLORS: Record<string, string> = {
+  drafted:     '#c9ccd1',  // gray — only NL skeleton
+  nl_reviewed: '#6f42c1',  // purple — NL + deps signed off
+  bound:       '#0366d6',  // blue — Lean decl exists (sorry-stub OK)
+  aligned:     '#e36209',  // orange — humans confirm Lean ↔ NL match
+  proved:      '#28a745',  // green — sorry filled, build green
+};
+
+export const PHASE_ORDER = ['drafted', 'nl_reviewed', 'bound', 'aligned', 'proved'] as const;
+
+export const PHASE_LABELS: Record<string, string> = {
+  drafted: 'Drafted',
+  nl_reviewed: 'NL reviewed',
+  bound: 'Bound',
+  aligned: 'Aligned',
+  proved: 'Proved',
+};
+
+// Cytoscape node shapes per LaTeX kind. Splits things into 3 visual buckets:
+// data (definition/notation) · claim (theorem/prop/lemma/corollary) · meta (axiom/remark/...)
+export const KIND_SHAPES: Record<string, string> = {
+  definition:  'ellipse',
+  notation:    'ellipse',
+  theorem:     'round-rectangle',
+  proposition: 'round-rectangle',
+  lemma:       'round-rectangle',
+  corollary:   'round-rectangle',
+  axiom:       'rectangle',
+  remark:      'hexagon',
+  question:    'vee',
+  example:     'triangle',
+};
