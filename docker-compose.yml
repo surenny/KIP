@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kip-server
+    ports:
+      - "8082:8000"
+    volumes:
+      - ./blueprint/status.yaml:/app/blueprint/status.yaml
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: kip-dashboard
+    ports:
+      - "18080:8081"
+    volumes:
+      - .:/project
+    restart: unless-stopped
