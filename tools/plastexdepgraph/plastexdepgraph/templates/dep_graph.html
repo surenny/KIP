@@ -308,7 +308,7 @@ function updateButtons(panel, st) {
     }
   });
   // Update completion labels
-  var completionSpans = panel.querySelectorAll('span[style*="font-weight:bold"]');
+  var completionSpans = panel.querySelectorAll('.completion-label');
   completionSpans.forEach(function(s) { s.remove(); });
   var btnRow = panel.querySelector('div');
   if (btnRow) {
@@ -316,16 +316,19 @@ function updateButtons(panel, st) {
     var state = nodeState(st);
     if (kind === 'definition' && st.aligned) {
       var s = document.createElement('span');
+      s.className = 'completion-label';
       s.style.cssText = 'color:#009E73;font-size:0.8em;font-weight:bold;';
       s.textContent = 'Complete (definition)';
       btnRow.appendChild(s);
     } else if (kind === 'axiom' && st.aligned) {
       var s = document.createElement('span');
+      s.className = 'completion-label';
       s.style.cssText = 'color:#CC79A7;font-size:0.8em;font-weight:bold;';
       s.textContent = 'Complete (axiom \u2014 no proof needed)';
       btnRow.appendChild(s);
     } else if (isThmKind(kind) && st.proved) {
       var s = document.createElement('span');
+      s.className = 'completion-label';
       s.style.cssText = 'color:#1CAC78;font-size:0.8em;font-weight:bold;';
       s.textContent = 'Complete (proved)';
       btnRow.appendChild(s);

@@ -1,0 +1,9 @@
+services:
+  server:
+    build: .
+    container_name: kip-server
+    ports:
+      - "8082:8000"
+    volumes:
+      - ./blueprint/status.yaml:/app/blueprint/status.yaml
+    restart: unless-stopped

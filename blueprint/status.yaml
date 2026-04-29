@@ -117,6 +117,39 @@ nodes:
     kind: definition
     nl_hash: ac0cf089df4b4690
     aligned_by: surenny
+    comments:
+    - topic: general
+      text: test
+      by: wangpan
+      at: '2026-04-27'
+    - topic: general
+      text: 这是一个测试评论存储功能的信息
+      by: surenny
+      at: '2026-04-27'
+    - topic: general
+      text: test2
+      by: surenny
+      at: '2026-04-27'
+    - topic: general
+      text: hi
+      by: wangpan
+      at: '2026-04-27'
+    - topic: general
+      text: hi
+      by: wangpan
+      at: '2026-04-27'
+    - topic: general
+      text: hi
+      by: wangpan
+      at: '2026-04-27'
+    - topic: general
+      text: hi
+      by: wangpan
+      at: '2026-04-27'
+    - topic: general
+      text: '111'
+      by: wangpan
+      at: '2026-04-27'
   prereq:def:filtered-morphism:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
@@ -545,10 +578,12 @@ nodes:
     lean_decl: KIP.StableHomotopy.InAdamsFiltration
     nl_reviewed: true
     bound: true
-    aligned: false
+    aligned: true
     proved: false
     kind: definition
     nl_hash: 49238adaaf6a20fa
+    align_reviewer: web-reviewer
+    aligned_at: '2026-04-27'
   prereq:def:adams-filtration-maps:
     lean_decl: KIP.StableHomotopy.AF
     nl_reviewed: true
