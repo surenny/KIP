@@ -124,16 +124,35 @@ Instructions:
    - If the file was listed under '## Pending', remove it from there.
 8. Report what changed and whether validation passed." \
         2>>"$stderr_dest" | python3 -u -c "
-import sys, json, datetime
+import sys, json, datetime, urllib.request, os
 
 VERBOSE = '$VERBOSE_LOGS' == 'true'
 RAW = open('$RAW_FILE', 'a') if VERBOSE else None
 JSONL = open('$JSONL_FILE', 'a')
 
+_INGEST_URL   = os.getenv('KIP_INGEST_URL', '')
+_INGEST_TOKEN = os.getenv('KIP_INGEST_TOKEN', '')
+_AGENT        = 'blueprint-absorber'
+_RUN_ID       = 'run-$RUN_TS'
+_HINT_FILE    = '$HINT_FILE'
+
+def ingest(row):
+    if not _INGEST_URL:
+        return
+    payload = json.dumps({'agent': _AGENT, 'runId': _RUN_ID, 'hintFile': _HINT_FILE, 'row': row}).encode()
+    req = urllib.request.Request(_INGEST_URL, data=payload,
+        headers={'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _INGEST_TOKEN},
+        method='POST')
+    try:
+        urllib.request.urlopen(req, timeout=3)
+    except Exception:
+        pass
+
 def emit(event_type, **fields):
     row = {'ts': datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00', 'Z'), 'event': event_type, **fields}
     JSONL.write(json.dumps(row) + '\n')
     JSONL.flush()
+    ingest(row)
 
 last_result = ''
 
