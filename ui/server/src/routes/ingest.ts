@@ -19,7 +19,10 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
       }
     }
 
-    const { agent, runId, hintFile, row } = req.body as Record<string, unknown>;
+    const body = req.body as Record<string, unknown> | undefined;
+    if (!body) return reply.code(400).send({ error: 'missing JSON body' });
+
+    const { agent, runId, hintFile, row } = body;
 
     if (!safeSeg(agent) || !safeSeg(runId)) {
       return reply.code(400).send({ error: 'invalid agent or runId' });
