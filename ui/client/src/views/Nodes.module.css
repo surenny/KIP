@@ -1,0 +1,184 @@
+.root {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: 100%;
+  min-height: 0;
+  position: relative;  /* anchor for the floating drawer */
+}
+/* Kept for the App.tsx className concat — no longer changes layout. */
+.drawerOpen {}
+
+.sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--bg-secondary);
+  padding: 12px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+.sidebarTitle {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-size: 10px;
+  margin: 12px 0 6px;
+}
+.sidebarTitle:first-child { margin-top: 0; }
+
+.search {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  background: var(--bg-primary);
+}
+.search:focus { outline: none; border-color: var(--blue); }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  cursor: pointer;
+  font-size: 11px;
+  user-select: none;
+}
+.chip:hover { border-color: var(--text-muted); }
+.chipActive { background: var(--bg-tertiary); border-color: var(--text-secondary); color: var(--text-primary); }
+.chipDot {
+  width: 8px; height: 8px; border-radius: 50%;
+  display: inline-block;
+}
+.chipCount { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.legend { font-size: 11px; color: var(--text-secondary); }
+.legendRow { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+.legendSwatch { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legendShape { width: 14px; height: 14px; border: 1.5px solid var(--text-secondary); flex-shrink: 0; }
+.legendShape.ellipse { border-radius: 50%; }
+.legendShape.round { border-radius: 4px; }
+.legendShape.rect { border-radius: 0; }
+.legendShape.hex { transform: rotate(90deg); clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); border: none; background: transparent; box-shadow: 0 0 0 1.5px var(--text-secondary) inset; }
+
+.canvas {
+  position: relative;
+  background: var(--bg-primary);
+  min-height: 0;
+  min-width: 0;
+}
+.canvasInner { position: absolute; inset: 0; }
+
+/* Server-rendered Graphviz SVG. dot uses different shape elements per node
+   kind (ellipse / polygon / path / rect), so the highlight selectors cast a
+   wide net. */
+.canvasInner :global(g.kip-node) { cursor: pointer; }
+.canvasInner :global(g.kip-node:hover) ellipse,
+.canvasInner :global(g.kip-node:hover) polygon,
+.canvasInner :global(g.kip-node:hover) path,
+.canvasInner :global(g.kip-node:hover) rect {
+  stroke: #0366d6;
+  stroke-width: 2px;
+}
+.canvasInner :global(g.kip-node-selected) ellipse,
+.canvasInner :global(g.kip-node-selected) polygon,
+.canvasInner :global(g.kip-node-selected) path,
+.canvasInner :global(g.kip-node-selected) rect {
+  stroke: #0366d6;
+  stroke-width: 3px;
+}
+.canvasInner :global(g.kip-node-selected) text { font-weight: 600; }
+
+/* Edge highlight on node selection. Graphviz emits each edge as a <g> with
+   one <path> (the curve) and one <polygon> (the arrowhead). The default
+   stroke on the <polygon> is "none" with a fill, so we set both. */
+.canvasInner :global(g.kip-edge-uses) > path {
+  stroke: #0366d6;
+  stroke-width: 2.2px;
+}
+.canvasInner :global(g.kip-edge-uses) > polygon {
+  stroke: #0366d6;
+  fill: #0366d6;
+}
+.canvasInner :global(g.kip-edge-usedby) > path {
+  stroke: #e36209;
+  stroke-width: 2.2px;
+}
+.canvasInner :global(g.kip-edge-usedby) > polygon {
+  stroke: #e36209;
+  fill: #e36209;
+}
+.canvasOverlay {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.canvasMissing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 24px;
+}
+.canvasMissing code {
+  background: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* Drawer is overlaid on the canvas (absolute position) instead of pushing
+   it. This keeps the SVG geometry stable across selection toggles, so
+   svg-pan-zoom's current pan/zoom isn't visually reset every click. */
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;  /* default; React inline style overrides w/ persisted px */
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Thin invisible drag-strip just to the left of the drawer. Slightly wider
+   than the visible border so it's easy to grab; tints on hover/active so the
+   user gets feedback. */
+.drawerResize {
+  position: absolute;
+  top: 0;
+  left: -3px;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 11;
+  background: transparent;
+}
+.drawerResize:hover,
+.drawerResize:active {
+  background: rgba(3, 102, 214, 0.25);
+}

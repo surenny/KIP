@@ -1,0 +1,322 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+.idRow { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.id { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text-primary); word-break: break-all; }
+.kindChip {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 2px 6px; border-radius: 3px;
+  background: var(--bg-tertiary); color: var(--text-secondary);
+}
+.subline { font-size: 11px; color: var(--text-muted); }
+.subline a { color: var(--blue); }
+
+.phaseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 500;
+  color: white;
+}
+
+.section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sectionLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+/* When the section is a <details>/<summary> (collapsible Uses / Used by /
+   Agent runs), the summary needs to feel clickable and keep no extra bottom
+   gap when collapsed. The native disclosure triangle stays. */
+summary.sectionLabel {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0;
+}
+summary.sectionLabel:hover { color: var(--text-secondary); }
+details[open] > summary.sectionLabel { margin-bottom: 6px; }
+
+.flagsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.flag {
+  text-align: center;
+  padding: 6px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.flagOn {
+  background: rgba(40,167,69,0.1);
+  border-color: var(--green);
+  color: var(--green);
+}
+.flagMark { font-size: 14px; line-height: 1; }
+.flagText { display: block; margin-top: 2px; }
+
+.attribution {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.attribution b {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.reviewHint {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.reviewerLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.reviewerInput {
+  flex: 1;
+  font-size: 12px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.reviewerInput:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.reviewCommentBox {
+  font-size: 12px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 38px;
+}
+.reviewCommentBox:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+.reviewBtn {
+  align-self: flex-start;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  background: var(--green);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.reviewBtn:hover:not(:disabled) { filter: brightness(1.06); }
+.reviewBtn:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+.reviewError {
+  font-size: 11px;
+  color: var(--red);
+}
+.reviewOk {
+  font-size: 11px;
+  color: var(--green);
+}
+
+.refLine { font-size: 12px; padding: 2px 0; }
+.refLine code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--bg-tertiary);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.refLine a { cursor: pointer; }
+.refLink { color: var(--text-secondary); }
+.refLink:hover { color: var(--blue); }
+
+.empty { color: var(--text-muted); font-size: 11px; font-style: italic; }
+
+.excerpt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: pre-wrap;
+  background: var(--bg-secondary);
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  max-height: 240px;
+  overflow-y: auto;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+/* Rendered LaTeX block (HTML extracted from blueprint/web/sec-*.html;
+   MathJax v3 typesets the \(...\) and \[...\] markers in place). */
+.rendered {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  background: var(--bg-secondary);
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  max-height: 360px;
+  overflow-y: auto;
+  color: var(--text-primary);
+}
+.rendered p { margin: 0.4em 0; }
+.rendered ol, .rendered ul { margin: 0.4em 0 0.4em 1.4em; }
+.rendered li { margin: 0.2em 0; }
+.rendered .displaymath {
+  text-align: center;
+  margin: 0.6em 0;
+  overflow-x: auto;
+}
+.rendered em { font-style: italic; color: var(--text-primary); }
+.rendered code, .rendered pre {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--bg-tertiary);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.rendered a { color: var(--blue); pointer-events: none; }  /* dead links to chapter pages */
+.rendered img { max-width: 100%; height: auto; }
+.rendered :global(mjx-container) { overflow-x: auto; overflow-y: hidden; }
+
+.leanBox {
+  font-size: 12px;
+  background: var(--bg-secondary);
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.leanRow { display: flex; justify-content: space-between; padding: 2px 0; }
+.leanRow .leanKey { color: var(--text-muted); }
+.leanRow .leanVal { font-family: var(--font-mono); font-size: 11px; color: var(--text-primary); }
+
+/* Lean source span. Same look-and-feel as .excerpt but a bit taller and with
+   horizontal scroll instead of wrap — Lean declarations exceed 80 columns
+   often, and wrapping mid-arrow makes alignment review harder than scroll. */
+.leanSource {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: pre;
+  background: var(--bg-secondary);
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  margin-top: 8px;
+  max-height: 360px;
+  overflow: auto;
+  line-height: 1.45;
+  color: var(--text-primary);
+  tab-size: 2;
+}
+/* Lightweight Lean syntax colours — see ../utils/leanHighlight.ts. The
+   palette mirrors github-light tokens so it's legible on var(--bg-secondary)
+   and doesn't clash with the surrounding chrome. */
+.leanSource :global(.lean-c) { color: #6a737d; font-style: italic; }
+.leanSource :global(.lean-s) { color: #032f62; }
+.leanSource :global(.lean-a) { color: #6f42c1; }
+.leanSource :global(.lean-k) { color: #d73a49; }
+.leanSource :global(.lean-n) { color: #005cc5; }
+
+/* Small "beta" pill next to the Lean declaration label — flags that the
+   source slicing + highlighting are regex-based, not a real Lean parser, so
+   reviewers know to spot-check rather than trust the preview blindly. */
+.betaBadge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #e36209;  /* orange — matches the "aligned" phase chip palette */
+  vertical-align: 2px;
+  cursor: help;
+}
+.sorryDot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+.sorryDot.green { background: var(--green); }
+.sorryDot.orange { background: var(--orange); }
+
+.commentsList { display: flex; flex-direction: column; gap: 8px; }
+.commentItem {
+  border-left: 2px solid var(--border);
+  padding: 4px 0 4px 8px;
+}
+.commentMeta { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+.commentTopic {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 1px 4px; border-radius: 2px;
+  background: var(--bg-tertiary); color: var(--text-secondary);
+  margin-right: 6px;
+}
+.commentText { font-size: 12px; color: var(--text-primary); white-space: pre-wrap; }
+
+.runsList { display: flex; flex-direction: column; gap: 6px; }
+.runItem {
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+.runHeader { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.runAgent { font-weight: 500; }
+.runStatus { font-size: 10px; padding: 1px 5px; border-radius: 2px; }
+.runStatus.done { background: rgba(40,167,69,0.12); color: var(--green); }
+.runStatus.running { background: rgba(3,102,214,0.12); color: var(--blue); }
+.runStatus.error { background: rgba(203,36,49,0.12); color: var(--red); }
+.runMeta { color: var(--text-muted); font-size: 10px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.runHint { color: var(--text-secondary); font-size: 10px; font-family: var(--font-mono); margin-top: 2px; word-break: break-all; }

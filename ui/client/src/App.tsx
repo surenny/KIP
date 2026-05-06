@@ -2,6 +2,7 @@ import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import { useProject } from './hooks/useApi';
 import Overview from './views/Overview';
 import LogViewer from './views/LogViewer';
+import Nodes from './views/Nodes';
 
 function ConnectionBanner({ isError }: { isError: boolean }) {
   if (!isError) return null;
@@ -26,13 +27,17 @@ export default function App() {
         <h1>KIP</h1>
         {project && <span className="project-badge" title={project.path}>{project.name}</span>}
         <nav className="header-nav">
-          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>Overview</NavLink>
+          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>Nodes</NavLink>
+          <NavLink to="/overview" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Overview</NavLink>
           <NavLink to="/logs" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Logs</NavLink>
         </nav>
       </header>
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Overview />} />
+          <Route path="/" element={<Nodes />} />
+          <Route path="/nodes" element={<Nodes />} />
+          <Route path="/nodes/:id" element={<Nodes />} />
+          <Route path="/overview" element={<Overview />} />
           <Route path="/logs" element={<LogViewer />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

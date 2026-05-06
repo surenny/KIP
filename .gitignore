@@ -22,6 +22,7 @@ blueprint/src/*.bbl
 blueprint/src/*.pdf
 blueprint/src/content.md
 blueprint/src/content.tex.bak
+blueprint/status.yaml.bak
 blueprint/src/src/
 blueprint/src/web/
 blueprint/src/core.*
@@ -38,3 +39,4 @@ ui/server/node_modules/
 ui/server/dist/
 ui/client/node_modules/
 ui/client/dist/
+/.kip/
