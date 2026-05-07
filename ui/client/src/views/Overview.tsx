@@ -135,16 +135,16 @@ export default function Overview() {
                   <tr key={n.id}
                       style={{ cursor: 'pointer' }}
                       onClick={() => navigate(`/nodes/${encodeURIComponent(n.id)}`)}>
-                    <td>{n.id}</td>
-                    <td>{n.kind || '—'}</td>
-                    <td>{n.chapter || '—'}</td>
-                    <td>
+                    <td data-label="id">{n.id}</td>
+                    <td data-label="kind">{n.kind || '—'}</td>
+                    <td data-label="chapter">{n.chapter || '—'}</td>
+                    <td data-label="phase">
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                         <span style={{ width: 8, height: 8, borderRadius: '50%', background: PHASE_COLORS[n.phase] }} />
                         {PHASE_LABELS[n.phase]}
                       </span>
                     </td>
-                    <td>{d == null ? '∞' : `${Math.floor(d)}d`}</td>
+                    <td data-label="idle">{d == null ? '∞' : `${Math.floor(d)}d`}</td>
                   </tr>
                 );
               })}

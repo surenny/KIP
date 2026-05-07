@@ -41,6 +41,10 @@ export default function Nodes() {
   const [activeChapters, setActiveChapters] = useState<Set<string>>(() => new Set());
   const [chaptersInit, setChaptersInit] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState<number>(readSavedDrawerWidth);
+  // Mobile-only: filter sidebar collapses into a slide-in drawer behind a
+  // toggle button. Desktop CSS hides the toggle and keeps the sidebar
+  // statically docked, so this state has no visual effect there.
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Persist drawer width across page loads.
   useEffect(() => {
@@ -91,6 +95,13 @@ export default function Nodes() {
     const next = routeId || '';
     if (next !== selectedId) setSelectedId(next);
   }, [routeId, selectedId]);
+
+  // Close mobile filter drawer whenever a node opens — the detail drawer
+  // takes the full screen on mobile and would otherwise overlap the open
+  // filter panel.
+  useEffect(() => {
+    if (selectedId) setMobileSidebarOpen(false);
+  }, [selectedId]);
 
   // Chapter chips render in content.tex order (server returns them already
   // sorted). Don't re-sort here.
@@ -263,7 +274,23 @@ export default function Nodes() {
 
   return (
     <div className={`${styles.root} ${selectedId ? styles.drawerOpen : ''}`}>
-      <aside className={styles.sidebar}>
+      <button
+        type="button"
+        className={styles.mobileFilterToggle}
+        onClick={() => setMobileSidebarOpen(v => !v)}
+        aria-expanded={mobileSidebarOpen}
+        aria-label="Toggle filters"
+      >
+        ☰ Filters
+      </button>
+      {mobileSidebarOpen && (
+        <div
+          className={styles.mobileBackdrop}
+          onClick={() => setMobileSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside className={`${styles.sidebar} ${mobileSidebarOpen ? styles.mobileSidebarOpen : ''}`}>
         <div className={styles.sidebarTitle}>Search</div>
         <input
           className={styles.search}

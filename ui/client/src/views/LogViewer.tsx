@@ -79,6 +79,9 @@ function RunSummaryBar({ entries }: { entries: LogEntry[] }) {
 export default function LogViewer() {
   const [selectedFile, setSelectedFile] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<FilterEvent[]>(DEFAULT_FILTERS);
+  // Mobile-only: log-list sidebar collapses into a slide-in drawer behind a
+  // toggle button. Desktop CSS hides the toggle and keeps the sidebar fixed.
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const highlightRef = useRef<HTMLDivElement>(null);
 
   const { data: logsData } = useLogs();
@@ -152,14 +155,27 @@ export default function LogViewer() {
   const showSessionSummary = !!sessionEnd && selectedFilterSet.has('session_end');
   const selectedLabel = selectedFile.replace(/\.jsonl$/, '').replace(/\//g, ' / ');
 
+  // Wrap setSelectedFile so picking a log on mobile auto-closes the drawer.
+  const handleSelectFile = (path: string) => {
+    setSelectedFile(path);
+    setMobileSidebarOpen(false);
+  };
+
   return (
     <div className={styles.root}>
-      <div className={styles.sidebar}>
+      {mobileSidebarOpen && (
+        <div
+          className={styles.mobileBackdrop}
+          onClick={() => setMobileSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <div className={`${styles.sidebar} ${mobileSidebarOpen ? styles.mobileSidebarOpen : ''}`}>
         {Array.from(agentGroups.entries()).map(([agentName, groups]) => (
           <div key={agentName} className={styles.agentSection}>
             <div className={styles.agentHeader}>{agentName}</div>
             {groups.map(g => (
-              <RunGroup key={g.id} group={g} selectedFile={selectedFile} onSelect={setSelectedFile} />
+              <RunGroup key={g.id} group={g} selectedFile={selectedFile} onSelect={handleSelectFile} />
             ))}
           </div>
         ))}
@@ -171,6 +187,15 @@ export default function LogViewer() {
 
       <div className={styles.main}>
         <div className={styles.toolbar}>
+          <button
+            type="button"
+            className={styles.mobileSidebarToggle}
+            onClick={() => setMobileSidebarOpen(v => !v)}
+            aria-expanded={mobileSidebarOpen}
+            aria-label="Toggle log list"
+          >
+            ☰
+          </button>
           <span className={styles.selectedLabel}>{selectedLabel || 'Select a log'}</span>
           <div className={styles.filterBar} aria-label="Event type filters">
             <span className={styles.filterLabel}>Show</span>
