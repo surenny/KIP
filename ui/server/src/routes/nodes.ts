@@ -196,7 +196,7 @@ function getChapterOrder(projectPath: string): string[] {
 }
 
 function openDb(projectPath: string): Database.Database | null {
-  const candidate = path.join(projectPath, '.kip', 'state.db');
+  const candidate = path.join(projectPath, '.dashboard', 'state.db');
   if (!fs.existsSync(candidate)) return null;
   const stat = fs.statSync(candidate);
   if (dbInstance && dbPath === candidate && dbMtime === stat.mtimeMs) {
@@ -214,7 +214,7 @@ function openDb(projectPath: string): Database.Database | null {
 // Separate write handle, used only by review actions. Each call opens / closes
 // to avoid juggling cache invalidation alongside the readonly handle above.
 function openDbForWrite(projectPath: string): Database.Database | null {
-  const candidate = path.join(projectPath, '.kip', 'state.db');
+  const candidate = path.join(projectPath, '.dashboard', 'state.db');
   if (!fs.existsSync(candidate)) return null;
   return new Database(candidate, { readonly: false, fileMustExist: true });
 }
@@ -334,7 +334,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     if (!db) {
       return {
         ok: false,
-        error: 'No .kip/state.db found. Run: python tools/kip-state/index.py',
+        error: 'No .dashboard/state.db found. Run: python tools/kip-state/index.py',
       };
     }
     const meta = db.prepare("SELECT key, value FROM meta").all() as { key: string; value: string }[];
@@ -557,7 +557,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   //   approve_nl         drafted          → nl_reviewed
   //   confirm_alignment  nl_reviewed+bound → aligned
   // Source of truth is blueprint/status.yaml (what tools/kip-state/index.py
-  // reads on rebuild). We mirror the change into .kip/state.db so the dashboard
+  // reads on rebuild). We mirror the change into .dashboard/state.db so the dashboard
   // reflects it immediately without re-running the indexer.
   fastify.post<{
     Params: { id: string };
