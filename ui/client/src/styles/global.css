@@ -72,3 +72,20 @@ select {
   font-size: 12px;
   font-family: var(--font-sans);
 }
+
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  .header {
+    gap: 8px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+  }
+  .header h1 { font-size: 13px; }
+  .header-nav { gap: 0; margin-left: auto; }
+  .nav-link { padding: 6px 8px; }
+  .main-content { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  .project-badge { display: none; }
+}

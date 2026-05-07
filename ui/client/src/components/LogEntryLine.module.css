@@ -7,3 +7,9 @@
 .expandable { cursor: pointer; }
 .expandable:hover { color: var(--text-primary); }
 .expandHint { color: var(--text-muted); font-size: 10px; }
+
+@media (max-width: 768px) {
+  .line { gap: 6px; font-size: 12px; }
+  .event { min-width: 60px; font-size: 11px; }
+  .ts { font-size: 11px; }
+}
