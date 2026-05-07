@@ -241,12 +241,17 @@
   .chip { padding: 6px 12px; font-size: 12px; gap: 6px; }
   .search { padding: 8px 10px; font-size: 14px; }
 
-  /* Detail drawer becomes a fullscreen sheet. The inline `width: <px>` from
-     React is overridden via !important since @media + specificity alone
-     can't beat an inline style. */
+  /* Detail drawer becomes a fixed fullscreen sheet — position:fixed is
+     relative to the visual viewport so it renders at 1x regardless of any
+     pinch-zoom the user applied to the graph canvas. */
   .drawer {
-    width: 100% !important;
+    position: fixed;
+    top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    z-index: 30;
   }
   .drawerResize { display: none; }
 
