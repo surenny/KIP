@@ -26,6 +26,7 @@ export default function Nodes() {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panZoomRef = useRef<SvgPanZoom.Instance | null>(null);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
   // navigate's reference may not be perfectly stable across renders (or
   // an upstream provider re-render); keep it behind a ref so the SVG mount
   // effect doesn't fire just because navigate's identity changed —
@@ -101,6 +102,48 @@ export default function Nodes() {
   // filter panel.
   useEffect(() => {
     if (selectedId) setMobileSidebarOpen(false);
+  }, [selectedId]);
+
+  // On mobile, the user may pinch-zoom the page to read node labels. When
+  // the drawer opens, counter-scale it so it renders at 1x regardless of
+  // the current browser zoom level.
+  useEffect(() => {
+    const el = drawerRef.current;
+    const vv = window.visualViewport;
+    if (!el || !vv || !selectedId) return;
+
+    const sync = () => {
+      const scale = vv.scale;
+      if (scale > 1.05) {
+        el.style.transform = `scale(${1 / scale})`;
+        el.style.transformOrigin = 'top left';
+        el.style.width = `${vv.width * scale}px`;
+        el.style.height = `${vv.height * scale}px`;
+        el.style.left = `${vv.offsetLeft}px`;
+        el.style.top = `${vv.offsetTop}px`;
+      } else {
+        el.style.transform = '';
+        el.style.transformOrigin = '';
+        el.style.width = '';
+        el.style.height = '';
+        el.style.left = '';
+        el.style.top = '';
+      }
+    };
+
+    sync();
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    return () => {
+      vv.removeEventListener('resize', sync);
+      vv.removeEventListener('scroll', sync);
+      el.style.transform = '';
+      el.style.transformOrigin = '';
+      el.style.width = '';
+      el.style.height = '';
+      el.style.left = '';
+      el.style.top = '';
+    };
   }, [selectedId]);
 
   // Chapter chips render in content.tex order (server returns them already
@@ -369,7 +412,7 @@ export default function Nodes() {
       </div>
 
       {selectedId && (
-        <div className={styles.drawer} style={{ width: drawerWidth }}>
+        <div className={styles.drawer} ref={drawerRef} style={{ width: drawerWidth }}>
           <div
             className={styles.drawerResize}
             onMouseDown={startDrawerResize}
