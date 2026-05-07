@@ -119,3 +119,64 @@
 .summaryText pre { background: var(--bg-tertiary); padding: 8px; border-radius: 4px; overflow-x: auto; font-size: 12px; margin: 4px 0; }
 
 .emptyContent { padding: 32px; text-align: center; color: var(--text-muted); font-size: 12px; }
+
+/* Mobile-only sidebar toggle. Hidden on desktop. */
+.mobileSidebarToggle { display: none; }
+.mobileBackdrop { display: none; border: none; padding: 0; }
+
+@media (max-width: 768px) {
+  .root {
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 80vw;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 20;
+    background: var(--bg-primary);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
+    min-width: 0;
+  }
+  .sidebar.mobileSidebarOpen { transform: translateX(0); }
+
+  .mobileBackdrop {
+    display: block;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.32);
+    z-index: 19;
+  }
+
+  .mobileSidebarToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    font-size: 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .toolbar { padding: 6px 8px; gap: 6px; }
+  .selectedLabel {
+    max-width: 50vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .filterChip { padding: 4px 10px; font-size: 11px; }
+  .count { font-size: 10px; }
+}

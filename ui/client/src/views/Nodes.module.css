@@ -182,3 +182,83 @@
 .drawerResize:active {
   background: rgba(3, 102, 214, 0.25);
 }
+
+/* Mobile-only filter toggle. Hidden on desktop where the sidebar is
+   permanently docked. */
+.mobileFilterToggle { display: none; }
+.mobileBackdrop { display: none; border: none; padding: 0; }
+
+@media (max-width: 768px) {
+  .root { grid-template-columns: 1fr; }
+
+  /* Sidebar transforms into an off-canvas drawer. Anchored below the app
+     header via --header-height. */
+  .sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 80vw;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 20;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
+  }
+  .sidebar.mobileSidebarOpen { transform: translateX(0); }
+
+  .mobileBackdrop {
+    display: block;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.32);
+    z-index: 19;
+  }
+
+  .mobileFilterToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 12;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Larger touch targets for filter chips. */
+  .chip { padding: 6px 12px; font-size: 12px; gap: 6px; }
+  .search { padding: 8px 10px; font-size: 14px; }
+
+  /* Detail drawer becomes a fixed fullscreen sheet — position:fixed is
+     relative to the visual viewport so it renders at 1x regardless of any
+     pinch-zoom the user applied to the graph canvas. */
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;
+    z-index: 30;
+  }
+  .drawerResize { display: none; }
+
+  .canvasOverlay {
+    font-size: 10px;
+    padding: 4px 8px;
+    bottom: 8px;
+    left: 8px;
+  }
+}

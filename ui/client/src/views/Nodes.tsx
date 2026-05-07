@@ -26,6 +26,7 @@ export default function Nodes() {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const panZoomRef = useRef<SvgPanZoom.Instance | null>(null);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
   // navigate's reference may not be perfectly stable across renders (or
   // an upstream provider re-render); keep it behind a ref so the SVG mount
   // effect doesn't fire just because navigate's identity changed —
@@ -41,6 +42,10 @@ export default function Nodes() {
   const [activeChapters, setActiveChapters] = useState<Set<string>>(() => new Set());
   const [chaptersInit, setChaptersInit] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState<number>(readSavedDrawerWidth);
+  // Mobile-only: filter sidebar collapses into a slide-in drawer behind a
+  // toggle button. Desktop CSS hides the toggle and keeps the sidebar
+  // statically docked, so this state has no visual effect there.
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Persist drawer width across page loads.
   useEffect(() => {
@@ -91,6 +96,55 @@ export default function Nodes() {
     const next = routeId || '';
     if (next !== selectedId) setSelectedId(next);
   }, [routeId, selectedId]);
+
+  // Close mobile filter drawer whenever a node opens — the detail drawer
+  // takes the full screen on mobile and would otherwise overlap the open
+  // filter panel.
+  useEffect(() => {
+    if (selectedId) setMobileSidebarOpen(false);
+  }, [selectedId]);
+
+  // On mobile, the user may pinch-zoom the page to read node labels. When
+  // the drawer opens, counter-scale it so it renders at 1x regardless of
+  // the current browser zoom level.
+  useEffect(() => {
+    const el = drawerRef.current;
+    const vv = window.visualViewport;
+    if (!el || !vv || !selectedId) return;
+
+    const sync = () => {
+      const scale = vv.scale;
+      if (scale > 1.05) {
+        el.style.transform = `scale(${1 / scale})`;
+        el.style.transformOrigin = 'top left';
+        el.style.width = `${vv.width * scale}px`;
+        el.style.height = `${vv.height * scale}px`;
+        el.style.left = `${vv.offsetLeft}px`;
+        el.style.top = `${vv.offsetTop}px`;
+      } else {
+        el.style.transform = '';
+        el.style.transformOrigin = '';
+        el.style.width = '';
+        el.style.height = '';
+        el.style.left = '';
+        el.style.top = '';
+      }
+    };
+
+    sync();
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    return () => {
+      vv.removeEventListener('resize', sync);
+      vv.removeEventListener('scroll', sync);
+      el.style.transform = '';
+      el.style.transformOrigin = '';
+      el.style.width = '';
+      el.style.height = '';
+      el.style.left = '';
+      el.style.top = '';
+    };
+  }, [selectedId]);
 
   // Chapter chips render in content.tex order (server returns them already
   // sorted). Don't re-sort here.
@@ -263,7 +317,26 @@ export default function Nodes() {
 
   return (
     <div className={`${styles.root} ${selectedId ? styles.drawerOpen : ''}`}>
-      <aside className={styles.sidebar}>
+      {!selectedId && (
+        <button
+          type="button"
+          className={styles.mobileFilterToggle}
+          onClick={() => setMobileSidebarOpen(v => !v)}
+          aria-expanded={mobileSidebarOpen}
+          aria-label="Toggle filters"
+        >
+          ☰ Filters
+        </button>
+      )}
+      {mobileSidebarOpen && (
+        <button
+          type="button"
+          className={styles.mobileBackdrop}
+          onClick={() => setMobileSidebarOpen(false)}
+          aria-label="Close filters"
+        />
+      )}
+      <aside className={`${styles.sidebar} ${mobileSidebarOpen ? styles.mobileSidebarOpen : ''}`}>
         <div className={styles.sidebarTitle}>Search</div>
         <input
           className={styles.search}
@@ -339,7 +412,7 @@ export default function Nodes() {
       </div>
 
       {selectedId && (
-        <div className={styles.drawer} style={{ width: drawerWidth }}>
+        <div className={styles.drawer} ref={drawerRef} style={{ width: drawerWidth }}>
           <div
             className={styles.drawerResize}
             onMouseDown={startDrawerResize}
