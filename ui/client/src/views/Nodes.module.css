@@ -186,16 +186,16 @@
 /* Mobile-only filter toggle. Hidden on desktop where the sidebar is
    permanently docked. */
 .mobileFilterToggle { display: none; }
-.mobileBackdrop { display: none; }
+.mobileBackdrop { display: none; border: none; padding: 0; }
 
 @media (max-width: 768px) {
   .root { grid-template-columns: 1fr; }
 
   /* Sidebar transforms into an off-canvas drawer. Anchored below the app
-     header (~40px tall) — adjust if header height changes. */
+     header via --header-height. */
   .sidebar {
     position: fixed;
-    top: 40px;
+    top: var(--header-height);
     left: 0;
     bottom: 0;
     width: 280px;
@@ -210,7 +210,7 @@
   .mobileBackdrop {
     display: block;
     position: fixed;
-    top: 40px;
+    top: var(--header-height);
     left: 0;
     right: 0;
     bottom: 0;

@@ -51,7 +51,14 @@
      becomes a bordered card; each <td> becomes a label/value row whose
      label comes from data-label set in Overview.tsx. */
   .table { display: block; font-size: 13px; }
-  .table thead { display: none; }
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   .table tbody { display: block; }
   .table tr {
     display: block;

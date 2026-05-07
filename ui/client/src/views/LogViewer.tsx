@@ -164,10 +164,11 @@ export default function LogViewer() {
   return (
     <div className={styles.root}>
       {mobileSidebarOpen && (
-        <div
+        <button
+          type="button"
           className={styles.mobileBackdrop}
           onClick={() => setMobileSidebarOpen(false)}
-          aria-hidden="true"
+          aria-label="Close log list"
         />
       )}
       <div className={`${styles.sidebar} ${mobileSidebarOpen ? styles.mobileSidebarOpen : ''}`}>

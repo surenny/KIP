@@ -122,17 +122,17 @@
 
 /* Mobile-only sidebar toggle. Hidden on desktop. */
 .mobileSidebarToggle { display: none; }
-.mobileBackdrop { display: none; }
+.mobileBackdrop { display: none; border: none; padding: 0; }
 
 @media (max-width: 768px) {
   .root {
-    height: calc(100dvh - 80px);  /* dvh accounts for iOS Safari URL bar */
+    height: 100%;
     flex-direction: column;
   }
 
   .sidebar {
     position: fixed;
-    top: 40px;
+    top: var(--header-height);
     left: 0;
     bottom: 0;
     width: 280px;
@@ -149,7 +149,7 @@
   .mobileBackdrop {
     display: block;
     position: fixed;
-    top: 40px;
+    top: var(--header-height);
     left: 0;
     right: 0;
     bottom: 0;

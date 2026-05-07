@@ -274,20 +274,23 @@ export default function Nodes() {
 
   return (
     <div className={`${styles.root} ${selectedId ? styles.drawerOpen : ''}`}>
-      <button
-        type="button"
-        className={styles.mobileFilterToggle}
-        onClick={() => setMobileSidebarOpen(v => !v)}
-        aria-expanded={mobileSidebarOpen}
-        aria-label="Toggle filters"
-      >
-        ☰ Filters
-      </button>
+      {!selectedId && (
+        <button
+          type="button"
+          className={styles.mobileFilterToggle}
+          onClick={() => setMobileSidebarOpen(v => !v)}
+          aria-expanded={mobileSidebarOpen}
+          aria-label="Toggle filters"
+        >
+          ☰ Filters
+        </button>
+      )}
       {mobileSidebarOpen && (
-        <div
+        <button
+          type="button"
           className={styles.mobileBackdrop}
           onClick={() => setMobileSidebarOpen(false)}
-          aria-hidden="true"
+          aria-label="Close filters"
         />
       )}
       <aside className={`${styles.sidebar} ${mobileSidebarOpen ? styles.mobileSidebarOpen : ''}`}>
