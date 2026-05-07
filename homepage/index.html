@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>On the Last Kervaire Invariant Problem</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1 { color: #159957; margin-bottom: 0.3rem; }
+    .subtitle { color: #606c71; font-size: 1.1rem; margin-bottom: 1.5rem; }
+    .description { margin-bottom: 1.5rem; font-size: 1.05rem; }
+
+    /* progress */
+    .progress-card {
+      background: #f6f8fa;
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e1e4e8;
+    }
+    .progress-label {
+      font-size: 0.85rem;
+      color: #606c71;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .progress-bar-wrap {
+      background: #e1e4e8;
+      border-radius: 4px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .progress-segments { display: flex; height: 100%; }
+    .seg { height: 100%; transition: width 0.4s; }
+    .seg-proved    { background: #28a745; }
+    .seg-aligned   { background: #e36209; }
+    .seg-bound     { background: #0366d6; }
+    .seg-nl        { background: #6f42c1; }
+    .seg-drafted   { background: #c9ccd1; }
+    .progress-stats {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      font-size: 0.85rem; color: #444;
+    }
+    .stat { display: flex; align-items: center; gap: 0.3rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* links */
+    .links { list-style: none; padding: 0; }
+    .links li {
+      margin: 0.8rem 0;
+      padding: 0.8rem 1.2rem;
+      background: #f6f8fa;
+      border-radius: 6px;
+      border-left: 4px solid #159957;
+    }
+    .links li.dashboard { border-left-color: #0366d6; }
+    .links a {
+      color: #159957;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .links li.dashboard a { color: #0366d6; }
+    .links a:hover { text-decoration: underline; }
+    .links .desc { color: #606c71; font-size: 0.9rem; margin-top: 0.2rem; }
+  </style>
+</head>
+<body>
+  <h1>On the Last Kervaire Invariant Problem</h1>
+  <p class="subtitle">by Weinan Lin, Guozhen Wang, and Zhouli Xu</p>
+  <p class="description">
+    A Lean 4 formalization of the paper <em>On the Last Kervaire Invariant Problem</em>,
+    which proves that framed manifolds of Kervaire invariant one exist in dimension 126.
+  </p>
+
+  <div class="progress-card">
+    <div class="progress-label">Formalization progress</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-segments" id="bar">
+        <div class="seg seg-proved"  id="seg-proved"  style="width:0%"></div>
+        <div class="seg seg-aligned" id="seg-aligned" style="width:0%"></div>
+        <div class="seg seg-bound"   id="seg-bound"   style="width:0%"></div>
+        <div class="seg seg-nl"      id="seg-nl"      style="width:0%"></div>
+        <div class="seg seg-drafted" id="seg-drafted" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="progress-stats" id="stats">
+      <span style="color:#aaa;font-size:0.85rem">Loading…</span>
+    </div>
+  </div>
+
+  <ul class="links">
+    <li class="dashboard">
+      <a href="/dashboard/">Dashboard</a>
+      <div class="desc">Formalization progress · dependency DAG · agent logs · review actions</div>
+    </li>
+    <li>
+      <a href="/index.html">Blueprint</a>
+      <div class="desc">Interactive blueprint with dependency graph and review system</div>
+    </li>
+    <li>
+      <a href="https://surenny.github.io/KIP/blueprint.pdf" target="_blank">Blueprint as PDF</a>
+      <div class="desc">Downloadable PDF version of the blueprint</div>
+    </li>
+    <li>
+      <a href="https://surenny.github.io/KIP/docs/" target="_blank">Lean API Docs</a>
+      <div class="desc">Auto-generated documentation for the Lean formalization</div>
+    </li>
+    <li>
+      <a href="https://github.com/surenny/KIP" target="_blank">Source Code</a>
+      <div class="desc">GitHub repository</div>
+    </li>
+  </ul>
+
+  <script>
+    const PHASES = [
+      { key: 'proved',      label: 'Proved',      cls: 'seg-proved',  dot: '#28a745' },
+      { key: 'aligned',     label: 'Aligned',     cls: 'seg-aligned', dot: '#e36209' },
+      { key: 'bound',       label: 'Bound',       cls: 'seg-bound',   dot: '#0366d6' },
+      { key: 'nl_reviewed', label: 'NL reviewed', cls: 'seg-nl',      dot: '#6f42c1' },
+      { key: 'drafted',     label: 'Drafted',     cls: 'seg-drafted', dot: '#c9ccd1' },
+    ];
+
+    fetch('/dashboard/api/state/health')
+      .then(r => r.json())
+      .then(data => {
+        const phases = data.phases || {};
+        const total  = data.counts?.nodes || 1;
+
+        PHASES.forEach(p => {
+          const n = phases[p.key] || 0;
+          const seg = document.getElementById('seg-' + (p.key === 'nl_reviewed' ? 'nl' : p.key));
+          if (seg) seg.style.width = (n / total * 100).toFixed(1) + '%';
+        });
+
+        const statsEl = document.getElementById('stats');
+        statsEl.innerHTML = PHASES.map(p => {
+          const n = phases[p.key] || 0;
+          return `<span class="stat"><span class="dot" style="background:${p.dot}"></span>${p.label}: <strong>${n}</strong></span>`;
+        }).join('') + `<span class="stat" style="margin-left:auto;color:#888">/ ${total} nodes</span>`;
+      })
+      .catch(() => {
+        document.getElementById('stats').innerHTML =
+          '<span style="color:#aaa;font-size:0.85rem">Progress unavailable</span>';
+      });
+  </script>
+</body>
+</html>
