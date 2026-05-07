@@ -1,0 +1,15 @@
+.git
+.github
+.lake
+.claude
+node_modules
+env
+__pycache__
+*.pyc
+*.egg-info
+ui
+agents
+docs
+draft-hint
+README.md
+LICENSE
