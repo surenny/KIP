@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""Build .kip/state.db from project sources.
+r"""Build .dashboard/state.db from project sources.
 
 Inputs:
   blueprint/status.yaml          - node lifecycle flags, comments
@@ -7,7 +7,7 @@ Inputs:
   KIP/**/*.lean                  - declarations + sorry counts (per fully-qualified name)
   agents/*/logs/run-*/           - agent runs (meta.json + .jsonl with session_end)
 
-Output: .kip/state.db (SQLite, gitignored, safe to drop)
+Output: .dashboard/state.db (SQLite, gitignored, safe to drop)
 
 Usage:
   python tools/kip-state/index.py [--project PATH] [--db PATH]
@@ -300,12 +300,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--project", type=Path, default=Path.cwd(),
                     help="KIP project root (default: cwd)")
     ap.add_argument("--db", type=Path, default=None,
-                    help="Output SQLite path (default: <project>/.kip/state.db)")
+                    help="Output SQLite path (default: <project>/.dashboard/state.db)")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
 
     project: Path = args.project.resolve()
-    db_path: Path = args.db or (project / ".kip" / "state.db")
+    db_path: Path = args.db or (project / ".dashboard" / "state.db")
     db_path.parent.mkdir(parents=True, exist_ok=True)
 
     log = (lambda *a, **k: None) if args.quiet else (lambda *a, **k: print(*a, **k, file=sys.stderr))

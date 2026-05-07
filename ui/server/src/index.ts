@@ -11,6 +11,7 @@ import { register as registerAgents } from './routes/agents.js';
 import { register as registerLogs } from './routes/logs.js';
 import { register as registerSummary } from './routes/summary.js';
 import { register as registerNodes } from './routes/nodes.js';
+import { register as registerIngest } from './routes/ingest.js';
 
 export interface ProjectPaths {
   projectPath: string;
@@ -64,6 +65,7 @@ export async function createServer(options: { projectPath: string; port: number 
   registerLogs(fastify, paths);
   registerSummary(fastify, paths);
   registerNodes(fastify, paths);
+  registerIngest(fastify, paths);
 
   await fastify.listen({ port, host: '0.0.0.0' });
   return fastify;

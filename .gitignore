@@ -39,4 +39,7 @@ ui/server/node_modules/
 ui/server/dist/
 ui/client/node_modules/
 ui/client/dist/
+/.dashboard/
+/.orchestrator/
+# legacy, see AUT-52; safe to `rm -rf .kip/` locally
 /.kip/

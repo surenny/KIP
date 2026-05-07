@@ -32,7 +32,7 @@ export default function Overview() {
       <div className={styles.root}>
         <h2 className={styles.title}>State index unavailable</h2>
         <div className={styles.empty}>
-          {health?.error || 'Run python tools/kip-state/index.py to build .kip/state.db.'}
+          {health?.error || 'Run python tools/kip-state/index.py to build .dashboard/state.db.'}
         </div>
       </div>
     );
