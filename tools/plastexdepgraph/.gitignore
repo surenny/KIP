@@ -1,6 +1,0 @@
-.mypy_cache/
-*.egg-info
-__pycache__
-.python-version
-dist/
-build

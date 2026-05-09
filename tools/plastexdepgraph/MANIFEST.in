@@ -1,4 +1,0 @@
-
-include plastexdepgraph/static/*
-include plastexdepgraph/templates/*
-include plastexdepgraph/Packages/renderer_templates/*
