@@ -31,16 +31,12 @@ blueprint/missfont.log
 blueprint/texput.log
 blueprint/template.*
 
-# Agent logs (runtime output)
-agents/*/logs/
-
-# UI build artifacts
-ui/server/node_modules/
-ui/server/dist/
-ui/client/node_modules/
-ui/client/dist/
+# Dashboard / orchestrator runtime state (written by blueprint-archon tools)
 /.dashboard/
 /.orchestrator/
+
+# Local-only stash exports from the blueprint-archon migration
+.stash-from-old/
+
 # legacy, see AUT-52; safe to `rm -rf .kip/` locally
 /.kip/
-.stash-from-old/
