@@ -31,9 +31,9 @@ blueprint/missfont.log
 blueprint/texput.log
 blueprint/template.*
 
-# Dashboard / orchestrator runtime state (written by blueprint-archon tools)
-/.dashboard/
-/.orchestrator/
+# Per-workspace runtime state written by blueprint-archon tools
+# (cycles/, prompts/, proof-journal/, task_results/, state.db, agent CLAUDE.md)
+/.blueprint-archon/
 
 # Local-only stash exports from the blueprint-archon migration
 .stash-from-old/
