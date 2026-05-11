@@ -31,11 +31,11 @@ blueprint/missfont.log
 blueprint/texput.log
 blueprint/template.*
 
-# Per-workspace runtime state written by blueprint-archon tools
+# Per-workspace runtime state written by barchon tools
 # (cycles/, prompts/, proof-journal/, task_results/, state.db, agent CLAUDE.md)
-/.blueprint-archon/
+/.barchon/
 
-# Local-only stash exports from the blueprint-archon migration
+# Local-only stash exports from the barchon migration
 .stash-from-old/
 
 # legacy, see AUT-52; safe to `rm -rf .kip/` locally
