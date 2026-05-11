@@ -83,7 +83,7 @@ select {
   }
   .header h1 { font-size: 13px; }
   .header-nav { gap: 0; margin-left: auto; }
-  .nav-link { padding: 6px 8px; }
+  .nav-link { padding: 10px 10px; }
   .main-content { padding: 12px; }
 }
 

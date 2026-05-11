@@ -57,7 +57,7 @@ export default function Overview() {
 
       <div className={styles.section}>
         <div className={styles.sectionLabel}>Phase distribution ({total} nodes)</div>
-        <div style={{ display: 'flex', height: 24, borderRadius: 4, overflow: 'hidden', border: '1px solid var(--border)' }}>
+        <div className={styles.phaseBar} style={{ display: 'flex', border: '1px solid var(--border)' }}>
           {PHASE_ORDER.map(p => {
             const c = phaseCounts[p] || 0;
             const pct = (c / total) * 100;
@@ -74,7 +74,7 @@ export default function Overview() {
             );
           })}
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 8, fontSize: 11, color: 'var(--text-secondary)' }}>
+        <div className={styles.phaseLegend}>
           {PHASE_ORDER.map(p => (
             <span key={p} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: PHASE_COLORS[p] }} />

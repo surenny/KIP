@@ -81,3 +81,12 @@
 }
 .inlineToggleBtn:hover { text-decoration: underline; }
 .expandHint { color: var(--text-muted); font-size: 10px; }
+
+@media (max-width: 768px) {
+  .codeBlock { font-size: 13px; max-height: 50vh; }
+  .bashBlock { font-size: 13px; }
+  .resultBlock { max-height: 40vh; }
+  .jsonTree { font-size: 12px; max-height: 40vh; }
+  .thinkingBlock { max-height: 50vh; }
+  .inlineToggleBtn { font-size: 12px; padding: 4px 6px; min-height: 28px; }
+}

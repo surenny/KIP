@@ -76,7 +76,7 @@
   min-height: 0;
   min-width: 0;
 }
-.canvasInner { position: absolute; inset: 0; }
+.canvasInner { position: absolute; inset: 0; touch-action: none; }
 
 /* Server-rendered Graphviz SVG. dot uses different shape elements per node
    kind (ellipse / polygon / path / rect), so the highlight selectors cast a
@@ -183,9 +183,34 @@
   background: rgba(3, 102, 214, 0.25);
 }
 
+.zoomControls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.zoomControls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.92);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+.zoomControls button:active { background: var(--bg-tertiary); }
+
 /* Mobile-only filter toggle. Hidden on desktop where the sidebar is
    permanently docked. */
 .mobileFilterToggle { display: none; }
+.mobileFilterToggle:active { background: var(--bg-tertiary); box-shadow: none; }
 .mobileBackdrop { display: none; border: none; padding: 0; }
 
 @media (max-width: 768px) {
@@ -252,6 +277,8 @@
     bottom: 0;
     width: 100% !important;
     z-index: 30;
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
   .drawerResize { display: none; }
 

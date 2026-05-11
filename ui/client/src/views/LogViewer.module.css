@@ -177,6 +177,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .filterChip { padding: 4px 10px; font-size: 11px; }
+  .filterChip { padding: 6px 12px; font-size: 12px; min-height: 36px; display: inline-flex; align-items: center; }
+  .resetFiltersBtn { padding: 6px 4px; min-height: 36px; display: inline-flex; align-items: center; }
   .count { font-size: 10px; }
+
+  .groupHeader { padding: 10px 12px; font-size: 13px; }
+  .fileItem { padding: 8px 10px 8px 20px; font-size: 12px; min-height: 40px; }
 }

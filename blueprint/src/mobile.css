@@ -1,0 +1,233 @@
+/* Blueprint Mobile Responsive — all rules scoped to @media (max-width: 768px) */
+
+/* ── TOC backdrop (injected by mobile.js) ── */
+.mobile-toc-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+}
+.mobile-toc-backdrop.visible {
+  display: block;
+}
+
+@media (max-width: 768px) {
+
+  /* ── 1. TOC as fixed slide-in overlay ── */
+  nav.toc {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(280px, 80vw);
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    background: #fff;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+    display: flex !important;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-right: 0;
+    padding: 0.5rem;
+    padding-top: 3.5rem;
+    border-right: 1px solid #e0e0e0;
+  }
+  nav.toc.mobile-open {
+    transform: translateX(0);
+  }
+  body.mobile-toc-active {
+    overflow: hidden;
+  }
+
+  /* ── 2. MathJax overflow ── */
+  mjx-container[jax="CHTML"] {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  mjx-container[jax="CHTML"][display="true"] {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 4px 0;
+  }
+  div.displaymath {
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── 3. Content area ── */
+  div.content {
+    padding: 0.75rem;
+    margin-bottom: 3rem;
+  }
+  div.content-wrapper {
+    max-width: 100%;
+  }
+  div.content > p {
+    margin: 1rem 0;
+  }
+
+  /* Reduce theorem/proof indentation */
+  div[class$=_thmcontent] {
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+  }
+  div.proof_content {
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+  }
+
+  /* ── 4. Hover-only elements → always visible on touch ── */
+  div.thm_header_hidden_extras {
+    display: inline-block !important;
+    opacity: 0.6;
+  }
+
+  /* ── 5. Annotation system ── */
+
+  /* Enlarge touch targets (44px Apple HIG minimum) */
+  .annotation-indicator {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  /* Float indicator: keep within viewport */
+  .ann-indicator-float {
+    right: 0;
+    position: static;
+    float: right;
+  }
+
+  /* Prevent iOS Safari auto-zoom on focus (font-size >= 16px) */
+  .ann-author-input,
+  .ann-text-input,
+  .ann-edit-textarea {
+    font-size: 16px !important;
+  }
+
+  /* Stack author label + input vertically */
+  .ann-input-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ann-input-row label {
+    min-width: auto;
+  }
+
+  /* Larger submit button */
+  .ann-submit-btn {
+    width: 100%;
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  /* Larger action buttons */
+  .ann-actions button {
+    min-height: 36px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Toolbar: avoid overlap with fixed bottom nav */
+  #annotation-toolbar {
+    bottom: 3.5rem;
+  }
+  #annotation-toolbar .ann-toolbar-main {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* ── 6. Bottom navigation bar ── */
+  nav.prev_up_next {
+    width: 100%;
+    left: 0;
+    justify-content: center;
+    gap: 1rem;
+  }
+  nav.prev_up_next a {
+    padding: 0.5rem 1.5rem;
+  }
+  /* showmore icons in bottom bar */
+  nav.prev_up_next svg.showmore {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+  }
+
+  /* ── 7. Dependency graph pages ── */
+  div#graph {
+    height: 70vh;
+    touch-action: none;
+    overflow: hidden;
+  }
+
+  /* Node detail modal → full screen */
+  div.dep-modal-container {
+    width: 100vw !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    max-height: 100vh;
+    top: 0 !important;
+  }
+  div.dep-modal-content {
+    max-height: calc(100vh - 2rem);
+    border-radius: 0;
+  }
+  button.dep-closebtn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.5rem;
+  }
+
+  /* Legend: wider on mobile so text is readable */
+  #Legend dl {
+    max-width: 70%;
+    font-size: 100%;
+  }
+
+  /* ── 8. Lean declaration modal ── */
+  div.modal-content {
+    width: 95vw;
+    max-height: 80vh;
+    margin: 10vh auto;
+  }
+  div.modal-content header button.closebtn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.5rem;
+  }
+
+  /* ── 9. Header ── */
+  body > header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  #toc-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  /* ── 10. Local TOC (in-page) ── */
+  nav.local_toc ul {
+    padding-left: 0.5rem;
+  }
+
+  /* ── 11. Tables: horizontal scroll ── */
+  .tabular {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+} /* end @media (max-width: 768px) */

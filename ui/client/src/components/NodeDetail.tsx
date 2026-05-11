@@ -112,7 +112,7 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
         <div className={styles.header}>
           <div className={styles.idRow}>
             <span className={styles.id}>{nodeId}</span>
-            <button onClick={onClose} style={{ marginLeft: 'auto', cursor: 'pointer', border: 'none', background: 'transparent', fontSize: 16, color: 'var(--text-muted)' }}>×</button>
+            <button className={styles.closeBtn} onClick={onClose} aria-label="Close">×</button>
           </div>
         </div>
         <div className={styles.section}>Node not found in index. Try re-running <code>python tools/kip-state/index.py</code>.</div>
@@ -128,9 +128,7 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
       <div className={styles.header}>
         <div className={styles.idRow}>
           <span className={styles.id}>{d.id}</span>
-          <button onClick={onClose}
-                  style={{ marginLeft: 'auto', cursor: 'pointer', border: 'none', background: 'transparent', fontSize: 18, color: 'var(--text-muted)', lineHeight: 1 }}
-                  aria-label="Close">×</button>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">×</button>
         </div>
         <div className={styles.subline}>
           {d.kind && <span className={styles.kindChip}>{d.kind}</span>}{' '}
@@ -209,6 +207,10 @@ export default function NodeDetail({ nodeId, onClose, onSelectNode }: Props) {
                   placeholder="your name"
                   value={reviewer}
                   onChange={e => setReviewer(e.target.value)}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
                 />
               </label>
               <textarea

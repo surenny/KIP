@@ -321,6 +321,16 @@ details[open] > summary.sectionLabel { margin-bottom: 6px; }
 .runMeta { color: var(--text-muted); font-size: 10px; margin-top: 2px; font-variant-numeric: tabular-nums; }
 .runHint { color: var(--text-secondary); font-size: 10px; font-family: var(--font-mono); margin-top: 2px; word-break: break-all; }
 
+.closeBtn {
+  margin-left: auto;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
 @media (max-width: 768px) {
   /* Keep the node id + close button visible while the user scrolls through
      long Lean source / NL bodies on a small screen. */
@@ -364,4 +374,30 @@ details[open] > summary.sectionLabel { margin-bottom: 6px; }
   .rendered { max-height: 50vh; }
   .leanSource { max-height: 50vh; font-size: 12px; }
   .excerpt { max-height: 40vh; }
+
+  .closeBtn {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .refLine { padding: 8px 0; font-size: 13px; }
+  .refLine code { font-size: 12px; }
+
+  summary.sectionLabel { padding: 8px 0; font-size: 11px; }
+
+  .leanRow { flex-direction: column; gap: 2px; }
+  .leanRow .leanVal { word-break: break-all; }
+
+  .commentTopic { font-size: 11px; }
+  .commentMeta { font-size: 12px; }
+  .commentText { font-size: 13px; line-height: 1.5; }
+  .commentItem { padding: 6px 0 6px 10px; }
+
+  .runItem { font-size: 12px; padding: 8px 10px; }
+  .runMeta { font-size: 11px; }
+  .runStatus { font-size: 11px; padding: 2px 7px; }
 }

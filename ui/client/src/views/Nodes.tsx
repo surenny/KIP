@@ -232,8 +232,8 @@ export default function Nodes() {
       mouseWheelZoomEnabled: true,
       preventMouseEventsDefault: false,
       minZoom: 0.2,
-      maxZoom: 8,
-      zoomScaleSensitivity: 0.4,
+      maxZoom: 50,
+      zoomScaleSensitivity: 0.5,
     });
     if (!isFirstMount && preservedZoom != null && preservedPan) {
       try {
@@ -344,6 +344,10 @@ export default function Nodes() {
           placeholder="id or substring…"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
         />
 
         <div className={styles.sidebarTitle}>Phase</div>
@@ -408,6 +412,11 @@ export default function Nodes() {
           {!isFetching && !isError && (
             <>graph rendered server-side via <code>dot</code> · {totalNodes} nodes total</>
           )}
+        </div>
+        <div className={styles.zoomControls}>
+          <button type="button" onClick={() => panZoomRef.current?.zoomIn()} aria-label="Zoom in">+</button>
+          <button type="button" onClick={() => panZoomRef.current?.zoomOut()} aria-label="Zoom out">−</button>
+          <button type="button" onClick={() => { panZoomRef.current?.fit(); panZoomRef.current?.center(); }} aria-label="Fit to view">⤢</button>
         </div>
       </div>
 

@@ -18,6 +18,9 @@
 
 .empty { padding: 32px; text-align: center; color: var(--text-muted); font-size: 13px; }
 
+.phaseBar { height: 24px; border-radius: 4px; overflow: hidden; }
+.phaseLegend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 11px; color: var(--text-muted); }
+
 .statsGrid { display: flex; gap: 16px; flex-wrap: wrap; }
 .stat {
   display: flex; flex-direction: column; align-items: center;
@@ -46,6 +49,9 @@
     padding: 10px 12px;
   }
   .statValue { font-size: 16px; }
+
+  .phaseBar { height: 36px; border-radius: 6px; }
+  .phaseLegend { font-size: 13px; gap: 10px; }
 
   /* Convert the stale table into a card list. Header row hidden; each <tr>
      becomes a bordered card; each <td> becomes a label/value row whose
@@ -85,4 +91,6 @@
     font-family: var(--font-sans);
     margin-right: 12px;
   }
+
+  .table tr:active { background: var(--bg-tertiary); }
 }
