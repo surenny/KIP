@@ -227,6 +227,7 @@ export default function Nodes() {
     panZoomRef.current = svgPanZoom(svgEl, {
       zoomEnabled: true,
       controlIconsEnabled: false,
+      dblClickZoomEnabled: false,
       fit: isFirstMount,
       center: isFirstMount,
       mouseWheelZoomEnabled: true,
