@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type { FastifyInstance } from 'fastify';
-import type { ProjectPaths } from '../index.js';
+import type { ProjectState } from '../index.js';
 import { parseJsonl } from '../utils.js';
 
 interface LogFileEntry { name: string; path: string; size: number; modified: string; agent?: string; runId?: string }
@@ -15,10 +15,9 @@ function resolveLogPath(agentsPath: string, logPath: string): string | null {
   return full;
 }
 
-export function register(fastify: FastifyInstance, paths: ProjectPaths) {
-  const { agentsPath } = paths;
-
+export function register(fastify: FastifyInstance, state: ProjectState) {
   fastify.get('/api/logs', async () => {
+    const { agentsPath } = state.paths;
     if (!fs.existsSync(agentsPath)) return { flat: [], groups: [] };
 
     const groups: LogGroup[] = [];
@@ -67,6 +66,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get('/api/logs/*', async (req, reply) => {
+    const { agentsPath } = state.paths;
     const subpath = (req.params as Record<string, string>)['*'];
     if (!subpath) return reply.status(400).send({ error: 'Missing path' });
     const filePath = resolveLogPath(agentsPath, subpath);
@@ -75,6 +75,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get('/api/log-stream/*', { websocket: true }, (socket, req) => {
+    const { agentsPath } = state.paths;
     const subpath = (req.params as Record<string, string>)['*'] || '';
     const filePath = resolveLogPath(agentsPath, subpath);
     if (!filePath || !fs.existsSync(filePath)) {

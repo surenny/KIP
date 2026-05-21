@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type { FastifyInstance } from 'fastify';
-import type { ProjectPaths } from '../index.js';
+import type { ProjectState } from '../index.js';
 import type { AgentSummary, AgentRun } from '../types.js';
 
 function listAgents(agentsPath: string): string[] {
@@ -53,10 +53,9 @@ function listRuns(agentsPath: string, agentName: string): AgentRun[] {
     });
 }
 
-export function register(fastify: FastifyInstance, paths: ProjectPaths) {
-  const { agentsPath } = paths;
-
+export function register(fastify: FastifyInstance, state: ProjectState) {
   fastify.get('/api/agents', async (): Promise<AgentSummary[]> => {
+    const { agentsPath } = state.paths;
     return listAgents(agentsPath).map(name => {
       const runs = listRuns(agentsPath, name);
       return {
@@ -68,6 +67,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get<{ Params: { name: string } }>('/api/agents/:name/runs', async (req, reply) => {
+    const { agentsPath } = state.paths;
     const { name } = req.params;
     if (!fs.existsSync(path.join(agentsPath, name, 'logs'))) {
       return reply.status(404).send({ error: 'Agent not found' });

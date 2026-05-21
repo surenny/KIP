@@ -17,6 +17,39 @@ export interface ProjectPaths {
   agentsPath: string;
 }
 
+export interface ProjectInfo {
+  name: string;
+  path: string;
+}
+
+export interface ProjectState {
+  paths: ProjectPaths;
+  allProjects: ProjectInfo[];
+}
+
+function discoverProjects(primaryPath: string): ProjectInfo[] {
+  const parent = path.dirname(primaryPath);
+  const found: ProjectInfo[] = [];
+  try {
+    for (const entry of fs.readdirSync(parent, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const full = path.join(parent, entry.name);
+      const hasBarchon = fs.existsSync(path.join(full, '.barchon'));
+      const hasAgents = fs.existsSync(path.join(full, 'agents'));
+      if (hasBarchon || hasAgents) found.push({ name: entry.name, path: full });
+    }
+  } catch { /* ignore */ }
+  if (!found.find(p => p.path === primaryPath)) {
+    found.unshift({ name: path.basename(primaryPath), path: primaryPath });
+  }
+  found.sort((a, b) => {
+    if (a.path === primaryPath) return -1;
+    if (b.path === primaryPath) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  return found;
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -39,6 +72,11 @@ export async function createServer(options: { projectPath: string; port: number 
     agentsPath: path.join(projectPath, 'agents'),
   };
 
+  const state: ProjectState = {
+    paths,
+    allProjects: discoverProjects(projectPath),
+  };
+
   const fastify = Fastify({
     logger: false,
     rewriteUrl: (req) => {
@@ -59,11 +97,11 @@ export async function createServer(options: { projectPath: string; port: number 
     });
   }
 
-  registerProject(fastify, paths);
-  registerAgents(fastify, paths);
-  registerLogs(fastify, paths);
-  registerSummary(fastify, paths);
-  registerNodes(fastify, paths);
+  registerProject(fastify, state);
+  registerAgents(fastify, state);
+  registerLogs(fastify, state);
+  registerSummary(fastify, state);
+  registerNodes(fastify, state);
 
   await fastify.listen({ port, host: '0.0.0.0' });
   return fastify;

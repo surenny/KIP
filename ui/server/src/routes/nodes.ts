@@ -3,7 +3,7 @@ import path from 'path';
 import Database from 'better-sqlite3';
 import yaml from 'js-yaml';
 import type { FastifyInstance } from 'fastify';
-import type { ProjectPaths } from '../index.js';
+import type { ProjectState } from '../index.js';
 import { buildDot, renderSvg, BLUEPRINT_KINDS, type GraphFilters } from './graph_svg.js';
 
 interface NodeRow {
@@ -326,10 +326,9 @@ function shapeNode(r: NodeRow) {
   };
 }
 
-export function register(fastify: FastifyInstance, paths: ProjectPaths) {
-  const { projectPath } = paths;
-
+export function register(fastify: FastifyInstance, state: ProjectState) {
   fastify.get('/api/state/health', async () => {
+    const { projectPath } = state.paths;
     const db = openDb(projectPath);
     if (!db) {
       return {
@@ -356,6 +355,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get('/api/nodes', async () => {
+    const { projectPath } = state.paths;
     const db = openDb(projectPath);
     if (!db) return [];
     const rows = db.prepare(
@@ -365,6 +365,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get('/api/edges', async () => {
+    const { projectPath } = state.paths;
     const db = openDb(projectPath);
     if (!db) return [];
     const rows = db.prepare(
@@ -384,6 +385,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   fastify.get<{ Querystring: { phases?: string; chapters?: string; q?: string; orphans?: string } }>(
     '/api/graph/svg',
     async (req, reply) => {
+      const { projectPath } = state.paths;
       const db = openDb(projectPath);
       if (!db) {
         reply.status(503);
@@ -419,6 +421,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
 
   // Combined payload sized for one round-trip into the DAG view.
   fastify.get('/api/graph', async () => {
+    const { projectPath } = state.paths;
     const db = openDb(projectPath);
     if (!db) return { nodes: [], edges: [], chapters: [] };
     // Restrict to blueprint kinds — remarks/examples/questions are commentary
@@ -445,6 +448,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
   });
 
   fastify.get<{ Params: { id: string } }>('/api/nodes/:id', async (req, reply) => {
+    const { projectPath } = state.paths;
     const db = openDb(projectPath);
     if (!db) return reply.status(503).send({ error: 'state.db not built' });
     const id = req.params.id;
@@ -563,6 +567,7 @@ export function register(fastify: FastifyInstance, paths: ProjectPaths) {
     Params: { id: string };
     Body: { action?: string; reviewer?: string; comment?: string };
   }>('/api/nodes/:id/review', async (req, reply) => {
+    const { projectPath } = state.paths;
     const id = req.params.id;
     const action = (req.body?.action || '').trim();
     const reviewer = (req.body?.reviewer || '').trim();

@@ -301,6 +301,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="KIP project root (default: cwd)")
     ap.add_argument("--db", type=Path, default=None,
                     help="Output SQLite path (default: <project>/.dashboard/state.db)")
+    ap.add_argument("--lean-root", type=Path, default=None,
+                    help="Lean source root (default: <project>/KIP)")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
 
@@ -315,7 +317,7 @@ def main(argv: list[str] | None = None) -> int:
 
     status_path = project / "blueprint" / "status.yaml"
     chapters_dir = project / "blueprint" / "src" / "chapters"
-    lean_root = project / "KIP"
+    lean_root = args.lean_root.resolve() if args.lean_root else project / "KIP"
     agents_dir = project / "agents"
 
     log(f"[kip-state] project={project}")

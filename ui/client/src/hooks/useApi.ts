@@ -17,6 +17,33 @@ export function useProject() {
   });
 }
 
+export function useProjects() {
+  return useQuery<{ name: string; path: string }[]>({
+    queryKey: ['projects'], queryFn: () => fetchJson('/api/projects'), staleTime: 30000,
+  });
+}
+
+export function useProjectSwitch() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (projectPath: string) => {
+      const res = await fetch(apiUrl('/api/project/switch'), {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ path: projectPath }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { error?: string }).error || `API ${res.status}`);
+      }
+      return res.json() as Promise<{ name: string; path: string; agentsPath: string }>;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries();
+    },
+  });
+}
+
 export function useAgents() {
   return useQuery<AgentSummary[]>({
     queryKey: ['agents'], queryFn: () => fetchJson('/api/agents'), refetchInterval: 10000,
