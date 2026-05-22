@@ -12,11 +12,13 @@ services:
 
   dashboard:
     build:
-      context: .
+      context: /root/ai4math/Barchon/src/barchon
       dockerfile: ui/Dockerfile
     container_name: kip-dashboard
     ports:
       - "18080:8081"
     volumes:
-      - .:/project
+      - .:/projects/KIP
+      - /root/ai4math/KIP-infra:/projects/KIP-infra
+    command: ["node", "server/dist/index.js", "--project", "/projects/KIP", "--port", "8081"]
     restart: unless-stopped

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import type { FastifyInstance } from 'fastify';
-import type { ProjectPaths } from '../index.js';
+import type { ProjectState } from '../index.js';
 import type { LogEntry, AggregatedStats, SessionSummary } from '../types.js';
 import { parseJsonl } from '../utils.js';
 
@@ -29,10 +29,9 @@ function calculateStats(logs: LogEntry[]): AggregatedStats {
   return { totalCost, totalDuration, totalTokensIn, totalTokensOut, sessionCount: sessions.length, sessions };
 }
 
-export function register(fastify: FastifyInstance, paths: ProjectPaths) {
-  const { agentsPath } = paths;
-
+export function register(fastify: FastifyInstance, state: ProjectState) {
   fastify.get('/api/summary', async () => {
+    const { agentsPath } = state.paths;
     if (!fs.existsSync(agentsPath)) return { totalCost: 0, totalDuration: 0, totalTokensIn: 0, totalTokensOut: 0, sessionCount: 0, sessions: [] };
     let allLogs: LogEntry[] = [];
     function walkJsonl(dir: string) {

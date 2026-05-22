@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import svgPanZoom from 'svg-pan-zoom';
-import { useGraph, useGraphSvg } from '../hooks/useApi';
+import { useGraph, useGraphSvg, useProject } from '../hooks/useApi';
 import { PHASE_COLORS, PHASE_ORDER, PHASE_LABELS } from '../utils/constants';
 import NodeDetail from '../components/NodeDetail';
 import type { Phase } from '../types';
@@ -77,6 +77,18 @@ export default function Nodes() {
   };
 
   const { data: graph } = useGraph();
+  const { data: project } = useProject();
+
+  // Reset chapter state when switching projects so stale chaptersInit doesn't
+  // trigger an SVG fetch against the new (possibly empty) project.
+  const prevProjectPath = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (prevProjectPath.current !== undefined && prevProjectPath.current !== project?.path) {
+      setChaptersInit(false);
+      setActiveChapters(new Set());
+    }
+    prevProjectPath.current = project?.path;
+  }, [project?.path]);
 
   // Debounce search → 300 ms before re-fetching SVG
   useEffect(() => {
@@ -170,11 +182,12 @@ export default function Nodes() {
     [allChapters, activeChapters, chaptersInit],
   );
 
+  const hasGraphData = (graph?.nodes?.length ?? 0) > 0;
   const { data: svgText, isFetching, isError } = useGraphSvg({
     phases: phasesArr,
     chapters: chaptersArr,
     q: debouncedSearch,
-    enabled: chaptersInit,
+    enabled: chaptersInit && hasGraphData,
   });
 
   // Mount the SVG, init pan-zoom, attach click bridging.
@@ -410,7 +423,8 @@ export default function Nodes() {
         <div className={styles.canvasOverlay}>
           {isFetching && 'rendering… '}
           {isError && 'render failed (check server log)'}
-          {!isFetching && !isError && (
+          {!isFetching && !isError && chaptersInit && !hasGraphData && 'No graph data (state.db not built)'}
+          {!isFetching && !isError && hasGraphData && (
             <>graph rendered server-side via <code>dot</code> · {totalNodes} nodes total</>
           )}
         </div>

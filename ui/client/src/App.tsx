@@ -1,5 +1,5 @@
 import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import { useProject } from './hooks/useApi';
+import { useProject, useProjects, useProjectSwitch } from './hooks/useApi';
 import Overview from './views/Overview';
 import LogViewer from './views/LogViewer';
 import Nodes from './views/Nodes';
@@ -17,15 +17,42 @@ function ConnectionBanner({ isError }: { isError: boolean }) {
   );
 }
 
+function ProjectSwitcher() {
+  const { data: project } = useProject();
+  const { data: projects } = useProjects();
+  const switcher = useProjectSwitch();
+
+  if (!projects || projects.length <= 1) {
+    return (
+      <span className="project-badge" title={project?.path}>
+        {project?.name ?? '…'}
+      </span>
+    );
+  }
+
+  return (
+    <select
+      className="project-switcher"
+      value={project?.path ?? ''}
+      onChange={(e) => switcher.mutate(e.target.value)}
+      disabled={switcher.isPending}
+      title={project?.path}
+    >
+      {projects.map(p => (
+        <option key={p.path} value={p.path}>{p.name}</option>
+      ))}
+    </select>
+  );
+}
+
 export default function App() {
-  const { data: project, isError } = useProject();
+  const { isError } = useProject();
 
   return (
     <div className="app">
       <ConnectionBanner isError={isError} />
       <header className="header">
-        <h1>KIP</h1>
-        {project && <span className="project-badge" title={project.path}>{project.name}</span>}
+        <ProjectSwitcher />
         <nav className="header-nav">
           <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>Nodes</NavLink>
           <NavLink to="/overview" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Overview</NavLink>
