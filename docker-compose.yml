@@ -12,7 +12,7 @@ services:
 
   dashboard:
     build:
-      context: .
+      context: /root/ai4math/Barchon/src/barchon
       dockerfile: ui/Dockerfile
     container_name: kip-dashboard
     ports:

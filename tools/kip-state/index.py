@@ -300,14 +300,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--project", type=Path, default=Path.cwd(),
                     help="KIP project root (default: cwd)")
     ap.add_argument("--db", type=Path, default=None,
-                    help="Output SQLite path (default: <project>/.dashboard/state.db)")
+                    help="Output SQLite path (default: <project>/.barchon/state.db)")
     ap.add_argument("--lean-root", type=Path, default=None,
                     help="Lean source root (default: <project>/KIP)")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
 
     project: Path = args.project.resolve()
-    db_path: Path = args.db or (project / ".dashboard" / "state.db")
+    db_path: Path = args.db or (project / ".barchon" / "state.db")
     db_path.parent.mkdir(parents=True, exist_ok=True)
 
     log = (lambda *a, **k: None) if args.quiet else (lambda *a, **k: print(*a, **k, file=sys.stderr))
