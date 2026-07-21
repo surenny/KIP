@@ -271,7 +271,7 @@
         \item If $\mathrm{AF}(f) = n$, then all $d_n^f$-differentials have no crossing.
     \end{enumerate}
 \end{proposition}
-\begin{proof}\leanok
+\begin{proof}
     \emph{Only if.} Suppose the extension has no crossing in $\mathrm{Fil} \ge p$. Assume for contradiction that there exists $[x] \in \{x\}$ with $\mathrm{Fil}(f_A[x]) \ge p$ but $f_A[x] \notin \{y\}$. Let $y'$ be the element of $E_\infty(V_2)$ detecting $f_A[x]$, so $f_A[x] \in \{y'\}$ with $\mathrm{Fil}(y') \ge p$. By Proposition~\ref{prereq:prop:f-ext-characterization} there is an $f$-extension from $x$ to $y'$. By Proposition~\ref{prereq:prop:f-ext-inessential}~(2), $y'$ (if $\mathrm{Fil}(y) > \mathrm{Fil}(y')$) or $y - y'$ (if $\mathrm{Fil}(y) = \mathrm{Fil}(y')$) is hit by a shorter $d^f$-differential from some $x'$ with $\mathrm{Fil}(x') > \mathrm{Fil}(x)$. This gives a crossing that hits $\mathrm{Fil} \ge p$, contradicting the assumption.
 
     \emph{If.} Suppose the extension has a crossing: there exist $x' \in E_\infty^{s+a}(V_1)$ with $a > 0$ and essential $d_{n-a}^f(x') = y'$ with $p \le \mathrm{Fil}(y') \le \mathrm{Fil}(y)$. By Proposition~\ref{prereq:prop:f-ext-characterization}, there exists $[x'] \in \{x'\}$ with $f_A([x']) \in \{y'\}$. Since $\mathrm{Fil}(x') > \mathrm{Fil}(x)$, the element $[x] + [x'] \in \{x\}$ (as $[x']$ lies in higher filtration). Then
@@ -279,6 +279,7 @@
     and this element is detected by $y'$ (if $\mathrm{Fil}(y') < \mathrm{Fil}(y)$) or by $y + y'$ (if $\mathrm{Fil}(y') = \mathrm{Fil}(y)$). In either case $f_A([x] + [x']) \notin \{y\}$ while $\mathrm{Fil}(f_A([x] + [x'])) \ge p$, contradicting the assumption.
 
     Parts~(1) and~(2) are special cases. Part~(3) holds for degree reasons: if $\mathrm{AF}(f) = n$, then $f_A$ raises filtration by at least $n$, so $\mathrm{Fil}(f_A[x]) \ge s + n$ for all $[x] \in F^s A_1$.
+  % rolled back at cycle_000 (KIP.SpectralSequence.ess_no_crossing_char)
 \end{proof}
 
 \subsubsection{Extension Spectral Sequence}\label{sec:prereq-ess}
@@ -326,7 +327,8 @@
     $$d_0^f = \mathrm{gr}^s(f_A): \mathrm{gr}^s A_1 \to \mathrm{gr}^s A_2.$$
     Under the identification $\mathrm{gr}^s A_i \cong E_\infty^s(V_i)$, this is the map $E_\infty^s(V_1) \to E_\infty^s(V_2)$ induced by $f$ on $E_\infty$-pages.
 \end{proposition}
-\begin{proof}\leanok This is the standard formula for the $E_0$-differential of a filtered complex (Definition~\ref{prereq:def:filtered-complex-ssdata}): $d_0$ is induced by the chain differential on the associated graded.\end{proof}
+\begin{proof} This is the standard formula for the $E_0$-differential of a filtered complex (Definition~\ref{prereq:def:filtered-complex-ssdata}): $d_0$ is induced by the chain differential on the associated graded.  % rolled back at cycle_000 (KIP.SpectralSequence.ess_diff_zero_page)
+\end{proof}
 
 \begin{notation}\label{prereq:not:representatives}
     \uses{prereq:def:detect}
@@ -341,7 +343,8 @@
     \lean{KIP.SpectralSequence.ess_diff_char}\leanok
     An $f$-extension $d_n^f(x) = y$ holds if and only if there exists $[x] \in \{x\}$ such that $f_A[x] \in \{y\}$.
 \end{proposition}
-\begin{proof}\leanok Follows directly from the filtered complex construction: $d_n^f(x) = y$ means there is a lift of $x$ in $F^s A_1$ whose image under $f_A$ lies in $F^{s+n} A_2$ and represents $y$ in $\mathrm{gr}^{s+n} A_2$.\end{proof}
+\begin{proof} Follows directly from the filtered complex construction: $d_n^f(x) = y$ means there is a lift of $x$ in $F^s A_1$ whose image under $f_A$ lies in $F^{s+n} A_2$ and represents $y$ in $\mathrm{gr}^{s+n} A_2$.  % rolled back at cycle_000 (KIP.SpectralSequence.ess_diff_char)
+\end{proof}
 
 \begin{proposition}\label{prereq:prop:f-ext-inessential}
     \uses{prereq:prop:f-ext-characterization,prereq:not:representatives}
@@ -356,17 +359,19 @@
         \end{enumerate}
     \end{enumerate}
 \end{proposition}
-\begin{proof}\leanok Part~(1) follows from the definition of the page boundaries in the filtered complex construction. Parts~(2a) and~(2b) follow from Part~(1) and Proposition~\ref{prereq:prop:f-ext-characterization}.\end{proof}
+\begin{proof} Part~(1) follows from the definition of the page boundaries in the filtered complex construction. Parts~(2a) and~(2b) follow from Part~(1) and Proposition~\ref{prereq:prop:f-ext-characterization}.  % rolled back at cycle_000 (KIP.SpectralSequence.ess_diff_inessential)
+\end{proof}
 
 \begin{proposition}\label{prereq:prop:ess-exactness}
     \uses{prereq:prop:f-ext-characterization,prereq:cor:composition-zero,prereq:not:representatives}
     \lean{KIP.SpectralSequence.ess_exactness}\leanok
     Suppose the sequence of converging spectral sequences $V_1 \xrightarrow{f} V_2 \xrightarrow{g} V_3$ induces an exact sequence on target groups $A_1 \xrightarrow{f_A} A_2 \xrightarrow{g_A} A_3$ that is exact at $A_2$. Then all permanent $d^g$-cycles in $E_\infty(V_2)$ are boundaries in the $f$-ESS.
 \end{proposition}
-\begin{proof}\leanok
+\begin{proof}
     \emph{First proof} (via chain complexes). Treat the three-term sequence $A_1 \xrightarrow{f_A} A_2 \xrightarrow{g_A} A_3$ as a filtered chain complex. Its associated spectral sequence comprises both the $d^f$ and $d^g$ differentials. By exactness at $A_2$, the abutment projected to the $A_2$-component is zero. Therefore every permanent $d^g$-cycle must be killed by a $d^f$-differential.
 
     \emph{Second proof} (via representatives). Let $y \in E_\infty(V_2)$ be a permanent $d^g$-cycle. By convergence, there exists $[y] \in \{y\}$ with $g_A([y]) = 0$. By exactness, there exists $[x] \in A_1$ with $f_A([x]) = [y]$. Let $x \in E_\infty(V_1)$ detect $[x]$. Then $f_A[x] \in \{y\}$, so by Proposition~\ref{prereq:prop:f-ext-characterization} there is an $f$-extension from $x$ to $y$.
+  % rolled back at cycle_000 (KIP.SpectralSequence.ess_exactness)
 \end{proof}
 
 \paragraph{Unbounded Extension Spectral Sequence.}\label{sec:prereq-unbounded-ess}
@@ -459,7 +464,7 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     \end{enumerate}
     Then $d_{m+l-n}^q(y) = w$.
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     First we find a representative $[x] \in \{x\}$ such that $p_A[x] \in \{z\}$ and $f_A[x] \in \{y\}$.
 
     If the differential in~(2) has no crossing, by Proposition~\ref{prereq:prop:no-crossing-iff} we can pick $[x] \in \{x\}$ such that $p_A[x] \in \{z\}$; by Proposition~\ref{prereq:prop:f-ext-characterization}, $f_A[x] \in \{y'\}$ for some $y'$, but the no-crossing condition forces $f_A[x] \in \{y\}$. Symmetrically, if the differential in~(1) has no crossing, we pick $[x]$ with $f_A[x] \in \{y\}$ and the no-crossing forces $p_A[x] \in \{z\}$.
@@ -469,6 +474,7 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     Combining with~(4) ($d_l^g(z) = w$ has no crossing that hits $\mathrm{Fil} \ge s + n + k$) and $p_A[x] \in \{z\}$, Proposition~\ref{prereq:prop:no-crossing-iff} gives $g_A p_A[x] \in \{w\}$.
 
     Therefore $q_A f_A[x] \in \{w\}$, and since $f_A[x] \in \{y\}$, there is a $q$-extension from $y$ to $w$ by Proposition~\ref{prereq:prop:f-ext-characterization}.
+  % rolled back at cycle_000 (KIP.SpectralSequence.fourSpectra_exact)
 \end{proof}
 
 \begin{corollary}\label{prereq:cor:four-spectra}
@@ -476,28 +482,31 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     \lean{KIP.SpectralSequence.fourSpectra_cor}\leanok
     In the setting of Theorem~\ref{prereq:thm:four-spectra}, if condition~(4) is strengthened to ``$d_l^g(z) = w$ has no crossing'' (and condition~(5) is dropped), then $d_{m+l-n}^q(y) = w$.
 \end{corollary}
-\begin{proof}\leanok If $d_l^g(z) = w$ has no crossing, then in particular it has no crossing that hits $\mathrm{Fil} \ge s + n + k$ for any $k$. Taking $k = 1$ and observing that $d_0^q y = 0$ trivially has no crossing, the result follows from Theorem~\ref{prereq:thm:four-spectra}.\end{proof}
+\begin{proof} If $d_l^g(z) = w$ has no crossing, then in particular it has no crossing that hits $\mathrm{Fil} \ge s + n + k$ for any $k$. Taking $k = 1$ and observing that $d_0^q y = 0$ trivially has no crossing, the result follows from Theorem~\ref{prereq:thm:four-spectra}.  % rolled back at cycle_000 (KIP.SpectralSequence.fourSpectra_cor)
+\end{proof}
 
 \begin{corollary}\label{prereq:cor:triangle-map}
     \uses{prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.essCommutativity_triangle}\leanok
     Consider a homotopy commutative diagram of converging spectral sequences $V_1 \xrightarrow{f} V_2 \xrightarrow{q} V_3$ with $p = q \circ f$. If $d_n^f(x) = y$, $d_m^p(x) = z$, and one of the two extensions has no crossing, then $d_{m-n}^q(y) = z$.
 \end{corollary}
-\begin{proof}\leanok This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_3 = V_4$ and $g = \mathrm{id}_{V_3}$: since $d_0^g(z) = z$ and the identity extension always has no crossing, the conditions are satisfied with $l = 0$.\end{proof}
+\begin{proof} This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_3 = V_4$ and $g = \mathrm{id}_{V_3}$: since $d_0^g(z) = z$ and the identity extension always has no crossing, the conditions are satisfied with $l = 0$.  % rolled back at cycle_000 (KIP.SpectralSequence.essCommutativity_triangle)
+\end{proof}
 
 \begin{corollary}\label{prereq:cor:composition-ext}
     \uses{prereq:cor:four-spectra}
     \lean{KIP.SpectralSequence.ess_composition}\leanok
     Consider a homotopy commutative diagram of converging spectral sequences $V_1 \xrightarrow{p} V_3 \xrightarrow{g} V_4$ with $q = g \circ p$. If $d_m^p(x) = z$ and $d_l^g(z) = w$ has no crossing, then $d_{m+l}^q(x) = w$.
 \end{corollary}
-\begin{proof}\leanok This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_1 = V_2$ and $f = \mathrm{id}_{V_1}$: since $d_0^f(x) = x$ with $n = 0$ and the identity extension has no crossing, the conditions give $d_{m+l-0}^q(y) = d_{m+l}^q(x) = w$.\end{proof}
+\begin{proof} This is the special case of Corollary~\ref{prereq:cor:four-spectra} with $V_1 = V_2$ and $f = \mathrm{id}_{V_1}$: since $d_0^f(x) = x$ with $n = 0$ and the identity extension has no crossing, the conditions give $d_{m+l-0}^q(y) = d_{m+l}^q(x) = w$.  % rolled back at cycle_000 (KIP.SpectralSequence.ess_composition)
+\end{proof}
 
 \begin{corollary}\label{prereq:cor:composition-zero}
     \uses{prereq:cor:four-spectra,prereq:prop:f-ext-characterization}
     \lean{KIP.SpectralSequence.ess_composition_zero}\leanok
     If $g \circ f = 0$ (as morphisms of converging spectral sequences) and $d_n^f(x) = y$, then $y$ is a permanent cycle in the $g$-ESS: $d_m^g(y) = 0$ for all $m \ge 0$.
 \end{corollary}
-\begin{proof}\leanok
+\begin{proof}
     Consider the commutative diagram
     $$\begin{CD}
     V_1 @>{f}>> V_2 \\
@@ -507,6 +516,7 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     with $p = 0$ and $g \circ f = 0$. All extensions from $x$ to $0$ are trivial and have no crossing. By Corollary~\ref{prereq:cor:four-spectra}, $d_m^g(y) = 0$.
 
     \emph{Alternative proof.} By Proposition~\ref{prereq:prop:f-ext-characterization}, there exists $[x] \in \{x\}$ with $f_A[x] \in \{y\}$. Let $[y] = f_A[x]$. Then $g_A([y]) = g_A(f_A([x])) = 0$. Hence $y$ is a permanent $d^g$-cycle.
+  % rolled back at cycle_000 (KIP.SpectralSequence.ess_composition_zero)
 \end{proof}
 
 \begin{corollary}\label{prereq:cor:ess-naturality}
@@ -520,8 +530,9 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
     \end{CD}$$
     Assume ${}^{p}\!E_0 = {}^{p}\!E_r$ and ${}^{q}\!E_0 = {}^{q}\!E_r$ for some $r \ge 0$ (i.e., the $p$-ESS and $q$-ESS have stationary pages up to $r$). Then $(d_r^p, d_r^q)$ induces a map from the $f$-ESS to the $g$-ESS.
 \end{corollary}
-\begin{proof}\leanok
+\begin{proof}
     Since ${}^{p}\!E_0 = {}^{p}\!E_r$ and ${}^{q}\!E_0 = {}^{q}\!E_r$, the differentials $d_r^p$ and $d_r^q$ have no crossings. By Corollary~\ref{prereq:cor:four-spectra}, $d_0^g \circ d_r^p = d_r^q \circ d_0^f$ and therefore $(d_r^p, d_r^q)$ induces a map from ${}^{f}\!E_1$ to ${}^{g}\!E_1$. Inductively, applying Corollary~\ref{prereq:cor:four-spectra} shows that $(d_r^p, d_r^q)$ induces a map from ${}^{f}\!E_n$ to ${}^{g}\!E_n$ and $d_n^g \circ d_r^p = d_r^q \circ d_n^f$ for all $n$.
+  % rolled back at cycle_000 (KIP.SpectralSequence.essCommutativity_induces_map)
 \end{proof}
 
 
@@ -532,7 +543,7 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
 \subsubsection{Stable Homotopy Theory}\label{sec:prereq-stable-homotopy}
 
 \begin{definition}\label{prereq:def:triangulated-category}
-    \lean{CategoryTheory.Pretriangulated}\leanok
+    \lean{CategoryTheory.Pretriangulated}
     A \emph{triangulated category} is an additive category $\mathcal{T}$ equipped with:
     \begin{enumerate}
         \item An additive autoequivalence $\Sigma: \mathcal{T} \to \mathcal{T}$, called the \emph{shift} (or \emph{suspension}) functor.
@@ -566,14 +577,14 @@ Throughout this subsection, all filtrations are assumed to be \emph{bounded belo
 
 \begin{proposition}\label{prereq:prop:les-hom}
     \uses{prereq:def:cofiber-sequence}
-    \lean{CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂}\leanok
+    \lean{CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂}
     For a distinguished triangle $X \to Y \to Z \to \Sigma X$ and any object $W$, the long exact sequence on hom-sets
     $$\cdots \to [W, X] \to [W, Y] \to [W, Z] \to [W, \Sigma X] \to \cdots$$
     holds (covariant), and dually for the contravariant case.
 \end{proposition}
 
 \begin{definition}\label{prereq:def:closed-symmetric-monoidal}
-    \lean{CategoryTheory.MonoidalClosed}\leanok
+    \lean{CategoryTheory.MonoidalClosed}
     A \emph{closed symmetric monoidal category} is a category $\mathcal{C}$ equipped with:
     \begin{enumerate}
         \item A unit object $S$.
@@ -820,7 +831,8 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
     \lean{KIP.SpectralSequence.af_vanishing}\leanok
     If $\mathrm{AF}(f) = k$, then $d_i^f = 0$ for $i < k$ in the $f$-extension spectral sequence.
 \end{corollary}
-\begin{proof}\leanok By Proposition~\ref{prereq:prop:f-ext-characterization}, $d_i^f(x) = y$ requires $[x] \in \{x\}$ with $f_A[x] \in \{y\}$, which forces $\mathrm{Fil}(f_A[x]) \ge s + i$. But $\mathrm{AF}(f) = k$ means $f_A$ raises filtration by at least $k$, so $\mathrm{Fil}(f_A[x]) \ge s + k > s + i$ for $i < k$, hence $y = 0$.\end{proof}
+\begin{proof} By Proposition~\ref{prereq:prop:f-ext-characterization}, $d_i^f(x) = y$ requires $[x] \in \{x\}$ with $f_A[x] \in \{y\}$, which forces $\mathrm{Fil}(f_A[x]) \ge s + i$. But $\mathrm{AF}(f) = k$ means $f_A$ raises filtration by at least $k$, so $\mathrm{Fil}(f_A[x]) \ge s + k > s + i$ for $i < k$, hence $y = 0$.  % rolled back at cycle_000 (KIP.SpectralSequence.af_vanishing)
+\end{proof}
 
 \begin{definition}\label{prereq:def:adams-filtration-infinity}
     \uses{prereq:def:adams-filtration-maps}
@@ -871,7 +883,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 
 \begin{definition}\label{prereq:def:bigraded-suspension}
     \uses{prereq:def:synthetic-category}
-    \lean{KIP.Synthetic.SyntheticCategory.biShift}\leanok
+    \lean{KIP.Synthetic.SyntheticCategory.biShift}
     The category $h\mathrm{Syn}$ admits a \emph{bigraded suspension} $\Sigma^{m,n}$ for each $(m,n) \in \mathbb{Z}^2$, which is an autoequivalence of $h\mathrm{Syn}$ satisfying
     $$\Sigma^{m_1,n_1}\Sigma^{m_2,n_2} \cong \Sigma^{m_1+m_2, n_1+n_2}.$$
     The functor $\Sigma^{1,0}$ is identified with the triangulated suspension functor.
@@ -885,7 +897,7 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
 
 \begin{definition}\label{prereq:def:lambda}
     \uses{prereq:def:bigraded-suspension}
-    \lean{KIP.Synthetic.SyntheticCategory.lam}\leanok
+    \lean{KIP.Synthetic.SyntheticCategory.lam}
     There exists a natural transformation
     $$\lambda: \Sigma^{0,-1} \to \mathrm{Id}$$
     in $h\mathrm{Syn}$. For a synthetic spectrum $X$, $\lambda_X$ denotes the component $\Sigma^{0,-1}X \to X$.
@@ -1046,7 +1058,8 @@ In this paragraph, assume $X \in \calS^{fin}$ and $Y$ is of finite type.
         0 & \text{otherwise}.
     \end{cases}$$
 \end{proposition}
-\begin{proof}\leanok Follows from the rigidity degeneration axiom by unwinding the associated graded structure.\end{proof}
+\begin{proof} Follows from the rigidity degeneration axiom by unwinding the associated graded structure.  % rolled back at cycle_000 (KIP.Synthetic.einfty_nuX)
+\end{proof}
 
 \begin{proposition}\label{prereq:prop:syn-einfty-mod-lambda}
     \uses{prereq:ax:rigid,prereq:def:lambda}

@@ -327,12 +327,14 @@ def Filtration.IsHausdorff {ω : Type w} {A : ω → C}
 /-- A filtration bounded below is exhaustive. -/
 theorem Filtration.IsBoundedBelow.toIsExhaustive {ω : Type w} {A : ω → C}
     {fil : Filtration A} (hb : fil.IsBoundedBelow) : fil.IsExhaustive := by
-  sorry
+  intro k
+  exact ⟨hb.lo k, hb.boundedBelow k (hb.lo k) le_rfl⟩
 
 /-- A filtration bounded above is Hausdorff. -/
 theorem Filtration.IsBoundedAbove.toIsHausdorff {ω : Type w} {A : ω → C}
     {fil : Filtration A} (hb : fil.IsBoundedAbove) : fil.IsHausdorff := by
-  sorry
+  intro k
+  exact ⟨hb.hi k, hb.boundedAbove k (hb.hi k) le_rfl⟩
 
 /-! ### Filtered morphisms
 

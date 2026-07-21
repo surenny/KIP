@@ -7,21 +7,21 @@ nodes:
     proved: false
     kind: definition
     comments:
-    - topic: align
-      text: SSData字段顺序和NL不一致，建议p q互换
-      by: surenny
-      at: '2026-04-19'
-      consumed_at_cycle: 99
-    - topic: general
-      text: 这个定义是整个谱序列的基础
-      by: wangguozhen
-      at: '2026-04-19'
-      consumed_at_cycle: 99
-    - topic: general
-      text: 这是一个非常正确的形式化
-      by: web-reviewer
-      at: '2026-04-19'
-      consumed_at_cycle: 99
+      - topic: align
+        text: SSData字段顺序和NL不一致，建议p q互换
+        by: surenny
+        at: '2026-04-19'
+        consumed_at_cycle: 99
+      - topic: general
+        text: 这个定义是整个谱序列的基础
+        by: wangguozhen
+        at: '2026-04-19'
+        consumed_at_cycle: 99
+      - topic: general
+        text: 这是一个非常正确的形式化
+        by: web-reviewer
+        at: '2026-04-19'
+        consumed_at_cycle: 99
     nl_reviewer: test
     align_reviewer: web-reviewer
     nl_hash: 192c2f3b92f48706
@@ -121,46 +121,46 @@ nodes:
     nl_hash: ac0cf089df4b4690
     aligned_by: surenny
     comments:
-    - topic: general
-      text: test
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: 这是一个测试评论存储功能的信息
-      by: surenny
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: test2
-      by: surenny
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: hi
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: hi
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: hi
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: hi
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
-    - topic: general
-      text: '111'
-      by: wangpan
-      at: '2026-04-27'
-      consumed_at_cycle: 99
+      - topic: general
+        text: test
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: 这是一个测试评论存储功能的信息
+        by: surenny
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: test2
+        by: surenny
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: hi
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: hi
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: hi
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: hi
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
+      - topic: general
+        text: '111'
+        by: wangpan
+        at: '2026-04-27'
+        consumed_at_cycle: 99
   prereq:def:filtered-morphism:
     lean_decl: KIP.SpectralSequence.FilteredMorphism
     nl_reviewed: true
@@ -170,11 +170,11 @@ nodes:
     kind: definition
     nl_hash: 49d94e708caedb2d
     comments:
-    - topic: align
-      text: Alignment confirmed
-      by: surenny
-      at: '2026-04-27T12:00:00+08:00'
-      consumed_at_cycle: 99
+      - topic: align
+        text: Alignment confirmed
+        by: surenny
+        at: '2026-04-27T12:00:00+08:00'
+        consumed_at_cycle: 99
     align_reviewer: surenny
     aligned_at: '2026-04-27T12:00:00+08:00'
   prereq:def:filtered-complex:
@@ -295,7 +295,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: proposition
     nl_hash: 6b4fe0d2c987a014
   prereq:def:ess:
@@ -327,7 +327,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: proposition
     nl_hash: 0fff8ddfc8cb1b1e
   prereq:cor:af-vanishing:
@@ -335,7 +335,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: e09cd3aff02baa7b
   prereq:prop:ess-exactness:
@@ -343,7 +343,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: proposition
     nl_hash: c078f5441fc15571
   prereq:thm:four-spectra:
@@ -351,7 +351,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: theorem
     nl_hash: 6a25232db9fa243c
   prereq:cor:four-spectra:
@@ -359,7 +359,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: 161ea4d7767e16a7
   prereq:cor:triangle-map:
@@ -367,7 +367,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: d78b78560bd66839
   prereq:cor:composition-ext:
@@ -375,7 +375,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: 9000ce2b40afb8bf
   prereq:cor:composition-zero:
@@ -383,7 +383,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: 0e954057b528f1e0
   prereq:cor:ess-naturality:
@@ -391,7 +391,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: corollary
     nl_hash: 53c7aeda67950db0
   prereq:cor:stationary-page:
@@ -705,7 +705,7 @@ nodes:
     nl_reviewed: true
     bound: true
     aligned: false
-    proved: true
+    proved: false
     kind: proposition
     nl_hash: 0536d05a612bafd8
   prereq:prop:syn-einfty-mod-lambda:
@@ -751,10 +751,8 @@ nodes:
   a0000000001:
     bound: false
     kind: remark
-    nl_reviewed: false
     nl_reviewer: web-reviewer
     nl_hash: 392c753ce7d36550
-    aligned: false
   a0000000002:
     bound: false
     kind: remark
@@ -762,10 +760,12 @@ nodes:
     nl_reviewer: web-reviewer
     nl_hash: bae37962648aca7e
     aligned: false
+    proved: false
   prereq:rem:decreasing-filtration:
     bound: false
     kind: remark
     nl_hash: 22dd969e7ab5a499
+    proved: false
   prereq:rem:weak-convergence:
     bound: false
     kind: remark
@@ -773,25 +773,35 @@ nodes:
     nl_reviewer: web-reviewer
     nl_reviewed_at: '2026-04-19T12:00:00+08:00'
     nl_hash: cda248a7a43d920b
+    proved: false
   a0000000003:
     bound: false
     kind: remark
     nl_hash: c39633b332fdd3bc
     nl_reviewed: false
     aligned: false
+    proved: false
   prereq:prop:filtered-complex-functoriality:
     bound: false
     kind: proposition
     nl_hash: 11c3837b78c933e6
+    proved: false
   prereq:def:filtered-complex-morphism:
     bound: false
     kind: definition
     proved: false
     nl_hash: 2478096e234dc052
+    comments:
+      - topic: nl-rejection
+        text: 建议把 “preserving the filtration” 改成 “such that ...” 更精确。
+        by: surenny
+        at: '2026-05-13T12:57:25.754Z'
+        consumed_at_cycle: 2
   a0000000004:
     bound: false
     kind: remark
     nl_hash: e839acd444e194a9
+    proved: false
   thm:main:
     bound: false
     kind: theorem
@@ -804,6 +814,7 @@ nodes:
     bound: false
     kind: theorem
     nl_hash: c99230704cabda48
+    proved: false
   thm:h62:
     bound: false
     kind: theorem
@@ -854,6 +865,7 @@ nodes:
     bound: false
     kind: remark
     nl_hash: 6343a41675fa7cdf
+    proved: false
   cor:af-vanishing:
     bound: false
     kind: corollary
@@ -887,46 +899,54 @@ nodes:
     bound: false
     kind: remark
     nl_hash: 72d241409030dd3c
+    proved: false
   a0000000007:
     bound: false
     kind: remark
     nl_hash: add0a104495f4766
+    proved: false
   nota:ess-notation:
     bound: false
     kind: notation
     nl_hash: b211f41c38eb91c6
   a0000000008:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 7bb29815f0942e22
+    proved: false
   a0000000009:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 2337fba42bf2d2f9
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000010:
     bound: false
     kind: remark
     nl_hash: a29dd213d4dfc81d
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000011:
     bound: false
     kind: remark
     nl_hash: 69a72ada33a4ae3d
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000012:
     bound: false
     kind: remark
     nl_hash: 4a3c3f93b2df7744
+    proved: false
   a0000000013:
     bound: false
     kind: remark
     nl_hash: d4b541323c42bbe7
     nl_reviewed: false
     aligned: false
+    proved: false
   rem:deformation:
     bound: false
     kind: remark
@@ -937,60 +957,72 @@ nodes:
     nl_hash: 876f7e1849b2ba2b
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000015:
     bound: false
     kind: remark
     nl_hash: ef5a8f338dab1e64
+    proved: false
   prop:lambda-rho-trivial:
     bound: false
     kind: proposition
     nl_hash: d0cf9a1a576d7448
+    proved: false
   prop:cross-dr-En:
     bound: false
     kind: proposition
     nl_hash: 76d8ba2cb6bd2d49
+    proved: false
   cor:delta-ess-general:
     bound: false
     kind: corollary
     nl_hash: 6c91402fe74947dc
+    proved: false
   a0000000016:
     bound: false
     kind: remark
     nl_hash: 2a2f97d9081e0c4d
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000017:
     bound: false
-    kind: notation
+    kind: remark
     nl_hash: 3d4c65047211cca9
     nl_reviewed: false
     aligned: false
+    proved: false
   nocrossE2:
     bound: false
     kind: remark
     nl_hash: 166924693de509f6
+    proved: false
   prop:delta-ess-adams:
     bound: false
     kind: proposition
     nl_hash: 83b5f0ed0a69dfe4
+    proved: false
   a0000000018:
     bound: false
     kind: remark
     nl_hash: 1b36ea2e00cebea2
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000019:
     bound: false
-    kind: remark
+    kind: notation
     nl_hash: 3654fbdff0b25f39
     nl_reviewed: false
     aligned: false
+    proved: false
   not:deltaandrho:
     bound: false
     kind: notation
     nl_hash: bdfdea133afd4516
     nl_reviewed: false
     aligned: false
+    proved: false
   def:classicalcrossdiff:
     bound: false
     kind: definition
@@ -1002,14 +1034,17 @@ nodes:
     nl_hash: 24ff4e56c092d226
     nl_reviewed: false
     aligned: false
+    proved: false
   prop:cross-f-Er:
     bound: false
     kind: proposition
     nl_hash: dfe7abb54e1b8677
+    proved: false
   def:fErextess:
     bound: false
     kind: remark
     nl_hash: 395103b214cf396d
+    proved: false
   def:f-Er-crossing:
     bound: false
     kind: definition
@@ -1023,6 +1058,7 @@ nodes:
     bound: false
     kind: proposition
     nl_hash: ccbc993e128e26b4
+    proved: false
   def:f-Er-extension:
     bound: false
     kind: definition
@@ -1036,24 +1072,29 @@ nodes:
     bound: false
     kind: remark
     nl_hash: bd022b3386c2d1f5
+    proved: false
   thm:gen-leibniz:
     bound: false
     kind: theorem
     nl_hash: 0ca8bb7feca3b7d1
+    proved: false
   lem:may-smash:
     bound: false
     kind: lemma
     nl_hash: afe5bd4273bd64ca
     nl_reviewed: false
     aligned: false
+    proved: false
   cor:stretch-extension:
     bound: false
     kind: corollary
     nl_hash: ab0723abee05add8
+    proved: false
   prop:ext-across-pages:
     bound: false
     kind: proposition
     nl_hash: 4ea59b098b81037a
+    proved: false
   a0000000022:
     bound: false
     kind: remark
@@ -1072,6 +1113,7 @@ nodes:
     nl_hash: bdfc644cddc2ab64
     nl_reviewed: false
     aligned: false
+    proved: false
   a0000000024:
     bound: false
     kind: remark
@@ -1094,26 +1136,32 @@ nodes:
     bound: false
     kind: lemma
     nl_hash: b940d91526a16f79
+    proved: false
   prop:possibleh62:
     bound: false
     kind: proposition
     nl_hash: f08457a0437b0094
+    proved: false
   lem:equistate5:
     bound: false
     kind: lemma
     nl_hash: ba06e3b0c17c4462
+    proved: false
   lem:toda2ext:
     bound: false
     kind: lemma
     nl_hash: d16df208c5725b37
+    proved: false
   cor:2ext125:
     bound: false
     kind: corollary
     nl_hash: 9a8555fccc03bff3
+    proved: false
   prop:state5false:
     bound: false
     kind: proposition
     nl_hash: 67a3c2fc453903a4
+    proved: false
   a0000000027:
     bound: false
     kind: remark
@@ -1135,10 +1183,12 @@ nodes:
     bound: false
     kind: lemma
     nl_hash: e156795870b4ba7a
+    proved: false
   lem:nuext125:
     bound: false
     kind: lemma
     nl_hash: d3cdcd67ac2ba027
+    proved: false
   a0000000029:
     bound: false
     kind: notation
@@ -1149,6 +1199,7 @@ nodes:
     bound: false
     kind: remark
     nl_hash: 824d0d34703e4d18
+    proved: false
   fact:h02x1259:
     bound: false
     kind: axiom
@@ -1164,6 +1215,7 @@ nodes:
     bound: false
     kind: remark
     nl_hash: b70e4cdd9c44fc33
+    proved: false
   thm:bjmbx:
     bound: false
     kind: axiom
@@ -1220,6 +1272,7 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: 2052ed7c0fd8f38f
+    proved: false
   prereq:def:finite-spectra:
     kind: definition
     bound: false
@@ -1229,6 +1282,7 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: 417b897c01c5e88e
+    proved: false
   prereq:ax:not-odd-order-af-finite:
     kind: axiom
     bound: false
@@ -1268,6 +1322,7 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: 7421873496fe6b21
+    proved: false
   prereq:def:finite-type:
     kind: definition
     bound: false
@@ -1303,10 +1358,12 @@ nodes:
     kind: remark
     bound: false
     nl_hash: e83fce7c3adf29c2
+    proved: false
   prereq:thm:nu-shift-bishift:
     kind: theorem
     bound: false
     nl_hash: d9d33fdadc435482
+    proved: false
   prereq:ax:nu-cofiber-ses:
     kind: axiom
     bound: true
@@ -1337,10 +1394,12 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: 0e0bcee1d10255b9
+    proved: false
   prereq:thm:odd-order-af-infinity:
     kind: theorem
     bound: false
     nl_hash: 70c5624b37269250
+    proved: false
   prereq:thm:not-odd-order-af-finite:
     kind: theorem
     bound: false
@@ -1354,6 +1413,7 @@ nodes:
     bound: false
     nl_hash: 926cb0ee0a75321c
     nl_reviewed: true
+    proved: false
   prereq:def:f-extension-diff:
     kind: definition
     bound: true
@@ -1364,22 +1424,24 @@ nodes:
     kind: proposition
     bound: true
     nl_hash: 251504847230c29f
-    proved: true
+    proved: false
     nl_reviewed: true
   prereq:prop:ess-e0-iso:
     kind: proposition
     bound: true
     nl_hash: 815a80bc8a569956
     nl_reviewed: true
+    proved: false
   prereq:rem:no-crossing-equiv:
     kind: remark
     bound: false
     nl_hash: 8c0bbb45f887ec01
+    proved: false
   prereq:prop:ess-d0:
     kind: proposition
     bound: true
     nl_hash: 9d0a665e6fb4c787
-    proved: true
+    proved: false
     nl_reviewed: true
   prereq:def:ess-underlying-complex:
     kind: definition
@@ -1393,11 +1455,11 @@ nodes:
     nl_hash: 5214332db2d05bf8
     proved: false
     comments:
-    - topic: nl-review
-      text: NL approved
-      by: surenny
-      at: '2026-04-27T12:00:00+08:00'
-      consumed_at_cycle: 99
+      - topic: nl-review
+        text: NL approved
+        by: surenny
+        at: '2026-04-27T12:00:00+08:00'
+        consumed_at_cycle: 99
     nl_reviewed: true
     nl_reviewer: surenny
     nl_reviewed_at: '2026-04-27T12:00:00+08:00'
@@ -1405,36 +1467,40 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: dd6c85bca70dd9ee
+    proved: false
   prereq:prop:unbounded-ess-stabilization:
     kind: proposition
     bound: false
     nl_hash: 13303687577c5d00
+    proved: false
   prereq:prop:truncations-inverse-system:
     kind: proposition
     bound: false
     nl_hash: ce623afb9a54bec9
     comments:
-    - topic: nl-review
-      text: NL approved
-      by: surenny
-      at: '2026-04-27T12:00:00+08:00'
-      consumed_at_cycle: 99
+      - topic: nl-review
+        text: NL approved
+        by: surenny
+        at: '2026-04-27T12:00:00+08:00'
+        consumed_at_cycle: 99
     nl_reviewed: true
     nl_reviewer: surenny
     nl_reviewed_at: '2026-04-27T12:00:00+08:00'
+    proved: false
   prereq:prop:invlim-of-truncations-ss:
     kind: proposition
     bound: false
     nl_hash: 54cb7bf052d765c5
     comments:
-    - topic: nl-review
-      text: NL approved
-      by: surenny
-      at: '2026-04-27T12:00:00+08:00'
-      consumed_at_cycle: 99
+      - topic: nl-review
+        text: NL approved
+        by: surenny
+        at: '2026-04-27T12:00:00+08:00'
+        consumed_at_cycle: 99
     nl_reviewed: true
     nl_reviewer: surenny
     nl_reviewed_at: '2026-04-27T12:00:00+08:00'
+    proved: false
   prereq:def:unbounded-ess:
     kind: definition
     bound: false
@@ -1449,6 +1515,7 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: 0fe575dc179e17ec
+    proved: false
   prereq:ax:lambda-g-equals-f:
     kind: axiom
     bound: false
@@ -1463,26 +1530,32 @@ nodes:
     kind: proposition
     bound: false
     nl_hash: 4978ae6e889f3f39
+    proved: false
   prop:enfty-level-extension-quotient:
     kind: proposition
     bound: false
     nl_hash: c590914683f26a4e
+    proved: false
   prop:level-comparison:
     kind: proposition
     bound: false
     nl_hash: d7ba5631b88428b4
+    proved: false
   prop:cross-f-Er-level:
     kind: proposition
     bound: false
     nl_hash: 11ec38d65102f7a2
+    proved: false
   prop:cross-f-Einfty:
     kind: proposition
     bound: false
     nl_hash: 026fdf9f11a75bd3
+    proved: false
   prop:level-crossing-from-zero:
     kind: proposition
     bound: false
     nl_hash: 86accf88b82f1b23
+    proved: false
   def:f-Er-level-extension:
     kind: definition
     bound: false
@@ -1502,11 +1575,14 @@ nodes:
     kind: theorem
     bound: false
     nl_hash: 47ebaafc9f956b94
+    proved: false
   exam:stretchext:
     kind: example
     bound: false
     nl_hash: 0fcee820de1789fc
+    proved: false
   thm:gen-leibniz-k-fwd:
     kind: theorem
     bound: false
     nl_hash: 4cfc9e6c2e0c3346
+    proved: false
