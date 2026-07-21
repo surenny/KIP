@@ -35,6 +35,9 @@ blueprint/template.*
 # (cycles/, prompts/, proof-journal/, task_results/, state.db, agent CLAUDE.md)
 /.barchon/
 
+# Machine-local MCP server configuration
+/.mcp.json
+
 # Local-only stash exports from the barchon migration
 .stash-from-old/
 
