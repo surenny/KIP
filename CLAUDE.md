@@ -1,15 +1,11 @@
 # KIP — Kervaire Invariant Problem Formalization
 
-## Required skills
-
-- linear-cli:linear-cli
-
 ## Project tracking
 
-This project uses [Linear](https://linear.app) (team: `AUT`) for issue tracking, integrated with this GitHub repository.
+This project uses Multica for issue tracking and project coordination. Use the `multica` CLI for issue operations.
 
 ### PR rules
 
-When creating a pull request, always reference the corresponding Linear issue ID (e.g. `AUT-12`) in the PR title or description. Linear's GitHub integration will automatically link the PR to the issue. Multiple issues can be referenced in the same PR.
+When work is associated with a Multica issue, include its issue ID or URL in the pull request title or description when practical. Multiple issues can be referenced in the same pull request.
 
-If no corresponding Linear issue exists, create one first via `linear issue create` before opening the PR.
+If no corresponding issue exists and the work should be tracked, create one with `multica issue create` before opening the pull request. Post progress and handoff notes with `multica issue comment add`.
